@@ -9,7 +9,7 @@ import configparser
 import os
 from pathlib import Path
 
-from queue_processors.queue_processor.settings import PROJECT_ROOT
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
