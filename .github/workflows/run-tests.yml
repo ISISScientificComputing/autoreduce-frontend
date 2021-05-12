@@ -2,47 +2,6 @@ name: Tests
 on: [ push ]
 
 jobs:
-  pytest:
-    name: Pytest
-    runs-on: ubuntu-18.04
-    strategy:
-      fail-fast: false
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Set up Python 3.7
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.7
-
-      - uses: actions/cache@v2
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
-      - uses: ./.github/actions/build-autoreduction
-
-      - name: Run unit tests
-        run: >-
-          pytest -pno:django --ignore=systemtests --cov=build --cov=monitors --cov=queue_processors
-          --cov=scripts --cov=paths --cov=plotting --cov=model --ignore=WebApp/autoreduce_webapp/selenium_tests/
-          --cov-report=xml
-
-      - name: Run system tests
-        run: |
-          pytest -pno:django systemtests --cov-append
-
-      - uses: codecov/codecov-action@v1
-        with:
-          files: ./coverage.xml
-          name: codecov-umbrella
-          flags: backend
-          fail_ci_if_error: true
-          verbose: true
-
   selenium:
     name: Selenium
     runs-on: ubuntu-18.04
