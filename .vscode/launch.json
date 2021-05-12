@@ -24,7 +24,7 @@
                 "order": 1
             },
             "preLaunchTask": "(don't use) Run Docker Web App",
-            "postDebugTask": "Kill webapp-debugpy"
+            "postDebugTask": "Kill webapp-debugpy",
             "django": true
         },
         {
