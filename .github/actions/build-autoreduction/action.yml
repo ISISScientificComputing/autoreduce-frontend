@@ -18,11 +18,6 @@ runs:
     - name: Setup test environment
       run: |
         autoreduce-creds-migrate
-        # Externals must be after test_settings
-        python setup.py externals -s activemq
-        python setup.py database
-        cat build.log
-        _LOCAL_PYTHON_PATH=$(which python)
-        sudo $_LOCAL_PYTHON_PATH setup.py start
-        python WebApp/autoreduce_webapp/manage.py collectstatic
+        python autoreduce_webapp/manage.py migrate
+        python autoreduce_webapp/manage.py collectstatic
       shell: bash
