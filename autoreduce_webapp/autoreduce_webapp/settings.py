@@ -9,7 +9,7 @@ import configparser
 import os
 from pathlib import Path
 
-PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+from queue_processors.queue_processor.settings import PROJECT_ROOT
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -48,8 +48,8 @@ INTERNAL_IPS = ['localhost', '127.0.0.1']
 # Application definition
 ORM_INSTALL = [  # Minimal apps required to setup JUST the ORM - (increases ORM setup speed)
     'autoreduce_webapp',
-    'reduction_viewer',
-    'instrument',
+    'autoreduce_db.reduction_viewer',
+    'autoreduce_db.instrument',
 ]
 
 INSTALLED_APPS = [
