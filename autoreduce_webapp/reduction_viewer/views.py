@@ -18,6 +18,8 @@ import logging
 import operator
 import traceback
 
+from autoreduce_db.reduction_viewer.models import (Experiment, Instrument, ReductionRun, Status)
+from autoreduce_qp.queue_processor.variable_utils import VariableUtils
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout as django_logout
 from django.contrib.auth.models import User
@@ -26,21 +28,18 @@ from django.db.models import Q
 from django.http import HttpResponseNotFound
 from django.shortcuts import redirect
 from django.utils.http import url_has_allowed_host_and_scheme
-from autoreduce_db.reduction_viewer.models import (Experiment, Instrument, ReductionRun, Status)
-from autoreduce_qp.queue_processor.variable_utils import VariableUtils
 
-from autoreduce_webapp.autoreduce_django.icat_cache import ICATCache, ICATConnectionException
+from autoreduce_webapp.autoreduce_django.icat_cache import (ICATCache, ICATConnectionException)
 from autoreduce_webapp.autoreduce_django.settings import (ALLOWED_HOSTS, DEVELOPMENT_MODE, UOWS_LOGIN_URL,
                                                           USER_ACCESS_CHECKS)
 from autoreduce_webapp.autoreduce_django.uows_client import UOWSClient
-from autoreduce_webapp.autoreduce_django.views import render_error
 from autoreduce_webapp.autoreduce_django.view_utils import (check_permissions, login_and_uows_valid, render_with,
                                                             require_admin)
-from autoreduce_webapp.reduction_viewer.utils import ReductionRunUtils
-from autoreduce_webapp.reduction_viewer.view_utils import deactivate_invalid_instruments, get_interactive_plot_data
-from autoreduce_webapp.utilities.pagination import CustomPaginator
-
+from autoreduce_webapp.autoreduce_django.views import render_error
 from autoreduce_webapp.plotting.plot_handler import PlotHandler
+from autoreduce_webapp.reduction_viewer.utils import ReductionRunUtils
+from autoreduce_webapp.reduction_viewer.view_utils import (deactivate_invalid_instruments, get_interactive_plot_data)
+from autoreduce_webapp.utilities.pagination import CustomPaginator
 
 LOGGER = logging.getLogger('app')
 
@@ -141,8 +140,8 @@ def run_queue(request):
     Render status of queue
     """
     # Get all runs that should be shown
-    queued_status = STATUS.get_queued()
-    processing_status = STATUS.get_processing()
+    queued_status = Status.get_queued()
+    processing_status = Status.get_processing()
     pending_jobs = ReductionRun.objects.filter(Q(status=queued_status)
                                                | Q(status=processing_status)).order_by('created')
     # Filter those which the user shouldn't be able to see
@@ -175,13 +174,13 @@ def fail_queue(request):
     Render status of failed queue
     """
     # render the page
-    error_status = STATUS.get_error()
+    error_status = Status.get_error()
     failed_jobs = ReductionRun.objects.filter(Q(status=error_status)
                                               & Q(hidden_in_failviewer=False)).order_by('-created')
     context_dictionary = {
         'queue': failed_jobs,
-        'status_success': STATUS.get_completed(),
-        'status_failed': STATUS.get_error()
+        'status_success': Status.get_completed(),
+        'status_failed': Status.get_error()
     }
 
     if request.method == 'POST':
@@ -344,8 +343,8 @@ def runs_list(request, instrument=None):
             'instrument_name': instrument_obj.name,
             'runs': runs,
             'last_instrument_run': runs[0],
-            'processing': runs.filter(status=STATUS.get_processing()),
-            'queued': runs.filter(status=STATUS.get_queued()),
+            'processing': runs.filter(status=Status.get_processing()),
+            'queued': runs.filter(status=Status.get_queued()),
             'filtering': filter_by,
             'sort': sort_by,
             'has_variables': has_variables,

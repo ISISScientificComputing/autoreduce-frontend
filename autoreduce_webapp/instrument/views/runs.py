@@ -7,18 +7,18 @@
 
 import logging
 from itertools import chain
-from autoreduce_webapp.autoreduce_django.view_utils import (check_permissions, login_and_uows_valid, render_with)
-from django.db.models.query import QuerySet
-from django.shortcuts import redirect
+
 from autoreduce_db.instrument.models import InstrumentVariable
-
-from autoreduce_db.reduction_viewer.models import Instrument, ReductionRun
-from autoreduce_webapp.reduction_viewer.utils import ReductionRunUtils
-from autoreduce_webapp.utilities import input_processing
-
+from autoreduce_db.reduction_viewer.models import Instrument, ReductionRun, Status
 from autoreduce_qp.queue_processor.instrument_variable_utils import InstrumentVariablesUtils
 from autoreduce_qp.queue_processor.reduction.service import ReductionScript
 from autoreduce_qp.queue_processor.variable_utils import VariableUtils
+from django.db.models.query import QuerySet
+from django.shortcuts import redirect
+
+from autoreduce_webapp.autoreduce_django.view_utils import (check_permissions, login_and_uows_valid, render_with)
+from autoreduce_webapp.reduction_viewer.utils import ReductionRunUtils
+from autoreduce_webapp.utilities import input_processing
 
 LOGGER = logging.getLogger("app")
 
@@ -35,8 +35,8 @@ def submit_runs(request, instrument=None):
     # pylint:disable=no-member
     instrument = Instrument.objects.prefetch_related('reduction_runs').get(name=instrument)
     if request.method == 'GET':
-        processing_status = STATUS.get_processing()
-        queued_status = STATUS.get_queued()
+        processing_status = Status.get_processing()
+        queued_status = Status.get_queued()
 
         # pylint:disable=no-member
         runs_for_instrument = instrument.reduction_runs.all()
@@ -80,7 +80,7 @@ def run_confirmation(request, instrument: str):
     run_description = request.POST.get('run_description')
 
     # pylint:disable=no-member
-    queue_count = ReductionRun.objects.filter(instrument__name=instrument, status=STATUS.get_queued()).count()
+    queue_count = ReductionRun.objects.filter(instrument__name=instrument, status=Status.get_queued()).count()
     context_dictionary = {
         # list stores (run_number, run_version)
         'runs': [],
@@ -174,7 +174,7 @@ def find_reason_to_avoid_re_run(matching_previous_runs, run_number):
         return False, f"Run number {run_number} hasn't been ran by autoreduction yet."
 
     # Prevent multiple queueings of the same re-run
-    queued_runs = matching_previous_runs.filter(status=STATUS.get_queued()).first()
+    queued_runs = matching_previous_runs.filter(status=Status.get_queued()).first()
     if queued_runs is not None:
         return False, f"Run number {queued_runs.run_number} is already queued to run"
 
@@ -351,8 +351,8 @@ def configure_new_runs_get(instrument_name, start=0, end=0, experiment_reference
     context_dictionary = {
         'instrument': instrument,
         'last_instrument_run': last_run,
-        'processing': ReductionRun.objects.filter(instrument=instrument, status=STATUS.get_processing()),
-        'queued': ReductionRun.objects.filter(instrument=instrument, status=STATUS.get_queued()),
+        'processing': ReductionRun.objects.filter(instrument=instrument, status=Status.get_processing()),
+        'queued': ReductionRun.objects.filter(instrument=instrument, status=Status.get_queued()),
         'standard_variables': standard_vars if standard_vars else current_standard_variables,
         'advanced_variables': advanced_vars if advanced_vars else current_advanced_variables,
         'current_standard_variables': current_standard_variables,

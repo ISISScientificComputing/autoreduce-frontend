@@ -1,3 +1,5 @@
+EDIT: 19/05/2021 - Leaving this in, but it is unclear whether this is used in production anymore - and if it is, it should be moved to the ansible repo
+
 This template file is used to instruct Apache of where the content to serve is located.
 In order to get this up and running with Apache you must do the following:
 

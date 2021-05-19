@@ -11,13 +11,13 @@ Module containing the base test cases for a page and components
 import datetime
 from pathlib import Path
 
+from axe_selenium_python import Axe
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.urls.base import reverse
+
 from autoreduce_webapp.selenium_tests.configuration import set_url
 from autoreduce_webapp.selenium_tests.driver import get_chrome_driver
-from axe_selenium_python import Axe
-
-from autoreduce_qp.queue_processor.settings import PROJECT_ROOT
+from autoreduce_webapp.autoreduce_django.settings import CONFIG_ROOT
 
 
 class BaseTestCase(StaticLiveServerTestCase):
@@ -46,8 +46,7 @@ class BaseTestCase(StaticLiveServerTestCase):
     def _screenshot_driver(self):
         now = datetime.datetime.now()
         screenshot_name = f"{type(self).__name__}-{self._testMethodName}-{now.strftime('%Y-%m-%d_%H-%M-%S')}.png"
-        screenshot_path = str(
-            Path(PROJECT_ROOT, "WebApp", "autoreduce_webapp", "selenium_tests", "screenshots", screenshot_name))
+        screenshot_path = str(Path(CONFIG_ROOT, "selenium_tests", "screenshots", screenshot_name))
         self.driver.save_screenshot(screenshot_path)
 
     def _is_test_failure(self):
@@ -224,8 +223,9 @@ class AccessibilityTestMixin:
 
         now = datetime.datetime.now()
         report_name = f"{type(self.page).__name__}-{now.strftime('%Y-%m-%d_%H-%M-%S')}.json"
-        report_path = str(
-            Path(PROJECT_ROOT, "WebApp", "autoreduce_webapp", "selenium_tests", "a11y_reports", report_name))
+        a11y_reports_folder = Path(CONFIG_ROOT, "selenium_tests", "a11y_reports")
+        a11y_reports_folder.mkdir(parents=True, exist_ok=True)
+        report_path = str(a11y_reports_folder / report_name)
 
         axe.write_results(results, report_path)
         self.assertEqual(len(results['violations']), 0, axe.report(results["violations"]))
