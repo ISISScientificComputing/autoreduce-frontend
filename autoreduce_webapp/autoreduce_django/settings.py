@@ -60,7 +60,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    'django_plotly_dash.apps.DjangoPlotlyDashConfig',
 ]
 
 INSTALLED_APPS = INSTALLED_APPS + ORM_INSTALL
@@ -73,7 +72,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django_user_agents.middleware.UserAgentMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django_plotly_dash.middleware.BaseMiddleware',
 ]
 if DEBUG:
     # Add debug toolbar only if in DEBUG mode and installed

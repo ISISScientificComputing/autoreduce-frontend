@@ -62,9 +62,6 @@ urlpatterns = [
     path('graph/', reduction_viewer_views.graph_home, name="graph"),
     path('graph/<str:instrument_name>', reduction_viewer_views.graph_instrument, name="graph_instrument"),
     path('stats/', reduction_viewer_views.stats, name="stats"),
-
-    # ===========================VISUALISATION============================= #
-    path('django_plotly_dash/', include('django_plotly_dash.urls'))
 ]
 
 if settings.DEBUG:
