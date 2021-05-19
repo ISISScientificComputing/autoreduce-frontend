@@ -9,14 +9,14 @@ from django.conf import settings
 from django.conf.urls import include
 from django.contrib import admin
 from django.urls import path, register_converter
-from instrument.views import runs
-from reduction_viewer import views as reduction_viewer_views
+from autoreduce_webapp.instrument.views import runs
+from autoreduce_webapp.reduction_viewer import views as reduction_viewer_views
 
 # pylint: disable=invalid-name
-handler400 = 'autoreduce_webapp.views.handler400'
-handler403 = 'autoreduce_webapp.views.handler403'
-handler404 = 'autoreduce_webapp.views.handler404'
-handler500 = 'autoreduce_webapp.views.handler500'
+handler400 = 'autoreduce_django.views.handler400'
+handler403 = 'autoreduce_django.views.handler403'
+handler404 = 'autoreduce_django.views.handler404'
+handler500 = 'autoreduce_django.views.handler500'
 
 
 class NegativeIntConverter:

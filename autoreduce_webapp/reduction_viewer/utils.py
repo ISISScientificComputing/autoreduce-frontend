@@ -13,9 +13,9 @@ should be able to be removed. Many are relating to imports
 """
 import time
 
-from autoreduce_webapp.settings import FACILITY
 from autoreduce_db.reduction_viewer.models import ReductionRun
 
+from autoreduce_webapp.autoreduce_django.settings import FACILITY
 from autoreduce_utils.message.message import Message
 from autoreduce_utils.clients.queue_client import QueueClient
 

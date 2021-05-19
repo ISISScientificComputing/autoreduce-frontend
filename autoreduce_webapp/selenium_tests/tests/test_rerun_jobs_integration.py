@@ -6,11 +6,12 @@
 # ############################################################################### #
 
 from django.urls import reverse
-from selenium_tests.pages.rerun_jobs_page import RerunJobsPage
-from selenium_tests.tests.base_tests import (BaseTestCase, FooterTestMixin, NavbarTestMixin, AccessibilityTestMixin)
-from selenium_tests.utils import submit_and_wait_for_result
+from autoreduce_webapp.selenium_tests.pages.rerun_jobs_page import RerunJobsPage
+from autoreduce_webapp.selenium_tests.tests.base_tests import (BaseTestCase, FooterTestMixin, NavbarTestMixin,
+                                                               AccessibilityTestMixin)
+from autoreduce_webapp.selenium_tests.utils import submit_and_wait_for_result
 
-from WebApp.autoreduce_webapp.selenium_tests.utils import setup_external_services
+from autoreduce_webapp.selenium_tests.utils import setup_external_services
 
 
 class TestRerunJobsPageIntegration(NavbarTestMixin, BaseTestCase, FooterTestMixin, AccessibilityTestMixin):
@@ -26,8 +27,7 @@ class TestRerunJobsPageIntegration(NavbarTestMixin, BaseTestCase, FooterTestMixi
         """Starts external services and sets instrument for all test cases"""
         super().setUpClass()
         cls.instrument_name = "TestInstrument"
-        cls.data_archive, cls.database_client, cls.queue_client, cls.listener = setup_external_services(
-            cls.instrument_name, 21, 21)
+        cls.data_archive, cls.queue_client, cls.listener = setup_external_services(cls.instrument_name, 21, 21)
         cls.data_archive.add_reduction_script(cls.instrument_name, """print('some text')""")
         cls.data_archive.add_reduce_vars_script(cls.instrument_name,
                                                 """standard_vars={"variable1":"test_variable_value_123"}""")
@@ -39,7 +39,6 @@ class TestRerunJobsPageIntegration(NavbarTestMixin, BaseTestCase, FooterTestMixi
     def tearDownClass(cls) -> None:
         """Stops external services."""
         cls.queue_client.disconnect()
-        cls.database_client.disconnect()
         cls.data_archive.delete()
         super().tearDownClass()
 
@@ -151,8 +150,7 @@ class TestRerunJobsPageIntegrationSkippedOnly(BaseTestCase):
         """Starts external services and sets instrument for all test cases"""
         super().setUpClass()
         cls.instrument_name = "TestInstrument"
-        cls.data_archive, cls.database_client, cls.queue_client, cls.listener = setup_external_services(
-            cls.instrument_name, 21, 21)
+        cls.data_archive, cls.queue_client, cls.listener = setup_external_services(cls.instrument_name, 21, 21)
         cls.data_archive.add_reduction_script(cls.instrument_name, """print('some text')""")
         cls.data_archive.add_reduce_vars_script(cls.instrument_name,
                                                 """standard_vars={"variable1":"test_variable_value_123"}""")
@@ -165,7 +163,6 @@ class TestRerunJobsPageIntegrationSkippedOnly(BaseTestCase):
     def tearDownClass(cls) -> None:
         """Stops external services."""
         cls.queue_client.disconnect()
-        cls.database_client.disconnect()
         cls.data_archive.delete()
         super().tearDownClass()
 

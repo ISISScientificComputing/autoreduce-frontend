@@ -12,10 +12,10 @@ import logging
 
 from django.utils import timezone
 
-from .icat_communication import ICATCommunication
-from .models import UserCache, InstrumentCache, ExperimentCache
-
-from .settings import CACHE_LIFETIME
+# models have to be imported via absolute path or Django can't run the server properly
+from autoreduce_webapp.autoreduce_django.models import UserCache, InstrumentCache, ExperimentCache
+from autoreduce_webapp.autoreduce_django.icat_communication import ICATCommunication
+from autoreduce_webapp.autoreduce_django.settings import CACHE_LIFETIME
 
 LOGGER = logging.getLogger("app")
 

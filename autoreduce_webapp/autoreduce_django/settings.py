@@ -9,7 +9,7 @@ import configparser
 import os
 from pathlib import Path
 
-from queue_processors.queue_processor.settings import PROJECT_ROOT
+from autoreduce_db.autoreduce_db.settings import DATABASES as autoreduce_db_settings
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -47,7 +47,7 @@ INTERNAL_IPS = ['localhost', '127.0.0.1']
 
 # Application definition
 ORM_INSTALL = [  # Minimal apps required to setup JUST the ORM - (increases ORM setup speed)
-    'autoreduce_webapp',
+    'autoreduce_webapp.autoreduce_django',
     'autoreduce_db.reduction_viewer',
     'autoreduce_db.instrument',
 ]
@@ -86,7 +86,7 @@ if DEBUG:
         pass
 
 AUTHENTICATION_BACKENDS = [
-    'autoreduce_webapp.backends.UOWSAuthenticationBackend',
+    'autoreduce_django.backends.UOWSAuthenticationBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
 
@@ -103,48 +103,20 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'autoreduce_webapp.context_processors.support_email_processor',
+                'autoreduce_django.context_processors.support_email_processor',
             ],
         },
     },
 ]
 
-ROOT_URLCONF = 'autoreduce_webapp.urls'
+ROOT_URLCONF = 'autoreduce_django.urls'
 
-WSGI_APPLICATION = 'autoreduce_webapp.wsgi.application'
+WSGI_APPLICATION = 'autoreduce_django.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 
-if "RUNNING_VIA_PYTEST" in os.environ:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': ':memory:',
-        }
-    }
-elif "AUTOREDUCTION_PRODUCTION" in os.environ:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': get_str('DATABASE', 'name'),
-            'USER': get_str('DATABASE', 'user'),
-            'PASSWORD': get_str('DATABASE', 'password'),
-            'HOST': get_str('DATABASE', 'host'),
-            'PORT': get_str('DATABASE', 'port'),
-            'OPTIONS': {
-                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-            },
-        }
-    }
-
-else:  # the default development DB backend
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': f'{PROJECT_ROOT}/sqlite3.db',  # Or path to database file if using sqlite3.
-        }
-    }
+DATABASES = autoreduce_db_settings
 
 # Internationalization
 # https://docs.djangoproject.com/en/dev/topics/i18n/

@@ -5,7 +5,7 @@
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
 """
-WSGI config for autoreduce_webapp project.
+WSGI config for autoreduce_django project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -17,6 +17,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "autoreduce_webapp.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "autoreduce_django.settings")
 # pylint: disable=invalid-name
 application = get_wsgi_application()

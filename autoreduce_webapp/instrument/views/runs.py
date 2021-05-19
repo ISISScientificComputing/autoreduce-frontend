@@ -7,19 +7,18 @@
 
 import logging
 from itertools import chain
-from autoreduce_webapp.view_utils import (check_permissions, login_and_uows_valid, render_with)
+from autoreduce_webapp.autoreduce_django.view_utils import (check_permissions, login_and_uows_valid, render_with)
 from django.db.models.query import QuerySet
 from django.shortcuts import redirect
 from autoreduce_db.instrument.models import InstrumentVariable
 
 from autoreduce_db.reduction_viewer.models import Instrument, ReductionRun
-from reduction_viewer.utils import ReductionRunUtils
-from utilities import input_processing
+from autoreduce_webapp.reduction_viewer.utils import ReductionRunUtils
+from autoreduce_webapp.utilities import input_processing
 
-from queue_processors.queue_processor.instrument_variable_utils import InstrumentVariablesUtils
-from queue_processors.queue_processor.reduction.service import ReductionScript
-from queue_processors.queue_processor.status_utils import STATUS
-from queue_processors.queue_processor.variable_utils import VariableUtils
+from autoreduce_qp.queue_processor.instrument_variable_utils import InstrumentVariablesUtils
+from autoreduce_qp.queue_processor.reduction.service import ReductionScript
+from autoreduce_qp.queue_processor.variable_utils import VariableUtils
 
 LOGGER = logging.getLogger("app")
 

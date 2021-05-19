@@ -9,7 +9,7 @@ Node for handling replacing
 """
 from django.template import Library, Node, Variable, TemplateSyntaxError
 
-from .common_helpers import get_var
+from autoreduce_webapp.autoreduce_django.templatetags.common_helpers import get_var
 
 register = Library()
 

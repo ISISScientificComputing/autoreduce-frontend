@@ -1,8 +1,9 @@
 from django.urls import reverse
-from selenium_tests.pages.rerun_jobs_page import RerunJobsPage
-from selenium_tests.tests.base_tests import (NavbarTestMixin, BaseTestCase, FooterTestMixin, AccessibilityTestMixin)
+from autoreduce_webapp.selenium_tests.pages.rerun_jobs_page import RerunJobsPage
+from autoreduce_webapp.selenium_tests.tests.base_tests import (NavbarTestMixin, BaseTestCase, FooterTestMixin,
+                                                               AccessibilityTestMixin)
 
-from systemtests.utils.data_archive import DataArchive
+from autoreduce_qp.systemtests.utils.data_archive import DataArchive
 
 
 class TestRerunJobsPage(NavbarTestMixin, BaseTestCase, FooterTestMixin, AccessibilityTestMixin):

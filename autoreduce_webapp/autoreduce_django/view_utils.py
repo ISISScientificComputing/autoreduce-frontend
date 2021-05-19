@@ -16,10 +16,11 @@ from django.shortcuts import render
 from autoreduce_db.reduction_viewer.models import Notification, Setting
 from autoreduce_db.reduction_viewer.models import ReductionRun, Experiment
 
-from .views import render_error
-from .icat_cache import ICATCache, ICATConnectionException
+from autoreduce_webapp.autoreduce_django.views import render_error
+from autoreduce_webapp.autoreduce_django.icat_cache import ICATCache, ICATConnectionException
 # The below is a template on the repository
-from .settings import (DEVELOPMENT_MODE, LOGIN_URL, OUTDATED_BROWSERS, UOWS_LOGIN_URL, USER_ACCESS_CHECKS)
+from autoreduce_webapp.autoreduce_django.settings import (DEVELOPMENT_MODE, LOGIN_URL, OUTDATED_BROWSERS,
+                                                          UOWS_LOGIN_URL, USER_ACCESS_CHECKS)
 
 LOGGER = logging.getLogger("app")
 

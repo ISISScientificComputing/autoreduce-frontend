@@ -9,11 +9,12 @@ Selenium tests for the runs summary page
 """
 
 from django.urls import reverse
-from selenium_tests.pages.run_summary_page import RunSummaryPage
-from selenium_tests.tests.base_tests import (BaseTestCase, FooterTestMixin, NavbarTestMixin, AccessibilityTestMixin)
-from selenium_tests.utils import submit_and_wait_for_result
+from autoreduce_webapp.selenium_tests.pages.run_summary_page import RunSummaryPage
+from autoreduce_webapp.selenium_tests.tests.base_tests import (BaseTestCase, FooterTestMixin, NavbarTestMixin,
+                                                               AccessibilityTestMixin)
+from autoreduce_webapp.selenium_tests.utils import submit_and_wait_for_result
 
-from WebApp.autoreduce_webapp.selenium_tests.utils import setup_external_services
+from autoreduce_webapp.selenium_tests.utils import setup_external_services
 
 
 class TestRunSummaryPageIntegration(BaseTestCase, FooterTestMixin, NavbarTestMixin, AccessibilityTestMixin):
@@ -36,8 +37,7 @@ class TestRunSummaryPageIntegration(BaseTestCase, FooterTestMixin, NavbarTestMix
         cls.instrument_name = "TestInstrument"
         cls.rb_number = 1234567
         cls.run_number = 99999
-        cls.data_archive, cls.database_client, cls.queue_client, cls.listener = setup_external_services(
-            cls.instrument_name, 21, 21)
+        cls.data_archive, cls.queue_client, cls.listener = setup_external_services(cls.instrument_name, 21, 21)
         cls.data_archive.add_reduction_script(cls.instrument_name, """print('some text')""")
         cls.data_archive.add_reduce_vars_script(cls.instrument_name,
                                                 """standard_vars={"variable1":"test_variable_value_123"}""")
@@ -46,7 +46,6 @@ class TestRunSummaryPageIntegration(BaseTestCase, FooterTestMixin, NavbarTestMix
     def tearDownClass(cls) -> None:
         """Stop all external services"""
         cls.queue_client.disconnect()
-        cls.database_client.disconnect()
         cls.data_archive.delete()
         super().tearDownClass()
 

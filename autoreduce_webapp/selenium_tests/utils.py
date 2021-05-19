@@ -13,10 +13,9 @@ from selenium.webdriver.support.wait import WebDriverWait
 from autoreduce_utils.clients.connection_exception import ConnectionException
 from autoreduce_utils.clients.queue_client import QueueClient
 
-from model.database import access as db
-from model.database.django_database_client import DatabaseClient
-from queue_processors.queue_processor.queue_listener import main, QueueListener
-from systemtests.utils.data_archive import DataArchive
+from autoreduce_qp.model.database import access as db
+from autoreduce_qp.queue_processor.queue_listener import QueueListener, setup_connection
+from autoreduce_qp.systemtests.utils.data_archive import DataArchive
 
 
 def find_run_in_database(test):
@@ -61,7 +60,7 @@ def submit_and_wait_for_result(test):
 
 
 def setup_external_services(instrument_name: str, start_year: int,
-                            end_year: int) -> Tuple[DataArchive, DatabaseClient, QueueClient, QueueListener]:
+                            end_year: int) -> Tuple[DataArchive, QueueClient, QueueListener]:
     """
     Sets up a DataArchive complete with scripts, database client and queue client and listeners and returns their
     objects in a tuple
@@ -72,12 +71,10 @@ def setup_external_services(instrument_name: str, start_year: int,
     """
     data_archive = DataArchive([instrument_name], start_year, end_year)
     data_archive.create()
-    database_client = DatabaseClient()
-    database_client.connect()
     try:
-        queue_client, listener = main()
+        queue_client, listener = setup_connection()
     except ConnectionException as err:
         raise RuntimeError("Could not connect to ActiveMQ - check your credentials. If running locally check that "
                            "ActiveMQ is running and started by `python setup.py start`") from err
 
-    return data_archive, database_client, queue_client, listener
+    return data_archive, queue_client, listener

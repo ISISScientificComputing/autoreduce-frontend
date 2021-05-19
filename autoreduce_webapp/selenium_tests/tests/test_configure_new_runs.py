@@ -6,10 +6,11 @@
 # ############################################################################### #
 
 from django.urls import reverse
-from selenium_tests.pages.configure_new_runs_page import ConfigureNewRunsPage
-from selenium_tests.pages.variables_summary_page import VariableSummaryPage
-from selenium_tests.tests.base_tests import (BaseTestCase, FooterTestMixin, NavbarTestMixin, AccessibilityTestMixin)
-from systemtests.utils.data_archive import DataArchive
+from autoreduce_webapp.selenium_tests.pages.configure_new_runs_page import ConfigureNewRunsPage
+from autoreduce_webapp.selenium_tests.pages.variables_summary_page import VariableSummaryPage
+from autoreduce_webapp.selenium_tests.tests.base_tests import (BaseTestCase, FooterTestMixin, NavbarTestMixin,
+                                                               AccessibilityTestMixin)
+from autoreduce_qp.systemtests.utils.data_archive import DataArchive
 
 
 class TestConfigureNewRunsPage(NavbarTestMixin, BaseTestCase, FooterTestMixin, AccessibilityTestMixin):

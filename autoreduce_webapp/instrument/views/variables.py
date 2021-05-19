@@ -10,13 +10,13 @@ This imports into another view, thus no middleware
 """
 import logging
 
-from autoreduce_webapp.view_utils import (check_permissions, login_and_uows_valid, render_with)
+from autoreduce_webapp.autoreduce_django.view_utils import (check_permissions, login_and_uows_valid, render_with)
 from django.shortcuts import redirect, render
 from autoreduce_db.instrument.models import InstrumentVariable
 from autoreduce_db.reduction_viewer.models import Instrument, ReductionRun
-from reduction_viewer.utils import ReductionRunUtils
+from autoreduce_webapp.reduction_viewer.utils import ReductionRunUtils
 
-from queue_processors.queue_processor.variable_utils import VariableUtils
+from autoreduce_qp.queue_processor.variable_utils import VariableUtils
 
 LOGGER = logging.getLogger("app")
 

@@ -12,8 +12,8 @@ import logging
 # pylint:disable=imported-auth-user
 from django.contrib.auth.models import User
 
-from .icat_cache import ICATCache
-from .uows_client import UOWSClient
+from autoreduce_webapp.autoreduce_django.icat_cache import ICATCache
+from autoreduce_webapp.autoreduce_django.uows_client import UOWSClient
 
 LOGGER = logging.getLogger('app')
 

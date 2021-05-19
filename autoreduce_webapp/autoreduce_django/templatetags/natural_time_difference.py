@@ -10,7 +10,7 @@ Renders the time difference between to given times
 from django.template import Library, Node, Variable, TemplateSyntaxError
 from django.template.defaultfilters import pluralize
 
-from .common_helpers import get_var
+from autoreduce_webapp.autoreduce_django.templatetags.common_helpers import get_var
 
 # pylint:disable=invalid-name
 register = Library()

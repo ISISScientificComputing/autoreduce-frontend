@@ -15,7 +15,7 @@ import icat
 from django.utils.encoding import smart_str
 from autoreduce_db.reduction_viewer.models import Setting
 
-from .settings import ICAT, BASE_DIR
+from autoreduce_webapp.autoreduce_django.settings import ICAT, BASE_DIR
 
 LOGGER = logging.getLogger("app")
 sys.path.insert(0, BASE_DIR)

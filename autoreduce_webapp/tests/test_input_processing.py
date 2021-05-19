@@ -10,7 +10,7 @@ Tests for the input parser
 import string
 import unittest
 
-from utilities import input_processing
+from autoreduce_webapp.utilities import input_processing
 
 
 # pylint:disable=missing-docstring

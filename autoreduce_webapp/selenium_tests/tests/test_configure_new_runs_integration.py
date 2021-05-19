@@ -6,14 +6,14 @@
 # ############################################################################### #
 
 from selenium.common.exceptions import NoSuchElementException
-from selenium_tests.pages.configure_new_runs_page import ConfigureNewRunsPage
-from selenium_tests.pages.variables_summary_page import VariableSummaryPage
-from selenium_tests.tests.base_tests import (BaseTestCase, FooterTestMixin, NavbarTestMixin, AccessibilityTestMixin)
+from autoreduce_webapp.selenium_tests.pages.configure_new_runs_page import ConfigureNewRunsPage
+from autoreduce_webapp.selenium_tests.pages.variables_summary_page import VariableSummaryPage
+from autoreduce_webapp.selenium_tests.tests.base_tests import (BaseTestCase, FooterTestMixin, NavbarTestMixin,
+                                                               AccessibilityTestMixin)
 
 from autoreduce_db.instrument.models import InstrumentVariable
-from model.database import access as db
-from WebApp.autoreduce_webapp.selenium_tests.utils import \
-    setup_external_services
+from autoreduce_qp.model.database import access as db
+from autoreduce_webapp.selenium_tests.utils import setup_external_services
 
 REDUCE_VARS_DEFAULT_VALUE = "default value from reduce_vars"
 
@@ -34,8 +34,7 @@ class TestConfigureNewRunsPageIntegration(NavbarTestMixin, BaseTestCase, FooterT
         """
         super().setUpClass()
         cls.instrument_name = "TestInstrument"
-        cls.data_archive, cls.database_client, cls.queue_client, cls.listener = setup_external_services(
-            cls.instrument_name, 21, 21)
+        cls.data_archive, cls.queue_client, cls.listener = setup_external_services(cls.instrument_name, 21, 21)
         cls.data_archive.add_reduction_script(cls.instrument_name, """print('some text')""")
         cls.data_archive.add_reduce_vars_script(cls.instrument_name,
                                                 f"""standard_vars={{"variable1":"{REDUCE_VARS_DEFAULT_VALUE}"}}""")
@@ -48,7 +47,6 @@ class TestConfigureNewRunsPageIntegration(NavbarTestMixin, BaseTestCase, FooterT
         Destroys the created data-archive and disconnects the database and queue clients
         """
         cls.queue_client.disconnect()
-        cls.database_client.disconnect()
         cls.data_archive.delete()
         super().tearDownClass()
 

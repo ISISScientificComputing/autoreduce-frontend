@@ -18,11 +18,6 @@ import logging
 import operator
 import traceback
 
-from autoreduce_webapp.icat_cache import ICATCache, ICATConnectionException
-from autoreduce_webapp.settings import (ALLOWED_HOSTS, DEVELOPMENT_MODE, UOWS_LOGIN_URL, USER_ACCESS_CHECKS)
-from autoreduce_webapp.uows_client import UOWSClient
-from autoreduce_webapp.views import render_error
-from autoreduce_webapp.view_utils import (check_permissions, login_and_uows_valid, render_with, require_admin)
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout as django_logout
 from django.contrib.auth.models import User
@@ -32,13 +27,20 @@ from django.http import HttpResponseNotFound
 from django.shortcuts import redirect
 from django.utils.http import url_has_allowed_host_and_scheme
 from autoreduce_db.reduction_viewer.models import (Experiment, Instrument, ReductionRun, Status)
-from reduction_viewer.utils import ReductionRunUtils
-from reduction_viewer.view_utils import deactivate_invalid_instruments, get_interactive_plot_data
-from utilities.pagination import CustomPaginator
+from autoreduce_qp.queue_processor.variable_utils import VariableUtils
 
-from plotting.plot_handler import PlotHandler
-from queue_processors.queue_processor.status_utils import STATUS
-from queue_processors.queue_processor.variable_utils import VariableUtils
+from autoreduce_webapp.autoreduce_django.icat_cache import ICATCache, ICATConnectionException
+from autoreduce_webapp.autoreduce_django.settings import (ALLOWED_HOSTS, DEVELOPMENT_MODE, UOWS_LOGIN_URL,
+                                                          USER_ACCESS_CHECKS)
+from autoreduce_webapp.autoreduce_django.uows_client import UOWSClient
+from autoreduce_webapp.autoreduce_django.views import render_error
+from autoreduce_webapp.autoreduce_django.view_utils import (check_permissions, login_and_uows_valid, render_with,
+                                                            require_admin)
+from autoreduce_webapp.reduction_viewer.utils import ReductionRunUtils
+from autoreduce_webapp.reduction_viewer.view_utils import deactivate_invalid_instruments, get_interactive_plot_data
+from autoreduce_webapp.utilities.pagination import CustomPaginator
+
+from autoreduce_webapp.plotting.plot_handler import PlotHandler
 
 LOGGER = logging.getLogger('app')
 

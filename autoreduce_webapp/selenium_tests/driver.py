@@ -8,14 +8,15 @@
 Module containing functions for obtaining webdrivers
 """
 import os
+from typing import Union
 
 from selenium import webdriver
-from selenium_tests import configuration
+from autoreduce_webapp.selenium_tests import configuration
 
 WINDOW_SIZE = "1920,1080"
 
 
-def get_chrome_driver() -> webdriver.Chrome:
+def get_chrome_driver() -> Union[webdriver.Chrome, webdriver.Remote]:
     """
     Get an instance of a chrome driver
     :return: (Chrome) instance of a chromedriver

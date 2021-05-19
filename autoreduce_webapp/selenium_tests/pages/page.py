@@ -9,7 +9,7 @@ Module containing the base Page object class
 """
 from abc import ABC, abstractmethod
 
-from selenium_tests import configuration
+from autoreduce_webapp.selenium_tests import configuration
 
 
 class Page(ABC):

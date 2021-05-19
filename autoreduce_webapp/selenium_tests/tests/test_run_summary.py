@@ -14,10 +14,10 @@ import tempfile
 from django.urls import reverse
 from autoreduce_db.reduction_viewer.models import ReductionRun
 from selenium.webdriver.support.wait import WebDriverWait
-from selenium_tests.pages.run_summary_page import RunSummaryPage
-from selenium_tests.tests.base_tests import BaseTestCase, FooterTestMixin, NavbarTestMixin, \
+from autoreduce_webapp.selenium_tests.pages.run_summary_page import RunSummaryPage
+from autoreduce_webapp.selenium_tests.tests.base_tests import BaseTestCase, FooterTestMixin, NavbarTestMixin, \
     AccessibilityTestMixin
-from systemtests.utils.data_archive import DataArchive
+from autoreduce_qp.systemtests.utils.data_archive import DataArchive
 
 
 class TestRunSummaryPageNoArchive(NavbarTestMixin, BaseTestCase, FooterTestMixin, AccessibilityTestMixin):

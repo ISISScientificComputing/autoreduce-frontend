@@ -1,10 +1,10 @@
 from unittest.mock import Mock, patch
 
-import reduction_viewer.views
-from autoreduce_webapp.icat_cache import DEFAULT_MESSAGE
-from autoreduce_webapp.view_utils import ICATConnectionException
-from selenium_tests.pages.error_page import ErrorPage
-from selenium_tests.tests.base_tests import (BaseTestCase, FooterTestMixin, NavbarTestMixin)
+from autoreduce_webapp.reduction_viewer import views
+from autoreduce_webapp.autoreduce_django.icat_cache import DEFAULT_MESSAGE
+from autoreduce_webapp.autoreduce_django.view_utils import ICATConnectionException
+from autoreduce_webapp.selenium_tests.pages.error_page import ErrorPage
+from autoreduce_webapp.selenium_tests.tests.base_tests import (BaseTestCase, FooterTestMixin, NavbarTestMixin)
 
 
 class TestErrorPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
@@ -30,8 +30,8 @@ class TestErrorPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
 
         At the end it turns it back on or following tests will fail
         """
-        reduction_viewer.views.DEVELOPMENT_MODE = False
+        views.DEVELOPMENT_MODE = False
         self.page.launch_with_session()
         self.assertEqual(DEFAULT_MESSAGE, self.page.get_error_message())
         authenticate.assert_called_once_with(token=self.page.fake_token)
-        reduction_viewer.views.DEVELOPMENT_MODE = True
+        views.DEVELOPMENT_MODE = True

@@ -8,8 +8,7 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
@@ -22,7 +21,13 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ExperimentCache',
             fields=[
-                ('cache_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='autoreduce_webapp.cache')),
+                ('cache_ptr',
+                 models.OneToOneField(auto_created=True,
+                                      on_delete=django.db.models.deletion.CASCADE,
+                                      parent_link=True,
+                                      primary_key=True,
+                                      serialize=False,
+                                      to='autoreduce_django.cache')),
                 ('id_name', models.IntegerField()),
                 ('start_date', models.TextField(default='')),
                 ('end_date', models.TextField(default='')),
@@ -31,22 +36,34 @@ class Migration(migrations.Migration):
                 ('instrument', models.TextField(default='')),
                 ('pi', models.TextField(default='')),
             ],
-            bases=('autoreduce_webapp.cache',),
+            bases=('autoreduce_django.cache', ),
         ),
         migrations.CreateModel(
             name='InstrumentCache',
             fields=[
-                ('cache_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='autoreduce_webapp.cache')),
+                ('cache_ptr',
+                 models.OneToOneField(auto_created=True,
+                                      on_delete=django.db.models.deletion.CASCADE,
+                                      parent_link=True,
+                                      primary_key=True,
+                                      serialize=False,
+                                      to='autoreduce_django.cache')),
                 ('id_name', models.CharField(max_length=80)),
                 ('upcoming_experiments', models.TextField(blank=True)),
                 ('valid_experiments', models.TextField(blank=True)),
             ],
-            bases=('autoreduce_webapp.cache',),
+            bases=('autoreduce_django.cache', ),
         ),
         migrations.CreateModel(
             name='UserCache',
             fields=[
-                ('cache_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='autoreduce_webapp.cache')),
+                ('cache_ptr',
+                 models.OneToOneField(auto_created=True,
+                                      on_delete=django.db.models.deletion.CASCADE,
+                                      parent_link=True,
+                                      primary_key=True,
+                                      serialize=False,
+                                      to='autoreduce_django.cache')),
                 ('id_name', models.IntegerField()),
                 ('associated_experiments', models.TextField(blank=True)),
                 ('owned_instruments', models.TextField(blank=True)),
@@ -54,6 +71,6 @@ class Migration(migrations.Migration):
                 ('is_admin', models.BooleanField(default=False)),
                 ('is_instrument_scientist', models.BooleanField(default=False)),
             ],
-            bases=('autoreduce_webapp.cache',),
+            bases=('autoreduce_django.cache', ),
         ),
     ]

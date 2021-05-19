@@ -13,10 +13,17 @@ import sys
 from pathlib import Path
 from shutil import copyfile
 
-from queue_processors.queue_processor.settings import PROJECT_ROOT
+from autoreduce_webapp.autoreduce_django.settings import CONFIG_ROOT
 
-CONFIG_PATH = Path(PROJECT_ROOT, "WebApp/autoreduce_webapp/selenium_tests/config.json")
-TEMP_CONFIG_PATH = Path(PROJECT_ROOT, "Webapp/autoreduce_webapp/selenium_tests/temp_config.json")
+SELENIUM_CONFIG_DIR = Path(CONFIG_ROOT, "selenium_tests")
+SELENIUM_CONFIG = Path(SELENIUM_CONFIG_DIR, "config.json")
+TEMP_SELENIUM_CONFIG = Path(SELENIUM_CONFIG_DIR, "temp_config.json")
+
+if not SELENIUM_CONFIG_DIR.exists():
+    SELENIUM_CONFIG_DIR.mkdir(parents=True, exist_ok=True)
+
+if not SELENIUM_CONFIG.exists():
+    SELENIUM_CONFIG.write_text("""{"url": "http://localhost:0000","run_headless": true}""")
 
 
 def store_original_config():
@@ -25,9 +32,9 @@ def store_original_config():
      entrypoint being persisted to the config file.
     """
     try:
-        copyfile(CONFIG_PATH, TEMP_CONFIG_PATH)
+        copyfile(SELENIUM_CONFIG, TEMP_SELENIUM_CONFIG)
     except OSError:
-        sys.exit(f"Config file: {CONFIG_PATH} could not be loaded...")
+        sys.exit(f"Config file: {SELENIUM_CONFIG} could not be loaded...")
 
 
 def get_url():
@@ -72,9 +79,9 @@ def cleanup_config():
     Copy the original values back to the original config file, so as not to persist arguments given
     to test runner
     """
-    copyfile(TEMP_CONFIG_PATH, CONFIG_PATH)
-    if TEMP_CONFIG_PATH.exists():
-        TEMP_CONFIG_PATH.unlink()
+    copyfile(TEMP_SELENIUM_CONFIG, SELENIUM_CONFIG)
+    if TEMP_SELENIUM_CONFIG.exists():
+        TEMP_SELENIUM_CONFIG.unlink()
 
 
 def load_config_file():
@@ -83,10 +90,10 @@ def load_config_file():
     :return: (dict) The config file as a python dictionary
     """
     try:
-        with open(CONFIG_PATH) as fle:
+        with open(SELENIUM_CONFIG) as fle:
             return json.load(fle)
     except FileNotFoundError:
-        sys.exit(f"Config file is missing. Please create: {str(CONFIG_PATH)}")
+        sys.exit(f"Config file is missing. Please create: {str(SELENIUM_CONFIG)}")
 
 
 def dump_to_config_file(config_dict):
@@ -94,5 +101,5 @@ def dump_to_config_file(config_dict):
     Dump the given dictionary to the config file
     :param config_dict: (dict) the dictionary to be dumped.
     """
-    with open(CONFIG_PATH, "w") as fle:
+    with open(SELENIUM_CONFIG, "w") as fle:
         json.dump(config_dict, fle, indent=4)

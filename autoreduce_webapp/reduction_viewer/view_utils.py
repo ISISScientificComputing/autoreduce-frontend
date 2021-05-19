@@ -12,7 +12,7 @@ import logging
 import os
 
 from autoreduce_db.reduction_viewer.models import Instrument
-from queue_processors.queue_processor.reduction.service import ReductionScript
+from autoreduce_qp.queue_processor.reduction.service import ReductionScript
 
 LOGGER = logging.getLogger("app")
 

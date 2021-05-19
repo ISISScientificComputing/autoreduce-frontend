@@ -13,11 +13,11 @@ from pathlib import Path
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.urls.base import reverse
-from selenium_tests.configuration import set_url
-from selenium_tests.driver import get_chrome_driver
+from autoreduce_webapp.selenium_tests.configuration import set_url
+from autoreduce_webapp.selenium_tests.driver import get_chrome_driver
 from axe_selenium_python import Axe
 
-from queue_processors.queue_processor.settings import PROJECT_ROOT
+from autoreduce_qp.queue_processor.settings import PROJECT_ROOT
 
 
 class BaseTestCase(StaticLiveServerTestCase):
