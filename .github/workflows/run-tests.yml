@@ -36,7 +36,7 @@ jobs:
 
       - name: Run tests
         run: |
-          pytest WebApp/autoreduce_webapp/selenium_tests --cov-report=xml --cov=WebApp/autoreduce_webapp
+          pytest autoreduce_webapp --cov-report=xml --cov=autoreduce_webapp
 
       - uses: codecov/codecov-action@v1
         with:
@@ -51,8 +51,8 @@ jobs:
         with:
           name: screenshots_and_reports
           path: |
-            WebApp/autoreduce_webapp/selenium_tests/screenshots
-            WebApp/autoreduce_webapp/selenium_tests/a11y_reports
+            ~/.autoreduce/selenium_tests/screenshots
+            ~/.autoreduce/selenium_tests/a11y_reports
 
 
   dependency-check:
@@ -103,18 +103,11 @@ jobs:
 
       - name: Pylint tests
         run: |
-          pylint build
-          pylint model
-          pylint monitors
-          pylint queue_processors
-          pylint scripts
-          pylint systemtests
-          pylint plotting
-          pylint --disable=django-not-configured,import-error,no-name-in-module --load-plugins pylint_django WebApp
+          PYTHONPATH=autoreduce_webapp pylint --load-plugins pylint_django autoreduce_webapp
 
       - name: YAPF
         run: python -m yapf --parallel --diff --recursive .
 
       - name: Vulture
-        run: vulture --min-confidence 100 build model monitors scripts queue_processors systemtests plotting
+        run: vulture --min-confidence 90 autoreduce_webapp
 

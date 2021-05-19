@@ -38,6 +38,8 @@ suggestion-mode=yes
 # active Python interpreter and may run arbitrary code.
 unsafe-load-any-extension=no
 
+django-settings-module=autoreduce_django.settings
+
 
 [MESSAGES CONTROL]
 
@@ -239,8 +241,7 @@ inlinevar-naming-style=any
 # Naming style matching correct method names
 method-naming-style=snake_case
 
-# Regular expression matching correct method names. Overrides method-naming-
-# style
+# Regular expression matching correct method names. Overrides method-naming-style
 # This regex is necessary due to import errors due to the way imports work in the WebApp
 method-rgx=(([a-z_][a-z0-9_]{2,})|(setUp)|(tearDown)|(setUpClass)|(tearDownClass))$
 
