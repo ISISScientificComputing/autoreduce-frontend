@@ -28,27 +28,6 @@
             "django": true
         },
         {
-            "name": "pytest Docker Attach",
-            "type": "python",
-            "request": "attach",
-            "connect": {
-                "host": "127.0.0.1",
-                "port": 5680
-            },
-            "pathMappings": [
-                {
-                    "localRoot": "${workspaceFolder}",
-                    "remoteRoot": "/autoreduce"
-                }
-            ],
-            "presentation": {
-                "hidden": false,
-                "group": "autoreduce-docker",
-                "order": 1
-            },
-            "preLaunchTask": "(don't use) Run Docker pytest",
-        },
-        {
             "name": "pytest django Docker Attach",
             "type": "python",
             "request": "attach",
@@ -143,18 +122,6 @@
                 "group": "autoreduce-native",
                 "order": 99
             },
-        },
-        {
-            "name": "Queue Listener",
-            "type": "python",
-            "request": "launch",
-            "program": "queue_processors/queue_processor/queue_listener.py",
-            "console": "integratedTerminal",
-            "presentation": {
-                "hidden": false,
-                "group": "autoreduce-native",
-                "order": 98
-            }
         },
         {
             "name": "Attach",
