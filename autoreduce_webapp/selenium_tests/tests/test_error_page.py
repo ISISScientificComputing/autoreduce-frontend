@@ -7,8 +7,7 @@ from autoreduce_webapp.selenium_tests.pages.error_page import ErrorPage
 from autoreduce_webapp.selenium_tests.tests.base_tests import (BaseTestCase, FooterTestMixin, NavbarTestMixin)
 
 
-class TestErrorPage(BaseTestCase):
-    # class TestErrorPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
+class TestErrorPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
     """
     Test cases for the error page
     """
