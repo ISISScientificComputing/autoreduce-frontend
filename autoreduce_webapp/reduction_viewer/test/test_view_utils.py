@@ -1,4 +1,4 @@
-from unittest.mock import Mock, call, mock_open, patch
+from unittest.mock import Mock, mock_open, patch
 from autoreduce_webapp.autoreduce_django.settings import DATA_ANALYSIS_BASE_URL
 from autoreduce_webapp.reduction_viewer.view_utils import get_interactive_plot_data, make_data_analysis_url
 
