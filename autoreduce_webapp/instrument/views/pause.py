@@ -5,9 +5,10 @@
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
 
-from autoreduce_webapp.autoreduce_django.view_utils import (check_permissions, login_and_uows_valid)
-from django.http.response import JsonResponse
 from autoreduce_db.reduction_viewer.models import Instrument
+from django.http.response import JsonResponse
+
+from autoreduce_webapp.autoreduce_django.view_utils import (check_permissions, login_and_uows_valid)
 
 
 @login_and_uows_valid
