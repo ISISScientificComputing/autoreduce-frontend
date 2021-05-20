@@ -9,7 +9,7 @@ import configparser
 import os
 from pathlib import Path
 
-from autoreduce_db.autoreduce_db.settings import DATABASES as autoreduce_db_settings
+from autoreduce_db.autoreduce_django.settings import DATABASES as autoreduce_db_settings
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -73,15 +73,6 @@ MIDDLEWARE = [
     'django_user_agents.middleware.UserAgentMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-if DEBUG:
-    # Add debug toolbar only if in DEBUG mode and installed
-    try:
-        import debug_toolbar
-        INSTALLED_APPS.append('debug_toolbar')
-        MIDDLEWARE.insert(3, 'debug_toolbar.middleware.DebugToolbarMiddleware')
-    except ModuleNotFoundError:
-        # debug_toolbar not installed - just run without it
-        pass
 
 AUTHENTICATION_BACKENDS = [
     'autoreduce_django.backends.UOWSAuthenticationBackend',
