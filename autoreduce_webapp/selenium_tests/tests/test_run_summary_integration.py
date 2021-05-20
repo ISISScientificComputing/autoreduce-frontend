@@ -17,8 +17,7 @@ from autoreduce_webapp.selenium_tests.utils import submit_and_wait_for_result
 from autoreduce_webapp.selenium_tests.utils import setup_external_services
 
 
-class TestRunSummaryPageIntegration(BaseTestCase):
-    # class TestRunSummaryPageIntegration(BaseTestCase, FooterTestMixin, NavbarTestMixin, AccessibilityTestMixin):
+class TestRunSummaryPageIntegration(BaseTestCase, FooterTestMixin, NavbarTestMixin, AccessibilityTestMixin):
     """
     Test cases for the InstrumentSummary page when the Rerun form is NOT visible
     """
