@@ -30,8 +30,7 @@ class TestRerunJobsRangePageIntegration(NavbarTestMixin, BaseTestCase, FooterTes
         """Starts all external services"""
         super().setUpClass()
         cls.instrument_name = "TestInstrument"
-        cls.data_archive, cls.database_client, cls.queue_client, cls.listener = setup_external_services(
-            cls.instrument_name, 21, 21)
+        cls.data_archive, cls.queue_client, cls.listener = setup_external_services(cls.instrument_name, 21, 21)
         cls.data_archive.add_reduction_script(cls.instrument_name, """print('some text')""")
         cls.data_archive.add_reduce_vars_script(cls.instrument_name,
                                                 """standard_vars={"variable1":"test_variable_value_123"}""")
@@ -42,7 +41,6 @@ class TestRerunJobsRangePageIntegration(NavbarTestMixin, BaseTestCase, FooterTes
     def tearDownClass(cls) -> None:
         """Stops all external services"""
         cls.queue_client.disconnect()
-        cls.database_client.disconnect()
         cls.data_archive.delete()
         super().tearDownClass()
 
