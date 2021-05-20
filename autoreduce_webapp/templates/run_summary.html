@@ -180,7 +180,7 @@
                                 <div class="file-path">
                                     <strong>Reduced:</strong>
                                     {% if reduction_location %}
-                                        {{ reduction_location }}&nbsp<a href="{{data_analysis_link_url}}" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a><br/>
+                                        <a href="{{data_analysis_link_url}}" target="_blank">{{ reduction_location }}<i class="fa fa-external-link" aria-hidden="true"></i></a><br/>
                                     {% elif run.reduction_location.all %}
                                         {% for location in run.reduction_location.all %}
                                             {{ location.file_path }}<br/>
