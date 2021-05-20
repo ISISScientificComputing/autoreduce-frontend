@@ -30,8 +30,8 @@ from django.shortcuts import redirect
 from django.utils.http import url_has_allowed_host_and_scheme
 
 from autoreduce_webapp.autoreduce_django.icat_cache import (ICATCache, ICATConnectionException)
-from autoreduce_webapp.autoreduce_django.settings import (ALLOWED_HOSTS, DATA_ANALYSIS_BASE_URL, DEVELOPMENT_MODE,
-                                                          UOWS_LOGIN_URL, USER_ACCESS_CHECKS)
+from autoreduce_webapp.autoreduce_django.settings import (ALLOWED_HOSTS, DEVELOPMENT_MODE, UOWS_LOGIN_URL,
+                                                          USER_ACCESS_CHECKS)
 from autoreduce_webapp.autoreduce_django.uows_client import UOWSClient
 from autoreduce_webapp.autoreduce_django.view_utils import (check_permissions, login_and_uows_valid, render_with,
                                                             require_admin)
