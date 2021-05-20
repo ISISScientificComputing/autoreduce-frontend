@@ -1,11 +1,12 @@
 from django.urls import reverse
+from autoreduce_qp.systemtests.utils.data_archive import DataArchive
+
 from autoreduce_webapp.selenium_tests.pages.rerun_jobs_page import RerunJobsPage
 from autoreduce_webapp.selenium_tests.tests.base_tests import (NavbarTestMixin, BaseTestCase, FooterTestMixin,
                                                                AccessibilityTestMixin)
 
-from autoreduce_qp.systemtests.utils.data_archive import DataArchive
 
-
+# pylint:disable=no-member
 class TestRerunJobsPage(NavbarTestMixin, BaseTestCase, FooterTestMixin, AccessibilityTestMixin):
     """
     Test cases for the InstrumentSummary page when the Rerun form is NOT visible

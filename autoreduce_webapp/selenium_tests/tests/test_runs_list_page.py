@@ -8,10 +8,11 @@
 Selenium tests for the runs summary page
 """
 
+from autoreduce_qp.systemtests.utils.data_archive import DataArchive
+
 from autoreduce_webapp.selenium_tests.pages.runs_list_page import RunsListPage
 from autoreduce_webapp.selenium_tests.tests.base_tests import NavbarTestMixin, BaseTestCase, FooterTestMixin, \
     AccessibilityTestMixin
-from autoreduce_qp.systemtests.utils.data_archive import DataArchive
 
 
 class TestRunsListPage(NavbarTestMixin, BaseTestCase, FooterTestMixin, AccessibilityTestMixin):

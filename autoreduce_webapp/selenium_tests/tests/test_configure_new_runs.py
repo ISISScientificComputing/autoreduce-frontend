@@ -6,11 +6,12 @@
 # ############################################################################### #
 
 from django.urls import reverse
+from autoreduce_qp.systemtests.utils.data_archive import DataArchive
+
 from autoreduce_webapp.selenium_tests.pages.configure_new_runs_page import ConfigureNewRunsPage
 from autoreduce_webapp.selenium_tests.pages.variables_summary_page import VariableSummaryPage
 from autoreduce_webapp.selenium_tests.tests.base_tests import (BaseTestCase, FooterTestMixin, NavbarTestMixin,
                                                                AccessibilityTestMixin)
-from autoreduce_qp.systemtests.utils.data_archive import DataArchive
 
 
 class TestConfigureNewRunsPage(NavbarTestMixin, BaseTestCase, FooterTestMixin, AccessibilityTestMixin):
@@ -52,7 +53,7 @@ class TestConfigureNewRunsPage(NavbarTestMixin, BaseTestCase, FooterTestMixin, A
 
         # need to re-query the driver because resetting replaces the elements
         var_field = self.page.variable1_field
-        assert var_field.get_attribute("value") == "test_variable_value_123"
+        assert var_field.get_attribute("value") == "test_variable_value_123"  # pylint:disable=no-member
 
     def test_back_to_instruments_goes_back(self):
         """
