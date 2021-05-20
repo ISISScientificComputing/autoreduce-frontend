@@ -111,8 +111,8 @@
             "name": "Web app",
             "type": "python",
             "request": "launch",
-            "cwd": "${workspaceFolder}/WebApp/autoreduce_webapp/",
-            "program": "${workspaceFolder}/WebApp/autoreduce_webapp/manage.py",
+            "cwd": "${workspaceFolder}/autoreduce_webapp/",
+            "program": "${workspaceFolder}/autoreduce_webapp/manage.py",
             "args": [
                 "runserver"
             ],
