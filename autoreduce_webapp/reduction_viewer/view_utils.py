@@ -14,6 +14,8 @@ import os
 from autoreduce_db.reduction_viewer.models import Instrument
 from autoreduce_qp.queue_processor.reduction.service import ReductionScript
 
+from autoreduce_webapp.autoreduce_django.settings import DATA_ANALYSIS_BASE_URL
+
 LOGGER = logging.getLogger("app")
 
 
@@ -54,3 +56,8 @@ def get_interactive_plot_data(plot_locations):
             data = file.read()
         output[name] = data
     return output
+
+
+def make_data_analysis_url(reduction_location: str):
+    """Makes a URL for the data.analysis website that will open the location of the data"""
+    return DATA_ANALYSIS_BASE_URL + reduction_location.split("/instrument/")[1]

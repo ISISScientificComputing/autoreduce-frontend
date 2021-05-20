@@ -30,15 +30,16 @@ from django.shortcuts import redirect
 from django.utils.http import url_has_allowed_host_and_scheme
 
 from autoreduce_webapp.autoreduce_django.icat_cache import (ICATCache, ICATConnectionException)
-from autoreduce_webapp.autoreduce_django.settings import (ALLOWED_HOSTS, DEVELOPMENT_MODE, UOWS_LOGIN_URL,
-                                                          USER_ACCESS_CHECKS)
+from autoreduce_webapp.autoreduce_django.settings import (ALLOWED_HOSTS, DATA_ANALYSIS_BASE_URL, DEVELOPMENT_MODE,
+                                                          UOWS_LOGIN_URL, USER_ACCESS_CHECKS)
 from autoreduce_webapp.autoreduce_django.uows_client import UOWSClient
 from autoreduce_webapp.autoreduce_django.view_utils import (check_permissions, login_and_uows_valid, render_with,
                                                             require_admin)
 from autoreduce_webapp.autoreduce_django.views import render_error
 from autoreduce_webapp.plotting.plot_handler import PlotHandler
 from autoreduce_webapp.reduction_viewer.utils import ReductionRunUtils
-from autoreduce_webapp.reduction_viewer.view_utils import (deactivate_invalid_instruments, get_interactive_plot_data)
+from autoreduce_webapp.reduction_viewer.view_utils import (deactivate_invalid_instruments, get_interactive_plot_data,
+                                                           make_data_analysis_url)
 from autoreduce_webapp.utilities.pagination import CustomPaginator
 
 LOGGER = logging.getLogger('app')
@@ -240,11 +241,13 @@ def run_summary(_, instrument_name=None, run_number=None, run_version=0):
         is_rerun = len(history) > 1
 
         location_list = run.reduction_location.all()
-        reduction_location = None
+        reduction_location = ""
         if location_list:
             reduction_location = location_list[0].file_path
         if reduction_location and '\\' in reduction_location:
             reduction_location = reduction_location.replace('\\', '/')
+
+        data_analysis_link_url = make_data_analysis_url(reduction_location)
 
         rb_number = run.experiment.reference_number
         try:
@@ -265,7 +268,8 @@ def run_summary(_, instrument_name=None, run_number=None, run_version=0):
             'reduction_location': reduction_location,
             'started_by': started_by,
             'has_reduce_vars': has_reduce_vars,
-            'has_run_variables': has_run_variables
+            'has_run_variables': has_run_variables,
+            'data_analysis_link_url': data_analysis_link_url
         }
 
     except PermissionDenied:
