@@ -7,7 +7,8 @@ from autoreduce_webapp.selenium_tests.pages.error_page import ErrorPage
 from autoreduce_webapp.selenium_tests.tests.base_tests import (BaseTestCase, FooterTestMixin, NavbarTestMixin)
 
 
-class TestErrorPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
+class TestErrorPage(BaseTestCase):
+    # class TestErrorPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
     """
     Test cases for the error page
     """
@@ -20,7 +21,7 @@ class TestErrorPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
         super().setUp()
         self.page = ErrorPage(self.driver)
 
-    @patch('reduction_viewer.views.authenticate', side_effect=ICATConnectionException)
+    @patch('autoreduce_webapp.reduction_viewer.views.authenticate', side_effect=ICATConnectionException)
     def test_error_message(self, authenticate: Mock):
         """
         Test that the page error message matches the expected error
