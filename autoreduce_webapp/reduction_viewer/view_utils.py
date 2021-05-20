@@ -60,4 +60,7 @@ def get_interactive_plot_data(plot_locations):
 
 def make_data_analysis_url(reduction_location: str):
     """Makes a URL for the data.analysis website that will open the location of the data"""
-    return DATA_ANALYSIS_BASE_URL + reduction_location.split("/instrument/")[1]
+    if "/instrument/" in reduction_location:
+        return DATA_ANALYSIS_BASE_URL + reduction_location.split("/instrument/")[1]
+    else:
+        return ""
