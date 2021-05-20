@@ -7,10 +7,11 @@
 
 import re
 
+from selenium.webdriver.support.wait import WebDriverWait
+
 from autoreduce_webapp.selenium_tests.pages.help_page import HelpPage
 from autoreduce_webapp.selenium_tests.tests.base_tests import (NavbarTestMixin, BaseTestCase, FooterTestMixin,
                                                                AccessibilityTestMixin)
-from selenium.webdriver.support.wait import WebDriverWait
 
 
 class TestHelpPage(NavbarTestMixin, BaseTestCase, FooterTestMixin, AccessibilityTestMixin):
