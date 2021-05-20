@@ -8,59 +8,16 @@
 Selenium tests for the runs summary page
 """
 
-import os
-import tempfile
-
 from django.urls import reverse
 from autoreduce_db.reduction_viewer.models import ReductionRun
 from autoreduce_qp.systemtests.utils.data_archive import DataArchive
 from selenium.webdriver.support.wait import WebDriverWait
 
 from autoreduce_webapp.selenium_tests.pages.run_summary_page import RunSummaryPage
-from autoreduce_webapp.selenium_tests.tests.base_tests import BaseTestCase, FooterTestMixin, NavbarTestMixin, \
-    AccessibilityTestMixin
+from autoreduce_webapp.selenium_tests.tests.base_tests import BaseTestCase, FooterTestMixin, NavbarTestMixin
 
 
 # pylint:disable=no-member
-class TestRunSummaryPageNoArchive(NavbarTestMixin, BaseTestCase, FooterTestMixin, AccessibilityTestMixin):
-    fixtures = BaseTestCase.fixtures + ["run_with_one_variable"]
-
-    @classmethod
-    def setUpClass(cls):
-        """Set the instrument for all test cases"""
-        super().setUpClass()
-        cls.instrument_name = "TestInstrument"
-
-    def setUp(self) -> None:
-        """Set up RunSummaryPage before each test case"""
-        super().setUp()
-        self.page = RunSummaryPage(self.driver, self.instrument_name, 99999, 0)
-        self.page.launch()
-
-    def test_opening_run_summary_without_reduce_vars(self):
-        """
-        Test that opening the run summary without a reduce_vars present for the instrument
-        will not show the "Reset to current" buttons as there is no current values!
-        """
-        # the reset to current values should not be visible
-        assert self.page.warning_message.is_displayed()
-        assert self.page.warning_message.text == ("The reduce_vars.py script is missing for this instrument."
-                                                  " Please create it before being able to submit re-runs.")
-
-    def test_opening_run_summary_without_run_variables(self):
-        """
-        Test that opening the run summary without a reduce_vars present for the instrument
-        will not show the "Reset to current" buttons as there is no current values!
-        """
-        # Delete the variables, and re-open the page
-        ReductionRun.objects.get(pk=1).run_variables.all().delete()
-        self.page.launch()
-        # the reset to current values should not be visible
-        assert self.page.warning_message.is_displayed()
-        assert self.page.warning_message.text == "No variables found for this run."
-        assert self.page.run_description_text() == "Run description: This is the test run_description"
-
-
 class TestRunSummaryPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
     """
     Test cases for the InstrumentSummary page when the Rerun form is NOT visible
@@ -147,98 +104,3 @@ class TestRunSummaryPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
         assert back.text == f"Back to {self.instrument_name} runs"
         back.click()
         assert reverse("runs:list", kwargs={"instrument": self.instrument_name}) in self.driver.current_url
-
-
-class TestRunSummaryPagePlots(BaseTestCase):
-    """
-    Test cases for the InstrumentSummary page when the Rerun form is NOT visible
-    """
-
-    fixtures = BaseTestCase.fixtures + ["one_run_plot"]
-
-    def setUp(self) -> None:
-        """
-        Set up the instrument name and page
-        """
-        super().setUp()
-        self.instrument_name = "TestInstrument"
-
-        self.page = RunSummaryPage(self.driver, self.instrument_name, 99999, 0)
-        self.run = ReductionRun.objects.first()
-
-    def test_plot_files_png(self):
-        """
-        Test: PNG plot files are fetched and shown
-        """
-        # the plot files are expected to be in the reduction location, so we write them there for the test to work
-        plot_files = [
-            tempfile.NamedTemporaryFile(prefix="data_",
-                                        suffix=".png",
-                                        dir=self.run.reduction_location.first().file_path),
-            tempfile.NamedTemporaryFile(prefix="data_",
-                                        suffix=".png",
-                                        dir=self.run.reduction_location.first().file_path)
-        ]
-        self.page.launch()
-
-        # 1 is the logo, the other 2 are the plots
-        images = self.page.images()
-        assert len(images) == 3
-        for img in images[1:]:
-            alt_text = img.get_attribute("alt")
-            assert "Plot image stored at" in alt_text
-            assert any(os.path.basename(f.name) in alt_text for f in plot_files)
-
-    def test_plot_files_json(self):
-        """
-        Test: JSON plot files are fetched and rendered by plotly
-        """
-        # the plot files are expected to be in the reduction location, so we write them there for the test to work
-        plot_files = []
-
-        for _ in range(2):
-            # pylint:disable=consider-using-with
-            tfile = tempfile.NamedTemporaryFile('w',
-                                                prefix="data_",
-                                                suffix=".json",
-                                                dir=self.run.reduction_location.first().file_path)
-            tfile.write("""{"data": [{"type": "bar","x": [1,2,3],"y": [1,3,2]}]}""")
-            tfile.flush()
-            plot_files.append(tfile)
-
-        self.page.launch()
-
-        plots = self.page.plotly_plots()
-        assert len(plots) == 2
-        for plot in plots:
-            assert any(plot.get_attribute("id") in file.name for file in plot_files)
-
-    def test_plot_files_mix(self):
-        """Test that both static and interactive plots are rendered"""
-        plot_files = [
-            tempfile.NamedTemporaryFile(prefix="data_",
-                                        suffix=".png",
-                                        dir=self.run.reduction_location.first().file_path),
-            tempfile.NamedTemporaryFile('w',
-                                        prefix="data_",
-                                        suffix=".json",
-                                        dir=self.run.reduction_location.first().file_path)
-        ]
-        # write the interactive plot data
-        plot_files[1].write("""{"data": [{"type": "bar","x": [1,2,3],"y": [1,3,2]}]}""")
-        plot_files[1].flush()
-
-        self.page.launch()
-
-        images = self.page.images()
-        # 1 is the logo, the other is the static plot
-        assert len(images) == 2
-
-        img = images[1]
-        alt_text = img.get_attribute("alt")
-        assert "Plot image stored at" in alt_text
-        assert any(os.path.basename(f.name) in alt_text for f in plot_files)
-
-        plots = self.page.plotly_plots()
-        assert len(plots) == 1
-        assert plots[0].get_attribute("id") in plot_files[1].name
