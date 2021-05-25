@@ -6,9 +6,21 @@ see:
 for more details
 """
 from setuptools import setup, find_packages
+from glob import glob
+import os
 
-setup(name="autoreduce_webapp",
-      version="21.1.3",
+PACKAGE_NAME = "autoreduce_webapp"
+
+data_locations = [f"{PACKAGE_NAME}/templates/", f"{PACKAGE_NAME}/static/"]
+
+data_files = []
+
+for loc in data_locations:
+    data_files.extend([f.split(f"{PACKAGE_NAME}/")[1] for f in glob(f"{loc}/**", recursive=True) if os.path.isfile(f)])
+print(data_files)
+
+setup(name=PACKAGE_NAME,
+      version="21.1.4",
       description="The frontend of the ISIS Autoreduction service",
       author="ISIS Autoreduction Team",
       url="https://github.com/ISISScientificComputing/autoreduce-frontend/",
@@ -17,5 +29,5 @@ setup(name="autoreduce_webapp",
           "django_extensions==3.1.3", "django-user-agents==0.4.0"
       ],
       packages=find_packages(),
-      package_data={"": ["templates/**/*.*", "static/**/*.*", "**/*.json"]},
+      package_data={"": data_files},
       entry_points={"console_scripts": ["autoreduce-webapp-manage = autoreduce_webapp.manage:main"]})
