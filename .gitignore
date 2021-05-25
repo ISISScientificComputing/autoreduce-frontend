@@ -18,6 +18,7 @@ credentials.ini
 
 # Ignore distutils installation
 dist/
+build/
 
 # Ignore virtual environment
 venv/
@@ -26,7 +27,7 @@ venv36/
 venv37/
 
 # Ignore pip install installation
-AutoReduction.egg-info/
+*.egg-info/
 
 # This is generated from a template so should be ignored to force regeneration
 apache_django_wsgi.conf
