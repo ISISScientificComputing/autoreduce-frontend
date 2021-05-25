@@ -7,7 +7,7 @@ for more details
 """
 from setuptools import setup, find_packages
 
-setup(name='autoreduction-frontend',
+setup(name='autoreduce_webapp',
       version='21.1.1',
       description='The frontend of the ISIS Autoreduction service',
       author='ISIS Autoreduction Team',
