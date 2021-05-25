@@ -13,10 +13,10 @@ from autoreduce_webapp.instrument.views import runs
 from autoreduce_webapp.reduction_viewer import views as reduction_viewer_views
 
 # pylint: disable=invalid-name
-handler400 = 'autoreduce_django.views.handler400'
-handler403 = 'autoreduce_django.views.handler403'
-handler404 = 'autoreduce_django.views.handler404'
-handler500 = 'autoreduce_django.views.handler500'
+handler400 = 'autoreduce_webapp.autoreduce_django.views.handler400'
+handler403 = 'autoreduce_webapp.autoreduce_django.views.handler403'
+handler404 = 'autoreduce_webapp.autoreduce_django.views.handler404'
+handler500 = 'autoreduce_webapp.autoreduce_django.views.handler500'
 
 
 class NegativeIntConverter:

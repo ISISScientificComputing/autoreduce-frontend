@@ -75,7 +75,7 @@ MIDDLEWARE = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-    'autoreduce_django.backends.UOWSAuthenticationBackend',
+    'autoreduce_webapp.autoreduce_django.backends.UOWSAuthenticationBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
 
@@ -92,15 +92,15 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'autoreduce_django.context_processors.support_email_processor',
+                'autoreduce_webapp.autoreduce_django.context_processors.support_email_processor',
             ],
         },
     },
 ]
 
-ROOT_URLCONF = 'autoreduce_django.urls'
+ROOT_URLCONF = 'autoreduce_webapp.autoreduce_django.urls'
 
-WSGI_APPLICATION = 'autoreduce_django.wsgi.application'
+WSGI_APPLICATION = 'autoreduce_webapp.autoreduce_django.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
