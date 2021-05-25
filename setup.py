@@ -8,7 +8,7 @@ for more details
 from setuptools import setup, find_packages
 
 setup(name="autoreduce_webapp",
-      version="21.1.1",
+      version="21.1.3",
       description="The frontend of the ISIS Autoreduction service",
       author="ISIS Autoreduction Team",
       url="https://github.com/ISISScientificComputing/autoreduce-frontend/",
@@ -17,4 +17,5 @@ setup(name="autoreduce_webapp",
           "django_extensions==3.1.3", "django-user-agents==0.4.0"
       ],
       packages=find_packages(),
+      package_data={"": ["templates/**/*.*", "static/**/*.*", "**/*.json"]},
       entry_points={"console_scripts": ["autoreduce-webapp-manage = autoreduce_webapp.manage:main"]})
