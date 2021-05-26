@@ -20,7 +20,7 @@ class TestErrorPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
         super().setUp()
         self.page = ErrorPage(self.driver)
 
-    @patch('autoreduce_webapp.reduction_viewer.views.authenticate', side_effect=ICATConnectionException)
+    @patch('autoreduce_frontend.reduction_viewer.views.authenticate', side_effect=ICATConnectionException)
     def test_error_message(self, authenticate: Mock):
         """
         Test that the page error message matches the expected error

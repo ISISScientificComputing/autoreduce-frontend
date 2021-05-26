@@ -21,7 +21,7 @@ def test_get_interactive_plot_data():
     """
     locations = ["location1.png", "location1.json", "location2.jpg", "location2.json"]
     mopen: Mock = mock_open()
-    with patch("autoreduce_webapp.reduction_viewer.view_utils.open", mopen, create=True):
+    with patch("autoreduce_frontend.reduction_viewer.view_utils.open", mopen, create=True):
         get_interactive_plot_data(locations)
     mopen.assert_any_call(locations[1], 'r')
     mopen.assert_any_call(locations[3], 'r')

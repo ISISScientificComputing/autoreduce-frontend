@@ -87,7 +87,7 @@ class TestPlotHandler(unittest.TestCase):
         actual_pattern = self.test_plot_handler._generate_file_extension_regex()
         self.assertEqual(expected_pattern, actual_pattern)
 
-    @patch('autoreduce_webapp.plotting.plot_handler.os')
+    @patch('autoreduce_frontend.plotting.plot_handler.os')
     def test_check_for_plot_files_path_exists(self, mock_os):
         """
         Test: sftpclient.get_filenames is called with the correct parameters if only one plot_type is used
@@ -102,7 +102,7 @@ class TestPlotHandler(unittest.TestCase):
         # check that only the valid matches have been found
         assert mock_os.listdir.return_value[0:3] == self.test_plot_handler._check_for_plot_files()
 
-    @patch('autoreduce_webapp.plotting.plot_handler.os')
+    @patch('autoreduce_frontend.plotting.plot_handler.os')
     def test_check_for_plot_files_path_doesnt_exist(self, mock_os):
         """
         Test: sftpclient.get_filenames is called with the correct parameters if only one plot_type is used
@@ -112,8 +112,8 @@ class TestPlotHandler(unittest.TestCase):
         # check that only the valid matches have been found
         assert [] == self.test_plot_handler._check_for_plot_files()
 
-    @patch('autoreduce_webapp.plotting.plot_handler.PlotHandler._check_for_plot_files')
-    @patch('autoreduce_webapp.plotting.plot_handler.shutil.copy')
+    @patch('autoreduce_frontend.plotting.plot_handler.PlotHandler._check_for_plot_files')
+    @patch('autoreduce_frontend.plotting.plot_handler.shutil.copy')
     def test_get_plot_files(self, mock_copy: Mock, mock_find_files):
         """
         Test: get_plot_files returns the expected plot files
@@ -130,8 +130,8 @@ class TestPlotHandler(unittest.TestCase):
 
         self.assertTrue(server_path[0].endswith(expected_files[0]))
 
-    @patch('autoreduce_webapp.plotting.plot_handler.PlotHandler._check_for_plot_files')
-    @patch('autoreduce_webapp.plotting.plot_handler.shutil.copy')
+    @patch('autoreduce_frontend.plotting.plot_handler.PlotHandler._check_for_plot_files')
+    @patch('autoreduce_frontend.plotting.plot_handler.shutil.copy')
     def test_get_plot_files_multiple(self, mock_copy: Mock, mock_find_files):
         """
         Test: Multiple file paths are returned as a list
@@ -150,7 +150,7 @@ class TestPlotHandler(unittest.TestCase):
         for i, expected in enumerate(expected_files):
             self.assertTrue(server_paths[i].endswith(expected))
 
-    @patch('autoreduce_webapp.plotting.plot_handler.PlotHandler._check_for_plot_files', return_value=[])
+    @patch('autoreduce_frontend.plotting.plot_handler.PlotHandler._check_for_plot_files', return_value=[])
     def test_get_plot_file_none_found(self, mock_cfpl: Mock):
         """
         Test: None is returned
@@ -162,9 +162,9 @@ class TestPlotHandler(unittest.TestCase):
         mock_cfpl.assert_called_once()
 
     @parameterized.expand([[FileNotFoundError, "does not exist"], [PermissionError, "Insufficient permissions"]])
-    @patch('autoreduce_webapp.plotting.plot_handler.LOGGER')
-    @patch('autoreduce_webapp.plotting.plot_handler.PlotHandler._check_for_plot_files')
-    @patch('autoreduce_webapp.plotting.plot_handler.shutil.copy')
+    @patch('autoreduce_frontend.plotting.plot_handler.LOGGER')
+    @patch('autoreduce_frontend.plotting.plot_handler.PlotHandler._check_for_plot_files')
+    @patch('autoreduce_frontend.plotting.plot_handler.shutil.copy')
     def test_get_plot_files_exception_raised(
         self,
         exc_type: Exception,

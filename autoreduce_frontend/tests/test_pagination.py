@@ -94,10 +94,10 @@ class TestCustomPaginator(unittest.TestCase):
             MockRunData(5, now - timedelta(4))
         ]
 
-    @patch('autoreduce_webapp.utilities.pagination.CustomPaginator._validate_current_page')
-    @patch('autoreduce_webapp.utilities.pagination.CustomPaginator._construct_pagination')
-    @patch('autoreduce_webapp.utilities.pagination.CustomPaginator._set_next_and_previous')
-    @patch('autoreduce_webapp.utilities.pagination.CustomPaginator._create_display_list')
+    @patch('autoreduce_frontend.utilities.pagination.CustomPaginator._validate_current_page')
+    @patch('autoreduce_frontend.utilities.pagination.CustomPaginator._construct_pagination')
+    @patch('autoreduce_frontend.utilities.pagination.CustomPaginator._set_next_and_previous')
+    @patch('autoreduce_frontend.utilities.pagination.CustomPaginator._create_display_list')
     def test_init(self, mock_create_display_list, mock_set_next_and_previous, mock_construct_pagination,
                   mock_validate_current_page):
         """
