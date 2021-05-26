@@ -38,7 +38,7 @@ suggestion-mode=yes
 # active Python interpreter and may run arbitrary code.
 unsafe-load-any-extension=no
 
-django-settings-module=autoreduce_django.settings
+django-settings-module=autoreduce_webapp.settings
 
 
 [MESSAGES CONTROL]

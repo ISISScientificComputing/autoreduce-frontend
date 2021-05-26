@@ -20,7 +20,7 @@ for loc in data_locations:
 print(data_files)
 
 setup(name=PACKAGE_NAME,
-      version="21.1.2",
+      version="21.1.3",
       description="The frontend of the ISIS Autoreduction service",
       author="ISIS Autoreduction Team",
       url="https://github.com/ISISScientificComputing/autoreduce-frontend/",
