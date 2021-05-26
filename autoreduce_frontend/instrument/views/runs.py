@@ -17,8 +17,8 @@ from django.db.models.query import QuerySet
 from django.shortcuts import redirect
 
 from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions, login_and_uows_valid, render_with)
-from autoreduce_webapp.reduction_viewer.utils import ReductionRunUtils
-from autoreduce_webapp.utilities import input_processing
+from autoreduce_frontend.reduction_viewer.utils import ReductionRunUtils
+from autoreduce_frontend.utilities import input_processing
 
 LOGGER = logging.getLogger("app")
 

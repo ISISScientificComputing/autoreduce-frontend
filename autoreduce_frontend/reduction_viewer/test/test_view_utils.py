@@ -1,6 +1,6 @@
 from unittest.mock import Mock, mock_open, patch
 from autoreduce_frontend.autoreduce_webapp.settings import DATA_ANALYSIS_BASE_URL
-from autoreduce_webapp.reduction_viewer.view_utils import get_interactive_plot_data, make_data_analysis_url
+from autoreduce_frontend.reduction_viewer.view_utils import get_interactive_plot_data, make_data_analysis_url
 
 
 def test_make_data_analysis_url_no_instrument_in_string():

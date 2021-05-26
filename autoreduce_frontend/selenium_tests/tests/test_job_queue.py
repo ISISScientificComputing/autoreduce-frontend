@@ -7,9 +7,9 @@
 """
 Tests for JobQueuePage
 """
-from autoreduce_webapp.selenium_tests.pages.job_queue_page import JobQueuePage
-from autoreduce_webapp.selenium_tests.tests.base_tests import (FooterTestMixin, BaseTestCase, NavbarTestMixin,
-                                                               AccessibilityTestMixin)
+from autoreduce_frontend.selenium_tests.pages.job_queue_page import JobQueuePage
+from autoreduce_frontend.selenium_tests.tests.base_tests import (FooterTestMixin, BaseTestCase, NavbarTestMixin,
+                                                                 AccessibilityTestMixin)
 
 
 class TestJobQueuePage(NavbarTestMixin, BaseTestCase, FooterTestMixin, AccessibilityTestMixin):

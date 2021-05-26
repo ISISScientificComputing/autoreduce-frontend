@@ -11,7 +11,7 @@ import os
 from typing import Union
 
 from selenium import webdriver
-from autoreduce_webapp.selenium_tests import configuration
+from autoreduce_frontend.selenium_tests import configuration
 
 WINDOW_SIZE = "1920,1080"
 

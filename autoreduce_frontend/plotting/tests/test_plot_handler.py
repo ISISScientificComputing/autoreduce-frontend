@@ -17,7 +17,7 @@ import unittest
 from unittest.mock import Mock, patch
 from parameterized import parameterized
 
-from autoreduce_webapp.plotting.plot_handler import PlotHandler
+from autoreduce_frontend.plotting.plot_handler import PlotHandler
 
 
 # pylint:disable=line-too-long, protected-access

@@ -9,10 +9,10 @@ Module for the error page model
 """
 from django.urls.base import reverse
 
-from autoreduce_webapp.selenium_tests.pages.component_mixins.footer_mixin import FooterMixin
-from autoreduce_webapp.selenium_tests.pages.component_mixins.navbar_mixin import NavbarMixin
-from autoreduce_webapp.selenium_tests.pages.page import Page
-from autoreduce_webapp.selenium_tests import configuration
+from autoreduce_frontend.selenium_tests.pages.component_mixins.footer_mixin import FooterMixin
+from autoreduce_frontend.selenium_tests.pages.component_mixins.navbar_mixin import NavbarMixin
+from autoreduce_frontend.selenium_tests.pages.page import Page
+from autoreduce_frontend.selenium_tests import configuration
 
 
 class ErrorPage(Page, NavbarMixin, FooterMixin):

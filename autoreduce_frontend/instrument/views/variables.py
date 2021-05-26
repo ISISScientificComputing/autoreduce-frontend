@@ -16,7 +16,7 @@ from autoreduce_db.reduction_viewer.models import Instrument, ReductionRun
 from autoreduce_qp.queue_processor.variable_utils import VariableUtils
 
 from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions, login_and_uows_valid, render_with)
-from autoreduce_webapp.reduction_viewer.utils import ReductionRunUtils
+from autoreduce_frontend.reduction_viewer.utils import ReductionRunUtils
 
 LOGGER = logging.getLogger("app")
 

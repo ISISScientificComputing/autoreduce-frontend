@@ -15,8 +15,8 @@ from axe_selenium_python import Axe
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.urls.base import reverse
 
-from autoreduce_webapp.selenium_tests.configuration import set_url
-from autoreduce_webapp.selenium_tests.driver import get_chrome_driver
+from autoreduce_frontend.selenium_tests.configuration import set_url
+from autoreduce_frontend.selenium_tests.driver import get_chrome_driver
 from autoreduce_frontend.autoreduce_webapp.settings import CONFIG_ROOT
 
 

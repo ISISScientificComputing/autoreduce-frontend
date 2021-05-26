@@ -1,5 +1,5 @@
-from autoreduce_webapp.selenium_tests.pages.accessibility_statement_page import AccessibilityStatementPage
-from autoreduce_webapp.selenium_tests.tests.base_tests import NavbarTestMixin, BaseTestCase, \
+from autoreduce_frontend.selenium_tests.pages.accessibility_statement_page import AccessibilityStatementPage
+from autoreduce_frontend.selenium_tests.tests.base_tests import NavbarTestMixin, BaseTestCase, \
     FooterTestMixin
 
 

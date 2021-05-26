@@ -8,11 +8,11 @@
 from django.urls import reverse
 from selenium.webdriver.remote.webelement import WebElement
 
-from autoreduce_webapp.selenium_tests.pages.component_mixins.footer_mixin import FooterMixin
-from autoreduce_webapp.selenium_tests.pages.component_mixins.navbar_mixin import NavbarMixin
-from autoreduce_webapp.selenium_tests.pages.component_mixins.tour_mixin import TourMixin
-from autoreduce_webapp.selenium_tests.pages.component_mixins.rerun_form_mixin import RerunFormMixin
-from autoreduce_webapp.selenium_tests.pages.page import Page
+from autoreduce_frontend.selenium_tests.pages.component_mixins.footer_mixin import FooterMixin
+from autoreduce_frontend.selenium_tests.pages.component_mixins.navbar_mixin import NavbarMixin
+from autoreduce_frontend.selenium_tests.pages.component_mixins.tour_mixin import TourMixin
+from autoreduce_frontend.selenium_tests.pages.component_mixins.rerun_form_mixin import RerunFormMixin
+from autoreduce_frontend.selenium_tests.pages.page import Page
 
 
 class ConfigureNewRunsPage(Page, RerunFormMixin, NavbarMixin, FooterMixin, TourMixin):

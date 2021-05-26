@@ -13,8 +13,8 @@ import tempfile
 
 from autoreduce_db.reduction_viewer.models import ReductionRun
 
-from autoreduce_webapp.selenium_tests.pages.run_summary_page import RunSummaryPage
-from autoreduce_webapp.selenium_tests.tests.base_tests import BaseTestCase
+from autoreduce_frontend.selenium_tests.pages.run_summary_page import RunSummaryPage
+from autoreduce_frontend.selenium_tests.tests.base_tests import BaseTestCase
 
 
 # pylint:disable=no-member

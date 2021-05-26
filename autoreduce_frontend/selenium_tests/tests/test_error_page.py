@@ -1,10 +1,10 @@
 from unittest.mock import Mock, patch
 
-from autoreduce_webapp.reduction_viewer import views
+from autoreduce_frontend.reduction_viewer import views
 from autoreduce_frontend.autoreduce_webapp.icat_cache import DEFAULT_MESSAGE
 from autoreduce_frontend.autoreduce_webapp.view_utils import ICATConnectionException
-from autoreduce_webapp.selenium_tests.pages.error_page import ErrorPage
-from autoreduce_webapp.selenium_tests.tests.base_tests import (BaseTestCase, FooterTestMixin, NavbarTestMixin)
+from autoreduce_frontend.selenium_tests.pages.error_page import ErrorPage
+from autoreduce_frontend.selenium_tests.tests.base_tests import (BaseTestCase, FooterTestMixin, NavbarTestMixin)
 
 
 class TestErrorPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):

@@ -13,9 +13,9 @@ from django.urls.base import reverse
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.webelement import WebElement
 
-from autoreduce_webapp.selenium_tests.pages.component_mixins.footer_mixin import FooterMixin
-from autoreduce_webapp.selenium_tests.pages.component_mixins.navbar_mixin import NavbarMixin
-from autoreduce_webapp.selenium_tests.pages.page import Page
+from autoreduce_frontend.selenium_tests.pages.component_mixins.footer_mixin import FooterMixin
+from autoreduce_frontend.selenium_tests.pages.component_mixins.navbar_mixin import NavbarMixin
+from autoreduce_frontend.selenium_tests.pages.page import Page
 
 
 class HelpPage(Page, NavbarMixin, FooterMixin):

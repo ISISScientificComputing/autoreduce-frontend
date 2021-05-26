@@ -6,7 +6,7 @@
 # ############################################################################### #
 
 from django.urls import path
-from autoreduce_webapp.instrument.views import runs, variables, pause
+from autoreduce_frontend.instrument.views import runs, variables, pause
 
 app_name = "instrument"
 

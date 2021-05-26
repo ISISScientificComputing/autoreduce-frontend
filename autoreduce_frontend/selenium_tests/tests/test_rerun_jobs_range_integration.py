@@ -7,14 +7,14 @@
 
 from django.urls import reverse
 from autoreduce_db.instrument.models import InstrumentVariable
-from autoreduce_webapp.selenium_tests.pages.rerun_jobs_page import RerunJobsPage
-from autoreduce_webapp.selenium_tests.pages.run_summary_page import RunSummaryPage
-from autoreduce_webapp.selenium_tests.pages.runs_list_page import RunsListPage
-from autoreduce_webapp.selenium_tests.tests.base_tests import (NavbarTestMixin, BaseTestCase, FooterTestMixin,
-                                                               AccessibilityTestMixin)
-from autoreduce_webapp.selenium_tests.utils import submit_and_wait_for_result
+from autoreduce_frontend.selenium_tests.pages.rerun_jobs_page import RerunJobsPage
+from autoreduce_frontend.selenium_tests.pages.run_summary_page import RunSummaryPage
+from autoreduce_frontend.selenium_tests.pages.runs_list_page import RunsListPage
+from autoreduce_frontend.selenium_tests.tests.base_tests import (NavbarTestMixin, BaseTestCase, FooterTestMixin,
+                                                                 AccessibilityTestMixin)
+from autoreduce_frontend.selenium_tests.utils import submit_and_wait_for_result
 
-from autoreduce_webapp.selenium_tests.utils import setup_external_services
+from autoreduce_frontend.selenium_tests.utils import setup_external_services
 
 
 class TestRerunJobsRangePageIntegration(NavbarTestMixin, BaseTestCase, FooterTestMixin, AccessibilityTestMixin):

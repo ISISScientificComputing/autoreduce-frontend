@@ -6,12 +6,12 @@
 # ############################################################################### #
 
 from django.urls import reverse
-from autoreduce_webapp.selenium_tests.pages.rerun_jobs_page import RerunJobsPage
-from autoreduce_webapp.selenium_tests.tests.base_tests import (BaseTestCase, FooterTestMixin, NavbarTestMixin,
-                                                               AccessibilityTestMixin)
-from autoreduce_webapp.selenium_tests.utils import submit_and_wait_for_result
+from autoreduce_frontend.selenium_tests.pages.rerun_jobs_page import RerunJobsPage
+from autoreduce_frontend.selenium_tests.tests.base_tests import (BaseTestCase, FooterTestMixin, NavbarTestMixin,
+                                                                 AccessibilityTestMixin)
+from autoreduce_frontend.selenium_tests.utils import submit_and_wait_for_result
 
-from autoreduce_webapp.selenium_tests.utils import setup_external_services
+from autoreduce_frontend.selenium_tests.utils import setup_external_services
 
 
 class TestRerunJobsPageIntegration(NavbarTestMixin, BaseTestCase, FooterTestMixin, AccessibilityTestMixin):

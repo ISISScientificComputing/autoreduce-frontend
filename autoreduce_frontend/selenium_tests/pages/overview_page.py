@@ -13,12 +13,12 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.expected_conditions import presence_of_element_located
 from selenium.webdriver.support.wait import WebDriverWait
 
-from autoreduce_webapp.selenium_tests import configuration
-from autoreduce_webapp.selenium_tests.pages.component_mixins.footer_mixin import FooterMixin
-from autoreduce_webapp.selenium_tests.pages.component_mixins.navbar_mixin import NavbarMixin
-from autoreduce_webapp.selenium_tests.pages.component_mixins.tour_mixin import TourMixin
-from autoreduce_webapp.selenium_tests.pages.runs_list_page import RunsListPage
-from autoreduce_webapp.selenium_tests.pages.page import Page
+from autoreduce_frontend.selenium_tests import configuration
+from autoreduce_frontend.selenium_tests.pages.component_mixins.footer_mixin import FooterMixin
+from autoreduce_frontend.selenium_tests.pages.component_mixins.navbar_mixin import NavbarMixin
+from autoreduce_frontend.selenium_tests.pages.component_mixins.tour_mixin import TourMixin
+from autoreduce_frontend.selenium_tests.pages.runs_list_page import RunsListPage
+from autoreduce_frontend.selenium_tests.pages.page import Page
 
 
 class OverviewPage(Page, NavbarMixin, FooterMixin, TourMixin):

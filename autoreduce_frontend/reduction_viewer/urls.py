@@ -6,7 +6,7 @@
 # ############################################################################### #
 
 from django.urls import path
-from autoreduce_webapp.reduction_viewer import views
+from autoreduce_frontend.reduction_viewer import views
 
 app_name = "runs"
 

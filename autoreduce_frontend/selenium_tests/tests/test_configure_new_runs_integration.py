@@ -9,11 +9,11 @@ from autoreduce_db.instrument.models import InstrumentVariable
 from autoreduce_qp.model.database import access as db
 from selenium.common.exceptions import NoSuchElementException
 
-from autoreduce_webapp.selenium_tests.pages.configure_new_runs_page import ConfigureNewRunsPage
-from autoreduce_webapp.selenium_tests.pages.variables_summary_page import VariableSummaryPage
-from autoreduce_webapp.selenium_tests.tests.base_tests import (BaseTestCase, FooterTestMixin, NavbarTestMixin,
-                                                               AccessibilityTestMixin)
-from autoreduce_webapp.selenium_tests.utils import setup_external_services
+from autoreduce_frontend.selenium_tests.pages.configure_new_runs_page import ConfigureNewRunsPage
+from autoreduce_frontend.selenium_tests.pages.variables_summary_page import VariableSummaryPage
+from autoreduce_frontend.selenium_tests.tests.base_tests import (BaseTestCase, FooterTestMixin, NavbarTestMixin,
+                                                                 AccessibilityTestMixin)
+from autoreduce_frontend.selenium_tests.utils import setup_external_services
 
 REDUCE_VARS_DEFAULT_VALUE = "default value from reduce_vars"
 

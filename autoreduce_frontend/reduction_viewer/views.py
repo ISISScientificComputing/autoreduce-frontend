@@ -36,11 +36,11 @@ from autoreduce_frontend.autoreduce_webapp.uows_client import UOWSClient
 from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions, login_and_uows_valid, render_with,
                                                               require_admin)
 from autoreduce_frontend.autoreduce_webapp.views import render_error
-from autoreduce_webapp.plotting.plot_handler import PlotHandler
-from autoreduce_webapp.reduction_viewer.utils import ReductionRunUtils
-from autoreduce_webapp.reduction_viewer.view_utils import (deactivate_invalid_instruments, get_interactive_plot_data,
-                                                           make_data_analysis_url)
-from autoreduce_webapp.utilities.pagination import CustomPaginator
+from autoreduce_frontend.plotting.plot_handler import PlotHandler
+from autoreduce_frontend.reduction_viewer.utils import ReductionRunUtils
+from autoreduce_frontend.reduction_viewer.view_utils import (deactivate_invalid_instruments, get_interactive_plot_data,
+                                                             make_data_analysis_url)
+from autoreduce_frontend.utilities.pagination import CustomPaginator
 
 LOGGER = logging.getLogger('app')
 

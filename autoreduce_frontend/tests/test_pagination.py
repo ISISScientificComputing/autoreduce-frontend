@@ -6,7 +6,7 @@ import unittest
 from datetime import datetime, timedelta
 from unittest.mock import patch
 
-from autoreduce_webapp.utilities.pagination import CustomPage, RunPage, CustomPaginator, PageLimitException
+from autoreduce_frontend.utilities.pagination import CustomPage, RunPage, CustomPaginator, PageLimitException
 
 
 class TestCustomPage(unittest.TestCase):
