@@ -18,6 +18,7 @@ credentials.ini
 
 # Ignore distutils installation
 dist/
+build/
 
 # Ignore virtual environment
 venv/
@@ -26,13 +27,14 @@ venv36/
 venv37/
 
 # Ignore pip install installation
-AutoReduction.egg-info/
+*.egg-info/
 
 # This is generated from a template so should be ignored to force regeneration
 apache_django_wsgi.conf
 
 # Ignore coverage logs
 .coverage
+coverage.xml
 
 # Include the coverage configuration file
 !.coveragerc
@@ -44,11 +46,11 @@ vault.yml
 .DS_Store
 
 # Ignore downloaded graphs
-!Webapp/autoreduce_webapp/static/graphs
-!Webapp/autoreduce_webapp/static/graphs/.keep
+!autoreduce_frontend/static/graphs
+!autoreduce_frontend/static/graphs/.keep
 
 # Ignore collected staticfiles
-autoreduce_webapp/staticfiles
+autoreduce_frontend/staticfiles
 
 .vscode/settings.json
 

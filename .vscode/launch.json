@@ -111,8 +111,8 @@
             "name": "Web app",
             "type": "python",
             "request": "launch",
-            "cwd": "${workspaceFolder}/WebApp/autoreduce_webapp/",
-            "program": "${workspaceFolder}/WebApp/autoreduce_webapp/manage.py",
+            "cwd": "${workspaceFolder}",
+            "program": "${workspaceFolder}/autoreduce_webapp/manage.py",
             "args": [
                 "runserver"
             ],
@@ -122,6 +122,9 @@
                 "group": "autoreduce-native",
                 "order": 99
             },
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            }
         },
         {
             "name": "Attach",
