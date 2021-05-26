@@ -1,7 +1,7 @@
 [run]
 branch = True
 omit =
-    autoreduce_webapp/selenium_tests/*
+    autoreduce_frontend/selenium_tests/*
     # Requires external deps
     */virtualenv/*
     *.so

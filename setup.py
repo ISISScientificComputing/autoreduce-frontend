@@ -9,7 +9,7 @@ from setuptools import setup, find_packages
 from glob import glob
 import os
 
-PACKAGE_NAME = "autoreduce_webapp"
+PACKAGE_NAME = "autoreduce_frontend"
 
 data_locations = [f"{PACKAGE_NAME}/templates/", f"{PACKAGE_NAME}/static/"]
 
@@ -30,4 +30,4 @@ setup(name=PACKAGE_NAME,
       ],
       packages=find_packages(),
       package_data={"": data_files},
-      entry_points={"console_scripts": ["autoreduce-webapp-manage = autoreduce_webapp.manage:main"]})
+      entry_points={"console_scripts": ["autoreduce-webapp-manage = autoreduce_frontend.manage:main"]})

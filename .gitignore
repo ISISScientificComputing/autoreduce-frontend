@@ -46,11 +46,11 @@ vault.yml
 .DS_Store
 
 # Ignore downloaded graphs
-!autoreduce_webapp/static/graphs
-!autoreduce_webapp/static/graphs/.keep
+!autoreduce_frontend/static/graphs
+!autoreduce_frontend/static/graphs/.keep
 
 # Ignore collected staticfiles
-autoreduce_webapp/staticfiles
+autoreduce_frontend/staticfiles
 
 .vscode/settings.json
 

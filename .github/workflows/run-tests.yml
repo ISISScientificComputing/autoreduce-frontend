@@ -36,7 +36,7 @@ jobs:
 
       - name: Run tests
         run: |
-          pytest autoreduce_webapp --cov-report=xml --cov=autoreduce_webapp
+          pytest autoreduce_frontend --cov-report=xml --cov=autoreduce_frontend
 
       - uses: codecov/codecov-action@v1
         with:
@@ -103,11 +103,11 @@ jobs:
 
       - name: Pylint tests
         run: |
-          PYTHONPATH=autoreduce_webapp pylint --load-plugins pylint_django autoreduce_webapp
+          PYTHONPATH=autoreduce_frontend pylint --load-plugins pylint_django autoreduce_frontend
 
       - name: YAPF
         run: python -m yapf --parallel --diff --recursive .
 
       - name: Vulture
-        run: vulture --min-confidence 90 autoreduce_webapp
+        run: vulture --min-confidence 90 autoreduce_frontend
 
