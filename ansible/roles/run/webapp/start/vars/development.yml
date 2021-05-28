@@ -1,0 +1,2 @@
+run_command: >
+  singularity instance start webapp.sif webapp autoreduce-webapp-manage runserver 0.0.0.0:8000

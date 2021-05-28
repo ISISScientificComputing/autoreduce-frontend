@@ -1,0 +1,9 @@
+run_command: >
+  singularity instance start
+  --env AUTOREDUCTION_PRODUCTION=true
+  --bind /instrument:/instrument
+  --bind /isis:/isis
+  --bind /isis:/archive
+  --bind /shared-config:/shared-config
+  --bind /staticfiles:/staticfiles
+  webapp.sif webapp
