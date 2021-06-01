@@ -32,7 +32,8 @@ class TestRerunJobsRangePageIntegration(NavbarTestMixin, BaseTestCase, FooterTes
         super().setUpClass()
         cls.instrument_name = "TestInstrument"
         cls.data_archive, cls.queue_client, cls.listener = setup_external_services(cls.instrument_name, 21, 21)
-        cls.data_archive.add_reduction_script(cls.instrument_name, """print('some text')""")
+        cls.data_archive.add_reduction_script(cls.instrument_name,
+                                              """def main(input_file, output_dir): print('some text')""")
         cls.data_archive.add_reduce_vars_script(cls.instrument_name,
                                                 """standard_vars={"variable1":"test_variable_value_123"}""")
         cls.rb_number = 1234567
