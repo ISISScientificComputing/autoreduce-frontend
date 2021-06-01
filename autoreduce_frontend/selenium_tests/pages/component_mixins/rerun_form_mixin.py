@@ -226,7 +226,7 @@ class RerunFormMixin:
         """
         Finds and returns the variable bool field value
         """
-        return self.variable_bool_field.first_selected_option
+        return self.variable_bool_field.first_selected_option.text
 
     @variable_bool_field.setter
     def variable_bool_field(self, value: str) -> None:
