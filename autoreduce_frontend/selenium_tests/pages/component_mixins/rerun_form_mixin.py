@@ -180,7 +180,7 @@ class RerunFormMixin:
         """
         Finds and returns the variabl1 input field
         """
-        return variable_none_field.get_attribute("value")
+        return self.variable_none_field.get_attribute("value")
 
     @variable_none_field.setter
     def variable_none_field(self, value) -> None:
