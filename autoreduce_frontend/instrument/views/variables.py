@@ -206,7 +206,12 @@ def _combine_dicts(current: dict, default: dict):
     """
     Combines the current and default variable dictionaries, into a single dictionary
     which can be more easily rendered into the webapp.
+
+    If no current variables are provided, it returns the default as both current and default.
     """
+    if not current:
+        current = default.copy()
+
     final = {}
     for name, var in current.items():
         final[name] = {"current": var, "default": default.get(name, None)}
