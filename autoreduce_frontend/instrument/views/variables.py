@@ -203,6 +203,10 @@ def render_run_variables(request, instrument_name, run_number, run_version=0):
 
 
 def _combine_dicts(current: dict, default: dict):
+    """
+    Combines the current and default variable dictionaries, into a single dictionary
+    which can be more easily rendered into the webapp.
+    """
     final = {}
     for name, var in current.items():
         final[name] = {"current": var, "default": default.get(name, None)}

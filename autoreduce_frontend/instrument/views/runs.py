@@ -5,7 +5,6 @@
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
 
-from autoreduce_frontend.instrument.views.variables import _combine_dicts
 import logging
 from itertools import chain
 
@@ -18,6 +17,7 @@ from django.db.models.query import QuerySet
 from django.shortcuts import redirect
 
 from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions, login_and_uows_valid, render_with)
+from autoreduce_frontend.instrument.views.variables import _combine_dicts
 from autoreduce_frontend.reduction_viewer.utils import ReductionRunUtils
 from autoreduce_frontend.utilities import input_processing
 
