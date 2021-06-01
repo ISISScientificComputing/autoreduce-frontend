@@ -33,14 +33,14 @@ class RerunFormMixin:
     @property
     def variable1_field(self) -> WebElement:
         """
-        Finds and returns the variabl1 input field
+        Finds and returns the variable1 field
         """
         return self.driver.find_element_by_id("var-standard-variable1")
 
     @property
     def variable1_field_val(self) -> WebElement:
         """
-        Finds and returns the variabl1 input field
+        Finds and returns the variable1 field value
         """
         return self.variable1_field.get_attribute("value")
 
@@ -56,14 +56,14 @@ class RerunFormMixin:
     @property
     def variable_str_field(self) -> WebElement:
         """
-        Finds and returns the variabl1 input field
+        Finds and returns the variable string field
         """
         return self.driver.find_element_by_id("var-standard-variable_str")
 
     @property
     def variable_str_field_val(self) -> WebElement:
         """
-        Finds and returns the variabl1 input field
+        Finds and returns the variable string field value
         """
         return self.variable_str_field.get_attribute("value")
 
@@ -79,14 +79,14 @@ class RerunFormMixin:
     @property
     def variable_int_field(self) -> WebElement:
         """
-        Finds and returns the variabl1 input field
+        Finds and returns the variable int field
         """
         return self.driver.find_element_by_id("var-standard-variable_int")
 
     @property
     def variable_int_field_val(self) -> WebElement:
         """
-        Finds and returns the variabl1 input field
+        Finds and returns the variable int field value
         """
         return self.variable_int_field.get_attribute("value")
 
@@ -102,14 +102,14 @@ class RerunFormMixin:
     @property
     def variable_float_field(self) -> WebElement:
         """
-        Finds and returns the variabl1 input field
+        Finds and returns the variable float field
         """
         return self.driver.find_element_by_id("var-standard-variable_float")
 
     @property
     def variable_float_field_val(self) -> WebElement:
         """
-        Finds and returns the variabl1 input field
+        Finds and returns the variable float field value
         """
         return self.variable_float_field.get_attribute("value")
 
@@ -125,14 +125,14 @@ class RerunFormMixin:
     @property
     def variable_listint_field(self) -> WebElement:
         """
-        Finds and returns the variabl1 input field
+        Finds and returns the variable list of ints field
         """
         return self.driver.find_element_by_id("var-standard-variable_listint")
 
     @property
     def variable_listint_field_val(self) -> WebElement:
         """
-        Finds and returns the variabl1 input field
+        Finds and returns the variable list of ints field value
         """
         return self.variable_listint_field.get_attribute("value")
 
@@ -148,14 +148,14 @@ class RerunFormMixin:
     @property
     def variable_liststr_field(self) -> WebElement:
         """
-        Finds and returns the variabl1 input field
+        Finds and returns the variable list of str field
         """
         return self.driver.find_element_by_id("var-standard-variable_liststr")
 
     @property
     def variable_liststr_field_val(self) -> WebElement:
         """
-        Finds and returns the variabl1 input field
+        Finds and returns the variable list of str field value
         """
         return self.variable_liststr_field.get_attribute("value")
 
@@ -171,14 +171,14 @@ class RerunFormMixin:
     @property
     def variable_none_field(self) -> WebElement:
         """
-        Finds and returns the variabl1 input field
+        Finds and returns the variable None field
         """
         return self.driver.find_element_by_id("var-standard-variable_none")
 
     @property
     def variable_none_field_val(self) -> WebElement:
         """
-        Finds and returns the variabl1 input field
+        Finds and returns the variable None field value
         """
         return self.variable_none_field.get_attribute("value")
 
@@ -194,14 +194,14 @@ class RerunFormMixin:
     @property
     def variable_empty_field(self) -> WebElement:
         """
-        Finds and returns the variabl1 input field
+        Finds and returns the variable empty field
         """
         return self.driver.find_element_by_id("var-standard-variable_empty")
 
     @property
     def variable_empty_field_val(self) -> WebElement:
         """
-        Finds and returns the variabl1 input field
+        Finds and returns the variable empty field value
         """
         return self.variable_empty_field.get_attribute("value")
 
@@ -217,14 +217,14 @@ class RerunFormMixin:
     @property
     def variable_bool_field(self) -> Select:
         """
-        Finds and returns the variabl1 input field
+        Finds and returns the variable bool field
         """
         return Select(self.driver.find_element_by_id("var-standard-variable_bool"))
 
     @property
     def variable_bool_field_val(self) -> Select:
         """
-        Finds and returns the variabl1 input field
+        Finds and returns the variable bool field value
         """
         return self.variable_bool_field.first_selected_option
 
