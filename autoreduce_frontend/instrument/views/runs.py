@@ -344,8 +344,8 @@ def configure_new_runs_get(instrument_name, start=0, end=0, experiment_reference
     except (FileNotFoundError, ImportError, SyntaxError) as err:
         return {"message": str(err)}
 
-    current_standard_variables = reduce_vars_variables["standard_vars"]
-    current_advanced_variables = reduce_vars_variables["advanced_vars"]
+    final_standard = _combine_dicts(standard_vars, reduce_vars_variables["standard_vars"])
+    final_advanced = _combine_dicts(advanced_vars, reduce_vars_variables["advanced_vars"])
     run_start = start if start else last_run.run_number + 1
 
     context_dictionary = {
@@ -353,10 +353,8 @@ def configure_new_runs_get(instrument_name, start=0, end=0, experiment_reference
         'last_instrument_run': last_run,
         'processing': ReductionRun.objects.filter(instrument=instrument, status=Status.get_processing()),
         'queued': ReductionRun.objects.filter(instrument=instrument, status=Status.get_queued()),
-        'standard_variables': standard_vars if standard_vars else current_standard_variables,
-        'advanced_variables': advanced_vars if advanced_vars else current_advanced_variables,
-        'current_standard_variables': current_standard_variables,
-        'current_advanced_variables': current_advanced_variables,
+        'standard_variables': final_standard,
+        'advanced_variables': final_advanced,
         'run_start': run_start,
         # used to determine whether the current form is for an experiment reference
         'current_experiment_reference': experiment_reference,
