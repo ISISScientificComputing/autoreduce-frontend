@@ -6,6 +6,7 @@
 # ############################################################################### #
 
 from selenium.webdriver.remote.webelement import WebElement
+from selenium.webdriver.support.ui import Select
 
 
 class RerunFormMixin:
@@ -41,7 +42,7 @@ class RerunFormMixin:
         """
         Finds and returns the variabl1 input field
         """
-        return self.driver.find_element_by_id("var-standard-variable1").get_attribute("value")
+        return self.variable1_field.get_attribute("value")
 
     @variable1_field.setter
     def variable1_field(self, value) -> None:
@@ -64,7 +65,7 @@ class RerunFormMixin:
         """
         Finds and returns the variabl1 input field
         """
-        return self.driver.find_element_by_id("var-standard-variable_str").get_attribute("value")
+        return self.variable_str_field.get_attribute("value")
 
     @variable_str_field.setter
     def variable_str_field(self, value) -> None:
@@ -87,7 +88,7 @@ class RerunFormMixin:
         """
         Finds and returns the variabl1 input field
         """
-        return self.driver.find_element_by_id("var-standard-variable_int").get_attribute("value")
+        return self.variable_int_field.get_attribute("value")
 
     @variable_int_field.setter
     def variable_int_field(self, value) -> None:
@@ -110,7 +111,7 @@ class RerunFormMixin:
         """
         Finds and returns the variabl1 input field
         """
-        return self.driver.find_element_by_id("var-standard-variable_float").get_attribute("value")
+        return self.variable_float_field.get_attribute("value")
 
     @variable_float_field.setter
     def variable_float_field(self, value) -> None:
@@ -133,7 +134,7 @@ class RerunFormMixin:
         """
         Finds and returns the variabl1 input field
         """
-        return self.driver.find_element_by_id("var-standard-variable_listint").get_attribute("value")
+        return self.variable_listint_field.get_attribute("value")
 
     @variable_listint_field.setter
     def variable_listint_field(self, value) -> None:
@@ -156,7 +157,7 @@ class RerunFormMixin:
         """
         Finds and returns the variabl1 input field
         """
-        return self.driver.find_element_by_id("var-standard-variable_liststr").get_attribute("value")
+        return self.variable_liststr_field.get_attribute("value")
 
     @variable_liststr_field.setter
     def variable_liststr_field(self, value) -> None:
@@ -179,7 +180,7 @@ class RerunFormMixin:
         """
         Finds and returns the variabl1 input field
         """
-        return self.driver.find_element_by_id("var-standard-variable_none").get_attribute("value")
+        return variable_none_field.get_attribute("value")
 
     @variable_none_field.setter
     def variable_none_field(self, value) -> None:
@@ -202,7 +203,7 @@ class RerunFormMixin:
         """
         Finds and returns the variabl1 input field
         """
-        return self.driver.find_element_by_id("var-standard-variable_empty").get_attribute("value")
+        return self.variable_empty_field.get_attribute("value")
 
     @variable_empty_field.setter
     def variable_empty_field(self, value) -> None:
@@ -214,25 +215,24 @@ class RerunFormMixin:
         self._set_field(self.variable_empty_field, value)
 
     @property
-    def variable_bool_field(self) -> WebElement:
+    def variable_bool_field(self) -> Select:
         """
         Finds and returns the variabl1 input field
         """
-        return self.driver.find_element_by_id("var-standard-variable_bool")
+        return Select(self.driver.find_element_by_id("var-standard-variable_bool"))
 
     @property
-    def variable_bool_field_val(self) -> WebElement:
+    def variable_bool_field_val(self) -> Select:
         """
         Finds and returns the variabl1 input field
         """
-        return self.driver.find_element_by_id("var-standard-variable_bool").get_attribute("value")
+        return self.variable_bool_field.first_selected_option
 
     @variable_bool_field.setter
-    def variable_bool_field(self, value) -> None:
+    def variable_bool_field(self, value: str) -> None:
         """
         Clears the field and sends the keys to the input field.
 
         Selenium requires that we clear the field first!
         """
-        if self.variable_bool_field.is_selected() != value:
-            self.driver.execute_script("arguments[0].click();", self.variable_bool_field)
+        self.variable_bool_field.select_by_visible_text(value)

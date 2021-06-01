@@ -379,9 +379,9 @@ function reset_to_default_all(event) {
         set_onclick("variableSubmit", submitForm)
 
         // attaches our custom event on clicking boolean fields
-        for (const elem of document.querySelectorAll("input[type=checkbox][data-type=boolean]")) {
-            set_onclick(elem, updateBoolean)
-        }
+        // for (const elem of document.querySelectorAll("input[type=checkbox][data-type=boolean]")) {
+        //     set_onclick(elem, updateBoolean)
+        // }
 
         $('#instrument_variables').on('click', '#track_script', toggleTrackScript);
         $('#instrument_variables').on('click', '#track_script_checkbox', updateTrackFields);
