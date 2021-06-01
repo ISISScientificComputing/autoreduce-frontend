@@ -148,7 +148,7 @@ def instrument_variables_summary(request, instrument):
 
 @login_and_uows_valid
 @check_permissions
-@render_with('snippets/edit_variables.html')
+@render_with('snippets/variables/form.html')
 def current_default_variables(request, instrument=None):
     """
     Handles request to view default variables
@@ -200,3 +200,10 @@ def render_run_variables(request, instrument_name, run_number, run_version=0):
         'instrument': reduction_run.instrument,
     }
     return render(request, 'snippets/run_variables.html', context_dictionary)
+
+
+def _combine_dicts(current: dict, default: dict):
+    final = {}
+    for name, var in current.items():
+        final[name] = {"current": var, "default": default.get(name, None)}
+    return final

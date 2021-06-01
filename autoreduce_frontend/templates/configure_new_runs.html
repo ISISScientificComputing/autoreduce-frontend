@@ -50,7 +50,7 @@
         <input type="hidden" id="is_editing" name="is_editing" value="{{ editing }}"/>
         <div class="row">
             <div class="col-md-9">
-                {% include "snippets/form_warnings.html" %}
+                {% include "snippets/variables/form_warnings.html" %}
                 <br/>
                 {% if current_experiment_reference > 0 %}
                 <div class="js-variable-by-experiment">
@@ -94,7 +94,7 @@
                 {% endif %}
 
                 <div class="js-variables-container">
-                    {% include "snippets/edit_variables.html" with standard_variables=standard_variables advanced_variables=advanced_variables instrument=instrument.name only %}
+                    {% include "snippets/variables/form.html" with standard_variables=standard_variables advanced_variables=advanced_variables instrument=instrument.name only %}
                 </div>
             </div>
             <div class="col-md-3">
@@ -104,13 +104,7 @@
                     </div>
                     <div class="row">
                         <ul class="js-form-actions">
-                            <li>
-                                <a href="#currentScript" id="currentScript" role="button">Reset to values in the current reduce_vars script</a>
-                                <a href="#" data-toggle="popover" data-html="true" data-content="Reset to the values currently contained in the reduce_vars script."
-                                data-trigger="hover click focus" data-placement="top" data-container="body" aria-label="Reset to the values currently contained in the reduce_vars script.">
-                                    <i class="fa fa-info-circle"></i>
-                                </a>
-                            </li>
+                            {% include "snippets/reset_buttons.html" %}
                         </ul>
                     </div>
                 </div>
@@ -171,12 +165,6 @@
                             <button type="button" class="btn btn-primary js-conflicts-confirm" id="replace_confirm">Yes, Replace</button>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <div class="hide">
-                <div class="js-current-variables">
-                    {% include "snippets/edit_variables.html" with standard_variables=current_standard_variables advanced_variables=current_advanced_variables instrument=instrument.name only %}
                 </div>
             </div>
         {% endif %}

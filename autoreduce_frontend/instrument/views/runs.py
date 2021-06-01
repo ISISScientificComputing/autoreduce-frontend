@@ -5,6 +5,7 @@
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
 
+from autoreduce_frontend.instrument.views.variables import _combine_dicts
 import logging
 from itertools import chain
 
@@ -47,22 +48,21 @@ def submit_runs(request, instrument=None):
         advanced_vars = kwargs["advanced_vars"]
 
         try:
-            current_variables = VariableUtils.get_default_variables(instrument)
+            default_variables = VariableUtils.get_default_variables(instrument)
         except (FileNotFoundError, ImportError, SyntaxError) as err:
             return {"message": str(err)}
 
-        current_standard_variables = current_variables["standard_vars"]
-        current_advanced_variables = current_variables["advanced_vars"]
+        final_standard = _combine_dicts(standard_vars, default_variables["standard_vars"])
+        final_advanced = _combine_dicts(advanced_vars, default_variables["advanced_vars"])
+
         # pylint:disable=no-member
         context_dictionary = {
             'instrument': instrument,
             'last_instrument_run': last_run,
             'processing': runs_for_instrument.filter(status=processing_status),
             'queued': runs_for_instrument.filter(status=queued_status),
-            'standard_variables': standard_vars,
-            'advanced_variables': advanced_vars,
-            'current_standard_variables': current_standard_variables,
-            'current_advanced_variables': current_advanced_variables,
+            'standard_variables': final_standard,
+            'advanced_variables': final_advanced,
         }
 
         return context_dictionary
