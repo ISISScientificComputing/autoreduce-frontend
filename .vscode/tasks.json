@@ -4,42 +4,15 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Build database",
-            "type": "shell",
-            "command": "${config:python.pythonPath}",
-            "args": [
-                "setup.py",
-                "database"
-            ],
-            "problemMatcher": [],
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            }
-        },
-        {
-            "label": "Install fixtures",
-            "type": "shell",
-            "command": "${config:python.pythonPath}",
-            "args": [
-                "setup.py",
-                "fixtures"
-            ],
-            "problemMatcher": []
-        },
-        {
             "label": "Export UID:GID to $USERID",
             "type": "shell",
             "command": "echo 'export USERID=$(id -u):$(id -g)' > ~/.userid.sh",
+            "isBackground": true,
             "problemMatcher": [],
             "detail": "Exports the current user's user and group IDs so that the output files are owned by the correct user",
             "presentation": {
-                "echo": true,
-                "reveal": "always",
+                "echo": false,
+                "reveal": "never",
                 "focus": false,
                 "panel": "shared",
                 "showReuseMessage": false,
@@ -47,48 +20,39 @@
             }
         },
         {
-            "label": "Kill queue-processor-debugpy",
-            "detail": "Used by the debugging configuration. Don't manually use",
+            "label": "Run Autoreduce container",
+            "detail": "Starts a daemon that contains the Autoreduce environment.",
             "type": "shell",
-            "command": "docker kill queue-processor-debugpy",
-            "problemMatcher": [],
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            }
-        },
-        {
-            "label": "(don't use) Run Docker Web App",
-            "detail": "Used by the debugging configuration. Don't manually use",
-            "type": "shell",
-            "command": "docker",
-            "isBackground": true,
+            "command": "source",
+            "promptOnClose": true,
+            "runOptions": {
+                "instanceLimit": 1,
+                "runOn": "folderOpen"
+            },
             "args": [
+                "~/.userid.sh",
+                "&&",
+                "docker",
                 "run",
                 "--rm",
                 "--network=host",
                 "-v",
-                "${workspaceFolder}:/autoreduce",
+                "${workspaceFolder}:/autoreduce-frontend",
                 "-v",
-                "~/.autoreduce:/root/.autoreduce",
+                "${workspaceFolder}/../autoreduce:/autoreduce",
                 "-v",
-                "${workspaceFolder}/reduced-data:/instrument",
+                "~/.autoreduce:/home/.autoreduce",
+                "-v",
+                "~/.autoreduce/dev/reduced-data:/instrument",
+                "-e",
+                "HOME=/home",
+                "--user",
+                "$USERID",
                 "--name",
-                "webapp-debugpy",
+                "autoreduce-debugpy",
                 "-it",
-                "autoreduction/qp",
-                "python3",
-                "-m",
-                "debugpy",
-                "--listen",
-                "5679",
-                "--wait-for-client",
-                "/autoreduce/autoreduce_webapp/manage.py",
-                "runserver"
+                "autoreduction/dev",
+                "bash"
             ],
             "presentation": {
                 "echo": true,
@@ -96,153 +60,98 @@
                 "focus": false,
                 "panel": "shared",
                 "showReuseMessage": false,
+                "group": "docker",
                 "clear": false
             },
-            "problemMatcher": []
-        },
-        {
-            "label": "(don't use) Run Docker pytest",
-            "detail": "Used by the debugging configuration. Don't manually use",
-            "type": "shell",
-            "command": "docker",
-            "isBackground": true,
-            "args": [
-                "run",
-                "--rm",
-                "--network=host",
-                "-v",
-                "${workspaceFolder}:/autoreduce",
-                "--name",
-                "webapp-debugpy-pytest",
-                "-it",
-                "autoreduction/devtest",
-                "python3",
-                "-m",
-                "debugpy",
-                "--listen",
-                "5680",
-                "--wait-for-client",
-                "-m",
-                "pytest",
-                "-pno:django",
-                "-v",
-                "/autoreduce/${relativeFileDirname}/${fileBasename}"
-            ],
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "(don't use) Run Docker pytest django",
-            "detail": "Used by the debugging configuration. Don't manually use",
-            "type": "shell",
-            "command": "docker",
-            "isBackground": true,
-            "args": [
-                "run",
-                "--rm",
-                "--network=host",
-                "-v",
-                "${workspaceFolder}:/autoreduce",
-                "--name",
-                "devtest",
-                "-e",
-                "DISPLAY=:1",
-                "-e",
-                "SELENIUM_REMOTE=1",
-                "-it",
-                "autoreduction/devtest",
-                "python3",
-                "-m",
-                "debugpy",
-                "--listen",
-                "5681",
-                "--wait-for-client",
-                "-m",
-                "pytest",
-                "-v",
-                "/autoreduce/${relativeFileDirname}/${fileBasename}"
-            ],
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "Kill webapp-debugpy",
-            "type": "shell",
-            "command": "docker kill webapp-debugpy",
-            "problemMatcher": [],
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            }
-        },
-        {
-            "label": "Kill devtest",
-            "type": "shell",
-            "command": "docker kill devtest",
-            "problemMatcher": [],
-            "presentation": {
-                "echo": true,
-                "reveal": "silent",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            }
-        },
-        {
-            "label": "(don't use) Run ActiveMQ Docker",
-            "type": "shell",
-            "command": "docker run --name activemq -p 61613:61613 -p 8161:8161 -it rmohr/activemq",
-            "problemMatcher": [],
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "dedicated",
-                "showReuseMessage": true,
-                "clear": false
-            }
-        },
-        {
-            "label": "Migrate database (with PR fixtures)",
-            "type": "shell",
-            "command": "source ~/.userid.sh && docker run --rm -v ${workspaceFolder}:/autoreduce -v ~/.autoreduce:/tmp/.autoreduce -e AUTOREDUCTION_CREDENTIALS=/tmp/.autoreduce/credentials.ini --user $USERID -it autoreduction/qp bash -c 'python3 /autoreduce/autoreduce_webapp/manage.py migrate && python3 /autoreduce/autoreduce_webapp/manage.py loaddata super_user_fixture status_fixture pr_test'",
             "problemMatcher": [],
             "dependsOn": [
                 "Export UID:GID to $USERID"
+            ]
+        },
+        {
+            "label": "(don't use directly) Exec runserver",
+            "detail": "Used by the debugging configuration. Don't manually use or the terminal will remain hanging until you manually attach to the --listen port",
+            "type": "shell",
+            "isBackground": true,
+            "command": "docker exec -it autoreduce-debugpy python3 -m debugpy --listen 5679 --wait-for-client /autoreduce-frontend/autoreduce_frontend/manage.py runserver",
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "(don't use directly) Exec pytest django",
+            "detail": "Used by the debugging configuration. Don't manually use",
+            "isBackground": true,
+            "type": "shell",
+            "command": "docker exec -e DISPLAY=:1 -e RUNNING_VIA_PYTEST=true -e SELENIUM_REMOTE=1 -it autoreduce-debugpy python3 -m debugpy --listen 5681 --wait-for-client -m pytest -v /autoreduce-frontend/${relativeFileDirname}/${fileBasename}",
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Kill autoreduce-debugpy",
+            "type": "shell",
+            "command": "docker kill autoreduce-debugpy",
+            "problemMatcher": [],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        {
+            "label": "Migrate all",
+            "detail": "Migrates credentials and database (with PR fixtures)",
+            "type": "shell",
+            "problemMatcher": [],
+            "dependsOn": [
+                "Migrate credentials",
+                "Migrate database (with PR fixtures)"
             ],
+            "dependsOrder": "sequence",
             "group": {
                 "kind": "build",
                 "isDefault": true
             }
         },
         {
+            "label": "Migrate credentials",
+            "type": "shell",
+            "command": "docker exec -it autoreduce-debugpy autoreduce-creds-migrate",
+            "problemMatcher": [],
+            "group": "build"
+        },
+        {
+            "label": "Migrate database (with PR fixtures)",
+            "type": "shell",
+            "command": "docker exec -it autoreduce-debugpy bash -c 'python3 /autoreduce-frontend/autoreduce_frontend/manage.py migrate && python3 /autoreduce-frontend/autoreduce_frontend/manage.py loaddata super_user_fixture status_fixture pr_test'",
+            "problemMatcher": [],
+            "group": "build"
+        },
+        {
             "label": "Migrate database (clean)",
             "type": "shell",
-            "command": "source ~/.userid.sh && docker run --rm -v ${workspaceFolder}:/autoreduce -v ~/.autoreduce:/tmp/.autoreduce -e AUTOREDUCTION_CREDENTIALS=/tmp/.autoreduce/credentials.ini --user $USERID -it autoreduction/webapp python3 /autoreduce/autoreduce_webapp/manage.py migrate",
+            "command": "docker exec -it autoreduce-debugpy python3 /autoreduce-frontend/autoreduce_frontend/manage.py migrate",
             "isBackground": true,
             "problemMatcher": [],
-            "dependsOn": [
-                "Export UID:GID to $USERID"
-            ]
+            "group": "build"
         },
         {
             "label": "Run Selenium Docker daemon",

@@ -15,16 +15,15 @@
             "pathMappings": [
                 {
                     "localRoot": "${workspaceFolder}",
-                    "remoteRoot": "/autoreduce"
+                    "remoteRoot": "/autoreduce-frontend"
                 }
             ],
             "presentation": {
                 "hidden": false,
-                "group": "autoreduce-docker",
+                "group": "autoreduce-frontend-docker",
                 "order": 1
             },
-            "preLaunchTask": "(don't use) Run Docker Web App",
-            "postDebugTask": "Kill webapp-debugpy",
+            "preLaunchTask": "(don't use directly) Exec runserver",
             "django": true
         },
         {
@@ -38,36 +37,18 @@
             "pathMappings": [
                 {
                     "localRoot": "${workspaceFolder}",
-                    "remoteRoot": "/autoreduce"
+                    "remoteRoot": "/autoreduce-frontend"
                 }
             ],
             "presentation": {
                 "hidden": false,
-                "group": "autoreduce-docker",
+                "group": "autoreduce-frontend-docker",
                 "order": 1
             },
-            "preLaunchTask": "(don't use) Run Docker pytest django",
+            "preLaunchTask": "(don't use directly) Exec pytest django",
         },
         {
             "name": "Pytest",
-            "type": "python",
-            "request": "launch",
-            "module": "pytest",
-            "args": [
-                "-pno:django",
-                "-v",
-                "${file}"
-            ],
-            "presentation": {
-                "hidden": false,
-                "group": "autoreduce-native",
-            },
-            "env": {
-                "DISPLAY": ":1",
-            }
-        },
-        {
-            "name": "Pytest - Django",
             "type": "python",
             "request": "launch",
             "module": "pytest",
@@ -78,7 +59,7 @@
             "django": true,
             "presentation": {
                 "hidden": false,
-                "group": "autoreduce-native",
+                "group": "autoreduce-frontend",
             },
             "env": {
                 "DISPLAY": ":1",
@@ -101,7 +82,7 @@
             ],
             "presentation": {
                 "hidden": false,
-                "group": "autoreduce-native",
+                "group": "autoreduce-frontend",
             },
             "env": {
                 "RUNNING_VIA_PYTEST": "true"
@@ -112,19 +93,20 @@
             "type": "python",
             "request": "launch",
             "cwd": "${workspaceFolder}",
-            "program": "${workspaceFolder}/autoreduce_webapp/manage.py",
+            "program": "${workspaceFolder}/autoreduce_frontend/manage.py",
             "args": [
                 "runserver"
             ],
             "django": true,
             "presentation": {
                 "hidden": false,
-                "group": "autoreduce-native",
+                "group": "autoreduce-frontend",
                 "order": 99
             },
             "env": {
                 "PYTHONPATH": "${workspaceFolder}"
-            }
+            },
+            "justMyCode": false
         },
         {
             "name": "Attach",
