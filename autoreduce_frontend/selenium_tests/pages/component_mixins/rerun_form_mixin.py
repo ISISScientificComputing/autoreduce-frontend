@@ -5,8 +5,12 @@
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
 
+from collections import namedtuple
+
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.ui import Select
+
+ResetButtons = namedtuple('ResetButtons', ["to_initial", "to_script"])
 
 
 class RerunFormMixin:
@@ -43,6 +47,17 @@ class RerunFormMixin:
         Finds and returns the variable1 field value
         """
         return self.variable1_field.get_attribute("value")
+
+    @property
+    def variable1_field_reset_buttons(self) -> ResetButtons:
+        """
+        Finds and returns the inline reset buttons for the variable1 field
+        """
+        buttons = self.driver.find_elements_by_css_selector("[data-for=var-standard-variable1]")
+        assert len(
+            buttons
+        ) == 2, "Found more elements with that selector that expected, further test assertions will not work properly"
+        return ResetButtons(*buttons)
 
     @variable1_field.setter
     def variable1_field(self, value) -> None:

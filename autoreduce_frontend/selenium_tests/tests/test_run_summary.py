@@ -81,26 +81,26 @@ class TestRunSummaryPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
         # need to re-query the driver because resetting replaces the elements
         assert self.page.variable1_field.get_attribute("value") == "test_variable_value_123"
 
-    def test_rerun_form(self):
+    def test_reset_single_to_initial(self):
         """
-        Test: Rerun form shows contents from Variable in database (from the fixture) and not reduce_vars.py
+        Tests changing the value of a variable field and resetting to the initial value, by using the inline button
         """
-        rerun_form = self.page.rerun_form
-        assert not rerun_form.is_displayed()
         self.page.toggle_button.click()
-        assert rerun_form.is_displayed()
-        assert rerun_form.find_element_by_id("var-standard-variable1").get_attribute("value") == "value1"
-        labels = rerun_form.find_elements_by_tag_name("label")
+        initial_value = self.page.variable1_field_val
+        self.page.variable1_field = "the new value in the field"
+        assert self.page.variable1_field_val != initial_value
 
-        WebDriverWait(self.driver, 10).until(lambda _: labels[0].text == "Re-run description")
-        WebDriverWait(self.driver, 10).until(lambda _: labels[1].text == "variable1")
+        self.page.variable1_field_reset_buttons.to_initial.click()
+        assert self.page.variable1_field_val == initial_value
 
-    def test_back_to_instruments_goes_back(self):
+    def test_reset_single_to_script(self):
         """
-        Test: Clicking back goes back to the instrument
+        Tests changing the value of a variable field and resetting to the script value, by using the inline button
         """
-        back = self.page.cancel_button
-        assert back.is_displayed()
-        assert back.text == f"Back to {self.instrument_name} runs"
-        back.click()
-        assert reverse("runs:list", kwargs={"instrument": self.instrument_name}) in self.driver.current_url
+        self.page.toggle_button.click()
+        initial_value = "test_variable_value_123"
+        self.page.variable1_field = "the new value in the field"
+        assert self.page.variable1_field_val != initial_value
+
+        self.page.variable1_field_reset_buttons.to_script.click()
+        assert self.page.variable1_field_val == initial_value
