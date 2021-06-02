@@ -18,7 +18,8 @@ from autoreduce_frontend.selenium_tests.tests.base_tests import BaseTestCase, Fo
 
 
 # pylint:disable=no-member
-class TestRunSummaryPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
+class TestRunSummaryPage(BaseTestCase):
+    # class TestRunSummaryPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
     """
     Test cases for the InstrumentSummary page when the Rerun form is NOT visible
     """
@@ -80,6 +81,30 @@ class TestRunSummaryPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
 
         # need to re-query the driver because resetting replaces the elements
         assert self.page.variable1_field.get_attribute("value") == "test_variable_value_123"
+
+    def test_rerun_form(self):
+        """
+        Test: Rerun form shows contents from Variable in database (from the fixture) and not reduce_vars.py
+        """
+        rerun_form = self.page.rerun_form
+        assert not rerun_form.is_displayed()
+        self.page.toggle_button.click()
+        assert rerun_form.is_displayed()
+        assert rerun_form.find_element_by_id("var-standard-variable1").get_attribute("value") == "value1"
+        labels = rerun_form.find_elements_by_tag_name("label")
+
+        WebDriverWait(self.driver, 10).until(lambda _: labels[0].text == "Re-run description")
+        WebDriverWait(self.driver, 10).until(lambda _: labels[1].text == "variable1")
+
+    def test_back_to_instruments_goes_back(self):
+        """
+        Test: Clicking back goes back to the instrument
+        """
+        back = self.page.cancel_button
+        assert back.is_displayed()
+        assert back.text == f"Back to {self.instrument_name} runs"
+        back.click()
+        assert reverse("runs:list", kwargs={"instrument": self.instrument_name}) in self.driver.current_url
 
     def test_reset_single_to_initial(self):
         """
