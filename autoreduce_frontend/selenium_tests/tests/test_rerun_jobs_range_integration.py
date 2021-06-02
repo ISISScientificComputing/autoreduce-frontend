@@ -5,6 +5,7 @@
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
 
+import time
 from django.urls import reverse
 from autoreduce_db.instrument.models import InstrumentVariable
 from autoreduce_frontend.selenium_tests.pages.rerun_jobs_page import RerunJobsPage
@@ -51,6 +52,7 @@ class TestRerunJobsRangePageIntegration(NavbarTestMixin, BaseTestCase, FooterTes
         super().setUp()
         self.page = RerunJobsPage(self.driver, self.instrument_name)
         self.page.launch()
+        time.sleep(5)  # arbitrary sleep to see if that removes random `database table is locked` CI errors
 
     def _verify_runs_exist_and_have_variable_value(self, variable_value):
         """
@@ -86,8 +88,6 @@ class TestRerunJobsRangePageIntegration(NavbarTestMixin, BaseTestCase, FooterTes
         result = submit_and_wait_for_result(self)
         expected_url = reverse("run_confirmation", kwargs={"instrument": self.instrument_name})
         assert expected_url in self.driver.current_url
-        # wait until the message processing is complete before ending the test
-        # otherwise the message handling can pollute the DB state for the next test
         assert len(result) == 4
 
         self._verify_runs_exist_and_have_variable_value("value2")
@@ -103,8 +103,6 @@ class TestRerunJobsRangePageIntegration(NavbarTestMixin, BaseTestCase, FooterTes
         result = submit_and_wait_for_result(self)
         expected_url = reverse("run_confirmation", kwargs={"instrument": self.instrument_name})
         assert expected_url in self.driver.current_url
-        # wait until the message processing is complete before ending the test
-        # otherwise the message handling can pollute the DB state for the next test
         assert len(result) == 4
 
         self._verify_runs_exist_and_have_variable_value(new_value)
