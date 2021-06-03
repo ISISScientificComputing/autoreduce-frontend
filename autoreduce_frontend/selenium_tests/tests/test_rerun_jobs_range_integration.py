@@ -17,6 +17,7 @@ from autoreduce_frontend.selenium_tests.utils import submit_and_wait_for_result
 from autoreduce_frontend.selenium_tests.utils import setup_external_services
 
 
+# pylint:disable=no-member
 class TestRerunJobsRangePageIntegration(NavbarTestMixin, BaseTestCase, FooterTestMixin, AccessibilityTestMixin):
     fixtures = BaseTestCase.fixtures + ["two_runs"]
 

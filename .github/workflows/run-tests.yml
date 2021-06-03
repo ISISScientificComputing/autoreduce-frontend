@@ -23,20 +23,19 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      - uses: ./.github/actions/build-autoreduction
+      - uses: ISISScientificComputing/autoreduce-actions/build@master
+        with:
+          package_name: autoreduce_frontend
 
-      - name: Set up chromedriver
-        run: |
-          wget https://chromedriver.storage.googleapis.com/87.0.4280.20/chromedriver_linux64.zip
-          unzip chromedriver_linux64.zip
-          export PATH=$PATH:./chromedriver_linux64/
+      - name: Start Selenium docker daemon
+        run: docker run --name selenium --rm -d --network=host -v /dev/shm:/dev/shm selenium/standalone-chrome:4.0.0-beta-3-prerelease-20210422
 
-      - name: Install chrome
-        run: sudo apt-get install -y google-chrome-stable
+      - name: Wait until the Selenium instance is ready
+        run: until nc -w 1 127.0.0.1 4444; do sleep 1; done
 
       - name: Run tests
         run: |
-          pytest autoreduce_frontend --cov-report=xml --cov=autoreduce_frontend
+          SELENIUM_REMOTE=1 pytest autoreduce_frontend --cov-report=xml --cov=autoreduce_frontend
 
       - uses: codecov/codecov-action@v1
         with:
@@ -58,7 +57,7 @@ jobs:
   dependency-check:
     name: Dependency-Check
     runs-on: ubuntu-18.04
-    container: centos/python-36-centos7
+    container: autoreduction/base
     strategy:
       fail-fast: false
 
@@ -77,6 +76,7 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
           pip install -e .
+
 
   Inspection:
     name: Code Inspection
@@ -99,15 +99,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      - uses: ./.github/actions/build-autoreduction
+      - uses: ISISScientificComputing/autoreduce-actions/build@master
+        with:
+          package_name: autoreduce_frontend
 
-      - name: Pylint tests
-        run: |
-          PYTHONPATH=autoreduce_frontend pylint --load-plugins pylint_django autoreduce_frontend
-
-      - name: YAPF
-        run: python -m yapf --parallel --diff --recursive .
-
-      - name: Vulture
-        run: vulture --min-confidence 90 autoreduce_frontend
+      - uses: ISISScientificComputing/autoreduce-actions/code_inspection@master
+        with:
+          package_name: autoreduce_frontend
 
