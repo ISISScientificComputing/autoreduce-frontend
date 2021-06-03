@@ -23,7 +23,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      - uses: ./.github/actions/build-autoreduction
+      - uses: ISISScientificComputing/autoreduce-actions@master
+        with:
+          package_name: autoreduce_frontend
 
       - name: Set up chromedriver
         run: |
