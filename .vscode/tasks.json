@@ -156,7 +156,7 @@
         {
             "label": "Run Selenium Docker daemon",
             "type": "shell",
-            "command": "docker run --name selenium --rm -it --network=host -v /dev/shm:/dev/shm selenium/standalone-chrome:4.0.0-beta-3-prerelease-20210422",
+            "command": "docker run --name selenium --rm -it -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome:4.0.0-beta-3-prerelease-20210422",
             "problemMatcher": []
         }
     ]
