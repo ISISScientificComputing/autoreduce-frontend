@@ -11,7 +11,7 @@ import os
 
 PACKAGE_NAME = "autoreduce_frontend"
 
-data_locations = [f"{PACKAGE_NAME}/templates/", f"{PACKAGE_NAME}/static/"]
+data_locations = [f"{PACKAGE_NAME}/templates/", f"{PACKAGE_NAME}/static/", f"{PACKAGE_NAME}/autoreduce_webapp/fixtures"]
 
 data_files = []
 
