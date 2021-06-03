@@ -27,18 +27,15 @@ jobs:
         with:
           package_name: autoreduce_frontend
 
-      - name: Set up chromedriver
-        run: |
-          wget https://chromedriver.storage.googleapis.com/87.0.4280.20/chromedriver_linux64.zip
-          unzip chromedriver_linux64.zip
-          export PATH=$PATH:./chromedriver_linux64/
+      - name: Start Selenium docker daemon
+        run: docker run --name selenium --rm -it --network=host -v /dev/shm:/dev/shm selenium/standalone-chrome:4.0.0-beta-3-prerelease-20210422
 
-      - name: Install chrome
-        run: sudo apt-get install -y google-chrome-stable
+      - name: Wait until the Selenium instance is ready
+        run: until nc -w 127.0.0.1 4444; do sleep 1; done
 
       - name: Run tests
         run: |
-          pytest autoreduce_frontend --cov-report=xml --cov=autoreduce_frontend
+          SELENIUM_REMOTE=1 pytest autoreduce_frontend --cov-report=xml --cov=autoreduce_frontend
 
       - uses: codecov/codecov-action@v1
         with:
