@@ -25,5 +25,4 @@ runs:
     - name: Setup test environment
       run: |
         python autoreduce_frontend/manage.py migrate
-        python autoreduce_frontend/manage.py collectstatic
       shell: bash
