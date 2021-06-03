@@ -60,7 +60,7 @@ jobs:
   dependency-check:
     name: Dependency-Check
     runs-on: ubuntu-18.04
-    container: centos/python-36-centos7
+    container: ubuntu/bionic
     strategy:
       fail-fast: false
 
@@ -79,6 +79,7 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
           pip install -e .
+
 
   Inspection:
     name: Code Inspection
@@ -101,7 +102,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      - uses: ./.github/actions/build-autoreduction
+      - uses: ISISScientificComputing/autoreduce-actions@master
+        with:
+          package_name: autoreduce_frontend
 
       - name: Pylint tests
         run: |
