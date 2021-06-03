@@ -60,7 +60,7 @@ jobs:
   dependency-check:
     name: Dependency-Check
     runs-on: ubuntu-18.04
-    container: ubuntu/bionic
+    container: ubuntu:bionic
     strategy:
       fail-fast: false
 
