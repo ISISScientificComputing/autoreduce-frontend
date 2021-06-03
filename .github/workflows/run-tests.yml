@@ -28,7 +28,7 @@ jobs:
           package_name: autoreduce_frontend
 
       - name: Start Selenium docker daemon
-        run: docker run --name selenium --rm -it --network=host -v /dev/shm:/dev/shm selenium/standalone-chrome:4.0.0-beta-3-prerelease-20210422
+        run: docker run --name selenium --rm -d --network=host -v /dev/shm:/dev/shm selenium/standalone-chrome:4.0.0-beta-3-prerelease-20210422
 
       - name: Wait until the Selenium instance is ready
         run: until nc -w 127.0.0.1 4444; do sleep 1; done
