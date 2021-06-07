@@ -4,6 +4,20 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "Make ~/.autoreduce/dev/reduced-data",
+            "type": "shell",
+            "command": "mkdir -p ~/.autoreduce/dev/reduced-data",
+            "problemMatcher": [],
+            "presentation": {
+                "echo": false,
+                "reveal": "never",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": false
+            }
+        },
+        {
             "label": "Export UID:GID to $USERID",
             "type": "shell",
             "command": "echo 'export USERID=$(id -u):$(id -g)' > ~/.userid.sh",
@@ -65,7 +79,8 @@
             },
             "problemMatcher": [],
             "dependsOn": [
-                "Export UID:GID to $USERID"
+                "Export UID:GID to $USERID",
+                "Make ~/.autoreduce/dev/reduced-data"
             ]
         },
         {
