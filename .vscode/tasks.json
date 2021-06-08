@@ -4,6 +4,20 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "Make ~/.autoreduce/dev/reduced-data",
+            "type": "shell",
+            "command": "mkdir -p ~/.autoreduce/dev/reduced-data",
+            "problemMatcher": [],
+            "presentation": {
+                "echo": false,
+                "reveal": "never",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": false
+            }
+        },
+        {
             "label": "Export UID:GID to $USERID",
             "type": "shell",
             "command": "echo 'export USERID=$(id -u):$(id -g)' > ~/.userid.sh",
@@ -36,14 +50,14 @@
                 "run",
                 "--rm",
                 "--network=host",
-                "-v",
-                "${workspaceFolder}:/autoreduce-frontend",
-                "-v",
-                "${workspaceFolder}/../autoreduce:/autoreduce",
-                "-v",
-                "~/.autoreduce:/home/.autoreduce",
-                "-v",
-                "~/.autoreduce/dev/reduced-data:/instrument",
+                "--mount",
+                "type=bind,source=${workspaceFolder},target=/autoreduce-frontend",
+                "--mount",
+                "type=bind,source=${workspaceFolder}/../autoreduce,target=/autoreduce",
+                "--mount",
+                "type=bind,source=$HOME/.autoreduce,target=/home/.autoreduce",
+                "--mount",
+                "type=bind,source=$HOME/.autoreduce/dev/reduced-data,target=/instrument",
                 "-e",
                 "HOME=/home",
                 "--user",
@@ -65,7 +79,8 @@
             },
             "problemMatcher": [],
             "dependsOn": [
-                "Export UID:GID to $USERID"
+                "Export UID:GID to $USERID",
+                "Make ~/.autoreduce/dev/reduced-data"
             ]
         },
         {
@@ -73,7 +88,7 @@
             "detail": "Used by the debugging configuration. Don't manually use or the terminal will remain hanging until you manually attach to the --listen port",
             "type": "shell",
             "isBackground": true,
-            "command": "docker exec -it autoreduce-debugpy python3 -m debugpy --listen 5679 --wait-for-client /autoreduce-frontend/autoreduce_frontend/manage.py runserver",
+            "command": "source ~/.userid.sh && docker exec -it autoreduce-debugpy python3 -m debugpy --listen 5679 --wait-for-client /autoreduce-frontend/autoreduce_frontend/manage.py runserver",
             "group": "test",
             "presentation": {
                 "echo": true,
@@ -90,7 +105,7 @@
             "detail": "Used by the debugging configuration. Don't manually use",
             "isBackground": true,
             "type": "shell",
-            "command": "docker exec -e DISPLAY=:1 -e RUNNING_VIA_PYTEST=true -e SELENIUM_REMOTE=1 -it autoreduce-debugpy python3 -m debugpy --listen 5681 --wait-for-client -m pytest -v /autoreduce-frontend/${relativeFileDirname}/${fileBasename}",
+            "command": "source ~/.userid.sh && docker exec -e DISPLAY=:1 -e RUNNING_VIA_PYTEST=true -e SELENIUM_REMOTE=1 -it autoreduce-debugpy python3 -m debugpy --listen 5681 --wait-for-client -m pytest -v /autoreduce-frontend/${relativeFileDirname}/${fileBasename}",
             "group": "test",
             "presentation": {
                 "echo": true,
@@ -134,21 +149,21 @@
         {
             "label": "Migrate credentials",
             "type": "shell",
-            "command": "docker exec -it autoreduce-debugpy autoreduce-creds-migrate",
+            "command": "source ~/.userid.sh && docker exec --user $USERID -it autoreduce-debugpy autoreduce-creds-migrate",
             "problemMatcher": [],
             "group": "build"
         },
         {
             "label": "Migrate database (with PR fixtures)",
             "type": "shell",
-            "command": "docker exec -it autoreduce-debugpy bash -c 'python3 /autoreduce-frontend/autoreduce_frontend/manage.py migrate && python3 /autoreduce-frontend/autoreduce_frontend/manage.py loaddata super_user_fixture status_fixture pr_test'",
+            "command": "source ~/.userid.sh && docker exec --user $USERID -it autoreduce-debugpy bash -c 'python3 /autoreduce-frontend/autoreduce_frontend/manage.py migrate && python3 /autoreduce-frontend/autoreduce_frontend/manage.py loaddata super_user_fixture status_fixture pr_test'",
             "problemMatcher": [],
             "group": "build"
         },
         {
             "label": "Migrate database (clean)",
             "type": "shell",
-            "command": "docker exec -it autoreduce-debugpy python3 /autoreduce-frontend/autoreduce_frontend/manage.py migrate",
+            "command": "source ~/.userid.sh && docker exec --user $USERID -it autoreduce-debugpy python3 /autoreduce-frontend/autoreduce_frontend/manage.py migrate",
             "isBackground": true,
             "problemMatcher": [],
             "group": "build"
