@@ -5,7 +5,6 @@
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
 
-import time
 from django.urls import reverse
 from autoreduce_db.instrument.models import InstrumentVariable
 from autoreduce_frontend.selenium_tests.pages.rerun_jobs_page import RerunJobsPage
@@ -77,18 +76,6 @@ class BaseRerunJobsRangePageIntegration(BaseTestCase):
             for var in vars_for_run_v1:
                 assert var.value == variable_value
 
-
-class TestRerunJobsRangePageIntegrationDefault(BaseRerunJobsRangePageIntegration):
-    @classmethod
-    def setUpClass(cls):
-        """Starts all external services"""
-        super().setUpClass()
-
-    @classmethod
-    def tearDownClass(cls) -> None:
-        """Stops all external services"""
-        super().tearDownClass()
-
     def test_run_range_default_variable_value(self):
         """
         Test setting a run range with the default variable value
@@ -96,24 +83,12 @@ class TestRerunJobsRangePageIntegrationDefault(BaseRerunJobsRangePageIntegration
         assert not self.page.form_validation_message.is_displayed()
         expected_run = "99999-100000"
         self.page.run_range_field = expected_run
-        result = submit_and_wait_for_result(self)
+        result = submit_and_wait_for_result(self, expected_runs=2)
         expected_url = reverse("run_confirmation", kwargs={"instrument": self.instrument_name})
         assert expected_url in self.driver.current_url
         assert len(result) == 4
 
         self._verify_runs_exist_and_have_variable_value("value2")
-
-
-class TestRerunJobsRangePageIntegrationNew(BaseRerunJobsRangePageIntegration):
-    @classmethod
-    def setUpClass(cls):
-        """Starts all external services"""
-        super().setUpClass()
-
-    @classmethod
-    def tearDownClass(cls) -> None:
-        """Stops all external services"""
-        super().tearDownClass()
 
     def test_run_range_new_variable_value(self):
         """
@@ -123,7 +98,7 @@ class TestRerunJobsRangePageIntegrationNew(BaseRerunJobsRangePageIntegration):
         self.page.run_range_field = expected_run
         new_value = "some_new_value"
         self.page.variable1_field = new_value
-        result = submit_and_wait_for_result(self)
+        result = submit_and_wait_for_result(self, expected_runs=2)
         expected_url = reverse("run_confirmation", kwargs={"instrument": self.instrument_name})
         assert expected_url in self.driver.current_url
         assert len(result) == 4

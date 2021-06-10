@@ -34,7 +34,7 @@ def find_run_in_database(test):
     return instrument.reduction_runs.filter(**args)
 
 
-def submit_and_wait_for_result(test):
+def submit_and_wait_for_result(test, expected_runs=1):
     """
     Submit after a reset button has been clicked. Then waits until the queue listener has finished processing.
 
@@ -53,8 +53,24 @@ def submit_and_wait_for_result(test):
         # the submit is successful if the URL has changed
         return expected_url in driver.current_url
 
+    class Counter:
+        def __init__(self, listener, expected_runs) -> None:
+            self.runs_processed = 0
+            self.listener = listener
+            self.expected_runs = expected_runs
+
+        def track(self, _):
+            """Callable for the until function, checks the listener and updates number of processed runs"""
+            if self.runs_processed == self.expected_runs:
+                return True
+            elif not self.listener.is_processing_message():
+                self.runs_processed += 1
+            else:
+                return False
+
+    count = Counter(test.listener, expected_runs)
     WebDriverWait(test.driver, 30).until(submit_successful)
-    WebDriverWait(test.driver, 30).until(lambda _: not test.listener.is_processing_message())
+    WebDriverWait(test.driver, 30).until(count.track)
 
     return find_run_in_database(test)
 
