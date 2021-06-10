@@ -9,6 +9,7 @@ Deals with communication with ICAT service
 """
 import datetime
 import logging
+import os
 import sys
 
 import icat
@@ -17,7 +18,7 @@ from autoreduce_db.reduction_viewer.models import Setting
 
 from autoreduce_frontend.autoreduce_webapp.settings import ICAT, BASE_DIR
 
-LOGGER = logging.getLogger("app")
+LOGGER = logging.getLogger(__package__)
 sys.path.insert(0, BASE_DIR)
 
 

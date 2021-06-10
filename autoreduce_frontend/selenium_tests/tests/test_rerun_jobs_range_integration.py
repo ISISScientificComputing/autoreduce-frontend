@@ -72,7 +72,7 @@ class BaseRerunJobsRangePageIntegration(BaseTestCase):
             run_number_v1 = self.driver.find_element_by_css_selector(f'[href*="{make_run_url(run)}"]')
             assert run_number_v1.is_displayed()
             assert RunSummaryPage(self.driver, self.instrument_name, run,
-                                  1).launch().variable1_field.get_attribute("value") == variable_value
+                                  1).launch().variable1_field_val == variable_value
             vars_for_run_v1 = InstrumentVariable.objects.filter(start_run=run)
             for var in vars_for_run_v1:
                 assert var.value == variable_value

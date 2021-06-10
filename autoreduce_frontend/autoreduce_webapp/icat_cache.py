@@ -9,6 +9,7 @@ Chached data from the ICAT service
 """
 import datetime
 import logging
+import os
 
 from django.utils import timezone
 
@@ -17,7 +18,7 @@ from autoreduce_frontend.autoreduce_webapp.models import UserCache, InstrumentCa
 from autoreduce_frontend.autoreduce_webapp.icat_communication import ICATCommunication
 from autoreduce_frontend.autoreduce_webapp.settings import CACHE_LIFETIME
 
-LOGGER = logging.getLogger("app")
+LOGGER = logging.getLogger(__package__)
 
 DEFAULT_MESSAGE = "ISIS ICAT is currently unavailable"
 

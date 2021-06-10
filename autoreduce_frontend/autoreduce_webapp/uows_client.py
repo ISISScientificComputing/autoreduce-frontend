@@ -8,6 +8,7 @@
 Client for accessing the user office logon
 """
 import logging
+import os
 
 import suds
 from suds.client import Client
@@ -15,7 +16,7 @@ from suds.client import Client
 # The below is a template on the repository
 from autoreduce_frontend.autoreduce_webapp.settings import UOWS_URL
 
-LOGGER = logging.getLogger("app")
+LOGGER = logging.getLogger(__package__)
 
 
 class UOWSClient:

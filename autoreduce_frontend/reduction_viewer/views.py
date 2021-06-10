@@ -16,6 +16,7 @@ can be more confident we are not affecting the execution
 import json
 import logging
 import operator
+import os
 import traceback
 
 from autoreduce_db.reduction_viewer.models import (Experiment, Instrument, ReductionRun, Status)
@@ -42,7 +43,7 @@ from autoreduce_frontend.reduction_viewer.view_utils import (deactivate_invalid_
                                                              make_data_analysis_url)
 from autoreduce_frontend.utilities.pagination import CustomPaginator
 
-LOGGER = logging.getLogger('app')
+LOGGER = logging.getLogger(__package__)
 
 
 @deactivate_invalid_instruments
