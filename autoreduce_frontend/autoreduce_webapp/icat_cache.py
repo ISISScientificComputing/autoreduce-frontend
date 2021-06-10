@@ -18,7 +18,7 @@ from autoreduce_frontend.autoreduce_webapp.models import UserCache, InstrumentCa
 from autoreduce_frontend.autoreduce_webapp.icat_communication import ICATCommunication
 from autoreduce_frontend.autoreduce_webapp.settings import CACHE_LIFETIME
 
-LOGGER = logging.getLogger(os.path.basename(__file__))
+LOGGER = logging.getLogger(__package__)
 
 DEFAULT_MESSAGE = "ISIS ICAT is currently unavailable"
 

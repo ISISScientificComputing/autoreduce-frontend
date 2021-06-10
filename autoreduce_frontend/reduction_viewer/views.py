@@ -43,7 +43,7 @@ from autoreduce_frontend.reduction_viewer.view_utils import (deactivate_invalid_
                                                              make_data_analysis_url)
 from autoreduce_frontend.utilities.pagination import CustomPaginator
 
-LOGGER = logging.getLogger(os.path.basename(__file__))
+LOGGER = logging.getLogger(__package__)
 
 
 @deactivate_invalid_instruments

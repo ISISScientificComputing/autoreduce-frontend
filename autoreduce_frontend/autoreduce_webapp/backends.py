@@ -15,7 +15,7 @@ from django.contrib.auth.models import User
 from autoreduce_frontend.autoreduce_webapp.icat_cache import ICATCache
 from autoreduce_frontend.autoreduce_webapp.uows_client import UOWSClient
 
-LOGGER = logging.getLogger(os.path.basename(__file__))
+LOGGER = logging.getLogger(__package__)
 
 
 class UOWSAuthenticationBackend:

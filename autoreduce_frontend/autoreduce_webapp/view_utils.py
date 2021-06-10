@@ -23,7 +23,7 @@ from autoreduce_frontend.autoreduce_webapp.icat_cache import ICATCache, ICATConn
 from autoreduce_frontend.autoreduce_webapp.settings import (DEVELOPMENT_MODE, LOGIN_URL, OUTDATED_BROWSERS,
                                                             UOWS_LOGIN_URL, USER_ACCESS_CHECKS)
 
-LOGGER = logging.getLogger(os.path.basename(__file__))
+LOGGER = logging.getLogger(__package__)
 
 
 def has_valid_login(request):

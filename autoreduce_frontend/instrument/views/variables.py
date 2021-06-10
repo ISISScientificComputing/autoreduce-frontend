@@ -19,7 +19,7 @@ from autoreduce_qp.queue_processor.variable_utils import VariableUtils
 from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions, login_and_uows_valid, render_with)
 from autoreduce_frontend.reduction_viewer.utils import ReductionRunUtils
 
-LOGGER = logging.getLogger(os.path.basename(__file__))
+LOGGER = logging.getLogger(__package__)
 
 
 # pylint:disable=too-many-locals

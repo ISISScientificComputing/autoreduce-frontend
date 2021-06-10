@@ -18,7 +18,7 @@ from autoreduce_db.reduction_viewer.models import Setting
 
 from autoreduce_frontend.autoreduce_webapp.settings import ICAT, BASE_DIR
 
-LOGGER = logging.getLogger(os.path.basename(__file__))
+LOGGER = logging.getLogger(__package__)
 sys.path.insert(0, BASE_DIR)
 
 

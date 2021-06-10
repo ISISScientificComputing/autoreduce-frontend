@@ -22,7 +22,7 @@ from autoreduce_frontend.instrument.views.variables import _combine_dicts
 from autoreduce_frontend.reduction_viewer.utils import ReductionRunUtils
 from autoreduce_frontend.utilities import input_processing
 
-LOGGER = logging.getLogger(os.path.basename(__file__))
+LOGGER = logging.getLogger(__package__)
 
 
 # pylint:disable=inconsistent-return-statements
