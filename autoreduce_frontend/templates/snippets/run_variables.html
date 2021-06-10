@@ -13,7 +13,7 @@
             <input type="hidden" name="run_version" value="{{ run_version }}">
             <div class="row">
                 <div class="col-md-9">
-                    {% include "snippets/form_warnings.html" %}
+                    {% include "snippets/variables/form_warnings.html" %}
                     <div class="form-group">
                         <label for="run_description" class="control-label col-md-2">
                             Re-run description
@@ -28,7 +28,7 @@
                         </div>
                     </div>
                     <div class="js-variables-container">
-                        {% include "snippets/edit_variables.html" with standard_variables=standard_variables advanced_variables=advanced_variables instrument=instrument.name only %}
+                        {% include "snippets/variables/form.html" with standard_variables=standard_variables advanced_variables=advanced_variables instrument=instrument.name only %}
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -40,20 +40,7 @@
                         </div>
                         <div class="row">
                             <ul class="js-form-actions">
-                                <li>
-                                    <a href="#resetValues" id="resetValues">Reset variables to initial values used for this run</a>
-                                    <a href="#" data-toggle="popover" data-html="true" data-content="Reset the values of the variables to the ones previously used for this run." data-trigger="hover click focus" data-placement="top" data-container="body" aria-label="Reset the values of the variables to the ones previously used for this run.">
-                                        <i class="fa fa-info-circle"></i>
-                                    </a>
-                                </li>
-                                {% if current_standard_variables %}
-                                <li>
-                                    <a href="#currentScript" id="currentScript">Reset to values in the current reduce_vars script</a>
-                                    <a href="#" data-toggle="popover" data-html="true" data-content="Reset to the values currently contained in the reduce_vars script." data-trigger="hover click focus" data-placement="top" data-container="body">
-                                        <i class="fa fa-info-circle"></i>
-                                    </a>
-                                </li>
-                                {% endif %}
+                                {% include "snippets/reset_buttons.html" %}
                             </ul>
                         </div>
                     </div>
@@ -68,14 +55,5 @@
                 </div>
             </div>
         </form>
-    </div>
-</div>
-
-<div class="hide">
-    <div class="js-default-variables">
-        {% include "snippets/edit_variables.html" with standard_variables=standard_variables advanced_variables=advanced_variables instrument=instrument.name only %}
-    </div>
-    <div class="js-current-variables">
-        {% include "snippets/edit_variables.html" with standard_variables=current_standard_variables advanced_variables=current_advanced_variables instrument=instrument.name only %}
     </div>
 </div>

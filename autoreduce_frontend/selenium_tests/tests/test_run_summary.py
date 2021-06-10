@@ -104,3 +104,27 @@ class TestRunSummaryPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
         assert back.text == f"Back to {self.instrument_name} runs"
         back.click()
         assert reverse("runs:list", kwargs={"instrument": self.instrument_name}) in self.driver.current_url
+
+    def test_reset_single_to_initial(self):
+        """
+        Tests changing the value of a variable field and resetting to the initial value, by using the inline button
+        """
+        self.page.toggle_button.click()
+        initial_value = self.page.variable1_field_val
+        self.page.variable1_field = "the new value in the field"
+        assert self.page.variable1_field_val != initial_value
+
+        self.page.variable1_field_reset_buttons.to_initial.click()
+        assert self.page.variable1_field_val == initial_value
+
+    def test_reset_single_to_script(self):
+        """
+        Tests changing the value of a variable field and resetting to the script value, by using the inline button
+        """
+        self.page.toggle_button.click()
+        initial_value = "test_variable_value_123"
+        self.page.variable1_field = "the new value in the field"
+        assert self.page.variable1_field_val != initial_value
+
+        self.page.variable1_field_reset_buttons.to_script.click()
+        assert self.page.variable1_field_val == initial_value

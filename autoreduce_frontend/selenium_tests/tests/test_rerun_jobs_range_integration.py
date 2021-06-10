@@ -5,6 +5,7 @@
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
 
+import time
 from django.urls import reverse
 from autoreduce_db.instrument.models import InstrumentVariable
 from autoreduce_frontend.selenium_tests.pages.rerun_jobs_page import RerunJobsPage
@@ -18,7 +19,7 @@ from autoreduce_frontend.selenium_tests.utils import setup_external_services
 
 
 # pylint:disable=no-member
-class TestRerunJobsRangePageIntegration(NavbarTestMixin, BaseTestCase, FooterTestMixin, AccessibilityTestMixin):
+class BaseRerunJobsRangePageIntegration(BaseTestCase):
     fixtures = BaseTestCase.fixtures + ["two_runs"]
 
     accessibility_test_ignore_rules = {
@@ -32,7 +33,8 @@ class TestRerunJobsRangePageIntegration(NavbarTestMixin, BaseTestCase, FooterTes
         super().setUpClass()
         cls.instrument_name = "TestInstrument"
         cls.data_archive, cls.queue_client, cls.listener = setup_external_services(cls.instrument_name, 21, 21)
-        cls.data_archive.add_reduction_script(cls.instrument_name, """print('some text')""")
+        cls.data_archive.add_reduction_script(cls.instrument_name,
+                                              """def main(input_file, output_dir): print('some text')""")
         cls.data_archive.add_reduce_vars_script(cls.instrument_name,
                                                 """standard_vars={"variable1":"test_variable_value_123"}""")
         cls.rb_number = 1234567
@@ -75,6 +77,18 @@ class TestRerunJobsRangePageIntegration(NavbarTestMixin, BaseTestCase, FooterTes
             for var in vars_for_run_v1:
                 assert var.value == variable_value
 
+
+class TestRerunJobsRangePageIntegrationDefault(BaseRerunJobsRangePageIntegration):
+    @classmethod
+    def setUpClass(cls):
+        """Starts all external services"""
+        super().setUpClass()
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        """Stops all external services"""
+        super().tearDownClass()
+
     def test_run_range_default_variable_value(self):
         """
         Test setting a run range with the default variable value
@@ -85,11 +99,21 @@ class TestRerunJobsRangePageIntegration(NavbarTestMixin, BaseTestCase, FooterTes
         result = submit_and_wait_for_result(self)
         expected_url = reverse("run_confirmation", kwargs={"instrument": self.instrument_name})
         assert expected_url in self.driver.current_url
-        # wait until the message processing is complete before ending the test
-        # otherwise the message handling can pollute the DB state for the next test
         assert len(result) == 4
 
         self._verify_runs_exist_and_have_variable_value("value2")
+
+
+class TestRerunJobsRangePageIntegrationNew(BaseRerunJobsRangePageIntegration):
+    @classmethod
+    def setUpClass(cls):
+        """Starts all external services"""
+        super().setUpClass()
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        """Stops all external services"""
+        super().tearDownClass()
 
     def test_run_range_new_variable_value(self):
         """
@@ -102,8 +126,6 @@ class TestRerunJobsRangePageIntegration(NavbarTestMixin, BaseTestCase, FooterTes
         result = submit_and_wait_for_result(self)
         expected_url = reverse("run_confirmation", kwargs={"instrument": self.instrument_name})
         assert expected_url in self.driver.current_url
-        # wait until the message processing is complete before ending the test
-        # otherwise the message handling can pollute the DB state for the next test
         assert len(result) == 4
 
         self._verify_runs_exist_and_have_variable_value(new_value)

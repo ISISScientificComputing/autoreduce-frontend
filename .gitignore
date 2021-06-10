@@ -58,9 +58,9 @@ autoreduce_frontend/staticfiles
 **/sqlite3*.db*
 
 # folders that get created from tests
-reduced-data/
-data-archive/
-test-archive/
+reduced-data*/
+data-archive*/
+test-archive*/
 
 autoreduce.code-workspace
 
