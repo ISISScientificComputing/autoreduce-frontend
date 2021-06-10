@@ -19,7 +19,7 @@ from autoreduce_frontend.selenium_tests.utils import setup_external_services
 
 
 # pylint:disable=no-member
-class TestRerunJobsRangePageIntegration(NavbarTestMixin, BaseTestCase, FooterTestMixin, AccessibilityTestMixin):
+class BaseRerunJobsRangePageIntegration(BaseTestCase):
     fixtures = BaseTestCase.fixtures + ["two_runs"]
 
     accessibility_test_ignore_rules = {
@@ -52,7 +52,6 @@ class TestRerunJobsRangePageIntegration(NavbarTestMixin, BaseTestCase, FooterTes
         super().setUp()
         self.page = RerunJobsPage(self.driver, self.instrument_name)
         self.page.launch()
-        time.sleep(5)  # arbitrary sleep to see if that removes random `database table is locked` CI errors
 
     def _verify_runs_exist_and_have_variable_value(self, variable_value):
         """
@@ -78,6 +77,18 @@ class TestRerunJobsRangePageIntegration(NavbarTestMixin, BaseTestCase, FooterTes
             for var in vars_for_run_v1:
                 assert var.value == variable_value
 
+
+class TestRerunJobsRangePageIntegrationDefault(BaseRerunJobsRangePageIntegration):
+    @classmethod
+    def setUpClass(cls):
+        """Starts all external services"""
+        super().setUpClass()
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        """Stops all external services"""
+        super().tearDownClass()
+
     def test_run_range_default_variable_value(self):
         """
         Test setting a run range with the default variable value
@@ -91,6 +102,18 @@ class TestRerunJobsRangePageIntegration(NavbarTestMixin, BaseTestCase, FooterTes
         assert len(result) == 4
 
         self._verify_runs_exist_and_have_variable_value("value2")
+
+
+class TestRerunJobsRangePageIntegrationNew(BaseRerunJobsRangePageIntegration):
+    @classmethod
+    def setUpClass(cls):
+        """Starts all external services"""
+        super().setUpClass()
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        """Stops all external services"""
+        super().tearDownClass()
 
     def test_run_range_new_variable_value(self):
         """
