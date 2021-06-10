@@ -19,7 +19,7 @@ import shutil
 from typing import List, Optional, Tuple
 from autoreduce_frontend.autoreduce_webapp.settings import STATIC_ROOT
 
-LOGGER = logging.getLogger('app')
+LOGGER = logging.getLogger(os.path.basename(__file__))
 
 
 class PlotHandler:

@@ -16,7 +16,7 @@ from autoreduce_qp.queue_processor.reduction.service import ReductionScript
 
 from autoreduce_frontend.autoreduce_webapp.settings import DATA_ANALYSIS_BASE_URL
 
-LOGGER = logging.getLogger("app")
+LOGGER = logging.getLogger(os.path.basename(__file__))
 
 
 def deactivate_invalid_instruments(func):

@@ -6,6 +6,7 @@
 # ############################################################################### #
 
 import logging
+import os
 from itertools import chain
 
 from autoreduce_db.instrument.models import InstrumentVariable
@@ -21,7 +22,7 @@ from autoreduce_frontend.instrument.views.variables import _combine_dicts
 from autoreduce_frontend.reduction_viewer.utils import ReductionRunUtils
 from autoreduce_frontend.utilities import input_processing
 
-LOGGER = logging.getLogger("app")
+LOGGER = logging.getLogger(os.path.basename(__file__))
 
 
 # pylint:disable=inconsistent-return-statements
