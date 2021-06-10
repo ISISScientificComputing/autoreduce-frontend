@@ -59,13 +59,22 @@ def submit_and_wait_for_result(test, expected_runs=1):
             self.listener = listener
             self.expected_runs = expected_runs
 
+            self._has_processed = False
+
         def track(self, _):
             """Callable for the until function, checks the listener and updates number of processed runs"""
             if self.runs_processed == self.expected_runs:
+                return False
+            elif not self.listener.is_processing_message() and self._has_processed:
+                # prevents counting up when >1 runs are expected, and the processing state has finished the first run,
+                # hasn't yet picked up the next run (i.e. changed listener.is_processing_message() back to True)
                 return True
             elif not self.listener.is_processing_message():
                 self.runs_processed += 1
+                self._has_processed = True
             else:
+                # the state has switched, and it's now processing again, reset the switch
+                self._has_processed = False
                 return False
 
     count = Counter(test.listener, expected_runs)
