@@ -14,6 +14,7 @@ def test_combine_dicts_empty_current():
 def test_combine_dicts():
     """
     Test: combine dicts works as expected - returns a dict with current and default
+    When: dicts with matching variables are passed in
     """
     current_test = {"test_var": 123}
     default_test = {"test_var": 654}
@@ -24,6 +25,7 @@ def test_combine_dicts():
 def test_combine_dicts_current_more_vars():
     """
     Test: Value is None when current variables has a variable that's not in the defaults
+    When: the current_variables dict has a variable that is not matching
     """
     current_test = {"test_var": 123, "not_in_defaults": "test"}
     default_test = {"test_var": 123}

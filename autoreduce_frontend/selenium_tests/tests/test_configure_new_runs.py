@@ -14,8 +14,7 @@ from autoreduce_frontend.selenium_tests.tests.base_tests import (BaseTestCase, F
                                                                  AccessibilityTestMixin)
 
 
-class TestConfigureNewRunsPage(AccessibilityTestMixin, BaseTestCase):
-    # class TestConfigureNewRunsPage(NavbarTestMixin, BaseTestCase, FooterTestMixin, AccessibilityTestMixin):
+class TestConfigureNewRunsPage(NavbarTestMixin, BaseTestCase, FooterTestMixin, AccessibilityTestMixin):
     fixtures = BaseTestCase.fixtures + ["two_runs"]
 
     accessibility_test_ignore_rules = {
