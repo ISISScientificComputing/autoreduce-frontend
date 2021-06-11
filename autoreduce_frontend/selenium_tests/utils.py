@@ -5,6 +5,7 @@
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
 from typing import Tuple
+from autoreduce_db.reduction_viewer.models import ReductionRun, Status
 
 from django.urls.base import reverse
 from selenium.common.exceptions import ElementClickInterceptedException
@@ -16,6 +17,8 @@ from autoreduce_utils.clients.queue_client import QueueClient
 from autoreduce_qp.model.database import access as db
 from autoreduce_qp.queue_processor.queue_listener import QueueListener, setup_connection
 from autoreduce_qp.systemtests.utils.data_archive import DataArchive
+
+# pylint:disable=no-member
 
 
 def find_run_in_database(test):
@@ -53,26 +56,13 @@ def submit_and_wait_for_result(test, expected_runs=1):
         # the submit is successful if the URL has changed
         return expected_url in driver.current_url
 
-    class Counter:
-        def __init__(self, listener, expected_runs) -> None:
-            self.runs_processed = 0
-            self.listener = listener
-            self.expected_runs = expected_runs
-
-            self._has_processed = False
-
-        def track(self, _):
-            """Callable for the until function, checks the listener and updates number of processed runs"""
-            if self.runs_processed == self.expected_runs:
-                return True
-            elif not self.listener.is_processing_message():
-                self.runs_processed += 1
-            else:
-                return False
-
-    count = Counter(test.listener, expected_runs)
     WebDriverWait(test.driver, 30).until(submit_successful)
-    WebDriverWait(test.driver, 30).until(count.track)
+    if expected_runs == 1:
+        WebDriverWait(test.driver, 30).until(lambda _: not test.listener.is_processing_message())
+    else:
+        num_current_runs = ReductionRun.objects.filter(status=Status.get_completed()).count()
+        WebDriverWait(test.driver, 30).until(lambda _: ReductionRun.objects.filter(status=Status.get_completed()).count(
+        ) == num_current_runs + expected_runs)
 
     return find_run_in_database(test)
 
