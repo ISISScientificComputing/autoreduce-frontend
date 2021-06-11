@@ -53,8 +53,7 @@ class TestConfigureNewRunsPage(NavbarTestMixin, BaseTestCase, FooterTestMixin, A
         self.page.reset_to_current_values.click()
 
         # need to re-query the driver because resetting replaces the elements
-        var_field = self.page.variable1_field
-        assert var_field.get_attribute("value") == "test_variable_value_123"  # pylint:disable=no-member
+        assert self.page.variable1_field_val == "test_variable_value_123"  # pylint:disable=no-member
 
     def test_back_to_instruments_goes_back(self):
         """
