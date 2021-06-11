@@ -11,14 +11,13 @@ from selenium.common.exceptions import NoSuchElementException
 
 from autoreduce_frontend.selenium_tests.pages.configure_new_runs_page import ConfigureNewRunsPage
 from autoreduce_frontend.selenium_tests.pages.variables_summary_page import VariableSummaryPage
-from autoreduce_frontend.selenium_tests.tests.base_tests import (BaseTestCase, FooterTestMixin, NavbarTestMixin,
-                                                                 AccessibilityTestMixin)
+from autoreduce_frontend.selenium_tests.tests.base_tests import BaseTestCase
 from autoreduce_frontend.selenium_tests.utils import setup_external_services
 
 REDUCE_VARS_DEFAULT_VALUE = "default value from reduce_vars"
 
 
-class TestConfigureNewRunsPageIntegration(NavbarTestMixin, BaseTestCase, FooterTestMixin, AccessibilityTestMixin):
+class TestConfigureNewRunsPageIntegration(BaseTestCase):
     fixtures = BaseTestCase.fixtures + ["run_with_one_variable"]
 
     accessibility_test_ignore_rules = {
@@ -35,7 +34,8 @@ class TestConfigureNewRunsPageIntegration(NavbarTestMixin, BaseTestCase, FooterT
         super().setUpClass()
         cls.instrument_name = "TestInstrument"
         cls.data_archive, cls.queue_client, cls.listener = setup_external_services(cls.instrument_name, 21, 21)
-        cls.data_archive.add_reduction_script(cls.instrument_name, """print('some text')""")
+        cls.data_archive.add_reduction_script(cls.instrument_name,
+                                              """def main(input_file, output_dir): print('some text')""")
         cls.data_archive.add_reduce_vars_script(cls.instrument_name,
                                                 f"""standard_vars={{"variable1":"{REDUCE_VARS_DEFAULT_VALUE}"}}""")
         cls.rb_number = 1234567

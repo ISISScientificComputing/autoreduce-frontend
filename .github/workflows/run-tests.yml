@@ -2,8 +2,8 @@ name: Tests
 on: [ push ]
 
 jobs:
-  selenium:
-    name: Selenium
+  selenium-pages:
+    name: Selenium pages
     runs-on: ubuntu-18.04
     strategy:
       fail-fast: false
@@ -35,13 +35,13 @@ jobs:
 
       - name: Run tests
         run: |
-          SELENIUM_REMOTE=1 pytest autoreduce_frontend --cov-report=xml --cov=autoreduce_frontend
+          SELENIUM_REMOTE=1 pytest autoreduce_frontend --cov-report=xml --cov=autoreduce_frontend --ignore=autoreduce_frontend/selenium_tests/tests/integration
 
       - uses: codecov/codecov-action@v1
         with:
           files: ./coverage.xml
           name: codecov-umbrella
-          flags: webapp
+          flags: webapp-pages
           fail_ci_if_error: true
           verbose: true
 
@@ -53,6 +53,56 @@ jobs:
             ~/.autoreduce/selenium_tests/screenshots
             ~/.autoreduce/selenium_tests/a11y_reports
 
+  selenium-integration:
+    name: Selenium integration
+    runs-on: ubuntu-18.04
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+
+      - uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - uses: ISISScientificComputing/autoreduce-actions/build@master
+        with:
+          package_name: autoreduce_frontend
+
+      - name: Start Selenium docker daemon
+        run: docker run --name selenium --rm -d --network=host -v /dev/shm:/dev/shm selenium/standalone-chrome:4.0.0-beta-3-prerelease-20210422
+
+      - name: Wait until the Selenium instance is ready
+        run: until nc -w 1 127.0.0.1 4444; do sleep 1; done
+
+      - name: Run tests
+        run: |
+          SELENIUM_REMOTE=1 pytest autoreduce_frontend/selenium_tests/tests/integration --cov-report=xml --cov=autoreduce_frontend
+
+      - uses: codecov/codecov-action@v1
+        with:
+          files: ./coverage.xml
+          name: codecov-umbrella
+          flags: webapp-integration
+          fail_ci_if_error: true
+          verbose: true
+
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: screenshots_and_reports
+          path: |
+            ~/.autoreduce/selenium_tests/screenshots
+            ~/.autoreduce/selenium_tests/a11y_reports
 
   dependency-check:
     name: Dependency-Check

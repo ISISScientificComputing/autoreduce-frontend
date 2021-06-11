@@ -29,7 +29,8 @@ class TestConfigureNewRunsPage(NavbarTestMixin, BaseTestCase, FooterTestMixin, A
         cls.instrument_name = "TestInstrument"
         cls.data_archive = DataArchive([cls.instrument_name], 21, 21)
         cls.data_archive.create()
-        cls.data_archive.add_reduction_script(cls.instrument_name, """print('some text')""")
+        cls.data_archive.add_reduction_script(cls.instrument_name,
+                                              """def main(input_file, output_dir): print('some text')""")
         cls.data_archive.add_reduce_vars_script(cls.instrument_name,
                                                 """standard_vars={"variable1":"test_variable_value_123"}""")
         cls.instrument_name = "TestInstrument"
@@ -52,8 +53,7 @@ class TestConfigureNewRunsPage(NavbarTestMixin, BaseTestCase, FooterTestMixin, A
         self.page.reset_to_current_values.click()
 
         # need to re-query the driver because resetting replaces the elements
-        var_field = self.page.variable1_field
-        assert var_field.get_attribute("value") == "test_variable_value_123"  # pylint:disable=no-member
+        assert self.page.variable1_field_val == "test_variable_value_123"  # pylint:disable=no-member
 
     def test_back_to_instruments_goes_back(self):
         """
@@ -95,7 +95,8 @@ class TestConfigureNewRunsPageSkippedOnly(NavbarTestMixin, BaseTestCase, FooterT
         cls.instrument_name = "TestInstrument"
         cls.data_archive = DataArchive([cls.instrument_name], 21, 21)
         cls.data_archive.create()
-        cls.data_archive.add_reduction_script(cls.instrument_name, """print('some text')""")
+        cls.data_archive.add_reduction_script(cls.instrument_name,
+                                              """def main(input_file, output_dir): print('some text')""")
         cls.data_archive.add_reduce_vars_script(cls.instrument_name,
                                                 """standard_vars={"variable1":"test_variable_value_123"}""")
         cls.instrument_name = "TestInstrument"
