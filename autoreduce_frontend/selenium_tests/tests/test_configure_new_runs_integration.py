@@ -11,14 +11,13 @@ from selenium.common.exceptions import NoSuchElementException
 
 from autoreduce_frontend.selenium_tests.pages.configure_new_runs_page import ConfigureNewRunsPage
 from autoreduce_frontend.selenium_tests.pages.variables_summary_page import VariableSummaryPage
-from autoreduce_frontend.selenium_tests.tests.base_tests import (BaseTestCase, FooterTestMixin, NavbarTestMixin,
-                                                                 AccessibilityTestMixin)
+from autoreduce_frontend.selenium_tests.tests.base_tests import BaseTestCase
 from autoreduce_frontend.selenium_tests.utils import setup_external_services
 
 REDUCE_VARS_DEFAULT_VALUE = "default value from reduce_vars"
 
 
-class TestConfigureNewRunsPageIntegration(NavbarTestMixin, BaseTestCase, FooterTestMixin, AccessibilityTestMixin):
+class TestConfigureNewRunsPageIntegration(BaseTestCase):
     fixtures = BaseTestCase.fixtures + ["run_with_one_variable"]
 
     accessibility_test_ignore_rules = {
