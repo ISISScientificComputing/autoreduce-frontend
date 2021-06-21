@@ -7,17 +7,15 @@
 # pylint: skip-file
 import configparser
 import os
-from pathlib import Path
 
 from autoreduce_db.autoreduce_django.settings import DATABASES as autoreduce_db_settings
+from autoreduce_utils.settings import CREDENTIALS_INI_FILE
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # Read the utilities .ini file that contains service credentials
-CONFIG_ROOT = str(Path("~/.autoreduce").expanduser())
-INI_FILE = os.environ.get("AUTOREDUCTION_CREDENTIALS", os.path.expanduser(f"{CONFIG_ROOT}/credentials.ini"))
 CONFIG = configparser.ConfigParser()
-CONFIG.read(INI_FILE)
+CONFIG.read(CREDENTIALS_INI_FILE)
 
 
 def get_str(section, key):
