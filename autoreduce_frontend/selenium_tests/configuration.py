@@ -13,9 +13,9 @@ import sys
 from pathlib import Path
 from shutil import copyfile
 
-from autoreduce_frontend.autoreduce_webapp.settings import CONFIG_ROOT
+from autoreduce_utils.settings import AUTOREDUCE_HOME_ROOT
 
-SELENIUM_CONFIG_DIR = Path(CONFIG_ROOT, "selenium_tests")
+SELENIUM_CONFIG_DIR = Path(AUTOREDUCE_HOME_ROOT, "selenium_tests")
 SELENIUM_CONFIG = Path(SELENIUM_CONFIG_DIR, "config.json")
 TEMP_SELENIUM_CONFIG = Path(SELENIUM_CONFIG_DIR, "temp_config.json")
 
