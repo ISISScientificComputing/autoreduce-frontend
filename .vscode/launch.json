@@ -5,91 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Webapp Docker Attach",
-            "type": "python",
-            "request": "attach",
-            "connect": {
-                "host": "127.0.0.1",
-                "port": 5679
-            },
-            "pathMappings": [
-                {
-                    "localRoot": "${workspaceFolder}",
-                    "remoteRoot": "/autoreduce-frontend"
-                }
-            ],
-            "presentation": {
-                "hidden": false,
-                "group": "autoreduce-frontend-docker",
-                "order": 1
-            },
-            "preLaunchTask": "(don't use directly) Exec runserver",
-            "django": true
-        },
-        {
-            "name": "pytest django Docker Attach",
-            "type": "python",
-            "request": "attach",
-            "connect": {
-                "host": "127.0.0.1",
-                "port": 5681
-            },
-            "pathMappings": [
-                {
-                    "localRoot": "${workspaceFolder}",
-                    "remoteRoot": "/autoreduce-frontend"
-                }
-            ],
-            "presentation": {
-                "hidden": false,
-                "group": "autoreduce-frontend-docker",
-                "order": 1
-            },
-            "preLaunchTask": "(don't use directly) Exec pytest django",
-        },
-        {
-            "name": "Pytest",
-            "type": "python",
-            "request": "launch",
-            "module": "pytest",
-            "args": [
-                "-v",
-                "${file}"
-            ],
-            "django": true,
-            "presentation": {
-                "hidden": false,
-                "group": "autoreduce-frontend",
-            },
-            "env": {
-                "DISPLAY": ":1",
-                "RUNNING_VIA_PYTEST": "true",
-                "SELENIUM_REMOTE": "1"
-            }
-        },
-        {
-            "name": "Pytest - coverage",
-            "type": "python",
-            "request": "launch",
-            "module": "pytest",
-            "args": [
-                "--cov-report",
-                "html",
-                "--cov=${workspaceFolder}/queue_processors",
-                "-pno:django",
-                "-v",
-                "${file}"
-            ],
-            "presentation": {
-                "hidden": false,
-                "group": "autoreduce-frontend",
-            },
-            "env": {
-                "RUNNING_VIA_PYTEST": "true"
-            }
-        },
-        {
-            "name": "Web app",
+            "name": "Run Autoreduce webapp",
             "type": "python",
             "request": "launch",
             "cwd": "${workspaceFolder}",
@@ -100,28 +16,13 @@
             "django": true,
             "presentation": {
                 "hidden": false,
-                "group": "autoreduce-frontend",
-                "order": 99
+                "group": "autoreduce-run",
+                "order": 1
             },
             "env": {
                 "PYTHONPATH": "${workspaceFolder}"
             },
             "justMyCode": false
-        },
-        {
-            "name": "Attach",
-            "type": "python",
-            "request": "attach",
-            "connect": {
-                "host": "127.0.0.1",
-                "port": 5678
-            },
-            "pathMappings": [
-                {
-                    "localRoot": "${workspaceFolder}",
-                    "remoteRoot": "/autoreduce"
-                }
-            ]
         },
     ]
 }
