@@ -44,23 +44,12 @@ else:
 INTERNAL_IPS = ['localhost', '127.0.0.1']
 
 # Application definition
-ORM_INSTALL = [  # Minimal apps required to setup JUST the ORM - (increases ORM setup speed)
-    'autoreduce_frontend.autoreduce_webapp',
-    'autoreduce_db.reduction_viewer',
-    'autoreduce_db.instrument',
-]
-
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'django.contrib.humanize',
+    'django.contrib.admin', 'django.contrib.auth', 'django.contrib.contenttypes', 'django.contrib.sessions',
+    'django.contrib.messages', 'django.contrib.staticfiles', 'django.contrib.humanize',
+    'autoreduce_frontend.autoreduce_webapp', 'autoreduce_frontend.generate_token', 'autoreduce_db.reduction_viewer',
+    'autoreduce_db.instrument', 'rest_framework.authtoken'
 ]
-
-INSTALLED_APPS = INSTALLED_APPS + ORM_INSTALL
 
 MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
