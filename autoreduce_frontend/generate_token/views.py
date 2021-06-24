@@ -1,13 +1,9 @@
-from typing import Any
-from django.http.request import HttpRequest
-
 from django import forms
-from django.http.response import HttpResponse, HttpResponseRedirect
-from django.views.generic.edit import DeleteView, FormView
-from django.views.generic import ListView
 from django.contrib.auth.models import User
-
+from django.http.response import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
+from django.views.generic import ListView
+from django.views.generic.edit import DeleteView, FormView
 from rest_framework.authtoken.models import Token
 
 
