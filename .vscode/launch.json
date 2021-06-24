@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Run Autoreduce webapp",
+            "name": "Run webapp",
             "type": "python",
             "request": "launch",
             "cwd": "${workspaceFolder}",
