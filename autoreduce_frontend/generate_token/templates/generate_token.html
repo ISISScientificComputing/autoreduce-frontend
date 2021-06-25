@@ -3,10 +3,10 @@
 {% load static %}
 
 {% block body %}
-<form method="POST">
+<form id="generate-token-form" method="POST">
     {% csrf_token %}
     {{ form }}
-    <button type="submit">Generate token</button>
+    <button id="generate-token-submit" type="submit">Generate token</button>
 </form>
 
 {% endblock %}

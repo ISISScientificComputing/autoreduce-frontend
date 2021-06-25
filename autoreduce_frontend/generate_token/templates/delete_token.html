@@ -6,6 +6,6 @@
 <form method="post">
     {% csrf_token %}
     <p>Are you sure you want to delete token for user: <strong>{{ object.user }}</strong>?</p>
-    <input type="submit" value="Confirm">
+    <input id="generate-token-delete" type="submit" value="Confirm">
 </form>
 {% endblock %}
