@@ -5,6 +5,28 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Pytest",
+            "type": "python",
+            "request": "launch",
+            "module": "pytest",
+            "cwd": "${workspaceFolder}",
+            "args": [
+                "-v",
+                "${file}"
+            ],
+            "django": true,
+            "presentation": {
+                "hidden": false,
+                "group": "autoreduce-test",
+            },
+            "env": {
+                "DISPLAY": ":1",
+                "RUNNING_VIA_PYTEST": "true",
+                "SELENIUM_REMOTE": "1"
+            },
+            "justMyCode": false
+        },
+        {
             "name": "Run webapp",
             "type": "python",
             "request": "launch",

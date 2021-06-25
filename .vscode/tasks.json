@@ -21,21 +21,21 @@
         {
             "label": "Migrate credentials",
             "type": "shell",
-            "command": "autoreduce-creds-migrate",
+            "command": "make credentials",
             "problemMatcher": [],
             "group": "build"
         },
         {
             "label": "Migrate database (with PR fixtures)",
             "type": "shell",
-            "command": "python ${workspaceFolder}/autoreduce_frontend/manage.py migrate && python ${workspaceFolder}/autoreduce_frontend/manage.py loaddata super_user_fixture status_fixture pr_test'",
+            "command": "make migrate-with-fixtures",
             "problemMatcher": [],
             "group": "build"
         },
         {
             "label": "Migrate database (clean)",
             "type": "shell",
-            "command": "python ${workspaceFolder}/autoreduce_frontend/manage.py migrate",
+            "command": "make migrate",
             "isBackground": true,
             "problemMatcher": [],
             "group": "build"
@@ -43,7 +43,7 @@
         {
             "label": "Run Selenium Docker daemon",
             "type": "shell",
-            "command": "docker run --network host --name selenium --rm -it -v /dev/shm:/dev/shm selenium/standalone-chrome:4.0.0-beta-3-prerelease-20210422",
+            "command": "make selenium",
             "problemMatcher": []
         }
     ]
