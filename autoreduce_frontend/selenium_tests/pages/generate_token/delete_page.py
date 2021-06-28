@@ -14,7 +14,6 @@ from selenium.webdriver.remote.webelement import WebElement
 from autoreduce_frontend.selenium_tests.pages.component_mixins.footer_mixin import FooterMixin
 from autoreduce_frontend.selenium_tests.pages.component_mixins.navbar_mixin import NavbarMixin
 from autoreduce_frontend.selenium_tests.pages.page import Page
-from selenium.webdriver.support.ui import Select
 
 
 class DeleteTokenFormPage(Page, NavbarMixin, FooterMixin):
