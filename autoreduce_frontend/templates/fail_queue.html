@@ -69,7 +69,7 @@
                                 {{ job.title }}</a>
                         </td>
                         <td>{{ job.instrument.name }}</td>
-                        <td style="width:600px;"><strong>{{ job.message }}</strong></td>
+                        <td style="width:600px; word-break: break-word;"><strong>{{ job.message }}</strong></td>
                         <td title="{{ job.created|date:'SHORT_DATETIME_FORMAT' }}">{{ job.created|naturaltime }}</td>
                                            {% endfor %}
                 </tbody>
