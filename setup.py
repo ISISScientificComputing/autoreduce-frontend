@@ -20,13 +20,13 @@ for loc in data_locations:
 print(data_files)
 
 setup(name=PACKAGE_NAME,
-      version="22.0.0.dev0",
+      version="22.0.0.dev1",
       description="The frontend of the ISIS Autoreduction service",
       author="ISIS Autoreduction Team",
       url="https://github.com/ISISScientificComputing/autoreduce-frontend/",
       install_requires=[
-          "autoreduce_utils==22.0.0.dev2", "autoreduce_db==22.0.0.dev3", "autoreduce_qp==22.0.0.dev1", "Django==3.2.4",
-          "django_extensions==3.1.3", "django-user-agents==0.4.0"
+          "autoreduce_utils==22.0.0.dev3", "autoreduce_db==22.0.0.dev4", "autoreduce_qp==22.0.0.dev2", "Django==3.2.4",
+          "django_extensions==3.1.3", "django-user-agents==0.4.0", "djangorestframework==3.12.4"
       ],
       packages=find_packages(),
       package_data={"": data_files},
