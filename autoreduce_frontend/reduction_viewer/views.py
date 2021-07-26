@@ -224,7 +224,7 @@ def fail_queue(request):
 @check_permissions
 @render_with('run_summary.html')
 # pylint:disable=no-member,too-many-locals
-def run_summary(_, instrument_name=None, run_number=None, run_version=0):
+def run_summary(request, instrument_name=None, run_number=None, run_version=0):
     """
     Render run summary
     """
@@ -258,6 +258,7 @@ def run_summary(_, instrument_name=None, run_number=None, run_version=0):
 
         has_reduce_vars = bool(current_variables)
         has_run_variables = bool(run.run_variables.count())
+        page = request.GET.get('page', 1)
         context_dictionary = {
             'run': run,
             'run_number': run_number,
@@ -270,7 +271,8 @@ def run_summary(_, instrument_name=None, run_number=None, run_version=0):
             'started_by': started_by,
             'has_reduce_vars': has_reduce_vars,
             'has_run_variables': has_run_variables,
-            'data_analysis_link_url': data_analysis_link_url
+            'data_analysis_link_url': data_analysis_link_url,
+            'current_page': page
         }
 
     except PermissionDenied:
@@ -343,6 +345,8 @@ def runs_list(request, instrument=None):
 
         has_variables = bool(current_variables)
 
+        #page = request.GET.get('page', '')
+
         context_dictionary = {
             'instrument': instrument_obj,
             'instrument_name': instrument_obj.name,
@@ -353,7 +357,7 @@ def runs_list(request, instrument=None):
             'filtering': filter_by,
             'sort': sort_by,
             'has_variables': has_variables,
-            'error_reason': error_reason
+            'error_reason': error_reason,
         }
 
         if filter_by == 'experiment':

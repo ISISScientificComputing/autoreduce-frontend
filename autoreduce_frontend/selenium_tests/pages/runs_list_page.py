@@ -59,3 +59,7 @@ class RunsListPage(Page, NavbarMixin, FooterMixin, TourMixin):
     def alert_message_text(self) -> str:
         """Get the the from the alert message"""
         return self.driver.find_element_by_id("alert_message").text.strip()
+
+    def get_top_run(self):
+        """Get the top run using the element's id"""
+        return self.driver.find_element_by_id("top-run-number")

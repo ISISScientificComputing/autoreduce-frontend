@@ -132,3 +132,13 @@ class RunSummaryPage(Page, RerunFormMixin, NavbarMixin, FooterMixin, TourMixin):
         Returns all image elements on the page.
         """
         return self.driver.find_elements_by_class_name("js-plotly-plot")
+
+    def get_top_run(self):
+        """Get the top run using the element's id"""
+        return self.driver.find_element_by_id('cancel')
+
+    def click_cancel_btn(self):
+        """"""
+        from autoreduce_frontend.selenium_tests.pages.runs_list_page import RunsListPage
+        self.cancel_button.click()
+        return RunsListPage(self.driver, self.instrument)

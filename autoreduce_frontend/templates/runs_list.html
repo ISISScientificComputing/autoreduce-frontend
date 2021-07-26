@@ -144,7 +144,7 @@
                         <div class="row run-row">
                     {% endif %}
                 <div class="col-md-5 col-sm-5 col-md-offset-1 col-xs-4"><a
-                        href="{% url 'runs:summary' instrument_name=instrument_name run_number=run.run_number run_version=run.run_version %}"
+                        href="{% url 'runs:summary' instrument_name=instrument_name run_number=run.run_number run_version=run.run_version %}?page={{ paginator.current_page_index }}"
                         {% if forloop.first %} id="top-run-number" {% endif %} class="run-num-links">{{ run.title }}</a></div>
                 <div class="col-md-2 col-sm-2 col-xs-4 run-status text-{% colour_table_row run.status.value_verbose %}">
                     <strong>{{ run.status.value_verbose }}</strong></div>
