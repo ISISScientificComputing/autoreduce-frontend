@@ -7,14 +7,15 @@
 """
 Module for the run summary page model
 """
+from functools import partial
 from typing import List
 
 from django.urls.base import reverse
 from selenium.webdriver.remote.webelement import WebElement
+from selenium.webdriver.support.wait import WebDriverWait
 from autoreduce_frontend.selenium_tests.pages.component_mixins.footer_mixin import FooterMixin
 from autoreduce_frontend.selenium_tests.pages.component_mixins.navbar_mixin import NavbarMixin
-from autoreduce_frontend.selenium_tests.pages.component_mixins.rerun_form_mixin import \
-    RerunFormMixin
+from autoreduce_frontend.selenium_tests.pages.component_mixins.rerun_form_mixin import RerunFormMixin
 from autoreduce_frontend.selenium_tests.pages.component_mixins.tour_mixin import TourMixin
 from autoreduce_frontend.selenium_tests.pages.page import Page
 
@@ -133,12 +134,17 @@ class RunSummaryPage(Page, RerunFormMixin, NavbarMixin, FooterMixin, TourMixin):
         """
         return self.driver.find_elements_by_class_name("js-plotly-plot")
 
-    def get_top_run(self):
-        """Get the top run using the element's id"""
-        return self.driver.find_element_by_id('cancel')
+    def _do_run_button(self, url):
+        def run_button_clicked_successfully(button, url, driver):
+            button.click()
+            return url in driver.current_url
+
+        button = self.driver.find_element_by_css_selector(f'[href*="{url}"]')
+        WebDriverWait(self.driver, 10).until(partial(run_button_clicked_successfully, button, url))
 
     def click_cancel_btn(self):
-        """"""
+        """Click the cancel button and return a RunsListPage object."""
         from autoreduce_frontend.selenium_tests.pages.runs_list_page import RunsListPage
-        self.cancel_button.click()
+
+        self._do_run_button(reverse("runs:list", kwargs={"instrument": self.instrument}))
         return RunsListPage(self.driver, self.instrument)
