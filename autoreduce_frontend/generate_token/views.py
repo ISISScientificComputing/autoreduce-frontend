@@ -1,14 +1,10 @@
-from django import forms
-from django.contrib.auth.models import User
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView
 from django.views.generic.edit import DeleteView, FormView
 from rest_framework.authtoken.models import Token
 
-
-class GenerateTokenForm(forms.Form):
-    user = forms.ModelChoiceField(queryset=User.objects.filter(auth_token__pk=None))
+from autoreduce_frontend.generate_token.forms import GenerateTokenForm
 
 
 class GenerateTokenFormView(FormView):
