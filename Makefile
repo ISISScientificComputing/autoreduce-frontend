@@ -18,4 +18,5 @@ migrate-with-fixtures: migrate
 	autoreduce-webapp-manage loaddata super_user_fixture status_fixture pr_test
 
 selenium:
+	docker kill selenium
 	docker run --network host --name selenium --rm -it -v /dev/shm:/dev/shm selenium/standalone-chrome:4.0.0-beta-3-prerelease-20210422
