@@ -1,17 +1,11 @@
-import unittest
-from unittest.mock import Mock, patch
-
 from rest_framework.authtoken.models import Token
 
-from autoreduce_frontend.reduction_viewer import views
-from autoreduce_frontend.autoreduce_webapp.icat_cache import DEFAULT_MESSAGE
-from autoreduce_frontend.autoreduce_webapp.view_utils import ICATConnectionException
-from autoreduce_frontend.selenium_tests.pages.error_page import ErrorPage
-from autoreduce_frontend.selenium_tests.tests.base_tests import BaseTestCase, FooterTestMixin, NavbarTestMixin, AccessibilityTestMixin
+from autoreduce_frontend.selenium_tests.tests.base_tests import (BaseTestCase, FooterTestMixin, NavbarTestMixin,
+                                                                 AccessibilityTestMixin)
 from autoreduce_frontend.selenium_tests.pages.generate_token.list_page import GenerateTokenListPage
 
 
-class TestGenerateTokenPage(BaseTestCase):  #NavbarTestMixin, FooterTestMixin,AccessibilityTestMixin):
+class TestGenerateTokenPage(BaseTestCase, NavbarTestMixin, FooterTestMixin, AccessibilityTestMixin):
     """
     Test cases for the error page
     """
