@@ -14,10 +14,8 @@ from autoreduce_frontend.selenium_tests.pages.runs_list_page import RunsListPage
 from autoreduce_frontend.selenium_tests.tests.base_tests import NavbarTestMixin, BaseTestCase, FooterTestMixin, \
     AccessibilityTestMixin
 
-from autoreduce_frontend.selenium_tests.utils import setup_archive
 
-
-class TestRunsListPage(BaseTestCase):
+class TestRunsListPage(NavbarTestMixin, BaseTestCase, FooterTestMixin, AccessibilityTestMixin):
     """
     Test cases for the InstrumentSummary page
     """
@@ -65,32 +63,54 @@ class TestRunsListPage(BaseTestCase):
         data_archive.delete()
 
 
-class TestNew(BaseTestCase):
-    """
-    Test cases for the InstrumentSummary page
-    """
+class TestParameters(BaseTestCase):
+    """Test cases for the InstrumentSummary page queries."""
 
     fixtures = BaseTestCase.fixtures + ["eleven_runs"]
 
     def setUp(self) -> None:
-        """
-        Sets up the InstrumentSummaryPage object
-        """
+        """Sets up the InstrumentSummaryPage object."""
         super().setUp()
         self.instrument_name = "TestInstrument"
         self.page = RunsListPage(self.driver, self.instrument_name)
 
-        #self.data_archive = setup_archive([self.instrument_name], 21, 21)
-        #self.data_archive.add_reduce_vars_script(self.instrument_name, 'standard_vars = {"variable": "somevalue"}')
+    def test_page_num_query(self, page=None):
+        """Test that the given page number is a query for the page."""
+        # Launch the web page if no page arg supplied
+        if not page:
+            self.page.launch()
+            page = 1
 
-    def test_page_param_in_href(self):
-        """
-        Test that the page parameter is within the href
-        """
-        self.page.launch()
-        assert "page=1" in self.page.get_top_run().get_attribute('href')
-        run_summary_page = self.page.click_run(100000)
-        assert "page=1" in run_summary_page.driver.current_url
-        assert "page=1" in run_summary_page.cancel_button.get_attribute('href')
+        # Evalutes to "page=<page>"
+        page_query = f"{page=}"
+
+        # Check if page query is in the href
+        assert page_query in self.page.get_top_run().get_attribute('href')
+
+        # Get the number of the top run
+        top_run_num = int(self.page.get_top_run().text)
+
+        # Click the top run and assign a RunSummaryPage object
+        run_summary_page = self.page.click_run(top_run_num)
+
+        # Check if the page query is in the url for the summary page
+        assert page_query in run_summary_page.driver.current_url
+
+        # Check if the page query is in the summary page href
+        assert page_query in run_summary_page.cancel_button.get_attribute('href')
+
+        # Click the cancel button to go back to the runs list
         run_summary_page.click_cancel_btn()
-        assert "page=1" in self.page.get_top_run().get_attribute('href')
+
+        # Check if page query is still in the href
+        assert page_query in self.page.get_top_run().get_attribute('href')
+
+    def test_second_page_num_query(self):
+        """Test that the second page of runs passes the correct page number query."""
+        self.page.launch()
+
+        # Click the 'Next Page' button
+        self.page.click_page("Next Page")
+
+        # Test that the page number query works for the second page
+        self.test_page_num_query(page=2)
