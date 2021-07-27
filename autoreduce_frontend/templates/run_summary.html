@@ -94,8 +94,7 @@
                                         class="text-{% colour_table_row run.status.value_verbose %}">{{ run.status.value_verbose }}</strong>
                                 </div>
                                 <div id="instrument">
-                                    <strong>Instrument:</strong> <a
-                                        href="{% url 'runs:list' instrument=run.instrument.name %}">{{ run.instrument.name }}</a>
+                                    <strong>Instrument:</strong> {{ run.instrument.name }}
                                 </div>
                                 <div id="rb_number">
                                     <strong>RB Number:</strong> <a
