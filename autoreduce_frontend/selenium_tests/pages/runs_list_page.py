@@ -61,5 +61,16 @@ class RunsListPage(Page, NavbarMixin, FooterMixin, TourMixin):
         return self.driver.find_element_by_id("alert_message").text.strip()
 
     def get_top_run(self):
-        """Get the top run using the element's id"""
+        """Get the top run using the element's id."""
         return self.driver.find_element_by_id("top-run-number")
+
+    def click_page(self, title):
+        """Click the page navigation button matching the given title on the instrument list page."""
+        btns = self.driver.find_elements_by_tag_name("button")
+
+        for btn in btns:
+            if btn.get_attribute("title") == title:
+                btn.click()
+                break
+        else:
+            raise NoSuchElementException
