@@ -11,7 +11,7 @@ import os
 
 PACKAGE_NAME = "autoreduce_frontend"
 
-data_locations = [f"{PACKAGE_NAME}/templates/", f"{PACKAGE_NAME}/static/"]
+data_locations = [f"{PACKAGE_NAME}/templates/", f"{PACKAGE_NAME}/static/", f"{PACKAGE_NAME}/**/templates"]
 
 data_files = []
 
@@ -20,7 +20,7 @@ for loc in data_locations:
 print(data_files)
 
 setup(name=PACKAGE_NAME,
-      version="22.0.0.dev2",
+      version="22.0.0.dev3",
       description="The frontend of the ISIS Autoreduction service",
       author="ISIS Autoreduction Team",
       url="https://github.com/ISISScientificComputing/autoreduce-frontend/",
