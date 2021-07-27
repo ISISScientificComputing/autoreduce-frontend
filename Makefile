@@ -1,10 +1,10 @@
 all: credentials migrate-with-fixtures
 
-dev:
+package-dev:
 	python setup.py sdist bdist_wheel
 	twine upload --repository testpypi dist/*
 
-prod:
+package:
 	python setup.py sdist bdist_wheel
 	twine upload --repository pypi dist/*
 
