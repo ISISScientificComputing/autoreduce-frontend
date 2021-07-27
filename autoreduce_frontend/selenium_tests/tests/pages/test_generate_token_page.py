@@ -15,7 +15,7 @@ class TestGenerateTokenPage(BaseTestCase):  #NavbarTestMixin, FooterTestMixin,Ac
     """
     Test cases for the error page
     """
-    fixtures = BaseTestCase.fixtures
+    fixtures = BaseTestCase.fixtures + ["additional_users"]
 
     def setUp(self) -> None:
         """
@@ -28,7 +28,7 @@ class TestGenerateTokenPage(BaseTestCase):  #NavbarTestMixin, FooterTestMixin,Ac
 
     def _action_generate_token(self):
         form_page = self.page.click_generate_token()
-        form_page.generate_form_users().select_by_visible_text("super")
+        form_page.generate_form_users().select_by_visible_text("(super)")
         form_page.click_generate_token()
 
     def test_generate_token_for_user(self):
@@ -83,3 +83,16 @@ class TestGenerateTokenPage(BaseTestCase):  #NavbarTestMixin, FooterTestMixin,Ac
         clipboards[0].click()
 
         self.page.paste_and_verify(str(Token.objects.first()))
+
+    def test_users_label_correct(self):
+        """
+        Test that users with first_name and last_name are displayed correctly
+        """
+        # clear all premade tokens
+        Token.objects.all().delete()
+        form_page = self.page.click_generate_token()
+        # 3 because top option is ------, and then the 2 users from the fixture
+        assert len(form_page.generate_form_users().options) == 3
+        assert form_page.generate_form_users().options[0].text == "---------"
+        assert form_page.generate_form_users().options[1].text == "(super)"
+        assert form_page.generate_form_users().options[2].text == "Test User (123456)"
