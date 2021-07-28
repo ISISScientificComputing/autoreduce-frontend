@@ -1,3 +1,4 @@
+from autoreduce_frontend.autoreduce_webapp.view_utils import get_notifications
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView
@@ -27,6 +28,7 @@ class ShowToken(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["notifications"] = get_notifications(self.request)
         error_message = self.request.session.pop("error_message", "")
         context['error_message'] = error_message
         return context

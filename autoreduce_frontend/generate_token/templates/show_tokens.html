@@ -51,7 +51,7 @@
     <tbody>
         {% for token in token_list %}
         <tr>
-            <td class="token-user">{{ token.user }}</td>
+            <td class="token-user">{{ token.user.first_name }} {{ token.user.last_name }} ({{ token.user.username }})</td>
             <td class="token-value" data-token-value="{{ token }}">Click eye to reveal <a onclick="this.parentElement.textContent=this.parentElement.dataset.tokenValue"><i class="fa fa-eye pointer" aria-hidden="true"></i></a>
                     or copy to clipboard <a data-toggle="popover" data-html="true" data-content="" data-trigger="click" data-placement="top" data-container="body" tabindex="0" onclick="copyWithSuccessCheck(this)"><i class="fa fa-clipboard pointer" aria-hidden="true"></i></a></td>
             <td><a type="button" class="btn btn-danger token-delete" href="{% url 'token:delete' pk=token.pk %}">Delete</a></td>

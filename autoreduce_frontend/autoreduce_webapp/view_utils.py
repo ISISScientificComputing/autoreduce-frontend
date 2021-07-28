@@ -101,6 +101,16 @@ def require_admin(func):
     return request_processor
 
 
+def get_notifications(request):
+    """
+    Gets the notifications that the user should be able to see
+    """
+    if request.user.is_staff and request.user.is_authenticated:
+        return Notification.objects.filter(is_active=True)
+    else:
+        return Notification.objects.filter(is_active=True, is_staff_only=False)
+
+
 def render_with(template):
     """
     Decorator for Django views that sends returned dict to render function
@@ -114,10 +124,7 @@ def render_with(template):
                 output['request'] = request
 
             # pylint: disable=no-member
-            if request.user.is_staff and request.user.is_authenticated:
-                notifications = Notification.objects.filter(is_active=True)
-            else:
-                notifications = Notification.objects.filter(is_active=True, is_staff_only=False)
+            notifications = get_notifications(request)
 
             if 'notifications' not in output:
                 output['notifications'] = notifications

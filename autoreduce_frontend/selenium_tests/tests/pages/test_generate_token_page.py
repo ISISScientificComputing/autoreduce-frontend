@@ -31,7 +31,7 @@ class TestGenerateTokenPage(BaseTestCase, NavbarTestMixin, FooterTestMixin, Acce
         """
         usernames = self.page.token_usernames()
         assert len(usernames) == 1
-        assert usernames[0].text == "super"
+        assert usernames[0].text == "(super)"
 
     def test_generate_and_view(self):
         """
