@@ -14,7 +14,7 @@ class VerboseUserChoiceField(ModelChoiceField):
     def __init__(self, *args, **kwargs):
         super(VerboseUserChoiceField, self).__init__(*args, **kwargs)
 
-    def label_from_instance(self, obj: User):
+    def label_from_instance(self, obj: User) -> str:
         """
         Returns a custom made label for the given object.
 

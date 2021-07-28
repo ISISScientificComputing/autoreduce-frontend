@@ -103,7 +103,7 @@ def require_admin(func):
 
 def get_notifications(request):
     """
-    Gets the notifications that the user should be able to see
+    Gets the notifications that the user should be able to see.
     """
     if request.user.is_staff and request.user.is_authenticated:
         return Notification.objects.filter(is_active=True)
