@@ -88,8 +88,7 @@ def setup_external_services(instrument_name: str, start_year: int,
 
 
 def setup_archive(instrument_name: str, start_year: int, end_year: int) -> DataArchive:
-    """
-    """
+    """Create a DataArchive."""
     data_archive = DataArchive([instrument_name], start_year, end_year)
     data_archive.create()
 
