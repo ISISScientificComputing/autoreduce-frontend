@@ -370,11 +370,13 @@ def runs_list(request, instrument=None):
             context_dictionary['experiments'] = experiments_and_runs
         else:
             max_items_per_page = request.GET.get('pagination', 10)
-            custom_paginator = CustomPaginator(page_type=sort_by,
+            custom_paginator = CustomPaginator(
+                page_type=sort_by,
                                                query_set=runs,
                                                items_per_page=max_items_per_page,
                                                page_tolerance=3,
-                                               current_page=request.GET.get('page', 1))
+                current_page=request.GET.get('page', 1),
+            )
             context_dictionary['paginator'] = custom_paginator
             context_dictionary['last_page_index'] = len(custom_paginator.page_list)
             context_dictionary['max_items'] = max_items_per_page
