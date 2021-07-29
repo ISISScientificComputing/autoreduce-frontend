@@ -16,11 +16,8 @@ can be more confident we are not affecting the execution
 import json
 import logging
 import operator
-import os
 import traceback
 
-from autoreduce_db.reduction_viewer.models import (Experiment, Instrument, ReductionRun, Status)
-from autoreduce_qp.queue_processor.variable_utils import VariableUtils
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout as django_logout
 from django.contrib.auth.models import User
@@ -30,7 +27,9 @@ from django.http import HttpResponseNotFound
 from django.shortcuts import redirect
 from django.utils.http import url_has_allowed_host_and_scheme
 
-from autoreduce_frontend.autoreduce_webapp.icat_cache import (ICATCache, ICATConnectionException)
+from autoreduce_db.reduction_viewer.models import Experiment, Instrument, ReductionRun, Status
+from autoreduce_qp.queue_processor.variable_utils import VariableUtils
+from autoreduce_frontend.autoreduce_webapp.icat_cache import ICATCache, ICATConnectionException
 from autoreduce_frontend.autoreduce_webapp.settings import (ALLOWED_HOSTS, DEVELOPMENT_MODE, UOWS_LOGIN_URL,
                                                             USER_ACCESS_CHECKS)
 from autoreduce_frontend.autoreduce_webapp.uows_client import UOWSClient
