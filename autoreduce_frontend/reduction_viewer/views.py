@@ -258,6 +258,9 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
         has_reduce_vars = bool(current_variables)
         has_run_variables = bool(run.run_variables.count())
         page = request.GET.get('page', 1)
+        items_per_page = request.GET.get('pagination', '10')
+        page_type = request.GET.get('sort', 'run')
+
         context_dictionary = {
             'run': run,
             'run_number': run_number,
@@ -271,7 +274,9 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
             'has_reduce_vars': has_reduce_vars,
             'has_run_variables': has_run_variables,
             'data_analysis_link_url': data_analysis_link_url,
-            'current_page': page
+            'current_page': page,
+            'items_per_page': items_per_page,
+            'page_type': page_type,
         }
 
     except PermissionDenied:
@@ -372,9 +377,9 @@ def runs_list(request, instrument=None):
             max_items_per_page = request.GET.get('pagination', 10)
             custom_paginator = CustomPaginator(
                 page_type=sort_by,
-                                               query_set=runs,
-                                               items_per_page=max_items_per_page,
-                                               page_tolerance=3,
+                query_set=runs,
+                items_per_page=max_items_per_page,
+                page_tolerance=3,
                 current_page=request.GET.get('page', 1),
             )
             context_dictionary['paginator'] = custom_paginator

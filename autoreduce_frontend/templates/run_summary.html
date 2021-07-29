@@ -234,7 +234,7 @@
         </div>
         <div class="row col-md-12 my-2">
             <div class="text-center">
-                <a href="{% url 'runs:list' run.instrument.name %}?page={{current_page}}" class="btn btn-primary back" id="cancel">Back to {{ run.instrument.name }} runs</a>
+                <a href="{% url 'runs:list' run.instrument.name %}?page={{ current_page }}&pagination={{ items_per_page }}&sort={{ page_type }}" class="btn btn-primary back" id="cancel">Back to {{ run.instrument.name }} runs</a>
             </div>
         </div>
         {% endif %}
