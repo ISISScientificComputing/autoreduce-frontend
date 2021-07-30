@@ -20,6 +20,5 @@ From: autoreduction/webapp:latest
 Includecmd: no
 
 %startscript
-    cd /autoreduce-frontend/autoreduce_webapp
     autoreduce-webapp-manage collectstatic --no-input
     gunicorn --workers 4 -b 0.0.0.0:8000 autoreduce_frontend.autoreduce_webapp.wsgi
