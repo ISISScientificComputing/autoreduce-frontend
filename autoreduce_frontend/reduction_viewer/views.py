@@ -349,7 +349,6 @@ def runs_list(request, instrument=None):
 
         has_variables = bool(current_variables)
 
-        #page = request.GET.get('page', '')
 
         context_dictionary = {
             'instrument': instrument_obj,
