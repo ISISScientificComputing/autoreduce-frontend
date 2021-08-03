@@ -18,7 +18,7 @@ from autoreduce_frontend.selenium_tests.tests.base_tests import BaseTestCase, Fo
 
 
 # pylint:disable=no-member
-class TestRunSummaryPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
+class TestRunSummaryPage(BaseTestCase, FooterTestMixin, NavbarTestMixin):
     """
     Test cases for the InstrumentSummary page when the Rerun form is NOT visible
     """

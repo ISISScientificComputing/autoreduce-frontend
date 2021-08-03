@@ -94,8 +94,7 @@
                                         class="text-{% colour_table_row run.status.value_verbose %}">{{ run.status.value_verbose }}</strong>
                                 </div>
                                 <div id="instrument">
-                                    <strong>Instrument:</strong> <a
-                                        href="{% url 'runs:list' instrument=run.instrument.name %}">{{ run.instrument.name }}</a>
+                                    <strong>Instrument:</strong> {{ run.instrument.name }}
                                 </div>
                                 <div id="rb_number">
                                     <strong>RB Number:</strong> <a
@@ -235,7 +234,7 @@
         </div>
         <div class="row col-md-12 my-2">
             <div class="text-center">
-                <a href="{% url 'runs:list' run.instrument.name %}" class="btn btn-primary back" id="cancel">Back to {{ run.instrument.name }} runs</a>
+                <a href="{% url 'runs:list' run.instrument.name %}?page={{ current_page }}&pagination={{ items_per_page }}&sort={{ page_type }}" class="btn btn-primary back" id="cancel">Back to {{ run.instrument.name }} runs</a>
             </div>
         </div>
         {% endif %}

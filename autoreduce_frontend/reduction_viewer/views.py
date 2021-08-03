@@ -16,11 +16,8 @@ can be more confident we are not affecting the execution
 import json
 import logging
 import operator
-import os
 import traceback
 
-from autoreduce_db.reduction_viewer.models import (Experiment, Instrument, ReductionRun, Status)
-from autoreduce_qp.queue_processor.variable_utils import VariableUtils
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout as django_logout
 from django.contrib.auth.models import User
@@ -30,7 +27,9 @@ from django.http import HttpResponseNotFound
 from django.shortcuts import redirect
 from django.utils.http import url_has_allowed_host_and_scheme
 
-from autoreduce_frontend.autoreduce_webapp.icat_cache import (ICATCache, ICATConnectionException)
+from autoreduce_db.reduction_viewer.models import Experiment, Instrument, ReductionRun, Status
+from autoreduce_qp.queue_processor.variable_utils import VariableUtils
+from autoreduce_frontend.autoreduce_webapp.icat_cache import ICATCache, ICATConnectionException
 from autoreduce_frontend.autoreduce_webapp.settings import (ALLOWED_HOSTS, DEVELOPMENT_MODE, UOWS_LOGIN_URL,
                                                             USER_ACCESS_CHECKS)
 from autoreduce_frontend.autoreduce_webapp.uows_client import UOWSClient
@@ -224,7 +223,7 @@ def fail_queue(request):
 @check_permissions
 @render_with('run_summary.html')
 # pylint:disable=no-member,too-many-locals
-def run_summary(_, instrument_name=None, run_number=None, run_version=0):
+def run_summary(request, instrument_name=None, run_number=None, run_version=0):
     """
     Render run summary
     """
@@ -258,6 +257,10 @@ def run_summary(_, instrument_name=None, run_number=None, run_version=0):
 
         has_reduce_vars = bool(current_variables)
         has_run_variables = bool(run.run_variables.count())
+        page = request.GET.get('page', 1)
+        items_per_page = request.GET.get('pagination', '10')
+        page_type = request.GET.get('sort', 'run')
+
         context_dictionary = {
             'run': run,
             'run_number': run_number,
@@ -270,7 +273,10 @@ def run_summary(_, instrument_name=None, run_number=None, run_version=0):
             'started_by': started_by,
             'has_reduce_vars': has_reduce_vars,
             'has_run_variables': has_run_variables,
-            'data_analysis_link_url': data_analysis_link_url
+            'data_analysis_link_url': data_analysis_link_url,
+            'current_page': page,
+            'items_per_page': items_per_page,
+            'page_type': page_type,
         }
 
     except PermissionDenied:
@@ -353,7 +359,7 @@ def runs_list(request, instrument=None):
             'filtering': filter_by,
             'sort': sort_by,
             'has_variables': has_variables,
-            'error_reason': error_reason
+            'error_reason': error_reason,
         }
 
         if filter_by == 'experiment':
@@ -367,11 +373,13 @@ def runs_list(request, instrument=None):
             context_dictionary['experiments'] = experiments_and_runs
         else:
             max_items_per_page = request.GET.get('pagination', 10)
-            custom_paginator = CustomPaginator(page_type=sort_by,
-                                               query_set=runs,
-                                               items_per_page=max_items_per_page,
-                                               page_tolerance=3,
-                                               current_page=request.GET.get('page', 1))
+            custom_paginator = CustomPaginator(
+                page_type=sort_by,
+                query_set=runs,
+                items_per_page=max_items_per_page,
+                page_tolerance=3,
+                current_page=request.GET.get('page', 1),
+            )
             context_dictionary['paginator'] = custom_paginator
             context_dictionary['last_page_index'] = len(custom_paginator.page_list)
             context_dictionary['max_items'] = max_items_per_page

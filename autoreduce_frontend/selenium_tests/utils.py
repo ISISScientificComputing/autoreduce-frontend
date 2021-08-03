@@ -77,8 +77,7 @@ def setup_external_services(instrument_name: str, start_year: int,
     :param end_year: End year for the archive
     :return: Tuple of external objects needed.
     """
-    data_archive = DataArchive([instrument_name], start_year, end_year)
-    data_archive.create()
+    data_archive = setup_archive(instrument_name, start_year, end_year)
     try:
         queue_client, listener = setup_connection()
     except ConnectionException as err:
@@ -86,3 +85,11 @@ def setup_external_services(instrument_name: str, start_year: int,
                            "ActiveMQ is running and started by `python setup.py start`") from err
 
     return data_archive, queue_client, listener
+
+
+def setup_archive(instrument_name: str, start_year: int, end_year: int) -> DataArchive:
+    """Create a DataArchive."""
+    data_archive = DataArchive([instrument_name], start_year, end_year)
+    data_archive.create()
+
+    return data_archive
