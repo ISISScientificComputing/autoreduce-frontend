@@ -116,7 +116,7 @@ class TestParameters(BaseTestCase, NavbarTestMixin, FooterTestMixin, Accessibili
             self.page.launch()
             self.page.update_items_per_page_option(pagination)
             self.page.click_apply_filters()
-            self._test_page_query(f"{pagination=}", page=1)
+            self._test_page_query(f"pagination={pagination}", page=1)
 
     def test_sort_by_filter(self):
         """Test that changing the sort by filter also updates the URL query."""
@@ -129,4 +129,4 @@ class TestParameters(BaseTestCase, NavbarTestMixin, FooterTestMixin, Accessibili
                 sort = "run"
 
             # {sort=!s} resolves to 'sort=<sort>'
-            self._test_page_query(f"{sort=!s}", page=1)
+            self._test_page_query(f"sort={sort}", page=1)
