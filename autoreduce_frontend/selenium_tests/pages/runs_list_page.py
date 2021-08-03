@@ -11,6 +11,7 @@ from typing import List
 
 from django.urls import reverse
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support.ui import Select
 from autoreduce_frontend.selenium_tests.pages.component_mixins.footer_mixin import FooterMixin
 from autoreduce_frontend.selenium_tests.pages.component_mixins.navbar_mixin import NavbarMixin
 from autoreduce_frontend.selenium_tests.pages.component_mixins.tour_mixin import TourMixin
@@ -60,12 +61,12 @@ class RunsListPage(Page, NavbarMixin, FooterMixin, TourMixin):
         """Get the the from the alert message"""
         return self.driver.find_element_by_id("alert_message").text.strip()
 
-    def get_top_run(self):
+    def get_top_run(self) -> None:
         """Get the top run using the element's id."""
         return self.driver.find_element_by_id("top-run-number")
 
-    def click_page(self, title):
-        """Click the page navigation button matching the given title on the instrument list page."""
+    def click_page(self, title: str) -> None:
+        """Click the page navigation button matching the given title."""
         btns = self.driver.find_elements_by_tag_name("button")
 
         for btn in btns:
@@ -74,3 +75,18 @@ class RunsListPage(Page, NavbarMixin, FooterMixin, TourMixin):
                 break
         else:
             raise NoSuchElementException
+
+    def update_items_per_page_option(self, pagination: int) -> None:
+        """Select the supplied pagination option from the 'Items per page' combo box."""
+        pagination_select = Select(self.driver.find_element_by_id("pagination_select"))
+        pagination_select.select_by_visible_text(str(pagination))
+
+    def update_sort_by_option(self, sort_by: str) -> None:
+        """Select the supplied sort by option from the 'Sort by' combo box."""
+        pagination_select = Select(self.driver.find_element_by_id("sort_select"))
+        pagination_select.select_by_visible_text(sort_by)
+
+    def click_apply_filters(self) -> None:
+        "Click the 'Apply filters' button."
+        btn = self.driver.find_element_by_id("apply_filters")
+        btn.click()
