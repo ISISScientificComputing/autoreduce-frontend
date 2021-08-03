@@ -349,7 +349,6 @@ def runs_list(request, instrument=None):
 
         has_variables = bool(current_variables)
 
-
         context_dictionary = {
             'instrument': instrument_obj,
             'instrument_name': instrument_obj.name,
