@@ -82,7 +82,7 @@ class TestParameters(BaseTestCase):
             page = 1
 
         # Evalutes to "page=<page>"
-        page_query = f"{page=}"
+        page_query = f"page={page}"
 
         # Check if page query is in the href
         assert page_query in self.page.get_top_run().get_attribute('href')

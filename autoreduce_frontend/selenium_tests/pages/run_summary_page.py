@@ -137,7 +137,7 @@ class RunSummaryPage(Page, RerunFormMixin, NavbarMixin, FooterMixin, TourMixin):
     def _do_run_button(self, url):
         def run_button_clicked_successfully(button, url, driver):
             button.click()
-            return url in driver.current_url
+            return driver.current_url.split("?")[0].endswith(url)
 
         button = self.driver.find_element_by_css_selector(f'[href*="{url}"]')
         WebDriverWait(self.driver, 10).until(partial(run_button_clicked_successfully, button, url))
