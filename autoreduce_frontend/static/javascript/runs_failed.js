@@ -40,3 +40,7 @@
     init();
     
 }())
+
+function changePage(page) {
+    document.location.href = window.location.origin + window.location.pathname + '?page=' + arguments[0];
+}
