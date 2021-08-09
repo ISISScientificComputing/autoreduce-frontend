@@ -342,3 +342,18 @@ pre code {
 .mt-2{
     margin-top: 0.5rem
 }
+
+#items-per-page {
+    display: inline-flex; 
+    margin-left: 25px;
+    vertical-align: middle;
+}
+
+#items-per-page .form-group {
+    margin-bottom: 0;
+}
+
+#items-per-page label {
+    margin: auto;
+    margin-right: 4px;
+}

@@ -115,6 +115,29 @@
                                 class="fa fa-step-forward"></i></button>
                     {% endif %}
                 </div>
+                <form action="{{ request.path }}" method="get" id="items-per-page">
+                    <label for="filter_select">Items per page: </label>
+
+                    <div class="form-group">
+                        <label for="pagination_select" hidden>Items per page</label>
+                        <select title="The number of failed reduction jobs that should be shown per page"
+                                class="form-control" name="pagination" form="items-per-page"
+                                id="pagination_select" onchange="this.form.submit()">
+                            <option {% if max_items == '10' %}selected="selected"{% endif %}>10
+                            </option>
+                            <option {% if max_items == '25' %}selected="selected"{% endif %}>25
+                            </option>
+                            <option {% if max_items == '50' %}selected="selected"{% endif %}>50
+                            </option>
+                            <option {% if max_items == '100' %}selected="selected"{% endif %}>100
+                            </option>
+                            <option {% if max_items == '250' %}selected="selected"{% endif %}>250
+                            </option>
+                            <option {% if max_items == '500' %}selected="selected"{% endif %}>500
+                            </option>
+                        </select>
+                    </div>
+                </form>
             </div>
         </div>
     {% else %}
