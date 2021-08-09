@@ -179,9 +179,7 @@ def fail_queue(request):
     failed_jobs = ReductionRun.objects.filter(Q(status=error_status)
                                               & Q(hidden_in_failviewer=False)).order_by('-created')
     if len(failed_jobs) == 0:
-        return {
-            'queue': []
-        }
+        return {'queue': []}
 
     max_items_per_page = request.GET.get('pagination', 10)
     custom_paginator = CustomPaginator(page_type='run',
