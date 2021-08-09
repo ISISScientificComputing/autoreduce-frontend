@@ -343,6 +343,15 @@ pre code {
     margin-top: 0.5rem
 }
 
+#run-action-row {
+    margin-bottom: 10px;
+}
+
+#runAction {
+    float: left;
+    width: auto;
+}
+
 #items-per-page {
     display: inline-flex; 
     margin-left: 25px;

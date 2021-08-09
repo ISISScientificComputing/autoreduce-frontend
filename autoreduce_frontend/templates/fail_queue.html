@@ -18,9 +18,9 @@
                     {{ message }}
                 </div>
             {% endif %}
-            <div class="row">
+            <div class="row" id="run-action-row">
                 <label for="runAction" hidden>Select action to apply to selected runs</label>
-                <select id="runAction" style="float: left;">
+                <select class="form-control" id="runAction">
                     <option value="default">Select action to apply to selected runs</option>
                     <option value="rerun">Re-run</option>
                     <option value="hide">Hide</option>
@@ -30,7 +30,7 @@
                     <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'/>
                     <input type="hidden" name="selectedRuns">
                     <input type="hidden" name="action">
-                    <input type="submit" id="runActionButton" value="Apply">
+                    <input class="btn btn-primary" type="submit" id="runActionButton" value="Apply">
                 </form>
             </div>
             <div class="row">
