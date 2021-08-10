@@ -255,6 +255,15 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
         except (FileNotFoundError, ImportError, SyntaxError):
             current_variables = {}
 
+        newest_run, oldest_run, next_run, previous_run = [
+            int(query) if query is not None else None for query in [
+                request.GET.get('newest_run'),
+                request.GET.get('oldest_run'),
+                request.GET.get('next_run'),
+                request.GET.get('previous_run'),
+            ]
+        ]
+
         context_dictionary = {
             'run': run,
             'run_number': run_number,
@@ -271,10 +280,10 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
             'current_page': request.GET.get('page', 1),
             'items_per_page': request.GET.get('pagination', '10'),
             'page_type': request.GET.get('sort', 'run'),
-            'newest_run': int(request.GET.get('newest_run')),
-            'oldest_run': int(request.GET.get('oldest_run')),
-            'next_run': int(request.GET.get('next_run')),
-            'previous_run': int(request.GET.get('previous_run')),
+            'newest_run': newest_run,
+            'oldest_run': oldest_run,
+            'next_run': next_run,
+            'previous_run': previous_run,
         }
 
     except PermissionDenied:
