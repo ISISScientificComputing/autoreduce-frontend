@@ -255,12 +255,6 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
         except (FileNotFoundError, ImportError, SyntaxError):
             current_variables = {}
 
-        has_reduce_vars = bool(current_variables)
-        has_run_variables = bool(run.run_variables.count())
-        page = request.GET.get('page', 1)
-        items_per_page = request.GET.get('pagination', '10')
-        page_type = request.GET.get('sort', 'run')
-
         context_dictionary = {
             'run': run,
             'run_number': run_number,
@@ -271,12 +265,16 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
             'history': history,
             'reduction_location': reduction_location,
             'started_by': started_by,
-            'has_reduce_vars': has_reduce_vars,
-            'has_run_variables': has_run_variables,
+            'has_reduce_vars': bool(current_variables),
+            'has_run_variables': bool(run.run_variables.count()),
             'data_analysis_link_url': data_analysis_link_url,
-            'current_page': page,
-            'items_per_page': items_per_page,
-            'page_type': page_type,
+            'current_page': request.GET.get('page', 1),
+            'items_per_page': request.GET.get('pagination', '10'),
+            'page_type': request.GET.get('sort', 'run'),
+            'newest_run': int(request.GET.get('newest_run')),
+            'oldest_run': int(request.GET.get('oldest_run')),
+            'next_run': int(request.GET.get('next_run')),
+            'previous_run': int(request.GET.get('previous_run')),
         }
 
     except PermissionDenied:
