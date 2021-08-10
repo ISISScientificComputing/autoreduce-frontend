@@ -356,7 +356,7 @@ def runs_list(request, instrument=None):
             'queued': runs.filter(status=Status.get_queued()),
             'filtering': filter_by,
             'sort': sort_by,
-            'has_variables': has_variables,
+            'has_variables': bool(current_variables),
             'error_reason': error_reason,
         }
 
