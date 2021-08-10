@@ -337,17 +337,15 @@ def runs_list(request, instrument=None):
         if len(runs) == 0:
             return {'message': "No runs found for instrument."}
 
+        current_variables = {}
         try:
-            current_variables = VariableUtils.get_default_variables(instrument_obj.name)
-            error_reason = ""
+            current_variables.update(VariableUtils.get_default_variables(instrument_obj.name))
         except FileNotFoundError:
-            current_variables = {}
             error_reason = "reduce_vars.py is missing for this instrument"
         except (ImportError, SyntaxError):
-            current_variables = {}
             error_reason = "reduce_vars.py has an import or syntax error"
-
-        has_variables = bool(current_variables)
+        else:
+            error_reason = ""
 
         context_dictionary = {
             'instrument': instrument_obj,
