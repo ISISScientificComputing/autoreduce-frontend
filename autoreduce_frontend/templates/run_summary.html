@@ -235,14 +235,14 @@
         </div>
         <div class="row col-md-12 my-2">
             <div class="text-center">
-                {% if run.run_number != newest_run %}
-                    {% if next_run != newest_run %}
+                {% if newest_run != run.run_number %}
+                    {% if next_run != run.run_number and newest_run != next_run %}
                         <a href="{% url 'runs:summary' instrument_name=instrument run_number=newest_run run_version=run.run_version %}?{% get_run_navigation_queries newest_run current_page newest_run oldest_run %}&pagination={{ items_per_page }}&sort={{ page_type }}" class="btn btn-primary back">&#60&#60 {{ newest_run }}</a>
-                    {% endif %}
+                {% endif %}
                     <a href="{% url 'runs:summary' instrument_name=instrument run_number=next_run run_version=run.run_version %}?{% get_run_navigation_queries next_run current_page newest_run oldest_run %}&pagination={{ items_per_page }}&sort={{ page_type }}" class="btn btn-primary back">&#60 {{ next_run }}</a>
                 {% endif %}
                 <a href="{% url 'runs:list' run.instrument.name %}?page={{ current_page }}&pagination={{ items_per_page }}&sort={{ page_type }}" class="btn btn-primary back" id="cancel">Back to {{ run.instrument.name }} runs</a>
-                {% if run.run_number != oldest_run %}
+                {% if oldest_run != run.run_number %}
                     <a href="{% url 'runs:summary' instrument_name=instrument run_number=previous_run run_version=run.run_version %}?{% get_run_navigation_queries previous_run current_page newest_run oldest_run %}&pagination={{ items_per_page }}&sort={{ page_type }}" class="btn btn-primary back">{{ previous_run }} &#62</a>
                 {% endif %}
             </div>
