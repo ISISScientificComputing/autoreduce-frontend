@@ -352,6 +352,7 @@ def runs_list(request, instrument=None):
             'instrument_name': instrument_obj.name,
             'runs': runs,
             'last_instrument_run': runs[0],
+            'first_instrument_run': list(runs)[-1],
             'processing': runs.filter(status=Status.get_processing()),
             'queued': runs.filter(status=Status.get_queued()),
             'filtering': filter_by,
