@@ -3,6 +3,7 @@
 {% load view %}
 {% load static %}
 {% load colour_table_rows %}
+{% load get_run_navigation_queries %}
 
 {% block body %}
     {% if message %}
@@ -144,7 +145,7 @@
                         <div class="row run-row">
                     {% endif %}
                 <div class="col-md-5 col-sm-5 col-md-offset-1 col-xs-4"><a
-                        href="{% url 'runs:summary' instrument_name=instrument_name run_number=run.run_number run_version=run.run_version %}?page={{ paginator.current_page_index }}&pagination={{ paginator.items_per_page }}&sort={{ paginator.page_type }}"
+                        href="{% url 'runs:summary' instrument_name=instrument_name run_number=run.run_number run_version=run.run_version %}?{% get_run_navigation_queries run.run_number paginator.current_page_index last_instrument_run first_instrument_run %}&pagination={{ paginator.items_per_page }}&sort={{ paginator.page_type }}"
                         {% if forloop.first %} id="top-run-number" {% endif %} class="run-num-links">{{ run.title }}</a></div>
                 <div class="col-md-2 col-sm-2 col-xs-4 run-status text-{% colour_table_row run.status.value_verbose %}">
                     <strong>{{ run.status.value_verbose }}</strong></div>
