@@ -5,14 +5,13 @@
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
 """
-The view for the django database model
+The view for the django database model.
 
-This file contains a large amount of pylint disables as there are no
-working unit tests for this code at the point of correcting the pylint errors
-as such we should remove the pylint disables and fix the code when we
-can be more confident we are not affecting the execution
+This file contains a large amount of pylint disables as there are no working
+unit tests for this code at the point of correcting the pylint errors as such we
+should remove the pylint disables and fix the code when we can be more confident
+we are not affecting the execution.
 """
-# pylint:disable=imported-auth-user
 import json
 import logging
 import operator
@@ -47,9 +46,7 @@ LOGGER = logging.getLogger(__package__)
 
 @deactivate_invalid_instruments
 def index(request):
-    """
-    Render the index page
-    """
+    """Render the index page."""
     return_url = _make_return_url(request, request.GET.get('next'))
 
     use_query_next = request.build_absolute_uri(request.GET.get('next'))
@@ -63,14 +60,10 @@ def index(request):
         authenticated = True
     else:
         if 'sessionid' in request.session.keys():
-            authenticated = request.user.is_authenticated \
-                            and UOWSClient().check_session(request.session['sessionid'])
+            authenticated = request.user.is_authenticated and UOWSClient().check_session(request.session['sessionid'])
 
     if authenticated:
-        if request.GET.get('next'):
-            return_url = use_query_next
-        else:
-            return_url = default_next
+        return_url = use_query_next if request.GET.get('next') else default_next
     elif request.GET.get('sessionid'):
         request.session['sessionid'] = request.GET.get('sessionid')
         try:
@@ -81,25 +74,23 @@ def index(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                if request.GET.get('next'):
-                    return_url = use_query_next
-                else:
-                    return_url = default_next
+                return_url = use_query_next if request.GET.get('next') else default_next
 
     return redirect(return_url)
 
 
 def _make_return_url(request, next_url):
     """
-    Make the return URL based on whether a next_url is present in the url.
-
-    If there is a next_url, verify that the url is safe and allowed before using it. If not, default to the host.
+    Make the return URL based on whether a next_url is present in the url. If
+    there is a next_url, verify that the url is safe and allowed before using
+    it. If not, default to the host.
     """
     if next_url:
         if url_has_allowed_host_and_scheme(next_url, ALLOWED_HOSTS, require_https=True):
             return UOWS_LOGIN_URL + request.build_absolute_uri(next_url)
         else:
-            # the next_url was not safe so don't use it - build from request.path to ignore GET parameters
+            # The next_url was not safe so don't use it - build from
+            # request.path to ignore GET parameters
             return UOWS_LOGIN_URL + request.build_absolute_uri(request.path)
     else:
         return UOWS_LOGIN_URL + request.build_absolute_uri()
@@ -107,9 +98,7 @@ def _make_return_url(request, next_url):
 
 @login_and_uows_valid
 def logout(request):
-    """
-    Render the logout page
-    """
+    """Render the logout page."""
     session_id = request.session.get('sessionid')
     if session_id:
         UOWSClient().logout(session_id)
@@ -123,8 +112,10 @@ def logout(request):
 # pylint:disable=no-member
 def overview(_):
     """
-    Render the overview landing page (redirect from /index)
-    Note: _ is replacing the passed in request parameter
+    Render the overview landing page (redirect from /index).
+
+    Note:
+      _ is replacing the passed in request parameter.
     """
     context_dictionary = {}
     instruments = Instrument.objects.values_list("name", flat=True)
@@ -137,14 +128,13 @@ def overview(_):
 @render_with('run_queue.html')
 # pylint:disable=no-member
 def run_queue(request):
-    """
-    Render status of queue
-    """
+    """Render status of queue."""
     # Get all runs that should be shown
     queued_status = Status.get_queued()
     processing_status = Status.get_processing()
     pending_jobs = ReductionRun.objects.filter(Q(status=queued_status)
                                                | Q(status=processing_status)).order_by('created')
+
     # Filter those which the user shouldn't be able to see
     if USER_ACCESS_CHECKS and not request.user.is_superuser:
         try:
@@ -158,23 +148,26 @@ def run_queue(request):
             return render_error(request, str(excep))
     # Initialise list to contain the names of user/team that started runs
     started_by = []
-    # cycle through all filtered runs and retrieve the name of the user/team that started the run
+
+    # Cycle through all filtered runs and retrieve the name of the user/team
+    # that started the run
     for run in pending_jobs:
         started_by.append(started_by_id_to_name(run.started_by))
-    # zip the run information with the user/team name to enable simultaneous iteration with django
+
+    # Zip the run information with the user/team name to enable simultaneous
+    # iteration with django
     context_dictionary = {'queue': zip(pending_jobs, started_by)}
+
     return context_dictionary
 
 
 @require_admin
 @login_and_uows_valid
 @render_with('fail_queue.html')
-# pylint:disable=no-member,too-many-locals
+# pylint:disable=no-member,too-many-locals,broad-except
 def fail_queue(request):
-    """
-    Render status of failed queue
-    """
-    # render the page
+    """Render status of failed queue."""
+    # Render the page
     error_status = Status.get_error()
     failed_jobs = ReductionRun.objects.filter(Q(status=error_status)
                                               & Q(hidden_in_failviewer=False)).order_by('-created')
@@ -185,7 +178,7 @@ def fail_queue(request):
     }
 
     if request.method == 'POST':
-        # perform the specified action
+        # Perform the specified action
         action = request.POST.get("action", "default")
         selected_run_string = request.POST.get("selectedRuns", [])
         selected_runs = json.loads(selected_run_string)
@@ -203,14 +196,13 @@ def fail_queue(request):
                 elif action == "rerun":
                     highest_version = max([int(runL[1]) for runL in selected_runs if int(runL[0]) == run_number])
                     if run_version != highest_version:
-                        continue  # do not run multiples of the same run
+                        continue  # Do not run multiples of the same run
 
                     ReductionRunUtils.send_retry_message_same_args(request.user.id, reduction_run)
 
                 elif action == "default":
                     pass
 
-        # pylint:disable=broad-except
         except Exception as exception:
             fail_str = "Selected action failed: %s %s" % (type(exception).__name__, exception)
             LOGGER.info("Failed to carry out fail_queue action - %s", fail_str)
@@ -222,12 +214,9 @@ def fail_queue(request):
 @login_and_uows_valid
 @check_permissions
 @render_with('run_summary.html')
-# pylint:disable=no-member,too-many-locals
+# pylint:disable=no-member,too-many-locals,broad-except
 def run_summary(request, instrument_name=None, run_number=None, run_version=0):
-    """
-    Render run summary
-    """
-    # pylint:disable=broad-except
+    """Render run summary."""
     try:
         history = ReductionRun.objects.filter(instrument__name=instrument_name, run_number=run_number).order_by(
             '-run_version').select_related('status').select_related('experiment').select_related('instrument')
@@ -236,7 +225,7 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
 
         run = next(run for run in history if run.run_version == int(run_version))
         started_by = started_by_id_to_name(run.started_by)
-        # run status value of "s" means the run is skipped
+        # Run status value of "s" means the run is skipped
         is_skipped = run.status.value == "s"
         is_rerun = len(history) > 1
 
@@ -281,7 +270,8 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
     except PermissionDenied:
         raise
     except Exception as exception:
-        # Error that we cannot recover from - something wrong with instrument, run, or experiment
+        # Error that we cannot recover from - something wrong with instrument,
+        # run, or experiment
         LOGGER.error(exception)
         return {"message": str(exception)}
 
@@ -298,8 +288,9 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
 
                 context_dictionary['interactive_plots'] = get_interactive_plot_data(server_plot_locs)
         except Exception as exception:
-            # Lack of plot images is recoverable - we shouldn't stop the whole page rendering
-            # if something is wrong with the plot images - but display an error message
+            # Lack of plot images is recoverable - we shouldn't stop the whole
+            # page rendering if something is wrong with the plot images - but
+            # display an error message
             err_msg = "Encountered error while retrieving plots for this run"
             LOGGER.error("%s. Instrument: %s, run %s. RB Number %s Error: %s", err_msg, run.instrument.name, run,
                          rb_number, exception)
@@ -313,9 +304,7 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
 @render_with('runs_list.html')
 # pylint:disable=no-member,unused-argument,too-many-locals
 def runs_list(request, instrument=None):
-    """
-    Render instrument summary
-    """
+    """Render instrument summary."""
     try:
         filter_by = request.GET.get('filter', 'run')
         instrument_obj = Instrument.objects.get(name=instrument)
@@ -395,9 +384,7 @@ def runs_list(request, instrument=None):
 @render_with('experiment_summary.html')
 # pylint:disable=no-member,too-many-locals
 def experiment_summary(request, reference_number=None):
-    """
-    Render experiment summary
-    """
+    """Render experiment summary."""
     try:
         experiment = Experiment.objects.get(reference_number=reference_number)
         runs = ReductionRun.objects.filter(experiment=experiment).order_by('-run_version')
@@ -417,8 +404,9 @@ def experiment_summary(request, reference_number=None):
 
         try:
             if DEVELOPMENT_MODE:
-                # If we are in development mode use user/password for ICAT from django settings
-                # e.g. do not attempt to use same authentication as the user office
+                # If we are in development mode use user/password for ICAT from
+                # django settings e.g. do not attempt to use same authentication
+                # as the user office
                 try:
                     with ICATCache() as icat:
                         experiment_details = icat.get_experiment_details(int(reference_number))
@@ -462,8 +450,10 @@ def experiment_summary(request, reference_number=None):
 # pylint:disable=redefined-builtin
 def help(_):
     """
-    Render help page
-    Note: _ is replacing the passed in request parameter
+    Render help page.
+
+    Note:
+      _ is replacing the passed in request parameter.
     """
     return {}
 
@@ -472,8 +462,10 @@ def help(_):
 # pylint:disable=redefined-builtin
 def accessibility_statement(_):
     """
-    Render accessibility statement page
-    Note: _ is replacing the passed in request parameter
+    Render accessibility statement page.
+
+    Note:
+      _ is replacing the passed in request parameter.
     """
     return {}
 
@@ -482,11 +474,12 @@ def accessibility_statement(_):
 # pylint:disable=no-member
 def graph_home(_):
     """
-    Render graph page
-    Note: _ is replacing the passed in request parameter
+    Render graph page.
+
+    Note:
+      _ is replacing the passed in request parameter.
     """
     instruments = Instrument.objects.all()
-
     context_dictionary = {'instruments': instruments}
 
     return context_dictionary
@@ -496,19 +489,17 @@ def graph_home(_):
 @render_with('admin/graph_instrument.html')
 # pylint:disable=no-member
 def graph_instrument(request, instrument_name):
-    """
-    Render instrument specific graphing page
-    """
+    """Render instrument specific graphing page."""
     instrument = Instrument.objects.filter(name=instrument_name)
     if not instrument:
         return HttpResponseNotFound('<h1>Instrument not found</h1>')
 
     runs = (
         ReductionRun.objects.
-        # Get the foreign key 'status' now. Otherwise many queries
-        # made from load_runs which is very slow.
+        # Get the foreign key 'status' now, otherwise many queries made from
+        # load_runs which is very slow
         select_related('status')
-        # Only get these attributes, to speed it up.
+        # Only get these attributes, to speed it up
         .only('status', 'started', 'finished', 'last_updated', 'created', 'run_number', 'run_description',
               'run_version').filter(instrument=instrument.first()).order_by('-created'))
 
@@ -516,8 +507,7 @@ def graph_instrument(request, instrument_name):
         if 'last' in request.GET:
             runs = runs[:int(request.GET.get('last'))]
     except ValueError:
-        # Non integer value entered as 'last' parameter.
-        # Just show all runs.
+        # Non integer value entered as 'last' parameter so just show all runs
         pass
 
     # Reverse list so graph displayed in correct order
@@ -539,17 +529,19 @@ def graph_instrument(request, instrument_name):
 # pylint:disable=no-member
 def stats(_):
     """
-    Render run statistics page
-    Note: _ is replacing the passed in request parameter
+    Render run statistics page.
+
+    Note:
+      _ is replacing the passed in request parameter.
     """
     statuses = []
     for status in Status.objects.all():
         status_count = (
             ReductionRun.objects.
-            # Get the foreign key 'status' now.
-            # Otherwise many queries made from load_runs which is very slow.
+            # Get the foreign key 'status' now, otherwise many queries made from
+            # load_runs which is very slow
             select_related('status')
-            # Only get these attributes, to speed it up.
+            # Only get these attributes, to speed it up
             .only('status').filter(status__value=status.value).count())
         statuses.append({'name': status, 'count': status_count})
 
@@ -562,15 +554,20 @@ def stats(_):
 
 def started_by_id_to_name(started_by_id=None):
     """
-    Returns name of the user or team that submitted an autoreduction run given an ID number
-    :param started_by_id: (int) The ID of the user who started the run, or a control code if not
-     started by a user
-    :return:
-        If started by a valid user, returns the name either of the user in the format
-         '[forename] [surname]'.
-        If started automatically, returns "Autoreducton service".
-        If started manually, returns "Development team".
-        Otherwise, returns None.
+    Return the name of the user or team that submitted an autoreduction run.
+
+    Args:
+      started_by_id: The ID of the user who started the run, or a control code
+      if not started by a user.
+
+    Returns:
+      If started by a valid user, return '[forename] [surname]'.
+
+      If started automatically, return 'Autoreducton service'.
+
+      If started manually, return 'Development team'.
+
+      Otherwise, return None.
     """
     if started_by_id is None or started_by_id < -1:
         return None
