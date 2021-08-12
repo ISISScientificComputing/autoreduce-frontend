@@ -1,3 +1,5 @@
 # Additional packages that will be installed in a test environment
 
+axe-selenium-python==2.1.6
 django-debug-toolbar==3.2.1
+selenium==3.141.0
