@@ -12,15 +12,8 @@
             "admin_log": "log",
             "hidden_in_failviewer": 0,
             "experiment_id": 1,
-            "instrument_id": 1
-        }
-    },
-    {
-        "pk": 1,
-        "model": "reduction_viewer.datalocation",
-        "fields": {
-            "file_path": "/tmp/data.nxs",
-            "reduction_run_id": 1
+            "instrument_id": 1,
+            "data_location": "/tmp"
         }
     },
     {

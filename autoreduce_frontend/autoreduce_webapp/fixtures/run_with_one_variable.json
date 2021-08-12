@@ -1,4 +1,5 @@
-[{
+[
+    {
         "model": "reduction_viewer.reductionrun",
         "pk": 1,
         "fields": {
@@ -14,15 +15,8 @@
             "experiment_id": 1,
             "instrument_id": 1,
             "started_by": -1,
-            "reduction_host": "test-host-123"
-        }
-    },
-    {
-        "pk": 1,
-        "model": "reduction_viewer.datalocation",
-        "fields": {
-            "file_path": "/tmp",
-            "reduction_run_id": 1
+            "reduction_host": "test-host-123",
+            "data_location": "/tmp"
         }
     },
     {

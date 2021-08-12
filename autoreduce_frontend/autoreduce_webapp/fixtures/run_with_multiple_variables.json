@@ -16,7 +16,8 @@
             "instrument_id": 1,
             "started_by": -1,
             "reduction_host": "test-host-123",
-            "software_id": 1
+            "software_id": 1,
+            "data_location": "/tmp"
         }
     },
     {
@@ -25,14 +26,6 @@
         "fields": {
             "name": "FakeSoftware",
             "version": "6"
-        }
-    },
-    {
-        "pk": 1,
-        "model": "reduction_viewer.datalocation",
-        "fields": {
-            "file_path": "/tmp",
-            "reduction_run_id": 1
         }
     },
     {
