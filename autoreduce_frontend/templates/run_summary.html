@@ -165,10 +165,8 @@
                             <div class="col-md-6">
                                 <div class="file-path">
                                     <strong>Data:</strong>
-                                    {% if run.data_location.all %}
-                                        {% for location in run.data_location.all %}
-                                            {{ location.file_path }}<br/>
-                                        {% endfor %}
+                                    {% if run.data_location %}
+                                        {{ run.data_location }}<br/>
                                     {% else %}
                                         <em>No data found</em>
                                     {% endif %}

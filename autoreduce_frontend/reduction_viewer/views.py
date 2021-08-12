@@ -288,7 +288,7 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
 
     if reduction_location:
         try:
-            plot_handler = PlotHandler(data_filepath=run.data_location.first().file_path,
+            plot_handler = PlotHandler(data_filepath=run.data_location,
                                        server_dir=reduction_location,
                                        rb_number=rb_number)
             local_plot_locs, server_plot_locs = plot_handler.get_plot_file()
@@ -407,9 +407,7 @@ def experiment_summary(request, reference_number=None):
         reduced_data = []
         started_by = []
         for run in runs:
-            for location in run.data_location.all():
-                if location not in data:
-                    data.append(location)
+            data.append(run.data_location)
             for location in run.reduction_location.all():
                 if location not in reduced_data:
                     reduced_data.append(location)

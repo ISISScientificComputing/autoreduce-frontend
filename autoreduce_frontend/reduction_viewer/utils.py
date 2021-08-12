@@ -77,7 +77,7 @@ class ReductionRunUtils:
                           run_number=most_recent_run.run_number,
                           instrument=most_recent_run.instrument.name,
                           rb_number=most_recent_run.experiment.reference_number,
-                          data=most_recent_run.data_location.first().file_path,
+                          data=most_recent_run.data_location,
                           reduction_script=script_text,
                           reduction_arguments=new_script_arguments,
                           run_version=most_recent_run.run_version,
