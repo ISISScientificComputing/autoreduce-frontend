@@ -21,12 +21,12 @@ print(data_files)
 
 setup(
     name=PACKAGE_NAME,
-    version="22.0.0.dev6",  # when updating the version here make sure to also update webapp.D
+    version="22.0.0.dev7",  # when updating the version here make sure to also update webapp.D
     description="The frontend of the ISIS Autoreduction service",
     author="ISIS Autoreduction Team",
     url="https://github.com/ISISScientificComputing/autoreduce-frontend/",
     install_requires=[
-        "autoreduce_qp==22.0.0.dev7", "Django==3.2.6", "django_extensions==3.1.3", "django-user-agents==0.4.0",
+        "autoreduce_qp==22.0.0.dev8", "Django==3.2.6", "django_extensions==3.1.3", "django-user-agents==0.4.0",
         "djangorestframework==3.12.4"
     ],
     packages=find_packages(),
