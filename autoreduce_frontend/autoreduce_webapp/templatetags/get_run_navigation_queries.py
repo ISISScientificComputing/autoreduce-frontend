@@ -10,8 +10,7 @@ register = Library()
 
 
 @register.simple_tag
-def get_run_navigation_queries(run_number: str, page: int, newest_run: int, oldest_run: int) -> str:
+def get_run_navigation_queries(run_number: int, page: int, newest_run: int, oldest_run: int) -> str:
     """Return a string of run queries."""
-    run_number = int(run_number)
     return (f"page={page}&newest_run={newest_run}&next_run={run_number+1}&"
             f"previous_run={run_number-1}&oldest_run={oldest_run}")
