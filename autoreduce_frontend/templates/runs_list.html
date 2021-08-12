@@ -135,56 +135,12 @@
         <!-- Display table for every reduction job -->
         <div class="row" id="runs-table">
         <div class="tab-content col-md-12">
-            {% if filtering == 'run' %}
                 <!-- Run number filtered jobs -->
-                <div class="row" id="by-run-number">
-                {% for run in paginator.current_page.records %}
-                    {% if forloop.first %}
-                        <div class="row run-row-top" id="run-row-top">
-                    {% else %}
-                        <div class="row run-row">
-                    {% endif %}
-                <div class="col-md-5 col-sm-5 col-md-offset-1 col-xs-4"><a
-                        href="{% url 'runs:summary' instrument_name=instrument_name run_number=run.run_number run_version=run.run_version %}?{% get_run_navigation_queries run.run_number paginator.current_page_index last_instrument_run first_instrument_run %}&pagination={{ paginator.items_per_page }}&sort={{ paginator.page_type }}"
-                        {% if forloop.first %} id="top-run-number" {% endif %} class="run-num-links">{{ run.title }}</a></div>
-                <div class="col-md-2 col-sm-2 col-xs-4 run-status text-{% colour_table_row run.status.value_verbose %}">
-                    <strong>{{ run.status.value_verbose }}</strong></div>
-                <div class="col-md-4 col-sm-5 col-xs-4"><strong>Last
-                    updated:</strong> {{ run.last_updated }}</div>
-                </div>
-                {% endfor %}
-            </div>
-            {% elif filtering == 'experiment' %}
+                {% if filtering == 'run' %}
+                    {% include "filtered_by_number.html" %}
                 <!-- Experiment filtered jobs -->
-                <div class="row" id="by-experiment-number">
-                {% for experiment, associated_runs in experiments.items %}
-                    {% if forloop.first %}
-                        <div class="col-md-12 run-row-top" data-toggle="collapse"
-                             data-target="#RB{{ experiment.reference_number }}">
-                    {% else %}
-                        <div class="col-md-12 run-row" data-toggle="collapse"
-                             data-target="#RB{{ experiment.reference_number }}">
-                    {% endif %}
-                <div class="col-md-1"></div>
-                <a href="{% url 'experiment_summary' experiment.reference_number %}"
-                   onClick="event.stopPropagation();"> RB{{ experiment.reference_number }}</a>
-                </div>
-
-                    <div id="RB{{ experiment.reference_number }}" class="collapse">
-                        {% for run in associated_runs %}
-                            <div class="row run-row-internal">
-                                <div class="col-md-5 col-sm-5 col-md-offset-1 col-xs-4"><a
-                                        href="{% url 'runs:summary' instrument_name=instrument_name run_number=run.run_number run_version=run.run_version %}">{{ run.title }}</a>
-                                </div>
-                                <div class="col-md-2 col-sm-2 col-xs-4 run-status text-{% colour_table_row run.status.value_verbose %}">
-                                    <strong>{{ run.status.value_verbose }}</strong></div>
-                                <div class="col-md-4 col-sm-5 col-xs-4"><strong>Last
-                                    updated:</strong> {{ run.last_updated }}</div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% endfor %}
-            </div>
+            {% elif filtering == 'experiment' %}
+                    {% include "filtered_by_reference.html" %}
             {% else %}
                 <div class="row">No runs to show</div>
             {% endif %}
