@@ -4,9 +4,7 @@
 # Copyright &copy; 2020 ISIS Rutherford Appleton Laboratory UKRI
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
-"""
-Selenium tests for the runs summary page
-"""
+"""Selenium tests for the runs summary page."""
 
 from autoreduce_qp.systemtests.utils.data_archive import DataArchive
 from autoreduce_frontend.selenium_tests.pages.runs_list_page import RunsListPage
@@ -14,32 +12,28 @@ from autoreduce_frontend.selenium_tests.tests.base_tests import (AccessibilityTe
                                                                  NavbarTestMixin)
 
 
-class TestRunsListPage(BaseTestCase, NavbarTestMixin, FooterTestMixin, AccessibilityTestMixin):
-    """
-    Test cases for the InstrumentSummary page
-    """
+class TestRunsListPage(AccessibilityTestMixin, BaseTestCase, FooterTestMixin, NavbarTestMixin):
+    """Test cases for the InstrumentSummary page."""
 
     fixtures = BaseTestCase.fixtures + ["test_runs_list_page"]
 
     def setUp(self) -> None:
-        """
-        Sets up the InstrumentSummaryPage object
-        """
+        """Sets up the InstrumentSummaryPage object."""
         super().setUp()
         self.instrument_name = "TestInstrument"
         self.page = RunsListPage(self.driver, self.instrument_name)
 
     def test_reduction_run_displayed(self):
         """
-        Test: Reduction run is displayed
-        When: The run exists in the database
+        Test that run '99999' is displayed when the run exists in the database.
         """
         runs = self.page.launch().get_run_numbers_from_table()
         assert "99999" in runs
 
     def test_alert_message_when_missing_reduce_vars(self):
         """
-        Test that the correct message is shown when the reduce_vars.py file is missing
+        Test that the correct message is shown when the reduce_vars.py file is
+        missing.
         """
         self.page.launch()
         expected = "The buttons above have been disabled because reduce_vars.py is missing for this instrument."
@@ -47,7 +41,8 @@ class TestRunsListPage(BaseTestCase, NavbarTestMixin, FooterTestMixin, Accessibi
 
     def test_alert_message_when_reduce_vars_has_error(self):
         """
-        Test that the correct message is shown when the reduce_vars.py has an error in it
+        Test that the correct message is shown when the reduce_vars.py has an
+        error in it.
         """
         data_archive = DataArchive([self.instrument_name], 21, 21)
         data_archive.create()
@@ -62,7 +57,7 @@ class TestRunsListPage(BaseTestCase, NavbarTestMixin, FooterTestMixin, Accessibi
         data_archive.delete()
 
 
-class TestParameters(BaseTestCase, NavbarTestMixin, FooterTestMixin, AccessibilityTestMixin):
+class TestRunsListQueries(AccessibilityTestMixin, BaseTestCase, FooterTestMixin, NavbarTestMixin):
     """Test cases for the InstrumentSummary page queries."""
 
     fixtures = BaseTestCase.fixtures + ["eleven_runs"]
@@ -74,8 +69,10 @@ class TestParameters(BaseTestCase, NavbarTestMixin, FooterTestMixin, Accessibili
         self.page = RunsListPage(self.driver, self.instrument_name)
 
     def _test_page_query(self, query, page=None):
-        """Test that the given query is in a run's URL after clicking a run and then clicking the 'Back to
-        <InstrumentName> runs' button."""
+        """
+        Test that the given query is in a run's URL after clicking a run and
+        then clicking the 'Back to <InstrumentName> runs' button.
+        """
         # Launch the web page if no page arg supplied
         if not page:
             self.page.launch()
@@ -129,5 +126,13 @@ class TestParameters(BaseTestCase, NavbarTestMixin, FooterTestMixin, Accessibili
             if sort == "number":
                 sort = "run"
 
-            # {sort=!s} resolves to 'sort=<sort>'
             self._test_page_query(f"sort={sort}", page=1)
+
+    def test_run_navigation_btns(self):
+        """Test that the run navigation buttons work."""
+        for nav in ("newest", "next", "previous"):
+            self.page.launch()
+            runs = self.page.get_run_btns_by_cls_name("run-num-links")
+            fifth_displayed_run = runs[4]
+            run_summary_page = self.page.click_run(int(fifth_displayed_run.text))
+            run_summary_page.click_btn_by_id(nav)

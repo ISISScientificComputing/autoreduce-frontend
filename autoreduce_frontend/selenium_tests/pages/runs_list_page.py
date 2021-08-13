@@ -65,7 +65,7 @@ class RunsListPage(Page, NavbarMixin, FooterMixin, TourMixin):
         """Get the top run using the element's id."""
         return self.driver.find_element_by_id("top-run-number")
 
-    def click_page(self, title: str) -> None:
+    def click_page_by_title(self, title: str) -> None:
         """Click the page navigation button matching the given title."""
         btns = self.driver.find_elements_by_tag_name("button")
 
@@ -77,7 +77,10 @@ class RunsListPage(Page, NavbarMixin, FooterMixin, TourMixin):
             raise NoSuchElementException
 
     def update_items_per_page_option(self, pagination: int) -> None:
-        """Select the supplied pagination option from the 'Items per page' combo box."""
+        """
+        Select the supplied pagination option from the 'Items per page' combo
+        box.
+        """
         pagination_select = Select(self.driver.find_element_by_id("pagination_select"))
         pagination_select.select_by_visible_text(str(pagination))
 
@@ -90,3 +93,7 @@ class RunsListPage(Page, NavbarMixin, FooterMixin, TourMixin):
         "Click the 'Apply filters' button."
         btn = self.driver.find_element_by_id("apply_filters")
         btn.click()
+
+    def get_run_btns_by_cls_name(self, cls_name: str) -> None:
+        """Return all elements containing the specified class name."""
+        return self.driver.find_elements_by_class_name(cls_name)
