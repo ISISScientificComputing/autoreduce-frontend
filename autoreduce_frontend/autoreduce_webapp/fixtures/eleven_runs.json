@@ -3,7 +3,7 @@
         "model": "reduction_viewer.reductionrun",
         "pk": 1,
         "fields": {
-            "run_number": 99999,
+            "run_number": 100,
             "status_id": 5,
             "run_version": 0,
             "last_updated": "2020-10-19 17:35:04+00:00",
@@ -19,7 +19,7 @@
         "model": "reduction_viewer.reductionrun",
         "pk": 2,
         "fields": {
-            "run_number": 100000,
+            "run_number": 99,
             "status_id": 5,
             "run_version": 0,
             "last_updated": "2020-10-19 17:35:04+00:00",
@@ -35,7 +35,7 @@
         "model": "reduction_viewer.reductionrun",
         "pk": 3,
         "fields": {
-            "run_number": 100001,
+            "run_number": 98,
             "status_id": 5,
             "run_version": 0,
             "last_updated": "2020-10-19 17:35:04+00:00",
@@ -51,7 +51,7 @@
         "model": "reduction_viewer.reductionrun",
         "pk": 4,
         "fields": {
-            "run_number": 100002,
+            "run_number": 97,
             "status_id": 5,
             "run_version": 0,
             "last_updated": "2020-10-19 17:35:04+00:00",
@@ -67,7 +67,7 @@
         "model": "reduction_viewer.reductionrun",
         "pk": 5,
         "fields": {
-            "run_number": 100003,
+            "run_number": 96,
             "status_id": 5,
             "run_version": 0,
             "last_updated": "2020-10-19 17:35:04+00:00",
@@ -83,7 +83,7 @@
         "model": "reduction_viewer.reductionrun",
         "pk": 6,
         "fields": {
-            "run_number": 100004,
+            "run_number": 95,
             "status_id": 5,
             "run_version": 0,
             "last_updated": "2020-10-19 17:35:04+00:00",
@@ -99,7 +99,7 @@
         "model": "reduction_viewer.reductionrun",
         "pk": 7,
         "fields": {
-            "run_number": 100005,
+            "run_number": 94,
             "status_id": 5,
             "run_version": 0,
             "last_updated": "2020-10-19 17:35:04+00:00",
@@ -115,7 +115,7 @@
         "model": "reduction_viewer.reductionrun",
         "pk": 8,
         "fields": {
-            "run_number": 100006,
+            "run_number": 93,
             "status_id": 5,
             "run_version": 0,
             "last_updated": "2020-10-19 17:35:04+00:00",
@@ -131,7 +131,7 @@
         "model": "reduction_viewer.reductionrun",
         "pk": 9,
         "fields": {
-            "run_number": 100007,
+            "run_number": 92,
             "status_id": 5,
             "run_version": 0,
             "last_updated": "2020-10-19 17:35:04+00:00",
@@ -147,7 +147,7 @@
         "model": "reduction_viewer.reductionrun",
         "pk": 10,
         "fields": {
-            "run_number": 100008,
+            "run_number": 91,
             "status_id": 5,
             "run_version": 0,
             "last_updated": "2020-10-19 17:35:04+00:00",
@@ -163,7 +163,7 @@
         "model": "reduction_viewer.reductionrun",
         "pk": 11,
         "fields": {
-            "run_number": 100009,
+            "run_number": 90,
             "status_id": 5,
             "run_version": 0,
             "last_updated": "2020-10-19 17:35:04+00:00",
@@ -269,7 +269,7 @@
             "variable_ptr_id": 2,
             "instrument_id": 1,
             "experiment_reference": null,
-            "start_run": 99999,
+            "start_run": 99,
             "tracks_script": true
         }
     },
@@ -280,7 +280,7 @@
             "variable_ptr_id": 3,
             "instrument_id": 1,
             "experiment_reference": null,
-            "start_run": 100000,
+            "start_run": 100,
             "tracks_script": true
         }
     },
@@ -291,7 +291,7 @@
             "variable_ptr_id": 4,
             "instrument_id": 1,
             "experiment_reference": null,
-            "start_run": 100000,
+            "start_run": 100,
             "tracks_script": true
         }
     },
