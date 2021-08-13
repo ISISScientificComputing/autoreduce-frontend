@@ -106,9 +106,10 @@ class TestParameters(BaseTestCase, NavbarTestMixin, FooterTestMixin, Accessibili
         """Test that each potential query is maintained."""
         for query in ("sort=run", "pagination=10", "filter=run", "page="):
             self.page.launch()
-            self._test_page_query(query + "1" if query == "page=" else "", page=1)
-            self.page.click_page("Next Page")
-            self._test_page_query(query + "2" if query == "page=" else "", page=2)
+            self._test_page_query(query=query + ("1" if query == "page=" else ""), page=1)
+
+            self.page.click_page_by_title("Next Page")
+            self._test_page_query(query=query + ("2" if query == "page=" else ""), page=2)
 
     def test_pagination_filter(self):
         """Test that changing the pagination filter also updates the URL query."""
