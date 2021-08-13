@@ -225,6 +225,7 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
 
         run = next(run for run in history if run.run_version == int(run_version))
         started_by = started_by_id_to_name(run.started_by)
+
         # Run status value of "s" means the run is skipped
         is_skipped = run.status.value == "s"
         is_rerun = len(history) > 1
@@ -302,7 +303,7 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
 @login_and_uows_valid
 @check_permissions
 @render_with('runs_list.html')
-# pylint:disable=no-member,unused-argument,too-many-locals
+# pylint:disable=no-member,unused-argument,too-many-locals,broad-except
 def runs_list(request, instrument=None):
     """Render instrument summary."""
     try:
@@ -311,16 +312,18 @@ def runs_list(request, instrument=None):
     except Instrument.DoesNotExist:
         return {'message': "Instrument not found."}
 
+    sort_by = request.GET.get('sort', 'run')
+
     try:
-        sort_by = request.GET.get('sort', 'run')
-        if sort_by == 'run':
-            runs = (ReductionRun.objects.only('status', 'last_updated', 'run_number', 'run_version',
-                                              'run_description').select_related('status').filter(
-                                                  instrument=instrument_obj).order_by('-run_number', 'run_version'))
-        else:
-            runs = (ReductionRun.objects.only(
-                'status', 'last_updated', 'run_number', 'run_version',
-                'run_description').select_related('status').filter(instrument=instrument_obj).order_by('-last_updated'))
+        runs = (ReductionRun.objects.only('status', 'last_updated', 'run_number', 'run_version',
+                                          'run_description').select_related('status').filter(instrument=instrument_obj))
+        last_instrument_run = runs.first
+        first_instrument_run = runs.last
+
+        if sort_by == "run":
+            runs = runs.order_by('-run_number', 'run_version')
+        elif sort_by == "date":
+            runs = runs.order_by('-last_updated')
 
         if len(runs) == 0:
             return {'message': "No runs found for instrument."}
@@ -339,8 +342,8 @@ def runs_list(request, instrument=None):
             'instrument': instrument_obj,
             'instrument_name': instrument_obj.name,
             'runs': runs,
-            'last_instrument_run': runs[0],
-            'first_instrument_run': list(runs)[-1],
+            'last_instrument_run': last_instrument_run,
+            'first_instrument_run': first_instrument_run,
             'processing': runs.filter(status=Status.get_processing()),
             'queued': runs.filter(status=Status.get_queued()),
             'filtering': filter_by,
@@ -371,7 +374,6 @@ def runs_list(request, instrument=None):
             context_dictionary['last_page_index'] = len(custom_paginator.page_list)
             context_dictionary['max_items'] = max_items_per_page
 
-    # pylint:disable=broad-except
     except Exception:
         LOGGER.error(traceback.format_exc())
         return {'message': "An unexpected error has occurred when loading the instrument."}
@@ -382,7 +384,7 @@ def runs_list(request, instrument=None):
 @login_and_uows_valid
 @check_permissions
 @render_with('experiment_summary.html')
-# pylint:disable=no-member,too-many-locals
+# pylint:disable=no-member,too-many-locals,broad-except
 def experiment_summary(request, reference_number=None):
     """Render experiment summary."""
     try:
@@ -418,7 +420,7 @@ def experiment_summary(request, reference_number=None):
                         experiment_details = icat.get_experiment_details(int(reference_number))
                 except ICATConnectionException as excep:
                     render_error(request, str(excep))
-        # pylint:disable=broad-except
+
         except Exception as icat_e:
             LOGGER.error(icat_e)
             experiment_details = {
@@ -430,6 +432,7 @@ def experiment_summary(request, reference_number=None):
                 'instrument': '',
                 'pi': '',
             }
+
         context_dictionary = {
             'experiment': experiment,
             'runs_with_started_by': runs_with_started_by,
@@ -438,7 +441,7 @@ def experiment_summary(request, reference_number=None):
             'data': data,
             'reduced_data': reduced_data,
         }
-    # pylint:disable=broad-except
+
     except Exception as exception:
         LOGGER.error(exception)
         context_dictionary = {}
