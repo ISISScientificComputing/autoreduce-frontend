@@ -68,45 +68,32 @@ class TestRunsListQueries(AccessibilityTestMixin, BaseTestCase, FooterTestMixin,
         self.instrument_name = "TestInstrument"
         self.page = RunsListPage(self.driver, self.instrument_name)
 
-    def _test_page_query(self, query, page=None):
+    def _test_page_query(self, query):
         """
         Test that the given query is in a run's URL after clicking a run and
         then clicking the 'Back to <InstrumentName> runs' button.
         """
-        # Launch the web page if no page arg supplied
-        if not page:
-            self.page.launch()
-            page = 1
-
-        # Check if page query is in the href
         assert query in self.page.get_top_run().get_attribute('href')
 
-        # Get the number of the top run
+        # Check queries runs after clicking the top run
         top_run_num = int(self.page.get_top_run().text)
-
-        # Click the top run and assign a RunSummaryPage object
         run_summary_page = self.page.click_run(top_run_num)
-
-        # Check if the query is in the url for the summary page
         assert query in run_summary_page.driver.current_url
-
-        # Check if the query is in the summary page href
         assert query in run_summary_page.cancel_button.get_attribute('href')
 
-        # Click the cancel button to go back to the runs list
-        run_summary_page.click_cancel_btn()
-
-        # Check if query is still in the href
-        assert query in self.page.get_top_run().get_attribute('href')
+        # Check queries after returning to runs list
+        runs_list_page = run_summary_page.click_cancel_btn()
+        assert query in runs_list_page.get_top_run().get_attribute('href')
+        assert query in runs_list_page.driver.current_url
 
     def test_each_query(self):
         """Test that each potential query is maintained."""
         for query in ("sort=run", "pagination=10", "filter=run", "page="):
             self.page.launch()
-            self._test_page_query(query=query + ("1" if query == "page=" else ""), page=1)
+            self._test_page_query(query + ("1" if query == "page=" else ""))
 
             self.page.click_page_by_title("Next Page")
-            self._test_page_query(query=query + ("2" if query == "page=" else ""), page=2)
+            self._test_page_query(query + ("2" if query == "page=" else ""))
 
     def test_pagination_filter(self):
         """Test that changing the pagination filter also updates the URL query."""
@@ -114,7 +101,7 @@ class TestRunsListQueries(AccessibilityTestMixin, BaseTestCase, FooterTestMixin,
             self.page.launch()
             self.page.update_items_per_page_option(pagination)
             self.page.click_apply_filters()
-            self._test_page_query(f"pagination={pagination}", page=1)
+            self._test_page_query(f"pagination={pagination}")
 
     def test_sort_by_filter(self):
         """Test that changing the sort by filter also updates the URL query."""
@@ -126,7 +113,7 @@ class TestRunsListQueries(AccessibilityTestMixin, BaseTestCase, FooterTestMixin,
             if sort == "number":
                 sort = "run"
 
-            self._test_page_query(f"sort={sort}", page=1)
+            self._test_page_query(f"sort={sort}")
 
     def test_run_navigation_btns(self):
         """Test that the run navigation buttons work."""
