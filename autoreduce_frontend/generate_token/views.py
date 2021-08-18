@@ -1,14 +1,11 @@
-from django import forms
-from django.contrib.auth.models import User
+from autoreduce_frontend.autoreduce_webapp.view_utils import get_notifications
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView
 from django.views.generic.edit import DeleteView, FormView
 from rest_framework.authtoken.models import Token
 
-
-class GenerateTokenForm(forms.Form):
-    user = forms.ModelChoiceField(queryset=User.objects.filter(auth_token__pk=None))
+from autoreduce_frontend.generate_token.forms import GenerateTokenForm
 
 
 class GenerateTokenFormView(FormView):
@@ -31,6 +28,7 @@ class ShowToken(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["notifications"] = get_notifications(self.request)
         error_message = self.request.session.pop("error_message", "")
         context['error_message'] = error_message
         return context
