@@ -265,7 +265,7 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
             'oldest_run': int(request.GET.get('oldest_run', -1)),
             'next_run': int(request.GET.get('next_run', -1)),
             'previous_run': int(request.GET.get('previous_run', -1)),
-            'filter': request.GET.get('filter', 'run'),
+            'filtering': request.GET.get('filter', 'run'),
         }
 
     except PermissionDenied:
