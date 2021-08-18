@@ -12,7 +12,7 @@ from autoreduce_frontend.selenium_tests.tests.base_tests import (AccessibilityTe
                                                                  NavbarTestMixin)
 
 
-class TestRunsListPage(AccessibilityTestMixin, BaseTestCase, FooterTestMixin, NavbarTestMixin):
+class TestRunsListPage(BaseTestCase, AccessibilityTestMixin, FooterTestMixin, NavbarTestMixin):
     """Test cases for the InstrumentSummary page."""
 
     fixtures = BaseTestCase.fixtures + ["test_runs_list_page"]
@@ -57,7 +57,7 @@ class TestRunsListPage(AccessibilityTestMixin, BaseTestCase, FooterTestMixin, Na
         data_archive.delete()
 
 
-class TestRunsListQueries(AccessibilityTestMixin, BaseTestCase, FooterTestMixin, NavbarTestMixin):
+class TestRunsListQueries(BaseTestCase, AccessibilityTestMixin, FooterTestMixin, NavbarTestMixin):
     """Test cases for the InstrumentSummary page queries."""
 
     fixtures = BaseTestCase.fixtures + ["eleven_runs"]
