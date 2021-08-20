@@ -4,15 +4,13 @@
 # Copyright &copy; 2020 ISIS Rutherford Appleton Laboratory UKRI
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
-"""
-Selenium tests for the runs summary page
-"""
+"""Selenium tests for the runs summary page."""
 
 from django.urls import reverse
-from autoreduce_db.reduction_viewer.models import ReductionRun
-from autoreduce_qp.systemtests.utils.data_archive import DataArchive
 from selenium.webdriver.support.wait import WebDriverWait
 
+from autoreduce_db.reduction_viewer.models import ReductionRun
+from autoreduce_qp.systemtests.utils.data_archive import DataArchive
 from autoreduce_frontend.selenium_tests.pages.run_summary_page import RunSummaryPage
 from autoreduce_frontend.selenium_tests.tests.base_tests import BaseTestCase, FooterTestMixin, NavbarTestMixin
 
@@ -20,14 +18,17 @@ from autoreduce_frontend.selenium_tests.tests.base_tests import BaseTestCase, Fo
 # pylint:disable=no-member
 class TestRunSummaryPage(BaseTestCase, FooterTestMixin, NavbarTestMixin):
     """
-    Test cases for the InstrumentSummary page when the Rerun form is NOT visible
+    Test cases for the InstrumentSummary page when the Rerun form is NOT
+    visible.
     """
 
     fixtures = BaseTestCase.fixtures + ["run_with_one_variable"]
 
     @classmethod
     def setUpClass(cls):
-        """Sets up Dataarchive with scripts and sets instrument for all test cases"""
+        """
+        Set up a DataArchive with scripts and set instrument for all test cases.
+        """
         super().setUpClass()
         cls.instrument_name = "TestInstrument"
         cls.data_archive = DataArchive([cls.instrument_name], 21, 21)
@@ -37,18 +38,18 @@ class TestRunSummaryPage(BaseTestCase, FooterTestMixin, NavbarTestMixin):
 
     @classmethod
     def tearDownClass(cls) -> None:
-        """Destroys created data archive"""
+        """Destroy created DataArchive."""
         cls.data_archive.delete()
         super().tearDownClass()
 
     def setUp(self) -> None:
-        """Sets up RunSummaryPage before each test case"""
+        """Set up RunSummaryPage before each test case."""
         super().setUp()
         self.page = RunSummaryPage(self.driver, self.instrument_name, 99999, 0)
         self.page.launch()
 
     def test_reduction_job_panel_displayed(self):
-        """Tests that the reduction job panel is showing the right things"""
+        """Test that the reduction job panel is showing the right things."""
         # only one run in the fixture, get it for assertions
         run = ReductionRun.objects.first()
         assert self.page.reduction_job_panel.is_displayed()
@@ -62,7 +63,10 @@ class TestRunSummaryPage(BaseTestCase, FooterTestMixin, NavbarTestMixin):
         assert self.page.reduction_host_text() == "Host: test-host-123"
 
     def test_reduction_job_panel_reset_to_values_first_used_for_run(self):
-        """Test that the button to reset the variables to the values first used for the run works"""
+        """
+        Test that the button to reset the variables to the values first used for
+        the run works.
+        """
         self.page.toggle_button.click()
         self.page.variable1_field = "the new value in the field"
 
@@ -72,7 +76,10 @@ class TestRunSummaryPage(BaseTestCase, FooterTestMixin, NavbarTestMixin):
         assert self.page.variable1_field.get_attribute("value") == "value1"
 
     def test_reduction_job_panel_reset_to_current_reduce_vars(self):
-        """Test that the button to reset the variables to the values from the reduce_vars script works"""
+        """
+        Test that the button to reset the variables to the values from the
+        reduce_vars script works.
+        """
         self.page.toggle_button.click()
         self.page.variable1_field = "the new value in the field"
 
@@ -83,7 +90,8 @@ class TestRunSummaryPage(BaseTestCase, FooterTestMixin, NavbarTestMixin):
 
     def test_rerun_form(self):
         """
-        Test: Rerun form shows contents from Variable in database (from the fixture) and not reduce_vars.py
+        Test that the rerun form shows contents from Variable in database (from
+        the fixture) and not reduce_vars.py.
         """
         rerun_form = self.page.rerun_form
         assert not rerun_form.is_displayed()
@@ -96,9 +104,7 @@ class TestRunSummaryPage(BaseTestCase, FooterTestMixin, NavbarTestMixin):
         WebDriverWait(self.driver, 10).until(lambda _: labels[1].text == "variable1")
 
     def test_back_to_instruments_goes_back(self):
-        """
-        Test: Clicking back goes back to the instrument
-        """
+        """Test that clicking back goes back to the instrument."""
         back = self.page.cancel_button
         assert back.is_displayed()
         assert back.text == f"Back to {self.instrument_name} runs"
@@ -107,7 +113,8 @@ class TestRunSummaryPage(BaseTestCase, FooterTestMixin, NavbarTestMixin):
 
     def test_reset_single_to_initial(self):
         """
-        Tests changing the value of a variable field and resetting to the initial value, by using the inline button
+        Tests changing the value of a variable field and resetting to the
+        initial value, by using the inline button.
         """
         self.page.toggle_button.click()
         initial_value = self.page.variable1_field_val
@@ -119,7 +126,8 @@ class TestRunSummaryPage(BaseTestCase, FooterTestMixin, NavbarTestMixin):
 
     def test_reset_single_to_script(self):
         """
-        Tests changing the value of a variable field and resetting to the script value, by using the inline button
+        Test that changing the value of a variable field and resetting to the
+        script value, by using the inline button.
         """
         self.page.toggle_button.click()
         initial_value = "test_variable_value_123"
