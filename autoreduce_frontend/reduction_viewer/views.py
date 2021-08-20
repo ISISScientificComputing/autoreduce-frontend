@@ -261,10 +261,10 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
             'current_page': int(request.GET.get('page', 1)),
             'items_per_page': int(request.GET.get('pagination', 10)),
             'page_type': request.GET.get('sort', 'run'),
-            'newest_run': int(request.GET.get('newest_run', -1)),
-            'oldest_run': int(request.GET.get('oldest_run', -1)),
-            'next_run': int(request.GET.get('next_run', -1)),
-            'previous_run': int(request.GET.get('previous_run', -1)),
+            'newest_run': int(request.GET.get('newest_run', run_number)),
+            'oldest_run': int(request.GET.get('oldest_run', run_number)),
+            'next_run': int(request.GET.get('next_run', run_number)),
+            'previous_run': int(request.GET.get('previous_run', run_number)),
             'filtering': request.GET.get('filter', 'run'),
         }
 
