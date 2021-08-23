@@ -66,7 +66,7 @@
                                    data-rb_number='{{ job.experiment.reference_number }}'>
                         </td>
                         <td>
-                            <a href="{% url 'runs:summary' instrument_name=job.instrument.name run_number=job.run_number run_version=job.run_version %}">
+                            <a class="failed-run-link" href="{% url 'runs:summary' instrument_name=job.instrument.name run_number=job.run_number run_version=job.run_version %}">
                                 {{ job.title }}</a>
                         </td>
                         <td>{{ job.instrument.name }}</td>
