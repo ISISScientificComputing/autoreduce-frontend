@@ -40,3 +40,8 @@
     init();
     
 }())
+
+function changePage(page) {
+    let paginationChoice = document.getElementById("pagination_select").value;
+    document.location.href = window.location.origin + window.location.pathname + '?page=' + arguments[0] + '&pagination=' + paginationChoice;
+}
