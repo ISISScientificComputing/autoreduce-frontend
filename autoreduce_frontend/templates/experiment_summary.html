@@ -87,7 +87,7 @@
                             {% for job, started_by in runs_with_started_by %}
                                 <tr>
                                     <td>
-                                        <a href="{% url 'runs:summary' instrument_name=job.instrument.name run_number=job.run_number run_version=job.run_version %}">{{ job.title }}</a>
+                                        <a href="{% url 'runs:summary' instrument_name=job.instrument.name run_number=job.run_number run_version=job.run_version %}?filter=experiment">{{ job.title }}</a>
                                     </td>
                                     <td class="text-{% colour_table_row job.status.value_verbose %}">
                                         <strong>{{ job.status.value_verbose }}</strong></td>

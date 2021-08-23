@@ -4,15 +4,14 @@
 # Copyright &copy; 2021 ISIS Rutherford Appleton Laboratory UKRI
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
-"""
-Module for the run summary page model
-"""
+"""Module for the run summary page model."""
 from functools import partial
 from typing import List
 
 from django.urls.base import reverse
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.wait import WebDriverWait
+
 from autoreduce_frontend.selenium_tests.pages.component_mixins.footer_mixin import FooterMixin
 from autoreduce_frontend.selenium_tests.pages.component_mixins.navbar_mixin import NavbarMixin
 from autoreduce_frontend.selenium_tests.pages.component_mixins.rerun_form_mixin import RerunFormMixin
@@ -134,17 +133,22 @@ class RunSummaryPage(Page, RerunFormMixin, NavbarMixin, FooterMixin, TourMixin):
         """
         return self.driver.find_elements_by_class_name("js-plotly-plot")
 
-    def _do_run_button(self, url):
+    def _do_cancel_btn(self, url):
         def run_button_clicked_successfully(button, url, driver):
             button.click()
             return driver.current_url.split("?")[0].endswith(url)
 
-        button = self.driver.find_element_by_css_selector(f'[href*="{url}"]')
+        button = self.driver.find_element_by_id("cancel")
         WebDriverWait(self.driver, 10).until(partial(run_button_clicked_successfully, button, url))
 
     def click_cancel_btn(self):
         """Click the cancel button and return a RunsListPage object."""
         from autoreduce_frontend.selenium_tests.pages.runs_list_page import RunsListPage
 
-        self._do_run_button(reverse("runs:list", kwargs={"instrument": self.instrument}))
+        self._do_cancel_btn(reverse("runs:list", kwargs={"instrument": self.instrument}))
         return RunsListPage(self.driver, self.instrument)
+
+    def click_btn_by_id(self, btn_id: str) -> None:
+        """Click the button with the specified ID."""
+        btn = self.driver.find_element_by_id(btn_id)
+        btn.click()
