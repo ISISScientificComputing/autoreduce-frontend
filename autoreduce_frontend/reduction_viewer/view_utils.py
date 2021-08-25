@@ -58,5 +58,4 @@ def make_data_analysis_url(reduction_location: str):
     """
     if "/instrument/" in reduction_location:
         return DATA_ANALYSIS_BASE_URL + reduction_location.split("/instrument/")[1]
-    else:
-        return ""
+    return ""
