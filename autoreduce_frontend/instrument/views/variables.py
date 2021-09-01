@@ -5,32 +5,27 @@
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
 """
-View functions for displaying Variable data
-This imports into another view, thus no middleware
+View functions for displaying Variable data. This imports into another view,
+thus no middleware.
 """
+# pylint:disable=too-many-locals,no-member,unused-argument
 import logging
-import os
 
 from django.shortcuts import redirect, render
+
 from autoreduce_db.instrument.models import InstrumentVariable
 from autoreduce_db.reduction_viewer.models import Instrument, ReductionRun
 from autoreduce_qp.queue_processor.variable_utils import VariableUtils
-
-from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions, login_and_uows_valid, render_with)
+from autoreduce_frontend.autoreduce_webapp.view_utils import check_permissions, login_and_uows_valid, render_with
 from autoreduce_frontend.reduction_viewer.utils import ReductionRunUtils
 
 LOGGER = logging.getLogger(__package__)
 
 
-# pylint:disable=too-many-locals
 def summarize_variables(request, instrument, last_run_object):
-    """
-    Handles view request for the instrument summary page
-    """
-    # pylint:disable=no-member
+    """Handle view request for the instrument summary page."""
     instrument = Instrument.objects.get(name=instrument)
 
-    # pylint:disable=invalid-name
     current_variables = [runvar.variable.instrumentvariable for runvar in last_run_object.run_variables.all()]
 
     upcoming_variables_by_run = InstrumentVariable.objects.filter(start_run__gt=last_run_object.run_number,
@@ -40,7 +35,7 @@ def summarize_variables(request, instrument, last_run_object):
 
     # There's a known issue with inaccurate display of tracks script:
     # https://github.com/ISISScientificComputing/autoreduce/issues/1187
-    # Creates a nested dictionary for by-run
+    # creates a nested dictionary for by-run
     upcoming_variables_by_run_dict = {}
     for variable in upcoming_variables_by_run:
         if variable.start_run not in upcoming_variables_by_run_dict:
@@ -108,7 +103,6 @@ def summarize_variables(request, instrument, last_run_object):
     return render(request, 'snippets/instrument_summary_variables.html', context_dictionary)
 
 
-# pylint:disable=unused-argument
 @login_and_uows_valid
 @check_permissions
 def delete_instrument_variables(request, instrument=None, start=0, end=0, experiment_reference=None):
@@ -137,7 +131,6 @@ def delete_instrument_variables(request, instrument=None, start=0, end=0, experi
 @login_and_uows_valid
 @check_permissions
 @render_with('variables_summary.html')
-# pylint:disable=no-member
 def instrument_variables_summary(request, instrument):
     """
     Handles request to view instrument variables
@@ -151,9 +144,7 @@ def instrument_variables_summary(request, instrument):
 @check_permissions
 @render_with('snippets/variables/form.html')
 def current_default_variables(request, instrument=None):
-    """
-    Handles request to view default variables
-    """
+    """Handle request to view default variables."""
 
     try:
         current_variables = VariableUtils.get_default_variables(instrument)
@@ -171,10 +162,7 @@ def current_default_variables(request, instrument=None):
 
 
 def render_run_variables(request, instrument_name, run_number, run_version=0):
-    """
-    Handles request to view the summary of a run
-    """
-    # pylint:disable=no-member
+    """Handle request to view the summary of a run."""
     reduction_run = ReductionRun.objects.get(instrument__name=instrument_name,
                                              run_number=run_number,
                                              run_version=run_version)
@@ -206,10 +194,11 @@ def render_run_variables(request, instrument_name, run_number, run_version=0):
 
 def _combine_dicts(current: dict, default: dict):
     """
-    Combines the current and default variable dictionaries, into a single dictionary
-    which can be more easily rendered into the webapp.
+    Combine the current and default variable dictionaries, into a single
+    dictionary which can be more easily rendered into the webapp.
 
-    If no current variables are provided, it returns the default as both current and default.
+    If no current variables are provided, return the default as both current and
+    default.
     """
     if not current:
         current = default.copy()
