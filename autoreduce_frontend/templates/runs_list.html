@@ -23,6 +23,7 @@
             </div>
             <!-- Pause / Resume Reduction button-->
             <div class="col-md-6 text-center">
+            <div>
                 {% if instrument.is_paused %}
                     <a class="btn btn-danger btn-block" id="pause">
                         <i class="fa fa-play"></i>
@@ -40,7 +41,7 @@
                 </form>
                 <p></p>
             </div>
-            <div class="col-md-6 text-center" id="btn-re-run_past_job">
+            <div id="btn-re-run_past_job">
                 <p>
                     <a href="{% url 'instrument:submit_runs' instrument=instrument_name %}" class="btn btn-success btn-block"
                         {% if not has_variables %}
@@ -51,7 +52,18 @@
                     </a>
                 </p>
             </div>
-            <div class="col-md-6 text-center" id="btn-configure_new_runs">
+            <div id="btn-batch_job">
+                <p>
+                    <a href="{% url 'instrument:submit_batch_run' instrument=instrument_name %}" class="btn btn-success btn-block"
+                        {% if not has_variables %}
+                            disabled
+                        {% endif %}>
+                        <i class="fa fa-cog"></i>
+                        &nbsp;&nbsp;Submit batch job
+                    </a>
+                </p>
+            </div>
+            <div id="btn-configure_new_runs">
                 <p>
                     <a href="{% url 'instrument:variables' instrument=instrument_name %}"class="btn btn-success btn-block"
                         {% if not has_variables %}
@@ -62,7 +74,7 @@
                     </a>
                 </p>
             </div>
-            <div class="col-md-6 text-center" id="btn-see_instrument_variables">
+            <div id="btn-see_instrument_variables">
                 <p>
                     <a href="{% url 'instrument:variables_summary' instrument=instrument_name %}" class="btn btn-success btn-block"
                         {% if not has_variables %}
@@ -74,11 +86,12 @@
                 </p>
             </div>
             {% if not has_variables %}
-                <div class="col-md-offset-6 col-md-6 text-center alert alert-warning" role="alert" id="alert_message">
+                <div class="alert alert-warning" role="alert" id="alert_message">
                     <i class="fa fa-exclamation-triangle"></i>
                     &nbsp;&nbsp;The buttons above have been disabled because {{ error_reason }}.
                 </div>
             {% endif %}
+            </div>
         </div>
         <br/>
         <hr/>

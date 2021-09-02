@@ -337,13 +337,14 @@ def runs_list(request, instrument=None):
     sort_by = request.GET.get('sort', 'run')
 
     try:
-        runs = (ReductionRun.objects.only('status', 'last_updated', 'run_number', 'run_version',
-                                          'run_description').select_related('status').filter(instrument=instrument_obj))
+        runs = (ReductionRun.objects.only('status', 'last_updated', 'run_version',
+                                          'run_description').select_related('status').filter(instrument=instrument_obj,
+                                                                                             batch_run=False))
         last_instrument_run = runs.last
         first_instrument_run = runs.first
 
         if sort_by == "run":
-            runs = runs.order_by('-run_number', 'run_version')
+            runs = runs.order_by('-run_numbers__run_number', 'run_version')
         elif sort_by == "date":
             runs = runs.order_by('-last_updated')
 

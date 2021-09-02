@@ -6,12 +6,13 @@
 # ############################################################################### #
 
 from django.urls import path
-from autoreduce_frontend.instrument.views import runs, variables, pause
+from autoreduce_frontend.instrument.views import runs, variables, pause, batch_run
 
 app_name = "instrument"
 
 urlpatterns = [
     path('<str:instrument>/submit_runs/', runs.submit_runs, name='submit_runs'),
+    path('<str:instrument>/submit_batch_run/', batch_run.BatchRun.as_view(), name='submit_batch_run'),
     path('<str:instrument>/configure_new_runs/', runs.configure_new_runs, name='variables'),
     path('<str:instrument>/configure_new_runs/<int:start>/', runs.configure_new_runs, name='variables'),
     path('<str:instrument>/configure_new_runs/<int:start>/<int:end>/', runs.configure_new_runs, name='variables'),

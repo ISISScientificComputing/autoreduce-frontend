@@ -41,7 +41,7 @@ def submit_runs(request, instrument=None):
         queued_status = Status.get_queued()
 
         # pylint:disable=no-member
-        runs_for_instrument = instrument.reduction_runs.all()
+        runs_for_instrument = instrument.reduction_runs.filter(batch_run=False)
         last_run = instrument.get_last_for_rerun(runs_for_instrument)
 
         kwargs = ReductionRunUtils.make_kwargs_from_runvariables(last_run)
