@@ -251,12 +251,7 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
             reduction_location = reduction_location.replace('\\', '/')
 
         data_analysis_link_url = make_data_analysis_url(reduction_location) if reduction_location else ""
-
         rb_number = run.experiment.reference_number
-        try:
-            current_variables = VariableUtils.get_default_variables(run.instrument.name)
-        except (FileNotFoundError, ImportError, SyntaxError):
-            current_variables = {}
 
         context_dictionary = {
             'run': run,
@@ -268,7 +263,6 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
             'history': history,
             'reduction_location': reduction_location,
             'started_by': started_by,
-            'has_reduce_vars': bool(current_variables),
             'has_run_variables': bool(run.run_variables.count()),
             'data_analysis_link_url': data_analysis_link_url,
             'current_page': int(request.GET.get('page', 1)),

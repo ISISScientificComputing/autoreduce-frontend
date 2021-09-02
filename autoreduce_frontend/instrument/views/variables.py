@@ -182,6 +182,7 @@ def render_run_variables(request, instrument_name, run_number, run_version=0):
         default_standard_variables = default_variables["standard_vars"]
         default_advanced_variables = default_variables["advanced_vars"]
     except (FileNotFoundError, ImportError, SyntaxError):
+        default_variables = {}
         default_standard_variables = {}
         default_advanced_variables = {}
 
@@ -190,6 +191,7 @@ def render_run_variables(request, instrument_name, run_number, run_version=0):
     context_dictionary = {
         'run_number': run_number,
         'run_version': run_version,
+        'has_reduce_vars': bool(default_variables),
         'standard_variables': final_standard,
         'advanced_variables': final_advanced,
         'instrument': reduction_run.instrument,
