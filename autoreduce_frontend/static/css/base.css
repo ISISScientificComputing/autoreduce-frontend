@@ -82,7 +82,7 @@ footer {
     text-align: center;
     margin-top: 30px;
     color: #555555;
-    margin-bottom: 10px;
+    margin-bottom: 400px;
 }
 
 /****************
@@ -353,7 +353,7 @@ pre code {
 }
 
 #items-per-page {
-    display: inline-flex; 
+    display: inline-flex;
     margin-left: 25px;
     vertical-align: middle;
 }
