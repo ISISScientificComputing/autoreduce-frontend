@@ -115,7 +115,7 @@ def overview(_):
     Render the overview landing page (redirect from /index).
 
     Note:
-      _ is replacing the passed in request parameter.
+        _ is replacing the passed in request parameter.
     """
     context_dictionary = {}
     instruments = Instrument.objects.values_list("name", flat=True)
@@ -140,10 +140,10 @@ def run_queue(request):
         try:
             with ICATCache(AUTH='uows', SESSION={'sessionid': request.session['sessionid']}) as icat:
                 pending_jobs = filter(lambda job: job.experiment.reference_number in icat.get_associated_experiments(
-                    int(request.user.username)), pending_jobs)  # check RB numbers
+                    int(request.user.username)), pending_jobs)  # Check RB numbers
                 pending_jobs = filter(
                     lambda job: job.instrument.name in icat.get_owned_instruments(int(request.user.username)),
-                    pending_jobs)  # check instrument
+                    pending_jobs)  # Check instrument
         except ICATConnectionException as excep:
             return render_error(request, str(excep))
     # Initialise list to contain the names of user/team that started runs
@@ -469,7 +469,7 @@ def help(_):
     Render help page.
 
     Note:
-      _ is replacing the passed in request parameter.
+        _ is replacing the passed in request parameter.
     """
     return {}
 
@@ -481,7 +481,7 @@ def accessibility_statement(_):
     Render accessibility statement page.
 
     Note:
-      _ is replacing the passed in request parameter.
+        _ is replacing the passed in request parameter.
     """
     return {}
 
@@ -493,7 +493,7 @@ def graph_home(_):
     Render graph page.
 
     Note:
-      _ is replacing the passed in request parameter.
+        _ is replacing the passed in request parameter.
     """
     instruments = Instrument.objects.all()
     context_dictionary = {'instruments': instruments}
@@ -548,7 +548,7 @@ def stats(_):
     Render run statistics page.
 
     Note:
-      _ is replacing the passed in request parameter.
+        _ is replacing the passed in request parameter.
     """
     statuses = []
     for status in Status.objects.all():
@@ -573,17 +573,17 @@ def started_by_id_to_name(started_by_id=None):
     Return the name of the user or team that submitted an autoreduction run.
 
     Args:
-      started_by_id: The ID of the user who started the run, or a control code
-      if not started by a user.
+        started_by_id: The ID of the user who started the run, or a control code
+        if not started by a user.
 
     Returns:
-      If started by a valid user, return '[forename] [surname]'.
+        If started by a valid user, return '[forename] [surname]'.
 
-      If started automatically, return 'Autoreducton service'.
+        If started automatically, return 'Autoreducton service'.
 
-      If started manually, return 'Development team'.
+        If started manually, return 'Development team'.
 
-      Otherwise, return None.
+        Otherwise, return None.
     """
     if started_by_id is None or started_by_id < -1:
         return None

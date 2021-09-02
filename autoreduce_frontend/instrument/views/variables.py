@@ -107,12 +107,19 @@ def summarize_variables(request, instrument, last_run_object):
 @check_permissions
 def delete_instrument_variables(request, instrument=None, start=0, end=0, experiment_reference=None):
     """
-    Handles request for deleting instrument variables
+    Handle request for deleting instrument variables.
 
-    :param instrument: Name of the instrument for which variables are being deleted
-    :param start: The start run from which variables are being deleted
-    :param end: Used to limit how many variables get deleted, otherwise a delete would wipe ALL variables > start
-    :param experiment_reference: If provided - use the experiment reference to delete variables instead of start_run
+    Args:
+        instrument: Name of the instrument for which variables are being
+        deleted.
+
+        start: Run from which variables are being deleted.
+
+        end: Limit of how many variables get deleted, otherwise a delete would
+        wipe ALL variables > start.
+
+        experiment_reference: If provided - use the experiment reference to
+        delete variables instead of start_run.
     """
 
     # We "save" an empty list to delete the previous variables.
@@ -132,9 +139,7 @@ def delete_instrument_variables(request, instrument=None, start=0, end=0, experi
 @check_permissions
 @render_with('variables_summary.html')
 def instrument_variables_summary(request, instrument):
-    """
-    Handles request to view instrument variables
-    """
+    """Handle request to view instrument variables."""
     instrument = Instrument.objects.get(name=instrument)
     context_dictionary = {'instrument': instrument, 'last_instrument_run': instrument.reduction_runs.last()}
     return context_dictionary
@@ -150,14 +155,15 @@ def current_default_variables(request, instrument=None):
         current_variables = VariableUtils.get_default_variables(instrument)
     except (FileNotFoundError, ImportError, SyntaxError) as err:
         return {"message": str(err)}
+
     standard_vars = current_variables["standard_vars"]
     advanced_vars = current_variables["advanced_vars"]
-
     context_dictionary = {
         'instrument': instrument,
         'standard_variables': standard_vars,
         'advanced_variables': advanced_vars,
     }
+
     return context_dictionary
 
 
@@ -181,7 +187,6 @@ def render_run_variables(request, instrument_name, run_number, run_version=0):
 
     final_standard = _combine_dicts(standard_vars, default_standard_variables)
     final_advanced = _combine_dicts(advanced_vars, default_advanced_variables)
-
     context_dictionary = {
         'run_number': run_number,
         'run_version': run_version,
@@ -189,6 +194,7 @@ def render_run_variables(request, instrument_name, run_number, run_version=0):
         'advanced_variables': final_advanced,
         'instrument': reduction_run.instrument,
     }
+
     return render(request, 'snippets/run_variables.html', context_dictionary)
 
 
@@ -206,4 +212,5 @@ def _combine_dicts(current: dict, default: dict):
     final = {}
     for name, var in current.items():
         final[name] = {"current": var, "default": default.get(name, None)}
+
     return final
