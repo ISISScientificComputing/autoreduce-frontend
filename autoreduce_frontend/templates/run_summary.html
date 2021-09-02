@@ -9,14 +9,13 @@
 {% load get_run_navigation_queries %}
 
 {% block body %}
-    {% comment %} only pull in plotly if there are interactive plots {% endcomment %}
+    <!-- Only pull in plotly if there are interactive plots -->
     {% if interactive_plots %}
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     {% endif %}
+
     {% if not run %}
-        <div class="text-center col-md-6 col-md-offset-3 well well-small">
-            Reduction run not found or error encountered: {{ message }}.
-        </div>
+        <div class="text-center col-md-6 col-md-offset-3 well well-small">Reduction run not found or error encountered: {{ message }}.</div>
     {% else %}
         <title>Reduction Job #{{ run.title }}</title>
         <div class="row">
@@ -38,7 +37,7 @@
             </div>
         {% else %}
             {% if static_plots %}
-            <div class="row plot-container">
+                <div class="row plot-container">
                 {% for plot_file in static_plots %}
                     {% if static_plots|length == 1 %}
                         <img class="center-block" src="{{ plot_file }}" alt="Plot image stored at {{ plot_file }}">
@@ -46,21 +45,22 @@
                         <img class="col-md-6" src="{{ plot_file }}" alt="Plot image stored at {{ plot_file }}">
                     {% endif %}
                 {% endfor %}
-            </div>
+                </div>
             {% endif %}
             {% if interactive_plots %}
-             <div class="row plot-container">
-                {% for name, data in interactive_plots.items %}
-                    <div id="{{ name }}"></div>
-                    <script>
-                        var data = JSON.parse('{{ data|escapejs }}');
-                        var elem = document.getElementById("{{ name }}");
-                        Plotly.newPlot(elem, data);
-                    </script>
-                {% endfor %}
-            </div>
+                <div class="row plot-container">
+                    {% for name, data in interactive_plots.items %}
+                        <div id="{{ name }}"></div>
+                        <script>
+                            var data = JSON.parse('{{ data|escapejs }}');
+                            var elem = document.getElementById("{{ name }}");
+                            Plotly.newPlot(elem, data);
+                        </script>
+                    {% endfor %}
+                </div>
             {% endif %}
         {% endif %}
+
         {% if run.message %}
             {% if 'Skipped' in run.message %}
                 <div class="alert alert-{% replace run.status.value_verbose 'Skipped' 'info' %} word-wrap" role="alert">
@@ -74,6 +74,7 @@
                 </div>
             {% endif %}
         {% endif %}
+
         <div class="row" id="reduction_job_panel">
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-primary panel-small panel-2-column">
@@ -81,30 +82,35 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div id="run_description">
-                                {% if run.run_description %}
-                                    <strong>Run description: </strong> {{ run.run_description }}
+                                    {% if run.run_description %}
+                                        <strong>Run description: </strong> {{ run.run_description }}
                                     {% endif %}
                                 </div>
+
                                 <div id="started_by">
-                                {% if started_by is not null %}
-                                    <strong>Started by:</strong> {{ started_by }}
+                                    {% if started_by is not null %}
+                                        <strong>Started by:</strong> {{ started_by }}
                                     {% endif %}
                                 </div>
+
                                 <div id="status">
-                                    <strong>Status:</strong> <strong
-                                        class="text-{% colour_table_row run.status.value_verbose %}">{{ run.status.value_verbose }}</strong>
+                                    <strong>Status:</strong> <strong class="text-{% colour_table_row run.status.value_verbose %}">{{ run.status.value_verbose }}</strong>
                                 </div>
+
                                 <div id="instrument">
                                     <strong>Instrument:</strong> {{ run.instrument.name }}
                                 </div>
+
                                 <div id="rb_number">
-                                    <strong>RB Number:</strong> <a
-                                        href="{% url 'experiment_summary' reference_number=run.experiment.reference_number %}">{{ run.experiment.reference_number }}</a>
+                                    <strong>RB Number:</strong>
+                                        <a href="{% url 'experiment_summary' reference_number=run.experiment.reference_number %}">{{ run.experiment.reference_number }}</a>
                                 </div>
+
                                 <div id="last_updated">
                                     <strong>Last Updated:</strong> {{ run.last_updated }}
                                 </div>
                             </div>
+
                             <div class="col-md-6">
                                 <div>
                                     <strong>Start:</strong>
@@ -116,6 +122,7 @@
                                         <em>Not yet started</em>
                                     {% endif %}
                                 </div>
+
                                 <div>
                                     <strong>Finish:</strong>
                                     {% if is_skipped %}
@@ -126,6 +133,7 @@
                                         <em>Not yet finished</em>
                                     {% endif %}
                                 </div>
+
                                 <div>
                                     <strong>Duration:</strong>
                                     {% if run.started and run.finished %}
@@ -136,14 +144,14 @@
                                         <em>Not yet finished</em>
                                     {% endif %}
                                 </div>
+
                                 <div>
                                     <strong>Retrying:</strong>
                                     {% if run.finished %}
                                         {% if run.retry_when %}
                                             {{ run.retry_when|naturaltime }}
                                             {% if run.retry_run %}
-                                                <a href="{% url 'runs:summary' instrument_name=run.instrument.name run_number=run.retry_run.run_number run_version=run.retry_run.run_version %}">
-                                                    ({{ run.retry_run.status.value_verbose }})</a>
+                                                <a href="{% url 'runs:summary' instrument_name=run.instrument.name run_number=run.retry_run.run_number run_version=run.retry_run.run_version %}">({{ run.retry_run.status.value_verbose }})</a>
                                             {% endif %}
                                         {% else %}
                                             Never
@@ -152,6 +160,7 @@
                                         <em>Not yet finished</em>
                                     {% endif %}
                                 </div>
+
                                 <div>
                                     <strong>Software used:</strong>
                                     {% if run.software is not null %}
@@ -162,6 +171,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="file-path">
@@ -180,7 +190,9 @@
                                 <div class="file-path">
                                     <strong>Reduced:</strong>
                                     {% if reduction_location %}
-                                        <a href="{{ data_analysis_link_url }}" target="_blank">{{ reduction_location }}<i class="fa fa-external-link" aria-hidden="true"></i></a><br/>
+                                        <a href="{{ data_analysis_link_url }}" target="_blank">{{ reduction_location }}
+                                            <i class="fa fa-external-link" aria-hidden="true"></i>
+                                        </a><br/>
                                     {% elif run.reduction_location.all %}
                                         {% for location in run.reduction_location.all %}
                                             {{ location.file_path }}<br/>
@@ -201,39 +213,33 @@
                 </div>
             </div>
         </div>
-        {% if not is_skipped %}
-            <div id="re-run_and_graphs">
-                {% if run.graph %}
-                    <div class="panel panel-default" id="re-run_job">
-                        <div class="panel-heading">
-                            <div class="panel-title"><a data-toggle="collapse" href="#collapseGraphs"
-                                                        data-target="#graphs"><i
-                                    class="fa fa-chevron-down"></i> Images</a></div>
-                        </div>
-                        <div class="panel-body collapse in" id="graphs">
-                            {% for graph in run.graph %}
-                                <div class="text-center"><a href="{{ graph }}" target="_blank"
-                                                            rel="noopener noreferrer"><img src="{{ graph }}"/></a>
-                                </div>
-                            {% endfor %}
+
+        <div id="re-run_and_graphs">
+            {% if run.graph %}
+                <div class="panel panel-default" id="re-run_job">
+                    <div class="panel-heading">
+                        <div class="panel-title">
+                            <a data-toggle="collapse" href="#collapseGraphs" data-target="#graphs">
+                                <i class="fa fa-chevron-down"></i> Images
+                            </a>
                         </div>
                     </div>
-            {% endif %}
-            {% if has_run_variables and has_reduce_vars  %}
-                {% autoescape on %}
-                    {% view "instrument.views.variables.render_run_variables" instrument run_number run_version %}
-                {% endautoescape %}
-            {% elif not has_run_variables %}
-                <div>
-                    <p class="text-center" id="warning_message">No variables found for this run.</p>
-                </div>
-            {% elif not has_reduce_vars %}
-                <div>
-                    <p class="text-center" id="warning_message">The reduce_vars.py script is missing for this instrument. Please create it before being able to submit re-runs.</p>
+
+                    <div class="panel-body collapse in" id="graphs">
+                        {% for graph in run.graph %}
+                            <div class="text-center">
+                                <a href="{{ graph }}" target="_blank" rel="noopener noreferrer"><img src="{{ graph }}"/></a>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
             {% endif %}
+
+            {% autoescape on %}
+                {% view "instrument.views.variables.render_run_variables" instrument run_number run_version %}
+            {% endautoescape %}
         </div>
-        {% endif %}
+
         <div class="row col-md-12 my-2">
             <div class="text-center">
                 {% if newest_run != run.run_number %}
@@ -248,12 +254,15 @@
                 {% endif %}
             </div>
         </div>
+
         <div class="run-history modal fade" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
-                                class="sr-only">Close</span></button>
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span aria-hidden="true">&times;</span>
+                            <span class="sr-only">Close</span>
+                        </button>
                         <h3 class="modal-title">Job History</h3>
                     </div>
                     <div class="modal-body">
@@ -277,7 +286,8 @@
                                             {% endif %}
                                         </td>
                                         <td class="text-{% colour_table_row job.status.value_verbose %}">
-                                            <strong>{{ job.status.value_verbose }}</strong></td>
+                                                <strong>{{ job.status.value_verbose }}</strong>
+                                        </td>
                                         <td title="{{ job.last_updated|date:'SHORT_DATETIME_FORMAT' }}">{{ job.last_updated|naturaltime }}</td>
                                         <td>
                                             {% if started_by %}
@@ -299,8 +309,10 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
-                                class="sr-only">Close</span></button>
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span aria-hidden="true">&times;</span>
+                            <span class="sr-only">Close</span>
+                        </button>
                         <h4 class="modal-title">Reduction logs</h4>
                     </div>
                     <div class="modal-body">
@@ -312,18 +324,16 @@
     {% endif %}
 {% endblock %}
 
-
-
 {% block stylesheets %}
     <link rel="stylesheet" href="{% static 'css/vendor/prettify.css' %}">
     <link rel="stylesheet" href="{% static 'css/vendor/bootstrap-tour.min.css' %}">
 {% endblock %}
+
 {% block scripts %}
     <script src="{% static 'javascript/run_summary.js' %}"></script>
     <script src="{% static 'javascript/vendor/prettify.js' %}"></script>
     <script src="{% static 'javascript/run_variables.js' %}"></script>
     <script src="{% static 'javascript/vendor/bootstrap-tour.min.js' %}"></script>
-
     <script src="{% static 'javascript/tours/run_summary_tour.js' %}"></script>
     <script src="{% static 'javascript/tours/navbar_tour.js' %}"></script>
     <script src="{% static 'javascript/create_tour.js' %}"></script>
