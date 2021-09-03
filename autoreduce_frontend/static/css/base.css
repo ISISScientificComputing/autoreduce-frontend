@@ -12,6 +12,10 @@
 /****************
  1. Base
 ****************/
+body {
+    overflow-y: scroll;
+}
+
 hr {
     width: 60%;
 }
@@ -353,7 +357,7 @@ pre code {
 }
 
 #items-per-page {
-    display: inline-flex; 
+    display: inline-flex;
     margin-left: 25px;
     vertical-align: middle;
 }
