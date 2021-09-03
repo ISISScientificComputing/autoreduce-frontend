@@ -15,9 +15,7 @@ urlpatterns = [
     path('failed/', views.fail_queue, name='failed'),
     path('<str:instrument>/', views.runs_list, name='list'),
     path('<str:instrument_name>/<int:run_number>/', views.run_summary, name='summary'),
-    path('<str:instrument_name>/batch/<int:pk>/', batch_run_summary.BatchRunSummary.as_view(), name='batch_summary'),
-    path('<str:instrument_name>/batch/<int:pk>/<int:run_version>/',
-         batch_run_summary.BatchRunSummary.as_view(),
-         name='batch_summary'),
+    path('<str:instrument_name>/batch/<int:pk>/', views.run_summary_batch_run, name='batch_summary'),
+    path('<str:instrument_name>/batch/<int:pk>/<int:run_version>/', views.run_summary_batch_run, name='batch_summary'),
     path('<str:instrument_name>/<int:run_number>/<int:run_version>/', views.run_summary, name='summary'),
 ]

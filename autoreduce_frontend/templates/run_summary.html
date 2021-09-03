@@ -146,22 +146,6 @@
                                 </div>
 
                                 <div>
-                                    <strong>Retrying:</strong>
-                                    {% if run.finished %}
-                                        {% if run.retry_when %}
-                                            {{ run.retry_when|naturaltime }}
-                                            {% if run.retry_run %}
-                                                <a href="{% url 'runs:summary' instrument_name=run.instrument.name run_number=run.retry_run.run_number run_version=run.retry_run.run_version %}">({{ run.retry_run.status.value_verbose }})</a>
-                                            {% endif %}
-                                        {% else %}
-                                            Never
-                                        {% endif %}
-                                    {% else %}
-                                        <em>Not yet finished</em>
-                                    {% endif %}
-                                </div>
-
-                                <div>
                                     <strong>Software used:</strong>
                                     {% if run.software is not null %}
                                         {{ run.software.name }} - {{ run.software.version }}
@@ -237,6 +221,18 @@
                             </div>
                         {% endfor %}
                     </div>
+            {% endif %}
+            {% if has_run_variables and has_reduce_vars  %}
+                {% autoescape on %}
+                    {% view "instrument.views.variables.render_run_variables" instrument run %}
+                {% endautoescape %}
+            {% elif not has_run_variables %}
+                <div>
+                    <p class="text-center" id="warning_message">No variables found for this run.</p>
+                </div>
+            {% elif not has_reduce_vars %}
+                <div>
+                    <p class="text-center" id="warning_message">The reduce_vars.py script is missing for this instrument. Please create it before being able to submit re-runs.</p>
                 </div>
             {% endif %}
 

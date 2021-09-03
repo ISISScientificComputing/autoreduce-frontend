@@ -231,12 +231,31 @@ def fail_queue(request):
 # pylint:disable=no-member,too-many-locals,broad-except
 def run_summary(request, instrument_name=None, run_number=None, run_version=0):
     """Render run summary."""
-    try:
-        history = ReductionRun.objects.filter(instrument__name=instrument_name, run_number=run_number).order_by(
-            '-run_version').select_related('status').select_related('experiment').select_related('instrument')
-        if len(history) == 0:
-            raise ValueError(f"Could not find any matching runs for instrument {instrument_name} run {run_number}")
+    history = ReductionRun.objects.filter(instrument__name=instrument_name,
+                                          batch_run=False,
+                                          run_numbers__run_number=run_number).order_by('-run_version').select_related(
+                                              'status').select_related('experiment').select_related('instrument')
+    if len(history) == 0:
+        raise ValueError(f"Could not find any matching runs for instrument {instrument_name} run {run_number}")
 
+    return run_summary_run(request, history, instrument_name, run_number, run_version)
+
+
+@login_and_uows_valid
+@check_permissions
+@render_with('run_summary.html')
+# pylint:disable=no-member,too-many-locals,broad-except
+def run_summary_batch_run(request, instrument_name=None, pk=None, run_version=0):
+    history = ReductionRun.objects.filter(instrument__name=instrument_name, pk=pk).order_by(
+        '-run_version').select_related('status').select_related('experiment').select_related('instrument')
+    if len(history) == 0:
+        raise ValueError(f"Could not find any matching runs for instrument {instrument_name} run {pk}")
+
+    return run_summary_run(request, history, instrument_name, pk, run_version)
+
+
+def run_summary_run(request, history, instrument_name=None, run_number=None, run_version=0):
+    try:
         run = next(run for run in history if run.run_version == int(run_version))
         started_by = started_by_id_to_name(run.started_by)
 
