@@ -4,6 +4,7 @@
 {% load static %}
 {% load colour_table_rows %}
 {% load get_run_navigation_queries %}
+{% load generate_run_link %}
 
 {% block body %}
     {% if message %}
@@ -52,17 +53,6 @@
                     </a>
                 </p>
             </div>
-            <div id="btn-batch_job">
-                <p>
-                    <a href="{% url 'instrument:submit_batch_run' instrument=instrument_name %}" class="btn btn-success btn-block"
-                        {% if not has_variables %}
-                            disabled
-                        {% endif %}>
-                        <i class="fa fa-cog"></i>
-                        &nbsp;&nbsp;Submit batch job
-                    </a>
-                </p>
-            </div>
             <div id="btn-configure_new_runs">
                 <p>
                     <a href="{% url 'instrument:variables' instrument=instrument_name %}"class="btn btn-success btn-block"
@@ -82,6 +72,17 @@
                         {% endif %}>
                         <i class="fa fa-eye"></i>
                         &nbsp;&nbsp;See Instrument variables
+                    </a>
+                </p>
+            </div>
+            <div id="btn-batch_job">
+                <p>
+                    <a href="{% url 'instrument:submit_batch_run' instrument=instrument_name %}" class="btn btn-success btn-block"
+                        {% if not has_variables %}
+                            disabled
+                        {% endif %}>
+                        <i class="fa fa-cog"></i>
+                        &nbsp;&nbsp;Submit batch job
                     </a>
                 </p>
             </div>
@@ -113,6 +114,12 @@
                             {% endif %}
                             >Experiment Reference (RB)
                         </option>
+                        <option value="batch_runs" title="Display batch runs"
+                            {% if filtering == 'batch_runs' %}
+                                selected="selected"
+                            {% endif %}
+                            >Batch runs
+                        </option>
                     </select>
                 </div>
                 <div class="col-md-3">
@@ -132,7 +139,7 @@
                         </option>
                     </select>
                 </div>
-                {% if filtering == 'run' %}
+                {% if filtering == 'run' or filtering == 'batch_runs' %}
                     <div class="col-md-3">
                         <label for="pagination_select">Items per page</label>
                         <select title="The number of reduction jobs that should be shown per page" class="form-control" name="pagination" form="filter_options" id="pagination_select">
@@ -154,10 +161,8 @@
         <!-- Display table for every reduction job -->
         <div class="row" id="runs-table">
             <div class="tab-content col-md-12">
-                <!-- Run number filtered jobs -->
-                {% if filtering == 'run' %}
+                {% if filtering == 'run' or filtering == 'batch_runs' %}
                     {% include "filtered_by_number.html" %}
-                <!-- Experiment filtered jobs -->
                 {% elif filtering == 'experiment' %}
                     {% include "filtered_by_reference.html" %}
                 {% else %}
@@ -167,7 +172,7 @@
         </div>
             <br/>
             <!-- Paginator -->
-            {% if filtering == 'run' %}
+            {% if filtering == 'run' or filtering == 'batch_runs' %}
                 <div class="row">
                     {% if paginator %}
                         <div class="col-md-12 text-center">

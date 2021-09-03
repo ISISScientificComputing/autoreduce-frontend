@@ -151,16 +151,13 @@ class RunPage(CustomPage):
         Custom function to set the start and end variables and
         construct the display name for the page
         """
-        try:
-            self.start = self.records[0].run_number
-            self.end = self.records[-1].run_number
-            if self.start == self.end:
-                self.display_name = "{}".format(self.start)
-            else:
-                self.display_name = "{} - {}".format(self.start, self.end)
-        except ValueError as err:
-            print(err)
-            pass
+        self.start = self.records[0].run_numbers.first()
+        self.end = self.records[-1].run_numbers.last()
+
+        if self.start == self.end:
+            self.display_name = "{}".format(self.start)
+        else:
+            self.display_name = "{} - {}".format(self.start, self.end)
 
 
 class DatePage(CustomPage):

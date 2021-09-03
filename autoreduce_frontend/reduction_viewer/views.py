@@ -338,10 +338,9 @@ def runs_list(request, instrument=None):
 
     try:
         runs = (ReductionRun.objects.only('status', 'last_updated', 'run_version',
-                                          'run_description').select_related('status').filter(instrument=instrument_obj,
-                                                                                             batch_run=False))
-        last_instrument_run = runs.last
-        first_instrument_run = runs.first
+                                          'run_description').select_related('status').filter(instrument=instrument_obj))
+        last_instrument_run = runs.filter(batch_run=False).last()
+        first_instrument_run = runs.filter(batch_run=False).first()
 
         if sort_by == "run":
             runs = runs.order_by('-run_numbers__run_number', 'run_version')
@@ -367,8 +366,8 @@ def runs_list(request, instrument=None):
             'runs': runs,
             'last_instrument_run': last_instrument_run,
             'first_instrument_run': first_instrument_run,
-            'processing': runs.filter(status=Status.get_processing()),
-            'queued': runs.filter(status=Status.get_queued()),
+            'processing': runs.filter(status=Status.get_processing(), batch_run=False),
+            'queued': runs.filter(status=Status.get_queued(), batch_run=False),
             'filtering': filter_by,
             'sort': sort_by,
             'has_variables': bool(current_variables),
@@ -384,6 +383,18 @@ def runs_list(request, instrument=None):
                     order_by('-created')
                 experiments_and_runs[experiment] = associated_runs
             context_dictionary['experiments'] = experiments_and_runs
+        elif filter_by == 'batch_runs':
+            max_items_per_page = request.GET.get('pagination', 10)
+            custom_paginator = CustomPaginator(
+                page_type=sort_by,
+                query_set=runs.filter(batch_run=True),
+                items_per_page=max_items_per_page,
+                page_tolerance=3,
+                current_page=request.GET.get('page', 1),
+            )
+            context_dictionary['paginator'] = custom_paginator
+            context_dictionary['last_page_index'] = len(custom_paginator.page_list)
+            context_dictionary['max_items'] = max_items_per_page
         else:
             max_items_per_page = request.GET.get('pagination', 10)
             custom_paginator = CustomPaginator(
