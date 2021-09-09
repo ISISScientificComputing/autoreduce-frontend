@@ -235,16 +235,24 @@
         </div>
             <div class="row col-md-12 my-2">
                 <div class="text-center">
-                    {% if newest_run != run.run_number %}
-                        {% if newest_run != next_run %}
-                            <a href="{% url 'runs:summary' instrument_name=instrument run_number=newest_run run_version=run.run_version %}?{% get_run_navigation_queries newest_run current_page newest_run oldest_run %}&pagination={{ items_per_page }}&sort={{ page_type }}" class="btn btn-primary back" id="newest">&#60&#60 {{ newest_run }}</a>
-                        {% endif %}
-                        <a href="{% url 'runs:summary' instrument_name=instrument run_number=next_run run_version=run.run_version %}?{% get_run_navigation_queries next_run current_page newest_run oldest_run %}&pagination={{ items_per_page }}&sort={{ page_type }}" class="btn btn-primary back" id="next">&#60 {{ next_run }}</a>
-                    {% endif %}
-                    <a href="{% url 'runs:list' run.instrument.name %}?page={{ current_page }}&pagination={{ items_per_page }}&sort={{ page_type }}&filter={{ filtering }}" class="btn btn-primary back" id="cancel">Back to {{ run.instrument.name }} runs</a>
-                    {% if oldest_run != run.run_number %}
-                        <a href="{% url 'runs:summary' instrument_name=instrument run_number=previous_run run_version=run.run_version %}?{% get_run_navigation_queries previous_run current_page newest_run oldest_run %}&pagination={{ items_per_page }}&sort={{ page_type }}" class="btn btn-primary back" id="previous">{{ previous_run }} &#62</a>
-                    {% endif %}
+                    <a href="{% url 'runs:summary' instrument_name=instrument run_number=newest_run run_version=run.run_version %}?{% get_run_navigation_queries newest_run current_page newest_run oldest_run %}&pagination={{ items_per_page }}&sort={{ page_type }}" class="btn btn-primary back" id="newest"
+                        {% if newest_run == run.run_number %}
+                            disabled
+                        {% endif%}>&#124;&#60; Newest
+                    </a>
+                    <a href="{% url 'runs:summary' instrument_name=instrument run_number=next_run run_version=run.run_version %}?{% get_run_navigation_queries next_run current_page newest_run oldest_run %}&pagination={{ items_per_page }}&sort={{ page_type }}" class="btn btn-primary back" id="next"
+                        {% if newest_run == run.run_number %}
+                            disabled
+                        {% endif%}>&#60;&#60; Next
+                    </a>
+                    <a href="{% url 'runs:list' run.instrument.name %}?page={{ current_page }}&pagination={{ items_per_page }}&sort={{ page_type }}&filter={{ filtering }}" class="btn btn-primary back" id="cancel"
+                        >Back to {{ run.instrument.name }} runs
+                    </a>
+                    <a href="{% url 'runs:summary' instrument_name=instrument run_number=previous_run run_version=run.run_version %}?{% get_run_navigation_queries previous_run current_page newest_run oldest_run %}&pagination={{ items_per_page }}&sort={{ page_type }}" class="btn btn-primary back" id="previous"
+                        {% if oldest_run == run.run_number %}
+                            disabled
+                        {% endif%}>Previous &#62;&#62;
+                    </a>
                 </div>
             </div>
         {% endif %}
