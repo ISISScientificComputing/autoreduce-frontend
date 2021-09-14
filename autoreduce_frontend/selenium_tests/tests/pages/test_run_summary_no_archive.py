@@ -4,12 +4,9 @@
 # Copyright &copy; 2020 ISIS Rutherford Appleton Laboratory UKRI
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
-"""
-Selenium tests for the runs summary page
-"""
+"""Selenium tests for the runs summary page."""
 
 from autoreduce_db.reduction_viewer.models import ReductionRun
-
 from autoreduce_frontend.selenium_tests.pages.run_summary_page import RunSummaryPage
 from autoreduce_frontend.selenium_tests.tests.base_tests import BaseTestCase, FooterTestMixin, NavbarTestMixin, \
     AccessibilityTestMixin
@@ -21,20 +18,21 @@ class TestRunSummaryPageNoArchive(NavbarTestMixin, BaseTestCase, FooterTestMixin
 
     @classmethod
     def setUpClass(cls):
-        """Set the instrument for all test cases"""
+        """Set the instrument for all test cases."""
         super().setUpClass()
         cls.instrument_name = "TestInstrument"
 
     def setUp(self) -> None:
-        """Set up RunSummaryPage before each test case"""
+        """Set up RunSummaryPage before each test case."""
         super().setUp()
         self.page = RunSummaryPage(self.driver, self.instrument_name, 99999, 0)
         self.page.launch()
 
     def test_opening_run_summary_without_reduce_vars(self):
         """
-        Test that opening the run summary without a reduce_vars present for the instrument
-        will not show the "Reset to current" buttons as there is no current values!
+        Test that opening the run summary without a reduce_vars present for the
+        instrument will not show the "Reset to current" buttons as there are no
+        current values.
         """
         # the reset to current values should not be visible
         assert self.page.warning_message.is_displayed()
@@ -43,8 +41,9 @@ class TestRunSummaryPageNoArchive(NavbarTestMixin, BaseTestCase, FooterTestMixin
 
     def test_opening_run_summary_without_run_variables(self):
         """
-        Test that opening the run summary without a reduce_vars present for the instrument
-        will not show the "Reset to current" buttons as there is no current values!
+        Test that opening the run summary without run variables for the
+        instrument will not show the "Reset to current" buttons as there is no
+        current values.
         """
         # Delete the variables, and re-open the page
         ReductionRun.objects.get(pk=1).run_variables.all().delete()
