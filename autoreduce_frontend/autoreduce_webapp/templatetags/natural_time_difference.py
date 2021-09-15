@@ -29,23 +29,13 @@ class NaturalTimeDifferenceNode(Node):
         hours = delta.seconds // 3600
         minutes = delta.seconds // 60 % 60
         seconds = delta.seconds % 60
+
         human_delta = ''
-        if days > 0:
-            if human_delta:
-                human_delta += ', '
-            human_delta += '%i day%s' % (days, pluralize(days))
-        if hours > 0:
-            if human_delta:
-                human_delta += ', '
-            human_delta += '%i hour%s' % (hours, pluralize(hours))
-        if minutes > 0:
-            if human_delta:
-                human_delta += ', '
-            human_delta += '%i minute%s' % (minutes, pluralize(minutes))
-        if seconds > 0:
-            if human_delta:
-                human_delta += ', '
-            human_delta += '%i second%s' % (seconds, pluralize(seconds))
+        for time, unit in [(days, "day"), (hours, "hour"), (minutes, "minute"), (seconds, "second")]:
+            if time > 0:
+                if human_delta:
+                    human_delta += ', '
+                human_delta += f"{time} {unit}{pluralize(time)}"
 
         return human_delta
 
