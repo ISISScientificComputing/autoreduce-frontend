@@ -72,9 +72,9 @@ class RunsListPage(Page, NavbarMixin, FooterMixin, TourMixin):
         Click the button matching the given title.
 
         Note:
-            This method is being used to navgiate between instrument summary
-            pages as there is no `find_element_by_title` method and the
-            instrument summary navigation buttons have no id attributes.
+            This method is being used to navigate instrument summary pages as
+            there is no `find_element_by_title` method and the instrument
+            summary navigation buttons have no id attributes.
         """
         btns = self.driver.find_elements_by_tag_name("button")
 
@@ -85,7 +85,7 @@ class RunsListPage(Page, NavbarMixin, FooterMixin, TourMixin):
         else:
             raise NoSuchElementException
 
-    def update_filter(self, filter_name, value):  #items_per_page_option(self, pagination: int) -> None:
+    def update_filter(self, filter_name, value):
         """
         Select a valid filter option.
 

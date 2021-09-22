@@ -130,8 +130,8 @@ class TestRunsListQueries(BaseTestCase, AccessibilityTestMixin, FooterTestMixin,
 
     def test_disabled_btns(self):
         """
-        Test that run navigation buttons are disabled for certain runs depending
-        on their recency.
+        Test that the run summary navigation buttons are disabled depending on a
+        runs' recency.
 
         The latest run should have the `Newest` and `Next` buttons disabled.
 
