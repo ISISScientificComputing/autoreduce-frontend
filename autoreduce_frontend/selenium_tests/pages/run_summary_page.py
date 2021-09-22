@@ -123,3 +123,7 @@ class RunSummaryPage(Page, RerunFormMixin, NavbarMixin, FooterMixin, TourMixin):
         """Click the button with the given id."""
         btn = self.driver.find_element_by_id(btn_id)
         btn.click()
+
+    def is_disabled(self, element_id):
+        """Return true if the element with the given id is disabled."""
+        return self.driver.find_element_by_id(element_id).get_attribute("disabled") == "true"
