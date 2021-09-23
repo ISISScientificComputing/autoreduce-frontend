@@ -102,7 +102,7 @@ class RunSummaryPage(Page, RerunFormMixin, NavbarMixin, FooterMixin, TourMixin):
 
     def plotly_plots(self) -> List[WebElement]:
         """Return all plotly plot elements."""
-        return self.driver.find_elements_by_tag_name("img")
+        return self.driver.find_elements_by_class_name("js-plotly-plot")
 
     def _do_cancel_btn(self, url):
         def run_button_clicked_successfully(button, url, driver):
