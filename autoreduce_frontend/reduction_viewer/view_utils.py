@@ -59,3 +59,27 @@ def make_data_analysis_url(reduction_location: str):
     if "/instrument/" in reduction_location:
         return DATA_ANALYSIS_BASE_URL + reduction_location.split("/instrument/")[1]
     return ""
+
+
+def windows_to_linux_path(path):
+    """ Convert windows path to linux path.
+    :param path:
+    :param temp_root_directory:
+    :return: (str) linux formatted file path
+    """
+    # '\\isis\inst$\' maps to '/isis/'
+    path = path.replace('\\\\isis\\inst$\\', '/isis/')
+    path = path.replace('\\', '/')
+    return path
+
+
+def linux_to_windows_path(path):
+    """ Convert windows path to linux path.
+    :param path:
+    :param temp_root_directory:
+    :return: (str) linux formatted file path
+    """
+    # '\\isis\inst$\' maps to '/isis/'
+    path = path.replace('/isis/', '\\\\isis\\inst$\\')
+    path = path.replace('/', '\\')
+    return path

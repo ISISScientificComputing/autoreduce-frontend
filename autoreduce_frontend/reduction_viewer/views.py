@@ -38,7 +38,8 @@ from autoreduce_frontend.autoreduce_webapp.views import render_error
 from autoreduce_frontend.plotting.plot_handler import PlotHandler
 from autoreduce_frontend.reduction_viewer.utils import ReductionRunUtils
 from autoreduce_frontend.reduction_viewer.view_utils import (deactivate_invalid_instruments, get_interactive_plot_data,
-                                                             make_data_analysis_url)
+                                                             linux_to_windows_path, make_data_analysis_url,
+                                                             windows_to_linux_path)
 from autoreduce_frontend.utilities.pagination import CustomPaginator
 
 LOGGER = logging.getLogger(__package__)
@@ -224,18 +225,6 @@ def fail_queue(request):
     return context_dictionary
 
 
-def windows_to_linux_path(path):
-    """ Convert windows path to linux path.
-    :param path:
-    :param temp_root_directory:
-    :return: (str) linux formatted file path
-    """
-    # '\\isis\inst$\' maps to '/isis/'
-    path = path.replace('\\\\isis\\inst$\\', '/isis/')
-    path = path.replace('\\', '/')
-    return path
-
-
 @login_and_uows_valid
 @check_permissions
 @render_with('run_summary.html')
@@ -268,9 +257,12 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
             data_location = data_location_list[0].file_path
             print(data_location)
 
-        format = request.GET.get('format', 'Windows')
-        if format == "Linux":
-            data_location = windows_to_linux_path(data_location)
+        format = request.GET.get('format', "")
+        if format != "":
+            if format == "Linux":
+                data_location = windows_to_linux_path(data_location)
+            elif format == "Windows":
+                data_location = linux_to_windows_path(data_location)
 
         data_analysis_link_url = make_data_analysis_url(reduction_location) if reduction_location else ""
         rb_number = run.experiment.reference_number
