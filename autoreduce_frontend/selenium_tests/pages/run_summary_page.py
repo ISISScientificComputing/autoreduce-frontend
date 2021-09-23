@@ -38,7 +38,7 @@ class RunSummaryPage(Page, RerunFormMixin, NavbarMixin, FooterMixin, TourMixin):
 
     @property
     def reduction_job_panel(self) -> WebElement:
-        """Return the run summary panel on the page."""
+        """Return the run summary panel."""
         return self.driver.find_element_by_id("reduction_job_panel")
 
     @property
@@ -69,40 +69,40 @@ class RunSummaryPage(Page, RerunFormMixin, NavbarMixin, FooterMixin, TourMixin):
         return self.driver.find_element_by_id("warning_message")
 
     def run_description_text(self) -> str:
-        """Return the text of the run_description field."""
+        """Return the text of the 'run_description' field."""
         return self.driver.find_element_by_id("run_description").text
 
     def started_by_text(self) -> str:
-        """Return the text of the started_by field."""
+        """Return the text of the 'started_by' field."""
         return self.driver.find_element_by_id("started_by").text
 
     def status_text(self) -> str:
-        """Return the text of the status field."""
+        """Return the text of the 'status' field."""
         return self.driver.find_element_by_id("status").text
 
     def instrument_text(self) -> str:
-        """Return the text of the instrument field."""
+        """Return the text of the 'instrument' field."""
         return self.driver.find_element_by_id("instrument").text
 
     def rb_number_text(self) -> str:
-        """Return the text of the rb_number field."""
+        """Return the text of the 'rb_number' field."""
         return self.driver.find_element_by_id("rb_number").text
 
     def last_updated_text(self) -> str:
-        """Return the text of the last_updated field."""
+        """Return the text of the 'last_updated' field."""
         return self.driver.find_element_by_id("last_updated").text
 
     def reduction_host_text(self) -> WebElement:
-        """Return the reduction host text."""
+        """Return the text of the 'reduction_host' field."""
         return self.driver.find_element_by_id("reduction_host").text
 
     def images(self) -> List[WebElement]:
-        """Returns all image elements on the page."""
+        """Returns all image elements."""
         return self.driver.find_elements_by_tag_name("img")
 
     def plotly_plots(self) -> List[WebElement]:
-        """Return all plotly elements on the page."""
-        return self.driver.find_elements_by_class_name("js-plotly-plot")
+        """Return all plotly plot elements."""
+        return self.driver.find_elements_by_tag_name("img")
 
     def _do_cancel_btn(self, url):
         def run_button_clicked_successfully(button, url, driver):
@@ -125,5 +125,5 @@ class RunSummaryPage(Page, RerunFormMixin, NavbarMixin, FooterMixin, TourMixin):
         btn.click()
 
     def is_disabled(self, element_id):
-        """Return true if the element with the given id is disabled."""
+        """Return True if the element with the given id is disabled, otherwise, False."""
         return self.driver.find_element_by_id(element_id).get_attribute("disabled") == "true"
