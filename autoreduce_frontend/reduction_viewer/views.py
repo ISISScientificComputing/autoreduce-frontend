@@ -268,8 +268,8 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
             data_location = data_location_list[0].file_path
             print(data_location)
 
-        dataFormat = request.GET.get('dataFormat', 'Windows')
-        if dataFormat == "Linux":
+        format = request.GET.get('format', 'Windows')
+        if format == "Linux":
             data_location = windows_to_linux_path(data_location)
 
         data_analysis_link_url = make_data_analysis_url(reduction_location) if reduction_location else ""
