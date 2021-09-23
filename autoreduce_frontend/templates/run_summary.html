@@ -252,8 +252,10 @@
                 {% if oldest_run != run.run_number %}
                     <a href="{% url 'runs:summary' instrument_name=instrument run_number=previous_run run_version=run.run_version %}?{% get_run_navigation_queries previous_run current_page newest_run oldest_run %}&pagination={{ items_per_page }}&sort={{ page_type }}" class="btn btn-primary back" id="previous">{{ previous_run }} &#62</a>
                 {% endif %}
-                    <a class="btn btn-primary back" href="{% url 'runs:summary' instrument_name=instrument run_number=run.run_number run_version=run.run_version %}?{% get_run_navigation_queries next_run current_page newest_run oldest_run %}&pagination={{ items_per_page }}&sort={{ page_type }}&dataFormat={{"Windows"}}">Windows</a>
-                    <a class="btn btn-primary back" href="{% url 'runs:summary' instrument_name=instrument run_number=run.run_number run_version=run.run_version %}?{% get_run_navigation_queries next_run current_page newest_run oldest_run %}&pagination={{ items_per_page }}&sort={{ page_type }}&dataFormat={{"Linux"}}">Linux</a>
+                    <a class="btn btn-primary back" href="{% url 'runs:summary' instrument_name=instrument run_number=run.run_number run_version=run.run_version %}?{% get_run_navigation_queries next_run current_page newest_run oldest_run %}&pagination={{ items_per_page }}&sort={{ page_type }}&dataFormat={{"Windows"}}"><i class="fa fa-windows" aria-hidden="true"></i>
+Windows</a>
+                    <a class="btn btn-primary back" href="{% url 'runs:summary' instrument_name=instrument run_number=run.run_number run_version=run.run_version %}?{% get_run_navigation_queries next_run current_page newest_run oldest_run %}&pagination={{ items_per_page }}&sort={{ page_type }}&dataFormat={{"Linux"}}"><i class="fa fa-linux" aria-hidden="true"></i>
+Linux</a>
                 </div>
             </div>
         </div>
