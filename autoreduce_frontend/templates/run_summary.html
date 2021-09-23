@@ -176,9 +176,9 @@
                             <div class="col-md-6">
                                 <div class="file-path">
                                     <strong>Data:</strong>
-                                    {% if run.data_location.all %}
+                                    {% if data_location %}
                                         {% for location in run.data_location.all %}
-                                            {{ location.file_path }}<br/>
+                                            {{ data_location }}<br/>
                                         {% endfor %}
                                     {% else %}
                                         <em>No data found</em>
@@ -252,6 +252,9 @@
                 {% if oldest_run != run.run_number %}
                     <a href="{% url 'runs:summary' instrument_name=instrument run_number=previous_run run_version=run.run_version %}?{% get_run_navigation_queries previous_run current_page newest_run oldest_run %}&pagination={{ items_per_page }}&sort={{ page_type }}" class="btn btn-primary back" id="previous">{{ previous_run }} &#62</a>
                 {% endif %}
+                    <a class="btn btn-primary back" href="{% url 'runs:summary' instrument_name=instrument run_number=run.run_number run_version=run.run_version %}?{% get_run_navigation_queries next_run current_page newest_run oldest_run %}&pagination={{ items_per_page }}&sort={{ page_type }}&dataFormat={{"Windows"}}">Windows</a>
+                    <a class="btn btn-primary back" href="{% url 'runs:summary' instrument_name=instrument run_number=run.run_number run_version=run.run_version %}?{% get_run_navigation_queries next_run current_page newest_run oldest_run %}&pagination={{ items_per_page }}&sort={{ page_type }}&dataFormat={{"Linux"}}">Linux</a>
+                </div>
             </div>
         </div>
 
