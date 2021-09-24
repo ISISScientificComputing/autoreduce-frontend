@@ -181,9 +181,9 @@
                                             {{ data_location }}
                                         {% endfor %}
                                         {% if format == "Windows" or "\\" in data_location%}
-                                            <a class="btn btn-primary btn-xs" aria-label="Switch to Linux" href="{% url 'runs:summary' instrument_name=instrument run_number=run.run_number run_version=run.run_version %}?{% get_run_navigation_queries run.run_number current_page newest_run oldest_run %}&pagination={{ items_per_page }}&sort={{ page_type }}&format={{"Linux"}}"><i class="fa fa-linux" aria-hidden="true"></i></a>
+                                            <a class="btn btn-primary btn-xs" aria-label="Switch to Linux" id='datapath_toggle' href="{% url 'runs:summary' instrument_name=instrument run_number=run.run_number run_version=run.run_version %}?{% get_run_navigation_queries run.run_number current_page newest_run oldest_run %}&pagination={{ items_per_page }}&sort={{ page_type }}&format={{"Linux"}}"><i class="fa fa-linux" aria-hidden="true"></i></a>
                                         {% else %}
-                                            <a class="btn btn-primary btn-xs" aria-label="Switch to Windows" href="{% url 'runs:summary' instrument_name=instrument run_number=run.run_number run_version=run.run_version %}?{% get_run_navigation_queries run.run_number current_page newest_run oldest_run %}&pagination={{ items_per_page }}&sort={{ page_type }}&format={{"Windows"}}"><i class="fa fa-windows" aria-hidden="true"></i></a>
+                                            <a class="btn btn-primary btn-xs" aria-label="Switch to Windows" id='datapath_toggle' href="{% url 'runs:summary' instrument_name=instrument run_number=run.run_number run_version=run.run_version %}?{% get_run_navigation_queries run.run_number current_page newest_run oldest_run %}&pagination={{ items_per_page }}&sort={{ page_type }}&format={{"Windows"}}"><i class="fa fa-windows" aria-hidden="true"></i></a>
                                         {% endif %}<br/>
                                     {% else %}
                                         <em>No data found</em>
