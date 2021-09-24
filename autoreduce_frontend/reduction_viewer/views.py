@@ -257,12 +257,11 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
             data_location = data_location_list[0].file_path
             print(data_location)
 
-        format = request.GET.get('format', "")
-        if format != "":
-            if format == "Linux":
-                data_location = windows_to_linux_path(data_location)
-            elif format == "Windows":
-                data_location = linux_to_windows_path(data_location)
+        path_type = request.GET.get('path_type', "")
+        if path_type == "linux":
+            data_location = windows_to_linux_path(data_location)
+        elif path_type == "windows":
+            data_location = linux_to_windows_path(data_location)
 
         data_analysis_link_url = make_data_analysis_url(reduction_location) if reduction_location else ""
         rb_number = run.experiment.reference_number
@@ -288,7 +287,7 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
             'next_run': int(request.GET.get('next_run', run_number)),
             'previous_run': int(request.GET.get('previous_run', run_number)),
             'filtering': request.GET.get('filter', 'run'),
-            'format': format,
+            'path_type': path_type,
         }
 
     except PermissionDenied:

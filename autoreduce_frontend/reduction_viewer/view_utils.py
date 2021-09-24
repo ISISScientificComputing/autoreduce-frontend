@@ -68,18 +68,18 @@ def windows_to_linux_path(path):
     :return: (str) linux formatted file path
     """
     # '\\isis\inst$\' maps to '/isis/'
-    path = path.replace('\\\\isis\\inst$\\', '/isis/')
+    path = path.replace(r'\\isis\inst$' + '\\', '/isis/')
     path = path.replace('\\', '/')
     return path
 
 
 def linux_to_windows_path(path):
-    """ Convert windows path to linux path.
+    """ Convert linux path to windows path.
     :param path:
     :param temp_root_directory:
-    :return: (str) linux formatted file path
+    :return: (str) windows formatted file path
     """
     # '\\isis\inst$\' maps to '/isis/'
-    path = path.replace('/isis/', '\\\\isis\\inst$\\')
+    path = path.replace('/isis/', r'\\isis\inst$' + '\\')
     path = path.replace('/', '\\')
     return path
