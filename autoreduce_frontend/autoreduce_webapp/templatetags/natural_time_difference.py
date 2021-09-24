@@ -31,7 +31,7 @@ class NaturalTimeDifferenceNode(Node):
         seconds = delta.seconds % 60
 
         human_delta = ''
-        for time, unit in [(days, "day"), (hours, "hour"), (minutes, "minute"), (seconds, "second")]:
+        for time, unit in ((days, "day"), (hours, "hour"), (minutes, "minute"), (seconds, "second")):
             if time > 0:
                 if human_delta:
                     human_delta += ', '
