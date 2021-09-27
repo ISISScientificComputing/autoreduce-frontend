@@ -20,24 +20,29 @@ class NaturalTimeDifferenceNode(Node):
         self.start = Variable(start)
         self.end = Variable(end)
 
-    def render(self, context):
-        """Render the response."""
-        start = get_var(self.start, context)
-        end = get_var(self.end, context)
+    @staticmethod
+    def get_duration(start, end):
+        """Return the time difference as a string."""
         delta = end - start
         days = delta.days
         hours = delta.seconds // 3600
         minutes = delta.seconds // 60 % 60
         seconds = delta.seconds % 60
 
-        human_delta = ''
+        duration = ''
         for time, unit in ((days, "day"), (hours, "hour"), (minutes, "minute"), (seconds, "second")):
             if time > 0:
-                if human_delta:
-                    human_delta += ', '
-                human_delta += f"{time} {unit}{pluralize(time)}"
+                if duration:
+                    duration += ', '
+                duration += f"{time} {unit}{pluralize(time)}"
 
-        return human_delta
+        return duration
+
+    def render(self, context):
+        """Render the response."""
+        start = get_var(self.start, context)
+        end = get_var(self.end, context)
+        return self.get_duration(start, end)
 
 
 def natural_time_difference(_, token):
