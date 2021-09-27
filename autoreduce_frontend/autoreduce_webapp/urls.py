@@ -4,15 +4,15 @@
 # Copyright &copy; 2020 ISIS Rutherford Appleton Laboratory UKRI
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
-
+# pylint: disable=invalid-name
 from django.conf import settings
 from django.conf.urls import include
 from django.contrib import admin
 from django.urls import path, register_converter
+
 from autoreduce_frontend.instrument.views import runs
 from autoreduce_frontend.reduction_viewer import views as reduction_viewer_views
 
-# pylint: disable=invalid-name
 handler400 = 'autoreduce_frontend.autoreduce_webapp.views.handler400'
 handler403 = 'autoreduce_frontend.autoreduce_webapp.views.handler403'
 handler404 = 'autoreduce_frontend.autoreduce_webapp.views.handler404'
@@ -24,16 +24,12 @@ class NegativeIntConverter:
 
     @staticmethod
     def to_python(value):
-        """
-        Return the value as a Python object
-        """
+        """Return the value as a Python object."""
         return int(value)
 
     @staticmethod
     def to_url(value):
-        """
-        Return the value as a URL string
-        """
+        """Return the value as a URL string."""
         return '%d' % value
 
 
