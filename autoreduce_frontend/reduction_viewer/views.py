@@ -41,6 +41,8 @@ from autoreduce_frontend.reduction_viewer.view_utils import (deactivate_invalid_
                                                              make_data_analysis_url)
 from autoreduce_frontend.utilities.pagination import CustomPaginator
 
+from next_prev import next_in_order, prev_in_order
+
 LOGGER = logging.getLogger(__package__)
 
 
