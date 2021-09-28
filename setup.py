@@ -31,7 +31,6 @@ setup(
         "django_extensions==3.1.3",
         "django-user-agents==0.4.0",
         "djangorestframework==3.12.4",
-        "django-next-prev==1.1.0",
     ],
     packages=find_packages(),
     package_data={"": data_files},
