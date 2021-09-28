@@ -75,7 +75,7 @@
             </div>
             <div id="btn-batch_job">
                 <p>
-                    <a href="{% url 'instrument:submit_batch_run' instrument=instrument_name %}" class="btn btn-success btn-block"
+                    <a href="{% url 'instrument:configure_batch_run' instrument=instrument_name %}" class="btn btn-success btn-block"
                         {% if not has_variables %}
                             disabled
                         {% endif %}>

@@ -5,8 +5,8 @@
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
 
+from autoreduce_frontend.instrument.views.common import read_variables_from_form_post_submit
 import logging
-import os
 from itertools import chain
 
 from autoreduce_db.instrument.models import InstrumentVariable
@@ -115,7 +115,8 @@ def run_confirmation(request, instrument: str):
         return context_dictionary
 
     related_runs: QuerySet[ReductionRun] = ReductionRun.objects.filter(instrument__name=instrument,
-                                                                       run_number__in=run_numbers)
+                                                                       batch_run=isinstance(run_numbers, list),
+                                                                       run_numbers__run_number__in=run_numbers)
     # Check that RB numbers are the same for the range entered
     # pylint:disable=no-member
     rb_number = related_runs.values_list('experiment__reference_number', flat=True).distinct()
@@ -243,18 +244,7 @@ def configure_new_runs_post(request, instrument_name):
     experiment_reference = int(request.POST.get("experiment_reference_number")) if request.POST.get(
         "experiment_reference_number", None) else None
 
-    # [("var-standard-"+name, value) or ("var-advanced-"+name, value)]
-    var_list = [t for t in request.POST.items() if t[0].startswith("var-")]
-
-    standard_vars = {
-        var[0].replace("var-standard-", ""): var[1]
-        for var in var_list if var[0].startswith("var-standard")
-    }
-    advanced_vars = {
-        var[0].replace("var-advanced-", ""): var[1]
-        for var in var_list if var[0].startswith("var-advanced")
-    }
-    all_vars = {"standard_vars": standard_vars, "advanced_vars": advanced_vars}
+    all_vars = read_variables_from_form_post_submit(request.POST)
 
     reduce_vars = ReductionScript(instrument_name, 'reduce_vars.py')
     reduce_vars_module = reduce_vars.load()

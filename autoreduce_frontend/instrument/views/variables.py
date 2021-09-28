@@ -189,9 +189,9 @@ def render_run_variables(request, instrument_name, run_number, run_version=0):
     final_standard = _combine_dicts(standard_vars, default_standard_variables)
     final_advanced = _combine_dicts(advanced_vars, default_advanced_variables)
     context_dictionary = {
-        'run_number': run_number,
-        'run_version': run_version,
         'has_reduce_vars': bool(default_variables),
+        'run_number': ",".join(str(rn.run_number) for rn in reduction_run.run_numbers.all()),
+        'run_version': reduction_run.run_version,
         'standard_variables': final_standard,
         'advanced_variables': final_advanced,
         'instrument': reduction_run.instrument,
