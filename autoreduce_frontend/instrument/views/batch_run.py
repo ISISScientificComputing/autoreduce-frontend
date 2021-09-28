@@ -13,6 +13,7 @@ from autoreduce_frontend.reduction_viewer.utils import ReductionRunUtils
 from autoreduce_qp.queue_processor.variable_utils import VariableUtils
 from autoreduce_qp.queue_processor.instrument_variable_utils import InstrumentVariablesUtils
 from django.shortcuts import render
+from autoreduce_utils.settings import AUTOREDUCE_API_URL
 
 
 class BatchRun(TemplateView):
@@ -114,17 +115,16 @@ class BatchRunSubmit(FormView):
                  names of the variables shown in the web app.", **kwargs)
 
         try:
-            response = requests.post(f"http://127.0.0.1:8001/api/runs/batch/{kwargs['instrument']}",
+            response = requests.post(f"{AUTOREDUCE_API_URL}/runs/batch/{kwargs['instrument']}",
                                      json={
                                          "runs": runs,
                                          "reduction_arguments": args_for_range
                                      },
                                      headers={"Authorization": f"Token {auth_token}"})
-            print(response)
             if response.status_code != 200:
                 content = json.loads(response.content)
                 return self.render_error(request, content.get("message", "Unknown error encountered"), input_runs,
                                          **kwargs)
         except Exception as err:
-            print(err)
+            return self.render_error(request, input_runs, str(err), **kwargs)
         return self.render_confirm(request, instrument_name, runs, kwargs)

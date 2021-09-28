@@ -356,8 +356,9 @@ def runs_list(request, instrument=None):
     sort_by = request.GET.get('sort', 'run')
 
     try:
-        runs = (ReductionRun.objects.only('status', 'last_updated', 'run_version',
-                                          'run_description').select_related('status').filter(instrument=instrument_obj))
+        runs = ReductionRun.objects.only('status', 'last_updated', 'run_version',
+                                         'run_description').select_related('status').filter(instrument=instrument_obj,
+                                                                                            batch_run=False)
         last_instrument_run = runs.filter(batch_run=False).last()
         first_instrument_run = runs.filter(batch_run=False).first()
 
@@ -403,6 +404,8 @@ def runs_list(request, instrument=None):
                 experiments_and_runs[experiment] = associated_runs
             context_dictionary['experiments'] = experiments_and_runs
         elif filter_by == 'batch_runs':
+            runs = ReductionRun.objects.only('status', 'last_updated', 'run_version',
+                                             'run_description').filter(instrument=instrument_obj, batch_run=True)
             max_items_per_page = request.GET.get('pagination', 10)
             custom_paginator = CustomPaginator(
                 page_type=sort_by,
