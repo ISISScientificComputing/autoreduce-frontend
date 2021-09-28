@@ -75,23 +75,32 @@ class BatchRunSubmit(FormView):
     def get(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
         return render(request, self.template_name, self.get_context_data(**kwargs))
 
-    def render_error(self, request, message: str, **kwargs):
+    def render_error(self, request, message: str, runs, **kwargs):
         """Render the GET page but with an additional error message"""
         context = self.get_context_data(**kwargs)
         context["error"] = message
+        context["runs"] = runs
         return render(request, self.template_name, context)
+
+    def render_confirm(self, request, instrument: str, runs, kwargs):
+        """Render the GET page but with an additional error message"""
+        context = self.get_context_data(**kwargs)
+        context["runs"] = runs
+        context["instrument_name"] = instrument
+        return render(request, "batch_run_confirmation.html", context)
 
     def post(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
         instrument_name = kwargs["instrument"]
+
+        input_runs = request.POST.get("runs", None)
+        if not input_runs:
+            return self.render_error(request, "Run field was invalid or empty", input_runs, **kwargs)
+
         try:
             auth_token = str(request.user.auth_token)
         except AttributeError as err:
-            return self.render_error(request, "User is not authorized to submit batch runs.", **kwargs)
-
-        runs = request.POST.get("runs", None)
-        if not runs:
-            return self.render_error(request, "Run field was invalid or empty", **kwargs)
-        runs = input_processing.parse_user_run_numbers(runs)
+            return self.render_error(request, "User is not authorized to submit batch runs.", input_runs, **kwargs)
+        runs = input_processing.parse_user_run_numbers(input_runs)
         all_vars = read_variables_from_form_post_submit(request.POST)
 
         reduce_vars = ReductionScript(instrument_name, 'reduce_vars.py')
@@ -114,8 +123,8 @@ class BatchRunSubmit(FormView):
             print(response)
             if response.status_code != 200:
                 content = json.loads(response.content)
-                kwargs["runs"] = runs
-                return self.render_error(request, content.get("message", "Unknown error encountered"), **kwargs)
+                return self.render_error(request, content.get("message", "Unknown error encountered"), input_runs,
+                                         **kwargs)
         except Exception as err:
             print(err)
-        return self.render_error(request, "Submit OK", **kwargs)
+        return self.render_confirm(request, instrument_name, runs, kwargs)
