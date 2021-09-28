@@ -14,7 +14,7 @@
         <h2>{{ instrument.name }} - Batch run submission</h2>
     </div>
 </div>
-<form id="instrument_variables" method="POST" action="{% url 'instrument:configure_batch_run' instrument=instrument.name %}" class="form-horizontal">
+<form id="run_variables" method="POST" action="{% url 'instrument:configure_batch_run' instrument=instrument.name %}" class="form-horizontal">
     {% csrf_token %}
     <input type="hidden" id="upcoming_runs" name="upcoming_runs" value="{{ upcoming_run_variables }}"/>
     <input type="hidden" id="is_editing" name="is_editing" value="{{ editing }}"/>
@@ -26,7 +26,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="run_start" class="control-label col-md-3">Run Numbers</label>
+                            <label for="runs" class="control-label col-md-3">Run Numbers</label>
                             <div class="col-md-9">
                                 <input type="text" id="runs" name="runs" value="{{ runs }}" class="form-control"/></div>
                         </div>

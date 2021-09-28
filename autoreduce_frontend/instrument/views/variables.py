@@ -191,6 +191,7 @@ def render_run_variables(request, instrument_name, run_number, run_version=0):
     context_dictionary = {
         'has_reduce_vars': bool(default_variables),
         'run_number': ",".join(str(rn.run_number) for rn in reduction_run.run_numbers.all()),
+        'batch_run': reduction_run.batch_run,
         'run_version': reduction_run.run_version,
         'standard_variables': final_standard,
         'advanced_variables': final_advanced,

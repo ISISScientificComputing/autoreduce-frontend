@@ -77,7 +77,7 @@ def run_confirmation(request, instrument: str):
     """
     Handles request for user to confirm re-run
     """
-    range_string = request.POST.get('run_range')
+    range_string = request.POST.get('runs')
     run_description = request.POST.get('run_description')
 
     # pylint:disable=no-member

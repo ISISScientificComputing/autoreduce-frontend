@@ -7,9 +7,15 @@
         </div>
     </div>
     <div class="panel-body collapse" id="rerun_form">
-        <form id="run_variables" method="POST" action="{% url 'run_confirmation' instrument=instrument.name %}" class="form-horizontal">
+        <form id="run_variables" method="POST"
+        {% if not batch_run %}
+        action="{% url 'run_confirmation' instrument=instrument.name %}"
+        {% else %}
+        action="{% url 'instrument:configure_batch_run' instrument=instrument.name %}"
+        {% endif %}
+        class="form-horizontal">
             {% csrf_token %}
-            <input type="hidden" name="run_range" value="{{ run_number }}">
+            <input type="hidden" name="runs" value="{{ run_number }}">
             <input type="hidden" name="run_version" value="{{ run_version }}">
             <div class="row">
                 <div class="col-md-9">

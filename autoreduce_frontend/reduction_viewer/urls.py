@@ -6,7 +6,7 @@
 # ############################################################################### #
 
 from django.urls import path
-from autoreduce_frontend.reduction_viewer import views, batch_run_summary
+from autoreduce_frontend.reduction_viewer import views
 
 app_name = "runs"
 

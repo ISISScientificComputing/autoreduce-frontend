@@ -125,6 +125,6 @@ class BatchRunSubmit(FormView):
                 content = json.loads(response.content)
                 return self.render_error(request, content.get("message", "Unknown error encountered"), input_runs,
                                          **kwargs)
-        except Exception as err:
-            return self.render_error(request, input_runs, str(err), **kwargs)
+        except Exception as err:  # pylint:disable=broad-except
+            return self.render_error(request, str(err), input_runs, **kwargs)
         return self.render_confirm(request, instrument_name, runs, kwargs)
