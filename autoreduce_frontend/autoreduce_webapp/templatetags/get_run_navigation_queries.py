@@ -31,6 +31,10 @@ def get_run_navigation_queries(run_number: int,
         r = instrument_obj.get(run_number=run_number)
         next_run = prev_in_order(r, qs=instrument_obj, loop=True)
         previous_run = next_in_order(r, qs=instrument_obj, loop=True)
+        if next_run == None:
+            next_run = r.run_number
+        if previous_run == None:
+            previous_run = r.run_number
         newest_run = str(newest_run).partition(":")[0]
         oldest_run = str(oldest_run).partition(":")[0]
     except Exception:  # pylint:disable=broad-except
