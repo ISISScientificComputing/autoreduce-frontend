@@ -6,7 +6,9 @@
 # ############################################################################### #
 """Selenium tests for the runs summary page."""
 
+import time
 from autoreduce_qp.systemtests.utils.data_archive import DataArchive
+from selenium.webdriver.support.wait import WebDriverWait
 from autoreduce_frontend.selenium_tests.pages.runs_list_page import RunsListPage
 from autoreduce_frontend.selenium_tests.tests.base_tests import (AccessibilityTestMixin, BaseTestCase, FooterTestMixin,
                                                                  NavbarTestMixin)
@@ -126,7 +128,17 @@ class TestRunsListQueries(BaseTestCase, AccessibilityTestMixin, FooterTestMixin,
             runs = self.page.get_run_numbers_from_table()
             fifth_run = runs[4]
             run_summary_page = self.page.click_run(fifth_run)
+            assert self.page.driver.title == "Reduction job #100005 - ISIS Auto-reduction"
             run_summary_page.click_btn_by_id(nav)
+
+            run_summary_page.driver.refresh()
+            time.sleep(3)
+            if (nav == "next"):
+                assert run_summary_page.title_text() == "Reduction Job #100006"
+            elif (nav == "previous"):
+                assert run_summary_page.title_text() == "Reduction Job #100004"
+            elif (nav == "newest"):
+                assert run_summary_page.title_text() == "Reduction Job #100009"
 
     def test_disabled_btns(self):
         """
