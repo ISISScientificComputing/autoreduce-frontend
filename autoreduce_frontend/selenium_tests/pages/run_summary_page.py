@@ -91,6 +91,11 @@ class RunSummaryPage(Page, RerunFormMixin, NavbarMixin, FooterMixin, TourMixin):
         """Return the button for returning the previous run."""
         return self.driver.find_element_by_id("previous")
 
+    @property
+    def toggle_data_path_button(self) -> WebElement:
+        """Return the toggle button for toggling the form on the page."""
+        return self.driver.find_element_by_id("datapath_toggle")
+
     def run_description_text(self) -> str:
         """Return the text of the 'run_description' field."""
         return self.driver.find_element_by_id("run_description").text
