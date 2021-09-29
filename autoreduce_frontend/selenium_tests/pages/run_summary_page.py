@@ -68,6 +68,11 @@ class RunSummaryPage(Page, RerunFormMixin, NavbarMixin, FooterMixin, TourMixin):
         """Return the 'warning_message' box."""
         return self.driver.find_element_by_id("warning_message")
 
+    @property
+    def toggle_data_path_button(self) -> WebElement:
+        """Return the toggle button for toggling the form on the page."""
+        return self.driver.find_element_by_id("datapath_toggle")
+
     def run_description_text(self) -> str:
         """Return the text of the 'run_description' field."""
         return self.driver.find_element_by_id("run_description").text
@@ -91,6 +96,10 @@ class RunSummaryPage(Page, RerunFormMixin, NavbarMixin, FooterMixin, TourMixin):
     def last_updated_text(self) -> str:
         """Return the text of the 'last_updated' field."""
         return self.driver.find_element_by_id("last_updated").text
+
+    def data_path_text(self) -> str:
+        """Return the text of the data location field."""
+        return self.driver.find_element_by_class_name("file-path").text
 
     def reduction_host_text(self) -> WebElement:
         """Return the text of the 'reduction_host' field."""

@@ -60,6 +60,7 @@ class TestRunSummaryPage(BaseTestCase, FooterTestMixin, NavbarTestMixin):
         assert self.page.instrument_text() == f"Instrument: {run.instrument.name}"
         assert self.page.rb_number_text() == f"RB Number: {run.experiment.reference_number}"
         assert self.page.last_updated_text() == "Last Updated: 19 Oct 2020, 6:35 p.m."
+        assert self.page.data_path_text() == "Data: /tmp"
         assert self.page.reduction_host_text() == "Host: test-host-123"
 
     def test_reduction_job_panel_reset_to_values_first_used_for_run(self):
@@ -136,3 +137,13 @@ class TestRunSummaryPage(BaseTestCase, FooterTestMixin, NavbarTestMixin):
 
         self.page.variable1_field_reset_buttons.to_script.click()
         assert self.page.variable1_field_val == initial_value
+
+    def test_toggle_data_path_button(self):
+        """
+        Test that selecting data toggle path runs script to
+        alternative between '/' and '\\'
+        """
+        self.page.toggle_data_path_button.click()
+        assert self.page.data_path_text() == "Data: \\tmp"
+        self.page.toggle_data_path_button.click()
+        assert self.page.data_path_text() == "Data: /tmp"
