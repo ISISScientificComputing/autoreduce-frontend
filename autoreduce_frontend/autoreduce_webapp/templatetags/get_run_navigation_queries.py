@@ -21,9 +21,9 @@ def get_run_navigation_queries(run_number: int,
     """Return a string of run queries."""
     next_run = None
     previous_run = None
-    if (page_type == "run"):
+    if page_type == "run":
         order = '-run_number'
-    elif (page_type == "date"):
+    elif page_type == "date":
         order = '-last_updated'
     try:
         instrument_obj = ReductionRun.objects.filter(instrument__name=instrument_name).order_by(order)
