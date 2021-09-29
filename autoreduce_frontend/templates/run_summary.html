@@ -176,10 +176,15 @@
                             <div class="col-md-6">
                                 <div class="file-path">
                                     <strong>Data:</strong>
-                                    {% if run.data_location.all %}
+                                    {% if data_location %}
                                         {% for location in run.data_location.all %}
-                                            {{ location.file_path }}<br/>
+                                            {{ data_location }}
                                         {% endfor %}
+                                        {% if path_type == "Windows" or "\\" in data_location%}
+                                            <a class="btn btn-primary btn-xs" aria-label="Switch to Linux" id='datapath_toggle' href="{% url 'runs:summary' instrument_name=instrument run_number=run.run_number run_version=run.run_version %}?{% get_run_navigation_queries run.run_number current_page newest_run oldest_run instrument page_type %}&pagination={{ items_per_page }}&sort={{ page_type }}&path_type={{"linux"}}"><i class="fa fa-linux" aria-hidden="true"></i></a>
+                                        {% else %}
+                                            <a class="btn btn-primary btn-xs" aria-label="Switch to Windows" id='datapath_toggle' href="{% url 'runs:summary' instrument_name=instrument run_number=run.run_number run_version=run.run_version %}?{% get_run_navigation_queries run.run_number current_page newest_run oldest_run instrument page_type %}&pagination={{ items_per_page }}&sort={{ page_type }}&path_type={{"windows"}}"><i class="fa fa-windows" aria-hidden="true"></i></a>
+                                        {% endif %}<br/>
                                     {% else %}
                                         <em>No data found</em>
                                     {% endif %}
@@ -252,6 +257,7 @@
                 {% if oldest_run != run.run_number %}
                     <a href="{% url 'runs:summary' instrument_name=instrument run_number=previous_run run_version=run.run_version %}?{% get_run_navigation_queries previous_run current_page newest_run oldest_run instrument page_type %}&pagination={{ items_per_page }}&sort={{ page_type }}" class="btn btn-primary back" id="previous">{{ previous_run }} &#62</a>
                 {% endif %}
+                </div>
             </div>
         </div>
 
