@@ -38,7 +38,8 @@ from autoreduce_frontend.autoreduce_webapp.views import render_error
 from autoreduce_frontend.plotting.plot_handler import PlotHandler
 from autoreduce_frontend.reduction_viewer.utils import ReductionRunUtils
 from autoreduce_frontend.reduction_viewer.view_utils import (deactivate_invalid_instruments, get_interactive_plot_data,
-                                                             make_data_analysis_url)
+                                                             linux_to_windows_path, make_data_analysis_url,
+                                                             windows_to_linux_path)
 from autoreduce_frontend.utilities.pagination import CustomPaginator
 
 LOGGER = logging.getLogger(__package__)
@@ -250,6 +251,18 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
         if reduction_location and '\\' in reduction_location:
             reduction_location = reduction_location.replace('\\', '/')
 
+        data_location_list = run.data_location.all()
+        data_location = ""
+        if data_location_list:
+            data_location = data_location_list[0].file_path
+            print(data_location)
+
+        path_type = request.GET.get('path_type', "")
+        if path_type == "linux":
+            data_location = windows_to_linux_path(data_location)
+        elif path_type == "windows":
+            data_location = linux_to_windows_path(data_location)
+
         data_analysis_link_url = make_data_analysis_url(reduction_location) if reduction_location else ""
         rb_number = run.experiment.reference_number
 
@@ -261,6 +274,7 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
             'is_skipped': is_skipped,
             'is_rerun': is_rerun,
             'history': history,
+            'data_location': data_location,
             'reduction_location': reduction_location,
             'started_by': started_by,
             'has_run_variables': bool(run.run_variables.count()),
@@ -273,6 +287,7 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
             'next_run': int(request.GET.get('next_run', run_number)),
             'previous_run': int(request.GET.get('previous_run', run_number)),
             'filtering': request.GET.get('filter', 'run'),
+            'path_type': path_type,
         }
 
     except PermissionDenied:
