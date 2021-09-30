@@ -4,26 +4,26 @@
 # Copyright &copy; 2021 ISIS Rutherford Appleton Laboratory UKRI
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
-"""
-Selenium tests for the runs summary page
-"""
+"""Selenium tests for the runs summary page."""
+import datetime
+import pytz
 
 from django.urls import reverse
-from autoreduce_frontend.selenium_tests.pages.run_summary_page import RunSummaryPage
-from autoreduce_frontend.selenium_tests.tests.base_tests import (BaseTestCase, FooterTestMixin, NavbarTestMixin,
-                                                                 AccessibilityTestMixin)
-from autoreduce_frontend.selenium_tests.utils import submit_and_wait_for_result
 
-from autoreduce_frontend.selenium_tests.utils import setup_external_services
+from autoreduce_frontend.selenium_tests.pages.run_summary_page import RunSummaryPage
+from autoreduce_frontend.selenium_tests.pages.runs_list_page import RunsListPage
+from autoreduce_frontend.selenium_tests.tests.base_tests import (AccessibilityTestMixin, BaseTestCase, FooterTestMixin,
+                                                                 NavbarTestMixin)
+from autoreduce_frontend.selenium_tests.utils import setup_external_services, submit_and_wait_for_result
 
 
 class TestRunSummaryPageIntegration(BaseTestCase, FooterTestMixin, NavbarTestMixin, AccessibilityTestMixin):
     """
-    Test cases for the InstrumentSummary page when the Rerun form is NOT visible
+    Test cases for the InstrumentSummary page when the Rerun form is NOT
+    visible.
     """
 
     fixtures = BaseTestCase.fixtures + ["run_with_one_variable"]
-
     accessibility_test_ignore_rules = {
         # https://github.com/ISISScientificComputing/autoreduce/issues/1267
         # https://github.com/ISISScientificComputing/autoreduce/issues/1268
@@ -32,7 +32,7 @@ class TestRunSummaryPageIntegration(BaseTestCase, FooterTestMixin, NavbarTestMix
 
     @classmethod
     def setUpClass(cls):
-        """ Start all external services """
+        """Start all external services."""
         super().setUpClass()
         cls.instrument_name = "TestInstrument"
         cls.rb_number = 1234567
@@ -44,23 +44,25 @@ class TestRunSummaryPageIntegration(BaseTestCase, FooterTestMixin, NavbarTestMix
 
     @classmethod
     def tearDownClass(cls) -> None:
-        """Stop all external services"""
+        """Stop all external services."""
         cls.queue_client.disconnect()
         cls.data_archive.delete()
         super().tearDownClass()
 
     def setUp(self) -> None:
-        """Sets up the RunSummaryPage and shows the rerun panel before each test case"""
+        """
+        Set up the RunSummaryPage and show the rerun panel before each test
+        case.
+        """
         super().setUp()
         self.page = RunSummaryPage(self.driver, self.instrument_name, 99999, 0)
         self.page.launch()
-        # clicks the toggle to show the rerun panel, otherwise the buttons in the form are non interactive
+        # Click the toggle to show the rerun panel, otherwise the buttons in the
+        # form are non interactive
         self.page.toggle_button.click()
 
     def test_submit_rerun_same_variables(self):
-        """
-        Test: Just opening the submit page and clicking rerun
-        """
+        """Test opening the submit page and clicking rerun."""
         result = submit_and_wait_for_result(self)
         assert len(result) == 2
 
@@ -72,9 +74,10 @@ class TestRunSummaryPageIntegration(BaseTestCase, FooterTestMixin, NavbarTestMix
 
     def test_submit_rerun_changed_variable_arbitrary_value(self):
         """
-        Test: Open submit page, change a variable, submit the run
+        Test opening a submit page, changing a variable, and then submitting the
+        run.
         """
-        # change the value of the variable field
+        # Change the value of the variable field
         self.page.variable1_field = "the new value in the field"
 
         result = submit_and_wait_for_result(self)
@@ -84,17 +87,18 @@ class TestRunSummaryPageIntegration(BaseTestCase, FooterTestMixin, NavbarTestMix
         assert result[1].run_version == 1
 
         for run0_var, run1_var in zip(result[0].run_variables.all(), result[1].run_variables.all()):
-            # the value of the variable has been overwritten because it's the same run number
+            # The value of the variable has been overwritten because it's the
+            # same run number
             assert run0_var.variable == run1_var.variable
 
         assert result[1].run_variables.first().variable.value == "the new value in the field"
 
     def test_submit_rerun_after_clicking_reset_initial(self):
         """
-        Test: Submitting a run after changing the value and then clicking reset to initial values
-        will correctly use the initial values
+        Test that submitting a run after changing the value and then clicking
+        reset to initial values will correctly use the initial values.
         """
-        # change the value of the variable field
+        # Change the value of the variable field
         self.page.variable1_field = "the new value in the field"
 
         self.page.reset_to_initial_values.click()
@@ -105,14 +109,16 @@ class TestRunSummaryPageIntegration(BaseTestCase, FooterTestMixin, NavbarTestMix
         assert result[1].run_version == 1
 
         for run0_var, run1_var in zip(result[0].run_variables.all(), result[1].run_variables.all()):
-            # the value of the variable has been overwritten because it's the same run number
+            # The value of the variable has been overwritten because it's the
+            # same run number
             assert run0_var.variable == run1_var.variable
 
         assert result[1].run_variables.first().variable.value == "value1"
 
     def test_submit_rerun_after_clicking_reset_current_script(self):
         """
-        Test: Submitting a run after clicking the reset to current script uses the values saved in the current script
+        Test that submitting a run after clicking the reset to current script
+        uses the values saved in the current script.
         """
         self.page.reset_to_current_values.click()
         result = submit_and_wait_for_result(self)
@@ -123,21 +129,49 @@ class TestRunSummaryPageIntegration(BaseTestCase, FooterTestMixin, NavbarTestMix
         assert result[1].run_version == 1
 
         for run0_var, run1_var in zip(result[0].run_variables.all(), result[1].run_variables.all()):
-            # the value of the variable has been overwritten because it's the same run number
+            # The value of the variable has been overwritten because it's the
+            # same run number
             assert run0_var.variable == run1_var.variable
 
         assert result[1].run_variables.first().variable.value == "test_variable_value_123"
 
     def test_submit_confirm_page(self):
-        """
-        Test: Submitting a run leads to the correct page
-        """
+        """Test that submitting a run leads to the correct page."""
         result = submit_and_wait_for_result(self)
         expected_url = reverse("run_confirmation", kwargs={"instrument": self.instrument_name})
         assert expected_url in self.driver.current_url
-        # wait until the message processing is complete before ending the test
-        # otherwise the message handling can pollute the DB state for the next test
+        # Wait until the message processing is complete before ending the test
+        # otherwise the message handling can pollute the DB state for the next
+        # test
         assert len(result) == 2
-        # check that the error is because of missing Mantid
-        # if this fails then something else in the reduction caused an error instead!
+        # Check that the error is because of missing Mantid. If this fails then
+        # something else in the reduction caused an error
         assert "Mantid" in result[1].admin_log
+
+    def test_submit_respects_bst(self):
+        """
+        Test that a submitted run's datetime for when it was last updated
+        adheres to British Summer Time in the runs list page.
+        """
+        submit_and_wait_for_result(self)
+        runs_list_page = RunsListPage(self.driver, self.instrument_name)
+        runs_list_page.launch()
+
+        gmt = pytz.timezone("Europe/London")
+
+        # Get the datetime of now
+        now_datetime = gmt.localize(datetime.datetime.now())
+
+        # Get the bottom run from the runs list page and cast it to datetime
+        bottom_run_element = runs_list_page.driver.find_elements_by_class_name("col-md-4")[-1]
+        run_last_updated = datetime.datetime.strptime(
+            bottom_run_element.text.partition(": ")[2].replace(" p.m.", "PM").replace(" a.m.", "AM"),
+            "%d %b %Y, %I:%M%p")
+        run_datetime = gmt.localize(run_last_updated)
+
+        # Calculate the difference in minutes between the current time and the
+        # time the run displays on the runs list page
+        minutes_diff = (now_datetime - run_datetime).total_seconds() / 60.0
+
+        # A minute diff more than 30 would indicate a wrong timezone
+        assert minutes_diff < 30
