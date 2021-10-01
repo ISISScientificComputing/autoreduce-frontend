@@ -30,6 +30,8 @@ def get_run_navigation_queries(run_number: int,
         r = instrument_obj.get(run_number=run_number)
         next_run = prev_in_order(r, qs=instrument_obj, loop=False)
         previous_run = next_in_order(r, qs=instrument_obj, loop=False)
+        newest_run = instrument_obj.first()
+        oldest_run = instrument_obj.last()
         if next_run is None:
             next_run = r.run_number
         if previous_run is None:
