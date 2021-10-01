@@ -8,7 +8,6 @@
 Unit tests for the script which determines the natural time difference between
 the start and end of a run.
 """
-
 import datetime
 import unittest
 
@@ -28,7 +27,7 @@ class TestNaturalTimeDifference(unittest.TestCase):
 
     def test_difference_none(self):
         """Test that no time difference returns an empty string."""
-        self._test_time_difference(TestNaturalTimeDifference.START_DATETIME, "")
+        self._test_time_difference(TestNaturalTimeDifference.START_DATETIME, "0 seconds")
 
     @parameterized.expand([
         [START_DATETIME + datetime.timedelta(seconds=1), "1 second"],

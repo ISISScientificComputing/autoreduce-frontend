@@ -29,6 +29,9 @@ class NaturalTimeDifferenceNode(Node):
         minutes = delta.seconds // 60 % 60
         seconds = delta.seconds % 60
 
+        if not any((days, hours, minutes, seconds)):
+            return "0 seconds"
+
         duration = ''
         for time, unit in ((days, "day"), (hours, "hour"), (minutes, "minute"), (seconds, "second")):
             if time > 0:
