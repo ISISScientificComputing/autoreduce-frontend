@@ -341,8 +341,8 @@ def runs_list(request, instrument=None):
     try:
         runs = (ReductionRun.objects.only('status', 'last_updated', 'run_number', 'run_version',
                                           'run_description').select_related('status').filter(instrument=instrument_obj))
-        last_instrument_run = runs.last
-        first_instrument_run = runs.first
+        last_instrument_run = runs.last()
+        first_instrument_run = runs.first()
 
         if sort_by == "run":
             runs = runs.order_by('-run_number', 'run_version')

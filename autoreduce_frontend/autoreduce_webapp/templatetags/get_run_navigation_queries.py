@@ -17,7 +17,8 @@ def get_run_navigation_queries(run_number: int,
                                newest_run: int,
                                oldest_run: int,
                                instrument_name=None,
-                               page_type="run") -> str:
+                               page_type="run",
+                               runs=None) -> str:
     """Return a string of run queries."""
     next_run = None
     previous_run = None
@@ -25,8 +26,15 @@ def get_run_navigation_queries(run_number: int,
         order = '-run_number'
     elif page_type == "date":
         order = '-last_updated'
+
+    if runs is not None:
+        instrument_obj = runs
+        instrument_obj.order_by(order)
+    else:
+        instrument_obj = ReductionRun.objects.only('run_number').filter(
+            instrument__name=instrument_name).order_by(order)
+
     try:
-        instrument_obj = ReductionRun.objects.filter(instrument__name=instrument_name).order_by(order)
         r = instrument_obj.get(run_number=run_number)
         next_run = prev_in_order(r, qs=instrument_obj, loop=False)
         previous_run = next_in_order(r, qs=instrument_obj, loop=False)

@@ -9,7 +9,7 @@
             <div class="row run-row">
         {% endif %}
     <div class="col-md-5 col-sm-5 col-md-offset-1 col-xs-4">
-        <a href="{% url 'runs:summary' instrument_name=instrument_name run_number=run.run_number run_version=run.run_version %}?{% get_run_navigation_queries run.run_number paginator.current_page_index last_instrument_run first_instrument_run run.instrument.name paginator.page_type %}&pagination={{ paginator.items_per_page }}&sort={{ paginator.page_type }}&filter={{ filtering }}"
+        <a href="{% url 'runs:summary' instrument_name=instrument_name run_number=run.run_number run_version=run.run_version %}?{% get_run_navigation_queries run.run_number paginator.current_page_index last_instrument_run first_instrument_run run.instrument.name paginator.page_type runs %}&pagination={{ paginator.items_per_page }}&sort={{ paginator.page_type }}&filter={{ filtering }}"
             {% if forloop.first %}
                 id="top-run-number"
             {% endif %}
