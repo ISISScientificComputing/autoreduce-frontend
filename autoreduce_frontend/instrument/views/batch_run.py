@@ -118,7 +118,9 @@ class BatchRunSubmit(FormView):
             response = requests.post(f"{AUTOREDUCE_API_URL}/runs/batch/{kwargs['instrument']}",
                                      json={
                                          "runs": runs,
-                                         "reduction_arguments": args_for_range
+                                         "reduction_arguments": args_for_range,
+                                         "user_id": request.user.id,
+                                         "description": request.POST.get("run_description", "")
                                      },
                                      headers={"Authorization": f"Token {auth_token}"})
             if response.status_code != 200:
