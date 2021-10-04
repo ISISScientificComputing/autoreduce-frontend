@@ -326,8 +326,38 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
 @check_permissions
 @render_with('runs_list.html')
 # pylint:disable=no-member,unused-argument,too-many-locals,broad-except
-def runs_list(request, instrument=None):
+def runs_list(request, instrument=None, reference_number=0):
     """Render instrument summary."""
+
+    try:
+        if DEVELOPMENT_MODE:
+            # If we are in development mode use user/password for ICAT from
+            # django settings e.g. do not attempt to use same authentication
+            # as the user office
+            try:
+                with ICATCache() as icat:
+                    experiment_details = icat.get_experiment_details(int(reference_number))
+            except ICATConnectionException as excep:
+                render_error(request, str(excep))
+        else:
+            try:
+                with ICATCache(AUTH='uows', SESSION={'sessionid': request.session['sessionid']}) as icat:
+                    experiment_details = icat.get_experiment_details(int(reference_number))
+            except ICATConnectionException as excep:
+                render_error(request, str(excep))
+
+    except Exception as icat_e:
+        LOGGER.error(icat_e)
+        experiment_details = {
+            'reference_number': '',
+            'start_date': '',
+            'end_date': '',
+            'title': '',
+            'summary': '',
+            'instrument': '',
+            'pi': '',
+        }
+
     try:
         filter_by = request.GET.get('filter', 'run')
         instrument_obj = Instrument.objects.get(name=instrument)
@@ -369,6 +399,7 @@ def runs_list(request, instrument=None):
             'processing': runs.filter(status=Status.get_processing()),
             'queued': runs.filter(status=Status.get_queued()),
             'filtering': filter_by,
+            'experiment_details': experiment_details,
             'sort': sort_by,
             'has_variables': bool(current_variables),
             'error_reason': error_reason,
@@ -379,8 +410,7 @@ def runs_list(request, instrument=None):
             experiments = Experiment.objects.filter(reduction_runs__instrument=instrument_obj). \
                 order_by('-reference_number').distinct()
             for experiment in experiments:
-                associated_runs = runs.filter(experiment=experiment). \
-                    order_by('-created')
+                associated_runs = runs.filter(experiment=experiment).order_by('-created')
                 experiments_and_runs[experiment] = associated_runs
             context_dictionary['experiments'] = experiments_and_runs
         else:
