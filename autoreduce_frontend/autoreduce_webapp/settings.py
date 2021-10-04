@@ -34,7 +34,15 @@ SECRET_KEY = get_str("WEBAPP", "secret_key")
 # having to run `manage.py collectstatic` each time. On production
 # we use Apache to serve static content instead.
 DEBUG = not "AUTOREDUCTION_PRODUCTION" in os.environ
+
 DEBUG_PROPAGATE_EXCEPTIONS = True
+DEBUG_TOOLBAR_AVAILABLE = False
+if DEBUG:
+    try:
+        import debug_toolbar
+        DEBUG_TOOLBAR_AVAILABLE = True
+    except ImportError:
+        pass
 
 if DEBUG:
     ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'reducedev2.isis.cclrc.ac.uk']
@@ -51,6 +59,9 @@ INSTALLED_APPS = [
     'autoreduce_db.instrument', 'rest_framework.authtoken'
 ]
 
+if DEBUG and DEBUG_TOOLBAR_AVAILABLE:
+    INSTALLED_APPS.append('debug_toolbar')
+
 MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -60,6 +71,9 @@ MIDDLEWARE = [
     'django_user_agents.middleware.UserAgentMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+if DEBUG and DEBUG_TOOLBAR_AVAILABLE:
+    MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
 
 AUTHENTICATION_BACKENDS = [
     'autoreduce_frontend.autoreduce_webapp.backends.UOWSAuthenticationBackend',
