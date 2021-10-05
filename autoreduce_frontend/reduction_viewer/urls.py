@@ -6,13 +6,13 @@
 # ############################################################################### #
 
 from django.urls import path
-from autoreduce_frontend.reduction_viewer import views
+from autoreduce_frontend.reduction_viewer import views, fail_queue_view
 
 app_name = "runs"
 
 urlpatterns = [
     path('queue/', views.run_queue, name='queue'),
-    path('failed/', views.fail_queue, name='failed'),
+    path('failed/', fail_queue_view.fail_queue, name='failed'),
     path('<str:instrument>/', views.runs_list, name='list'),
     path('<str:instrument_name>/<int:run_number>/', views.run_summary, name='summary'),
     path('<str:instrument_name>/batch/<int:pk>/', views.run_summary_batch_run, name='batch_summary'),

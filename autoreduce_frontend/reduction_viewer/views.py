@@ -12,7 +12,6 @@ unit tests for this code at the point of correcting the pylint errors as such we
 should remove the pylint disables and fix the code when we can be more confident
 we are not affecting the execution.
 """
-import json
 import logging
 import operator
 import traceback
@@ -36,7 +35,6 @@ from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions,
                                                               require_admin)
 from autoreduce_frontend.autoreduce_webapp.views import render_error
 from autoreduce_frontend.plotting.plot_handler import PlotHandler
-from autoreduce_frontend.reduction_viewer.utils import ReductionRunUtils
 from autoreduce_frontend.reduction_viewer.view_utils import (deactivate_invalid_instruments, get_interactive_plot_data,
                                                              linux_to_windows_path, make_data_analysis_url,
                                                              windows_to_linux_path)
@@ -158,69 +156,6 @@ def run_queue(request):
     # Zip the run information with the user/team name to enable simultaneous
     # iteration with django
     context_dictionary = {'queue': zip(pending_jobs, started_by)}
-
-    return context_dictionary
-
-
-@require_admin
-@login_and_uows_valid
-@render_with('fail_queue.html')
-# pylint:disable=no-member,too-many-locals,broad-except
-def fail_queue(request):
-    """Render status of failed queue."""
-    # Render the page
-    error_status = Status.get_error()
-    failed_jobs = ReductionRun.objects.filter(Q(status=error_status)
-                                              & Q(hidden_in_failviewer=False)).order_by('-created')
-    if len(failed_jobs) == 0:
-        return {'queue': []}
-
-    max_items_per_page = request.GET.get('pagination', 10)
-    custom_paginator = CustomPaginator(page_type='run',
-                                       query_set=failed_jobs,
-                                       items_per_page=max_items_per_page,
-                                       page_tolerance=3,
-                                       current_page=request.GET.get('page', 1))
-
-    context_dictionary = {
-        'queue': failed_jobs,
-        'status_success': Status.get_completed(),
-        'status_failed': Status.get_error(),
-        'paginator': custom_paginator,
-        'last_page_index': len(custom_paginator.page_list),
-        'max_items': max_items_per_page
-    }
-
-    if request.method == 'POST':
-        # Perform the specified action
-        action = request.POST.get("action", "default")
-        selected_run_string = request.POST.get("selectedRuns", [])
-        selected_runs = json.loads(selected_run_string)
-        try:
-            for run in selected_runs:
-                run_number = int(run[0])
-                run_version = int(run[1])
-
-                reduction_run = failed_jobs.get(run_number=run_number, run_version=run_version)
-
-                if action == "hide":
-                    reduction_run.hidden_in_failviewer = True
-                    reduction_run.save()
-
-                elif action == "rerun":
-                    highest_version = max([int(runL[1]) for runL in selected_runs if int(runL[0]) == run_number])
-                    if run_version != highest_version:
-                        continue  # Do not run multiples of the same run
-
-                    ReductionRunUtils.send_retry_message_same_args(request.user.id, reduction_run)
-
-                elif action == "default":
-                    pass
-
-        except Exception as exception:
-            fail_str = "Selected action failed: %s %s" % (type(exception).__name__, exception)
-            LOGGER.info("Failed to carry out fail_queue action - %s", fail_str)
-            context_dictionary["message"] = fail_str
 
     return context_dictionary
 
