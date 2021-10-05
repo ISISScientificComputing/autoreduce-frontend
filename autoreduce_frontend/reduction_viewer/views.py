@@ -38,11 +38,9 @@ from autoreduce_frontend.autoreduce_webapp.views import render_error
 from autoreduce_frontend.plotting.plot_handler import PlotHandler
 from autoreduce_frontend.reduction_viewer.utils import ReductionRunUtils
 from autoreduce_frontend.reduction_viewer.view_utils import (deactivate_invalid_instruments, get_interactive_plot_data,
-                                                             linux_to_windows_path, make_data_analysis_url,
-                                                             windows_to_linux_path)
+                                                             get_run_navigation_queries, linux_to_windows_path,
+                                                             make_data_analysis_url, windows_to_linux_path)
 from autoreduce_frontend.utilities.pagination import CustomPaginator
-
-from next_prev import next_in_order, prev_in_order
 
 LOGGER = logging.getLogger(__package__)
 
@@ -268,6 +266,13 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
         data_analysis_link_url = make_data_analysis_url(reduction_location) if reduction_location else ""
         rb_number = run.experiment.reference_number
 
+        page_type = request.GET.get('sort', 'run')
+        navigation_tuple = get_run_navigation_queries(instrument_name, run, page_type, run_number)
+        next_run = navigation_tuple[0]
+        previous_run = navigation_tuple[1]
+        newest_run = navigation_tuple[2]
+        oldest_run = navigation_tuple[-1]
+
         context_dictionary = {
             'run': run,
             'run_number': run_number,
@@ -284,10 +289,10 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
             'current_page': int(request.GET.get('page', 1)),
             'items_per_page': int(request.GET.get('pagination', 10)),
             'page_type': request.GET.get('sort', 'run'),
-            'newest_run': int(request.GET.get('newest_run', run_number)),
-            'oldest_run': int(request.GET.get('oldest_run', run_number)),
-            'next_run': int(request.GET.get('next_run', run_number)),
-            'previous_run': int(request.GET.get('previous_run', run_number)),
+            'newest_run': newest_run.run_number,
+            'oldest_run': oldest_run.run_number,
+            'next_run': next_run.run_number,
+            'previous_run': previous_run.run_number,
             'filtering': request.GET.get('filter', 'run'),
             'path_type': path_type,
         }
