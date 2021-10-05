@@ -164,14 +164,23 @@
                                         {% for location in run.data_location.all %}
                                             {{ data_location }}
                                         {% endfor %}
-                                        {% if path_type == "Windows" or "\\" in data_location%}
-                                            <a class="btn btn-primary btn-xs" aria-label="Switch to Linux" id='datapath_toggle' href="{% url 'runs:summary' instrument_name=instrument run_number=run.run_number run_version=run.run_version %}?{% get_run_navigation_queries run.run_number current_page newest_run oldest_run %}&pagination={{ items_per_page }}&sort={{ page_type }}&path_type={{"linux"}}"><i class="fa fa-linux" aria-hidden="true"></i></a>
-                                        {% else %}
-                                            <a class="btn btn-primary btn-xs" aria-label="Switch to Windows" id='datapath_toggle' href="{% url 'runs:summary' instrument_name=instrument run_number=run.run_number run_version=run.run_version %}?{% get_run_navigation_queries run.run_number current_page newest_run oldest_run %}&pagination={{ items_per_page }}&sort={{ page_type }}&path_type={{"windows"}}"><i class="fa fa-windows" aria-hidden="true"></i></a>
-                                        {% endif %}<br/>
                                     {% else %}
                                         <em>No data found</em>
                                     {% endif %}
+                                        <a class="btn btn-primary btn-xs" aria-label="Switch to
+                                        {% if path_type == "Windows" or "\\" in data_location%}
+                                        Linux
+                                        {% else %}
+                                        Windows
+                                        {% endif %}
+                                        " id='datapath_toggle'
+                                        href="
+                                        {% if not run.batch_run %}
+                                            {% url 'runs:summary' instrument_name=instrument run_number=run.run_number run_version=run.run_version %}?{% get_run_navigation_queries run.run_number current_page newest_run oldest_run %}
+                                        {% else %}
+                                            {% url 'runs:batch_summary' instrument_name=instrument pk=run.pk run_version=run.run_version %}?{% get_run_navigation_queries run.pk current_page newest_run oldest_run %}
+                                        {% endif %}
+                                        &pagination={{ items_per_page }}&sort={{ page_type }}&path_type={{'linux'}}"></a><i class="fa fa-linux" aria-hidden="true"></i></a>
                                 </div>
                                 <div id="reduction_host"><strong>Host:</strong> {{ run.reduction_host }}</div>
                             </div>
@@ -222,26 +231,14 @@
                         {% endfor %}
                     </div>
             {% endif %}
-            {% if has_run_variables and has_reduce_vars  %}
-                {% autoescape on %}
-                    {% view "instrument.views.variables.render_run_variables" instrument run %}
-                {% endautoescape %}
-            {% elif not has_run_variables %}
-                <div>
-                    <p class="text-center" id="warning_message">No variables found for this run.</p>
-                </div>
-            {% elif not has_reduce_vars %}
-                <div>
-                    <p class="text-center" id="warning_message">The reduce_vars.py script is missing for this instrument. Please create it before being able to submit re-runs.</p>
-                </div>
-            {% endif %}
 
             {% autoescape on %}
-                {% view "instrument.views.variables.render_run_variables" instrument run_number run_version %}
+                {% view "instrument.views.variables.render_run_variables" instrument run %}
             {% endautoescape %}
         </div>
         <div class="row col-md-12 my-2">
             <div class="text-center">
+                {% if not run.batch_run %}
                 <a href="{% url 'runs:summary' instrument_name=instrument run_number=newest_run run_version=run.run_version %}?{% get_run_navigation_queries newest_run current_page newest_run oldest_run %}&pagination={{ items_per_page }}&sort={{ page_type }}" class="btn btn-primary back" id="newest"
                     {% if newest_run == run.run_number %}
                         disabled
@@ -260,6 +257,7 @@
                         disabled
                     {% endif%}>Previous &#62;&#62;
                 </a>
+                {% endif %}
             </div>
         </div>
 
@@ -288,13 +286,12 @@
                                     <tr>
                                         <td>
                                             {% if job.run_version != run.run_version %}
-                                                <a href="{% url 'runs:summary' instrument_name=run.instrument.name run_number=job.run_number run_version=job.run_version %}">{{ job.title }}</a>
                                             {% else %}
                                                 {{ job.title }}
                                             {% endif %}
                                         </td>
                                         <td class="text-{% colour_table_row job.status.value_verbose %}">
-                                                <strong>{{ job.status.value_verbose }}</strong>
+                                            <strong>{{ job.status.value_verbose }}</strong>
                                         </td>
                                         <td title="{{ job.last_updated|date:'SHORT_DATETIME_FORMAT' }}">{{ job.last_updated|naturaltime }}</td>
                                         <td>
