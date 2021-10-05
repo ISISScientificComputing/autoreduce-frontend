@@ -17,6 +17,12 @@ from autoreduce_frontend.autoreduce_webapp.settings import DATA_ANALYSIS_BASE_UR
 
 from autoreduce_frontend.autoreduce_webapp.settings import (ALLOWED_HOSTS, UOWS_LOGIN_URL)
 
+from autoreduce_db.reduction_viewer.models import Instrument, ReductionRun
+from autoreduce_qp.queue_processor.reduction.service import ReductionScript
+from autoreduce_frontend.autoreduce_webapp.settings import DATA_ANALYSIS_BASE_URL
+
+from next_prev import next_in_order, prev_in_order
+
 LOGGER = logging.getLogger(__package__)
 
 
@@ -139,3 +145,20 @@ def make_return_url(request, next_url):
             return UOWS_LOGIN_URL + request.build_absolute_uri(request.path)
     else:
         return UOWS_LOGIN_URL + request.build_absolute_uri()
+
+
+def get_run_navigation_queries(instrument_name, run, page_type, run_number):
+    if page_type == "run":
+        order = '-run_number'
+    elif page_type == "date":
+        order = '-last_updated'
+    instrument_obj = ReductionRun.objects.only('run_number').filter(instrument__name=instrument_name).order_by(order)
+    next_run = prev_in_order(run, qs=instrument_obj, loop=False)
+    previous_run = next_in_order(run, qs=instrument_obj, loop=False)
+    if next_run is None:
+        next_run = run
+    if previous_run is None:
+        previous_run = run
+    newest_run = instrument_obj.first()
+    oldest_run = instrument_obj.last()
+    return next_run, previous_run, newest_run, oldest_run
