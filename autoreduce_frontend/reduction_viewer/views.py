@@ -241,7 +241,7 @@ def run_summary_run(request, history, instrument_name=None, run_number=None, run
             'next_run': int(request.GET.get('next_run', run_number)),
             'previous_run': int(request.GET.get('previous_run', run_number)),
             'filtering': request.GET.get('filter', 'run'),
-            'path_type': path_type,
+            'new_path_type': 'linux' if path_type == 'windows' else 'windows',
         }
 
     except PermissionDenied:

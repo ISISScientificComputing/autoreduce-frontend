@@ -167,20 +167,13 @@
                                     {% else %}
                                         <em>No data found</em>
                                     {% endif %}
-                                        <a class="btn btn-primary btn-xs" aria-label="Switch to
-                                        {% if path_type == "Windows" or "\\" in data_location%}
-                                        Linux
+                                        <a class="btn btn-primary btn-xs"
+                                        id='datapath_toggle'
+                                        href="{% if not run.batch_run %}
+                                            {% url 'runs:summary' instrument_name=instrument run_number=run_number run_version=run.run_version %}?{% get_run_navigation_queries run_number current_page newest_run oldest_run %}
                                         {% else %}
-                                        Windows
-                                        {% endif %}
-                                        " id='datapath_toggle'
-                                        href="
-                                        {% if not run.batch_run %}
-                                            {% url 'runs:summary' instrument_name=instrument run_number=run.run_number run_version=run.run_version %}?{% get_run_navigation_queries run.run_number current_page newest_run oldest_run %}
-                                        {% else %}
-                                            {% url 'runs:batch_summary' instrument_name=instrument pk=run.pk run_version=run.run_version %}?{% get_run_navigation_queries run.pk current_page newest_run oldest_run %}
-                                        {% endif %}
-                                        &pagination={{ items_per_page }}&sort={{ page_type }}&path_type={{'linux'}}"></a><i class="fa fa-linux" aria-hidden="true"></i></a>
+                                            {% url 'runs:batch_summary' instrument_name=instrument pk=run_number run_version=run.run_version %}?{% get_run_navigation_queries run_number current_page newest_run oldest_run %}{% endif %}&pagination={{ items_per_page }}&sort={{ page_type }}&path_type={{ new_path_type }}"
+                                        aria-label="Switch to {{ new_path_type|title }}"><i class="fa fa-{{ new_path_type }}" aria-hidden="true"></i></a>
                                 </div>
                                 <div id="reduction_host"><strong>Host:</strong> {{ run.reduction_host }}</div>
                             </div>
