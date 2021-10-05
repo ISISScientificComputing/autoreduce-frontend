@@ -12,6 +12,7 @@ unit tests for this code at the point of correcting the pylint errors as such we
 should remove the pylint disables and fix the code when we can be more confident
 we are not affecting the execution.
 """
+# pylint:disable=no-member,broad-except,too-many-locals,redefined-builtin,too-many-branches,too-many-statements
 import json
 import logging
 import operator
@@ -59,9 +60,8 @@ def index(request):
         user = authenticate(username="super", password="super", backend="django.contrib.auth.backends.ModelBackend")
         login(request, user)
         authenticated = True
-    else:
-        if 'sessionid' in request.session.keys():
-            authenticated = request.user.is_authenticated and UOWSClient().check_session(request.session['sessionid'])
+    elif 'sessionid' in request.session.keys():
+        authenticated = request.user.is_authenticated and UOWSClient().check_session(request.session['sessionid'])
 
     if authenticated:
         return_url = use_query_next if request.GET.get('next') else default_next
@@ -72,10 +72,9 @@ def index(request):
         except ICATConnectionException as excep:
             return render_error(request, str(excep))
 
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                return_url = use_query_next if request.GET.get('next') else default_next
+        if user is not None and user.is_active:
+            login(request, user)
+            return_url = use_query_next if request.GET.get('next') else default_next
 
     return redirect(return_url)
 
@@ -103,14 +102,15 @@ def logout(request):
     session_id = request.session.get('sessionid')
     if session_id:
         UOWSClient().logout(session_id)
+
     django_logout(request)
     request.session.flush()
+
     return redirect('overview')
 
 
 @login_and_uows_valid
 @render_with('overview.html')
-# pylint:disable=no-member
 def overview(_):
     """
     Render the overview landing page (redirect from /index).
@@ -127,7 +127,6 @@ def overview(_):
 
 @login_and_uows_valid
 @render_with('run_queue.html')
-# pylint:disable=no-member
 def run_queue(request):
     """Render status of queue."""
     # Get all runs that should be shown
@@ -165,7 +164,6 @@ def run_queue(request):
 @require_admin
 @login_and_uows_valid
 @render_with('fail_queue.html')
-# pylint:disable=no-member,too-many-locals,broad-except
 def fail_queue(request):
     """Render status of failed queue."""
     # Render the page
@@ -325,10 +323,8 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
 @login_and_uows_valid
 @check_permissions
 @render_with('runs_list.html')
-# pylint:disable=no-member,unused-argument,too-many-locals,broad-except
 def runs_list(request, instrument=None, reference_number=0):
     """Render instrument summary."""
-
     try:
         if DEVELOPMENT_MODE:
             # If we are in development mode use user/password for ICAT from
@@ -436,7 +432,6 @@ def runs_list(request, instrument=None, reference_number=0):
 @login_and_uows_valid
 @check_permissions
 @render_with('experiment_summary.html')
-# pylint:disable=no-member,too-many-locals,broad-except
 def experiment_summary(request, reference_number=None):
     """Render experiment summary."""
     try:
@@ -502,7 +497,6 @@ def experiment_summary(request, reference_number=None):
 
 
 @render_with('help.html')
-# pylint:disable=redefined-builtin
 def help(_):
     """
     Render help page.
@@ -514,7 +508,6 @@ def help(_):
 
 
 @render_with('accessibility_statement.html')
-# pylint:disable=redefined-builtin
 def accessibility_statement(_):
     """
     Render accessibility statement page.
@@ -526,7 +519,6 @@ def accessibility_statement(_):
 
 
 @render_with('admin/graph_home.html')
-# pylint:disable=no-member
 def graph_home(_):
     """
     Render graph page.
@@ -542,7 +534,6 @@ def graph_home(_):
 
 @require_admin
 @render_with('admin/graph_instrument.html')
-# pylint:disable=no-member
 def graph_instrument(request, instrument_name):
     """Render instrument specific graphing page."""
     instrument = Instrument.objects.filter(name=instrument_name)
@@ -581,7 +572,6 @@ def graph_instrument(request, instrument_name):
 
 @require_admin
 @render_with('admin/stats.html')
-# pylint:disable=no-member
 def stats(_):
     """
     Render run statistics page.
@@ -626,11 +616,9 @@ def started_by_id_to_name(started_by_id=None):
     """
     if started_by_id is None or started_by_id < -1:
         return None
-
-    if started_by_id == -1:
+    elif started_by_id == -1:
         return "Development team"
-
-    if started_by_id == 0:
+    elif started_by_id == 0:
         return "Autoreduction service"
 
     try:
