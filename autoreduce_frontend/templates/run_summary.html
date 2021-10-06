@@ -180,9 +180,9 @@
                                             {{ data_location }}
                                         {% endfor %}
                                         {% if path_type == "Windows" or "\\" in data_location%}
-                                            <a class="btn btn-primary btn-xs" aria-label="Switch to Linux" id='datapath_toggle' href="{% url 'runs:summary' instrument_name=instrument run_number=run.run_number run_version=run.run_version %}?pagination={{ items_per_page }}&sort={{ page_type }}&path_type={{"linux"}}"><i class="fa fa-linux" aria-hidden="true"></i></a>
+                                            <a class="btn btn-primary btn-xs" aria-label="Switch to Linux" id='datapath_toggle' href="{% url 'runs:summary' instrument_name=instrument run_number=run.run_number run_version=run.run_version %}?page={{current_page}}&pagination={{ items_per_page }}&sort={{ page_type }}&path_type={{"linux"}}"><i class="fa fa-linux" aria-hidden="true"></i></a>
                                         {% else %}
-                                            <a class="btn btn-primary btn-xs" aria-label="Switch to Windows" id='datapath_toggle' href="{% url 'runs:summary' instrument_name=instrument run_number=run.run_number run_version=run.run_version %}?pagination={{ items_per_page }}&sort={{ page_type }}&path_type={{"windows"}}"><i class="fa fa-windows" aria-hidden="true"></i></a>
+                                            <a class="btn btn-primary btn-xs" aria-label="Switch to Windows" id='datapath_toggle' href="{% url 'runs:summary' instrument_name=instrument run_number=run.run_number run_version=run.run_version %}?page={{current_page}}&pagination={{ items_per_page }}&sort={{ page_type }}&path_type={{"windows"}}"><i class="fa fa-windows" aria-hidden="true"></i></a>
                                         {% endif %}<br/>
                                     {% else %}
                                         <em>No data found</em>
@@ -245,12 +245,12 @@
         </div>
         <div class="row col-md-12 my-2">
             <div class="text-center">
-                <a href="{% url 'runs:summary' instrument_name=instrument run_number=newest_run run_version=run.run_version %}?pagination={{ items_per_page }}&sort={{ page_type }}" class="btn btn-primary back" id="newest"
-                    {% ifequal newest_run run_number %}
+                <a href="{% url 'runs:summary' instrument_name=instrument run_number=newest_run run_version=run.run_version %}?page={{current_page}}&pagination={{ items_per_page }}&sort={{ page_type }}" class="btn btn-primary back" id="newest"
+                    {% if newest_run == run_number %}
                         disabled
-                    {% endifequal %}>&#124;&#60; Newest
+                    {% endif%}>&#124;&#60; Newest
                 </a>
-                <a href="{% url 'runs:summary' instrument_name=instrument run_number=next_run run_version=run.run_version %}?pagination={{ items_per_page }}&sort={{ page_type }}" class="btn btn-primary back" id="next"
+                <a href="{% url 'runs:summary' instrument_name=instrument run_number=next_run run_version=run.run_version %}?page={{current_page}}&pagination={{ items_per_page }}&sort={{ page_type }}" class="btn btn-primary back" id="next"
                     {% if newest_run == run_number %}
                         disabled
                     {% endif%}>&#60;&#60; Next
@@ -258,7 +258,7 @@
                 <a href="{% url 'runs:list' run.instrument.name %}?page={{ current_page }}&pagination={{ items_per_page }}&sort={{ page_type }}&filter={{ filtering }}" class="btn btn-primary back" id="cancel"
                     >Back to {{ run.instrument.name }} runs
                 </a>
-                <a href="{% url 'runs:summary' instrument_name=instrument run_number=previous_run run_version=run.run_version %}?pagination={{ items_per_page }}&sort={{ page_type }}" class="btn btn-primary back" id="previous"
+                <a href="{% url 'runs:summary' instrument_name=instrument run_number=previous_run run_version=run.run_version %}?page={{current_page}}&pagination={{ items_per_page }}&sort={{ page_type }}" class="btn btn-primary back" id="previous"
                     {% if oldest_run == run_number %}
                         disabled
                     {% endif%}>Previous &#62;&#62;

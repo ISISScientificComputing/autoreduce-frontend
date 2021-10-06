@@ -288,7 +288,7 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
             'data_analysis_link_url': data_analysis_link_url,
             'current_page': int(request.GET.get('page', 1)),
             'items_per_page': int(request.GET.get('pagination', 10)),
-            'page_type': request.GET.get('sort', 'run'),
+            'page_type': page_type,
             'newest_run': newest_run.run_number,
             'oldest_run': oldest_run.run_number,
             'next_run': next_run.run_number,
