@@ -1,14 +1,13 @@
 # ############################################################################### #
 # Autoreduction Repository : https://github.com/ISISScientificComputing/autoreduce
 #
-# Copyright &copy; 2020 ISIS Rutherford Appleton Laboratory UKRI
+# Copyright &copy; 2021 ISIS Rutherford Appleton Laboratory UKRI
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
 """Selenium tests for the runs summary page."""
-
 import time
+
 from autoreduce_qp.systemtests.utils.data_archive import DataArchive
-from selenium.webdriver.support.wait import WebDriverWait
 from autoreduce_frontend.selenium_tests.pages.runs_list_page import RunsListPage
 from autoreduce_frontend.selenium_tests.tests.base_tests import (AccessibilityTestMixin, BaseTestCase, FooterTestMixin,
                                                                  NavbarTestMixin)
@@ -133,11 +132,11 @@ class TestRunsListQueries(BaseTestCase, AccessibilityTestMixin, FooterTestMixin,
 
             run_summary_page.driver.refresh()
             time.sleep(3)
-            if (nav == "next"):
+            if nav == "next":
                 assert run_summary_page.title_text() == "Reduction Job #100006"
-            elif (nav == "previous"):
+            elif nav == "previous":
                 assert run_summary_page.title_text() == "Reduction Job #100004"
-            elif (nav == "newest"):
+            elif nav == "newest":
                 assert run_summary_page.title_text() == "Reduction Job #100009"
 
     def test_disabled_btns(self):
