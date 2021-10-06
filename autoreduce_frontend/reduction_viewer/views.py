@@ -267,11 +267,7 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
         rb_number = run.experiment.reference_number
 
         page_type = request.GET.get('sort', 'run')
-        navigation_tuple = get_run_navigation_queries(instrument_name, run, page_type, run_number)
-        next_run = navigation_tuple[0]
-        previous_run = navigation_tuple[1]
-        newest_run = navigation_tuple[2]
-        oldest_run = navigation_tuple[-1]
+        next_run, previous_run, newest_run, oldest_run = get_run_navigation_queries(instrument_name, run, page_type)
 
         context_dictionary = {
             'run': run,
