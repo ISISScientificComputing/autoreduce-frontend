@@ -275,12 +275,18 @@ def configure_new_runs_post(request, instrument_name):
 
     arguments_json = json.dumps(args_for_range, separators=(',', ':'))
 
+    def update_or_create(instrument, arguments_json, kwargs):
+        try:
+            args = ReductionArguments.objects.get(instrument=instrument, **kwargs)
+            args.raw = arguments_json
+            args.save()
+        except ReductionArguments.DoesNotExist:
+            ReductionArguments.objects.create(instrument=instrument, raw=arguments_json, **kwargs)
+
     if start:
-        ReductionArguments.objects.get_or_create(instrument=instrument, raw=arguments_json, start_run=start)
+        update_or_create(instrument, arguments_json, {'start_run': start})
     else:
-        ReductionArguments.objects.get_or_create(instrument=instrument,
-                                                 raw=arguments_json,
-                                                 experiment_reference=experiment_reference)
+        update_or_create(instrument, arguments_json, {'experiment_reference': start})
     return redirect('instrument:variables_summary', instrument=instrument_name)
 
 
