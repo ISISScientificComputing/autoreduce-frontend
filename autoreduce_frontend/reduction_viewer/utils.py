@@ -91,6 +91,7 @@ class ReductionRunUtils:
         """
         Sends a retry message using the parameters from the most_recent_run
         """
+        # todo use last_run.arguments.as_dict()?
         ReductionRunUtils.send_retry_message(
             user_id, most_recent_run, "Re-run from the failed queue", most_recent_run.script,
             ReductionRunUtils.make_kwargs_from_runvariables(most_recent_run, use_value=True), most_recent_run.overwrite)

@@ -5,21 +5,22 @@
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
 
-from autoreduce_frontend.instrument.views.common import read_variables_from_form_post_submit
+import json
 import logging
-from itertools import chain
+import requests
+from requests.exceptions import ConnectionError
 
-from autoreduce_db.instrument.models import InstrumentVariable
-from autoreduce_db.reduction_viewer.models import Instrument, ReductionRun, Status
-from autoreduce_qp.queue_processor.instrument_variable_utils import InstrumentVariablesUtils
+from autoreduce_frontend.instrument.views.common import decode_b64, get_vars_from_run, read_variables_from_form_post_submit
+# from autoreduce_db.instrument.models import InstrumentVariable
+from autoreduce_db.reduction_viewer.models import Instrument, ReductionArguments, ReductionRun, Status
+from autoreduce_qp.queue_processor.variable_utils import merge_arguments
 from autoreduce_qp.queue_processor.reduction.service import ReductionScript
 from autoreduce_qp.queue_processor.variable_utils import VariableUtils
 from django.db.models.query import QuerySet
 from django.shortcuts import redirect
 
+from autoreduce_utils.settings import AUTOREDUCE_API_URL
 from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions, login_and_uows_valid, render_with)
-from autoreduce_frontend.instrument.views.variables import _combine_dicts
-from autoreduce_frontend.reduction_viewer.utils import ReductionRunUtils
 from autoreduce_frontend.utilities import input_processing
 
 LOGGER = logging.getLogger(__package__)
@@ -44,26 +45,16 @@ def submit_runs(request, instrument=None):
         runs_for_instrument = instrument.reduction_runs.filter(batch_run=False)
         last_run = instrument.get_last_for_rerun(runs_for_instrument)
 
-        kwargs = ReductionRunUtils.make_kwargs_from_runvariables(last_run)
-        standard_vars = kwargs["standard_vars"]
-        advanced_vars = kwargs["advanced_vars"]
-
-        try:
-            default_variables = VariableUtils.get_default_variables(instrument)
-        except (FileNotFoundError, ImportError, SyntaxError) as err:
-            return {"message": str(err)}
-
-        final_standard = _combine_dicts(standard_vars, default_variables["standard_vars"])
-        final_advanced = _combine_dicts(advanced_vars, default_variables["advanced_vars"])
-
+        standard_vars, advanced_vars, variable_help = get_vars_from_run(last_run)
         # pylint:disable=no-member
         context_dictionary = {
             'instrument': instrument,
             'last_instrument_run': last_run,
             'processing': runs_for_instrument.filter(status=processing_status),
             'queued': runs_for_instrument.filter(status=queued_status),
-            'standard_variables': final_standard,
-            'advanced_variables': final_advanced,
+            'standard_variables': standard_vars,
+            'advanced_variables': advanced_vars,
+            'variable_help': variable_help
         }
 
         return context_dictionary
@@ -115,7 +106,7 @@ def run_confirmation(request, instrument: str):
         return context_dictionary
 
     related_runs: QuerySet[ReductionRun] = ReductionRun.objects.filter(instrument__name=instrument,
-                                                                       batch_run=isinstance(run_numbers, list),
+                                                                       batch_run=len(run_numbers) > 1,
                                                                        run_numbers__run_number__in=run_numbers)
     # Check that RB numbers are the same for the range entered
     # pylint:disable=no-member
@@ -127,7 +118,6 @@ def run_confirmation(request, instrument: str):
         return context_dictionary
 
     try:
-        script_text = InstrumentVariablesUtils.get_current_script_text(instrument)
         default_variables = VariableUtils.get_default_variables(instrument)
     except (FileNotFoundError, ImportError, SyntaxError) as err:
         context_dictionary['error'] = err
@@ -140,27 +130,49 @@ def run_confirmation(request, instrument: str):
         context_dictionary['error'] = err
         return context_dictionary
 
+    try:
+        auth_token = str(request.user.auth_token)
+    except AttributeError as err:
+        context_dictionary['error'] = "User is not authorized to submit batch runs."
+        return context_dictionary
+    # run_description gets stored in run_description in the ReductionRun object
+    max_run_description_length = ReductionRun._meta.get_field('run_description').max_length
+    if len(run_description) > max_run_description_length:
+        context_dictionary["error"] = "The description contains {0} characters, " \
+                                        "a maximum of {1} are allowed".\
+            format(len(run_description), max_run_description_length)
+        return context_dictionary
     for run_number in run_numbers:
-        matching_previous_runs = related_runs.filter(run_number=run_number).order_by('-run_version')
+        matching_previous_runs = related_runs.order_by('-run_version')
         run_suitable, reason = find_reason_to_avoid_re_run(matching_previous_runs, run_number)
         if not run_suitable:
             context_dictionary['error'] = reason
             break
 
-        # run_description gets stored in run_description in the ReductionRun object
-        max_run_description_length = ReductionRun._meta.get_field('run_description').max_length
-        if len(run_description) > max_run_description_length:
-            context_dictionary["error"] = "The description contains {0} characters, " \
-                                          "a maximum of {1} are allowed".\
-                format(len(run_description), max_run_description_length)
-            return context_dictionary
-
         most_recent_run: ReductionRun = matching_previous_runs.first()
-        # User can choose whether to overwrite with the re-run or create new data
-        ReductionRunUtils.send_retry_message(request.user.id, most_recent_run, run_description, script_text,
-                                             new_script_arguments, False)
         # list stores (run_number, run_version)
         context_dictionary["runs"].append((run_number, most_recent_run.run_version + 1))
+
+    try:
+        response = requests.post(f"{AUTOREDUCE_API_URL}/runs/{instrument}",
+                                 json={
+                                     "runs": run_numbers,
+                                     "reduction_arguments": new_script_arguments,
+                                     "user_id": request.user.id,
+                                     "description": run_description
+                                 },
+                                 headers={"Authorization": f"Token {auth_token}"})
+        if response.status_code != 200:
+            content = json.loads(response.content)
+            context_dictionary['error'] = content.get("message", "Unknown error encountered")
+            return context_dictionary
+    except ConnectionError as err:  # pylint:disable=broad-except
+        context_dictionary['error'] = "Unable to connect to the Autoreduce job submission service. If the error "\
+                    "persists please let the Autoreduce team know at ISISREDUCE@stfc.ac.uk"
+
+    except Exception as err:  # pylint:disable=broad-except
+        context_dictionary['error'] = "Encountered unexpected error, "\
+                f"please let the Autoreduce team know at ISISREDUCE@stfc.ac.uk: {err}"
 
     return context_dictionary
 
@@ -204,9 +216,7 @@ def make_reduction_arguments(post_arguments, default_variables) -> dict:
                 continue
 
             if name is not None:
-                if len(value) > InstrumentVariable._meta.get_field('value').max_length:
-                    raise ValueError(f'Value given in {name} is too long.')
-
+                name = decode_b64(name)
                 if name not in default_variables[dict_key]:
                     continue
 
@@ -244,12 +254,15 @@ def configure_new_runs_post(request, instrument_name):
     experiment_reference = int(request.POST.get("experiment_reference_number")) if request.POST.get(
         "experiment_reference_number", None) else None
 
+    if not start and not experiment_reference:
+        return {"message": "Invalid run range or experiment reference submitted."}
+
     all_vars = read_variables_from_form_post_submit(request.POST)
 
     reduce_vars = ReductionScript(instrument_name, 'reduce_vars.py')
     reduce_vars_module = reduce_vars.load()
     try:
-        args_for_range = InstrumentVariablesUtils.merge_arguments(all_vars, reduce_vars_module)
+        args_for_range = merge_arguments(all_vars, reduce_vars_module)
     except KeyError as err:
         return {
             "message":
@@ -260,27 +273,14 @@ def configure_new_runs_post(request, instrument_name):
 
     instrument = Instrument.objects.get(name=instrument_name)
 
-    if start and start > 0:
-        possible_variables = InstrumentVariable.objects.filter(start_run__lte=start, instrument__name=instrument_name)
+    arguments_json = json.dumps(args_for_range, separators=(',', ':'))
 
-        # Makes the variables that will be active for the range START -> END
-        # These variables DO NOT track the script - their value will not be updated until:
-        # - The user manually sets new variables in the web app
-        # - The end run number is passed
-        InstrumentVariablesUtils.find_or_make_variables(possible_variables,
-                                                        instrument.id,
-                                                        args_for_range,
-                                                        start,
-                                                        from_webapp=True)
+    if start:
+        ReductionArguments.objects.get_or_create(instrument=instrument, raw=arguments_json, start_run=start)
     else:
-        possible_variables = InstrumentVariable.objects.filter(experiment_reference=experiment_reference,
-                                                               instrument__name=instrument_name)
-        InstrumentVariablesUtils.find_or_make_variables(possible_variables,
-                                                        instrument.id,
-                                                        args_for_range,
-                                                        start,
-                                                        experiment_reference,
-                                                        from_webapp=True)
+        ReductionArguments.objects.get_or_create(instrument=instrument,
+                                                 raw=arguments_json,
+                                                 experiment_reference=experiment_reference)
     return redirect('instrument:variables_summary', instrument=instrument_name)
 
 
@@ -295,48 +295,49 @@ def configure_new_runs_get(instrument_name, start=0, end=0, experiment_reference
 
     last_run = instrument.get_last_for_rerun()
 
-    run_variables = ReductionRunUtils.make_kwargs_from_runvariables(last_run)
-    standard_vars = run_variables["standard_vars"]
-    advanced_vars = run_variables["advanced_vars"]
+    # run_variables = last_run.arguments.as_dict()
+    # standard_vars = run_variables["standard_vars"]
+    # advanced_vars = run_variables["advanced_vars"]
 
     # if a specific start is provided, include vars upcoming for the specific start
-    filter_kwargs = {"start_run__gte": start if start else last_run.run_number}
-    if end:
-        # if an end run is provided - don't show variables outside the [start-end) range
-        filter_kwargs["start_run__lt"] = end
+    # filter_kwargs = {"start_run__gte": start if start else last_run.run_number}
+    # if end:
+    #     # if an end run is provided - don't show variables outside the [start-end) range
+    #     filter_kwargs["start_run__lt"] = end
 
-    upcoming_variables = instrument.instrumentvariable_set.filter(**filter_kwargs)
-    if experiment_reference:
-        upcoming_experiment_variables = instrument.instrumentvariable_set.filter(
-            experiment_reference=experiment_reference)
-    else:
-        upcoming_experiment_variables = []
+    # upcoming_variables = instrument.instrumentvariable_set.filter(**filter_kwargs)
+    # if experiment_reference:
+    #     upcoming_experiment_variables = instrument.instrumentvariable_set.filter(
+    #         experiment_reference=experiment_reference)
+    # else:
+    #     upcoming_experiment_variables = []
 
-    # Updates the variables values. Experiment variables are chained second
-    # so they values will overwrite any changes from the run variables
-    for upcoming_var in chain(upcoming_variables, upcoming_experiment_variables):
-        name = upcoming_var.name
-        if name in standard_vars or not upcoming_var.is_advanced:
-            standard_vars[name] = upcoming_var
-        elif name in advanced_vars or upcoming_var.is_advanced:
-            advanced_vars[name] = upcoming_var
+    # # Updates the variables values. Experiment variables are chained second
+    # # so they values will overwrite any changes from the run variables
+    # for upcoming_var in chain(upcoming_variables, upcoming_experiment_variables):
+    #     name = upcoming_var.name
+    #     if name in standard_vars or not upcoming_var.is_advanced:
+    #         standard_vars[name] = upcoming_var
+    #     elif name in advanced_vars or upcoming_var.is_advanced:
+    #         advanced_vars[name] = upcoming_var
 
-    # Unique, comma-joined list of all start runs belonging to the upcoming variables.
-    # This seems to be used to prevent submission if trying to resubmit variables for already
-    # configured future run numbers - check the checkForConflicts function
-    # This should probably be done by the POST method anyway.. so remove it when
-    if upcoming_variables:
-        upcoming_run_variables = ','.join({str(var.start_run) for var in upcoming_variables})
-    else:
-        upcoming_run_variables = ""
+    # # Unique, comma-joined list of all start runs belonging to the upcoming variables.
+    # # This seems to be used to prevent submission if trying to resubmit variables for already
+    # # configured future run numbers - check the checkForConflicts function
+    # # This should probably be done by the POST method anyway.. so remove it when
+    # if upcoming_variables:
+    #     upcoming_run_variables = ','.join({str(var.start_run) for var in upcoming_variables})
+    # else:
+    #     upcoming_run_variables = ""
 
-    try:
-        reduce_vars_variables = VariableUtils.get_default_variables(instrument)
-    except (FileNotFoundError, ImportError, SyntaxError) as err:
-        return {"message": str(err)}
+    # try:
+    #     reduce_vars_variables = VariableUtils.get_default_variables(instrument)
+    # except (FileNotFoundError, ImportError, SyntaxError) as err:
+    #     return {"message": str(err)}
 
-    final_standard = _combine_dicts(standard_vars, reduce_vars_variables["standard_vars"])
-    final_advanced = _combine_dicts(advanced_vars, reduce_vars_variables["advanced_vars"])
+    # final_standard = _combine_dicts(standard_vars, reduce_vars_variables["standard_vars"])
+    # final_advanced = _combine_dicts(advanced_vars, reduce_vars_variables["advanced_vars"])
+    standard_vars, advanced_vars, variable_help = get_vars_from_run(last_run)
     run_start = start if start else last_run.run_number + 1
 
     context_dictionary = {
@@ -344,8 +345,9 @@ def configure_new_runs_get(instrument_name, start=0, end=0, experiment_reference
         'last_instrument_run': last_run,
         'processing': ReductionRun.objects.filter(instrument=instrument, status=Status.get_processing()),
         'queued': ReductionRun.objects.filter(instrument=instrument, status=Status.get_queued()),
-        'standard_variables': final_standard,
-        'advanced_variables': final_advanced,
+        'standard_variables': standard_vars,
+        'advanced_variables': advanced_vars,
+        'variable_help': variable_help,
         'run_start': run_start,
         # used to determine whether the current form is for an experiment reference
         'current_experiment_reference': experiment_reference,
@@ -353,7 +355,7 @@ def configure_new_runs_get(instrument_name, start=0, end=0, experiment_reference
         'submit_for_experiment_reference': last_run.experiment.reference_number,
         'minimum_run_start': run_start,
         'minimum_run_end': run_start + 1,
-        'upcoming_run_variables': upcoming_run_variables,
+        'upcoming_run_variables': "",
         'editing': editing,
         'tracks_script': '',
     }

@@ -231,7 +231,6 @@ def run_summary_run(request, history, instrument_name=None, run_number=None, run
             'data_location': data_location,
             'reduction_location': reduction_location,
             'started_by': started_by,
-            'has_run_variables': bool(run.run_variables.count()),
             'data_analysis_link_url': data_analysis_link_url,
             'current_page': int(request.GET.get('page', 1)),
             'items_per_page': int(request.GET.get('pagination', 10)),

@@ -13,11 +13,9 @@ import logging
 
 from django.shortcuts import redirect, render
 
-from autoreduce_db.instrument.models import InstrumentVariable
-from autoreduce_db.reduction_viewer.models import Instrument, ReductionRun
+from autoreduce_db.reduction_viewer.models import Instrument, ReductionArguments
 from autoreduce_qp.queue_processor.variable_utils import VariableUtils
 from autoreduce_frontend.autoreduce_webapp.view_utils import check_permissions, login_and_uows_valid, render_with
-from autoreduce_frontend.reduction_viewer.utils import ReductionRunUtils
 
 LOGGER = logging.getLogger(__package__)
 
@@ -26,78 +24,75 @@ def summarize_variables(request, instrument, last_run_object):
     """Handle view request for the instrument summary page."""
     instrument = Instrument.objects.get(name=instrument)
 
-    current_variables = [runvar.variable.instrumentvariable for runvar in last_run_object.run_variables.all()]
+    current_arguments = last_run_object.arguments
 
-    upcoming_variables_by_run = InstrumentVariable.objects.filter(start_run__gt=last_run_object.run_number,
+    upcoming_arguments_by_run = ReductionArguments.objects.filter(start_run__gt=last_run_object.run_number,
                                                                   instrument=instrument)
-    upcoming_variables_by_experiment = InstrumentVariable.objects.filter(
+    upcoming_arguments_by_experiment = ReductionArguments.objects.filter(
         experiment_reference__gte=last_run_object.experiment.reference_number, instrument=instrument)
 
     # There's a known issue with inaccurate display of tracks script:
     # https://github.com/ISISScientificComputing/autoreduce/issues/1187
     # creates a nested dictionary for by-run
-    upcoming_variables_by_run_dict = {}
-    for variable in upcoming_variables_by_run:
-        if variable.start_run not in upcoming_variables_by_run_dict:
-            upcoming_variables_by_run_dict[variable.start_run] = {
-                'run_start': variable.start_run,
+    upcoming_arguments_by_run_dict = {}
+    for arguments in upcoming_arguments_by_run:
+        if arguments.start_run not in upcoming_arguments_by_run_dict:
+            upcoming_arguments_by_run_dict[arguments.start_run] = {
+                'run_start': arguments.start_run,
                 'run_end': 0,  # We'll fill this in after
-                'tracks_script': variable.tracks_script,
-                'variables': [],
+                'arguments': arguments.as_dict(),
                 'instrument': instrument,
             }
-        upcoming_variables_by_run_dict[variable.start_run]['variables'].append(variable)
 
     # Fill in the run end numbers
     run_end = 0
-    for run_number in sorted(upcoming_variables_by_run_dict.keys(), reverse=True):
-        upcoming_variables_by_run_dict[run_number]['run_end'] = run_end
+    for run_number in sorted(upcoming_arguments_by_run_dict.keys(), reverse=True):
+        upcoming_arguments_by_run_dict[run_number]['run_end'] = run_end
         run_end = max(run_number - 1, 0)
 
-    if current_variables:
-        current_start = current_variables[0].start_run
+    if current_arguments:
+        current_start = current_arguments.start_run
+        if current_start is None:
+            current_start = 0
         next_run_starts = list(
-            filter(lambda start: start > current_start, sorted(upcoming_variables_by_run_dict.keys())))
+            filter(lambda start: start > current_start, sorted(upcoming_arguments_by_run_dict.keys())))
         current_end = next_run_starts[0] - 1 if next_run_starts else 0
 
         current_vars = {
             'run_start': current_start,
             'run_end': current_end,
-            'tracks_script': not any((var.tracks_script for var in current_variables)),
-            'variables': current_variables,
+            'arguments': current_arguments.as_dict(),
             'instrument': instrument,
         }
     else:
         current_vars = {}
 
     # Move the upcoming vars into an ordered list
-    upcoming_variables_by_run_ordered = []
-    for key in sorted(upcoming_variables_by_run_dict):
-        upcoming_variables_by_run_ordered.append(upcoming_variables_by_run_dict[key])
+    upcoming_arguments_by_run_ordered = []
+    for key in sorted(upcoming_arguments_by_run_dict):
+        upcoming_arguments_by_run_ordered.append(upcoming_arguments_by_run_dict[key])
 
     # Create a nested dictionary for by-experiment
     upcoming_variables_by_experiment_dict = {}
-    for variables in upcoming_variables_by_experiment:
-        if variables.experiment_reference not in upcoming_variables_by_experiment_dict:
-            upcoming_variables_by_experiment_dict[variables.experiment_reference] = {
-                'experiment': variables.experiment_reference,
-                'variables': [],
+    for arguments in upcoming_arguments_by_experiment:
+        if arguments.experiment_reference not in upcoming_variables_by_experiment_dict:
+            upcoming_variables_by_experiment_dict[arguments.experiment_reference] = {
+                'experiment': arguments.experiment_reference,
+                'arguments': arguments.as_dict(),
                 'instrument': instrument,
             }
-        upcoming_variables_by_experiment_dict[variables.experiment_reference]['variables'].\
-            append(variables)
 
     # Move the upcoming vars into an ordered list
-    upcoming_variables_by_experiment_ordered = []
+    upcoming_arguments_by_experiment_ordered = []
     for key in sorted(upcoming_variables_by_experiment_dict):
-        upcoming_variables_by_experiment_ordered.append(upcoming_variables_by_experiment_dict[key])
-    sorted(upcoming_variables_by_experiment_ordered, key=lambda r: r['experiment'])
+        upcoming_arguments_by_experiment_ordered.append(upcoming_variables_by_experiment_dict[key])
+    sorted(upcoming_arguments_by_experiment_ordered, key=lambda r: r['experiment'])
 
     context_dictionary = {
         'instrument': instrument,
         'current_variables': current_vars,
-        'upcoming_variables_by_run': upcoming_variables_by_run_ordered,
-        'upcoming_variables_by_experiment': upcoming_variables_by_experiment_ordered,
+        'upcoming_arguments_by_run': upcoming_arguments_by_run_ordered,
+        'upcoming_arguments_by_experiment': upcoming_arguments_by_experiment_ordered,
     }
 
     return render(request, 'snippets/instrument_summary_variables.html', context_dictionary)
@@ -124,13 +119,13 @@ def delete_instrument_variables(request, instrument=None, start=0, end=0, experi
 
     # We "save" an empty list to delete the previous variables.
     if experiment_reference is not None:
-        InstrumentVariable.objects.filter(instrument__name=instrument,
+        ReductionArguments.objects.filter(instrument__name=instrument,
                                           experiment_reference=experiment_reference).delete()
     else:
         start_run_kwargs = {"start_run__gte": start}
         if end > 0:
             start_run_kwargs["start_run__lte"] = end
-        InstrumentVariable.objects.filter(instrument__name=instrument, **start_run_kwargs).delete()
+        ReductionArguments.objects.filter(instrument__name=instrument, **start_run_kwargs).delete()
 
     return redirect('instrument:variables_summary', instrument=instrument)
 
@@ -172,7 +167,7 @@ def render_run_variables(request, instrument_name, reduction_run):
     Handles request to view the summary of a run
     """
     # pylint:disable=no-member
-    vars_kwargs = ReductionRunUtils.make_kwargs_from_runvariables(reduction_run)
+    vars_kwargs = reduction_run.arguments.as_dict()
     standard_vars = vars_kwargs["standard_vars"]
     advanced_vars = vars_kwargs["advanced_vars"]
 
@@ -180,10 +175,12 @@ def render_run_variables(request, instrument_name, reduction_run):
         default_variables = VariableUtils.get_default_variables(instrument_name)
         default_standard_variables = default_variables["standard_vars"]
         default_advanced_variables = default_variables["advanced_vars"]
+        variable_help = default_variables["variable_help"]
     except (FileNotFoundError, ImportError, SyntaxError):
         default_variables = {}
         default_standard_variables = {}
         default_advanced_variables = {}
+        variable_help = {}
 
     final_standard = _combine_dicts(standard_vars, default_standard_variables)
     final_advanced = _combine_dicts(advanced_vars, default_advanced_variables)
@@ -195,6 +192,7 @@ def render_run_variables(request, instrument_name, reduction_run):
         'batch_run': reduction_run.batch_run,
         'standard_variables': final_standard,
         'advanced_variables': final_advanced,
+        'variable_help': variable_help,
         'instrument': reduction_run.instrument,
     }
     return render(request, 'snippets/run_variables.html', context_dictionary)

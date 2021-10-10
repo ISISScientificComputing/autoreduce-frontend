@@ -28,10 +28,6 @@
                     {% endif %}
                 </div>
             </div>
-            {% if instrument_variables.tracks_script %}
-                <small>(Tracking script changes)</small>
-                <br/>
-            {% endif %}
             {% if upcoming %}
             <br/>
             <a href="{% url 'instrument:variables' instrument=instrument.name start=instrument_variables.run_start end=instrument_variables.run_end %}">edit variables</a>
@@ -41,7 +37,7 @@
         {% endif %}
     </div>
     <div class="col-md-8">
-        {% for variable in instrument_variables.variables|dictsort:"name" %}
+        {% for variable in instrument_variables.arguments|dictsort:"name" %}
             <div>
                 <strong>{{ variable.name }}:</strong> {{ variable.value }}
             </div>
