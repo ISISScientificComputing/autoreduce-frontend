@@ -90,12 +90,12 @@ def summarize_variables(request, instrument, last_run_object):
 
     context_dictionary = {
         'instrument': instrument,
-        'current_variables': current_vars,
+        'current_arguments': current_vars,
         'upcoming_arguments_by_run': upcoming_arguments_by_run_ordered,
         'upcoming_arguments_by_experiment': upcoming_arguments_by_experiment_ordered,
     }
 
-    return render(request, 'snippets/instrument_summary_variables.html', context_dictionary)
+    return render(request, 'snippets/instrument_summary.html', context_dictionary)
 
 
 @login_and_uows_valid
