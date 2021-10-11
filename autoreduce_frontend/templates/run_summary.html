@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Reduction job #{{ run.title|default:"null" }}{% endblock %}
 {% load view %}
-{% load colour_table_rows %}
+{% load colour_table_row %}
 {% load natural_time_difference %}
 {% load replace %}
 {% load naturaltime from humanize %}
@@ -252,71 +252,8 @@
             </div>
         </div>
 
-        <div class="run-history modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">
-                            <span aria-hidden="true">&times;</span>
-                            <span class="sr-only">Close</span>
-                        </button>
-                        <h3 class="modal-title">Job History</h3>
-                    </div>
-                    <div class="modal-body">
-                        <table class="table table-striped table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Job Number</th>
-                                    <th>Status</th>
-                                    <th>Last Updated</th>
-                                    <th>Submitted By</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for job in history %}
-                                    <tr>
-                                        <td>
-                                            {% if job.run_version != run.run_version %}
-                                            {% else %}
-                                                {{ job.title }}
-                                            {% endif %}
-                                        </td>
-                                        <td class="text-{% colour_table_row job.status.value_verbose %}">
-                                            <strong>{{ job.status.value_verbose }}</strong>
-                                        </td>
-                                        <td title="{{ job.last_updated|date:'SHORT_DATETIME_FORMAT' }}">{{ job.last_updated|naturaltime }}</td>
-                                        <td>
-                                            {% if started_by %}
-                                                {{ started_by }}
-                                            {% else %}
-                                                Unknown
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="log-display modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">
-                            <span aria-hidden="true">&times;</span>
-                            <span class="sr-only">Close</span>
-                        </button>
-                        <h4 class="modal-title">Reduction logs</h4>
-                    </div>
-                    <div class="modal-body">
-                        <pre class="prettyprint js-log-display-container">## Reduction log ##<br/>{{ run.reduction_log }}<br/><br/><br/>## Reduction admin log ##<br/>{{ run.admin_log }}</pre>
-                    </div>
-                </div>
-            </div>
-        </div>
+        {% include 'snippets/run_summary/history.html' with history=history started_by=started_by %}
+        {% include 'snippets/run_summary/reduction_log.html' with run=run %}
     {% endif %}
 {% endblock %}
 
