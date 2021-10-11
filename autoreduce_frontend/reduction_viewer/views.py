@@ -16,14 +16,15 @@ import json
 import logging
 import operator
 import traceback
+import requests
 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout as django_logout
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.db.models import Q
-from django.http import HttpResponseNotFound
-from django.shortcuts import redirect
+from django.http import HttpResponseNotFound, response
+from django.shortcuts import redirect, render
 from django.utils.http import url_has_allowed_host_and_scheme
 
 from autoreduce_db.reduction_viewer.models import Experiment, Instrument, ReductionRun, Status
@@ -41,6 +42,7 @@ from autoreduce_frontend.reduction_viewer.view_utils import (deactivate_invalid_
                                                              linux_to_windows_path, make_data_analysis_url,
                                                              windows_to_linux_path)
 from autoreduce_frontend.utilities.pagination import CustomPaginator
+from autoreduce_frontend.autoreduce_webapp.settings import AUTOREDUCE_API_URL
 
 LOGGER = logging.getLogger(__package__)
 
@@ -609,3 +611,15 @@ def started_by_id_to_name(started_by_id=None):
     except ObjectDoesNotExist as exception:
         LOGGER.error(exception)
         return None
+
+
+# pylint:disable=no-member
+def search_runs(request):
+    search_result = {}
+    if 'query' in request.GET:
+        query = request.GET['query']
+        url = AUTOREDUCE_API_URL + "/search?search=%s" % query
+        print(url)
+        response = requests.get(url)
+        search_result = response.json()
+    return render(request, "search_runs.html", {'search_result': search_result})
