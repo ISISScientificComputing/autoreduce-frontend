@@ -181,6 +181,7 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
 @render_with('run_summary.html')
 # pylint:disable=no-member,too-many-locals,broad-except
 def run_summary_batch_run(request, instrument_name=None, pk=None, run_version=0):
+    """Gathers the context and renders a run's summary"""
     history = ReductionRun.objects.filter(instrument__name=instrument_name, pk=pk).order_by(
         '-run_version').select_related('status').select_related('experiment').select_related('instrument')
     if len(history) == 0:
@@ -240,7 +241,7 @@ def run_summary_run(request, history, instrument_name=None, run_number=None, run
         'next_run': int(request.GET.get('next_run', run_number)),
         'previous_run': int(request.GET.get('previous_run', run_number)),
         'filtering': request.GET.get('filter', 'run'),
-        'new_path_type': 'linux' if path_type == 'windows' else 'windows',
+        'new_path_type': 'windows' if path_type == 'windows' else 'linux',
     }
 
     if reduction_location:
