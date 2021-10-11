@@ -4,7 +4,11 @@
 {% load naturaltime from humanize %}
 
 {% block body %}
-    {% if experiment %}
+    {% if not experiment %}
+        <div class="text-center col-md-6 col-md-offset-3 well well-small">
+            Experiment not found or error encountered: {{ error }}.
+        </div>
+    {% else %}
         <div class="row">
             <div class="col-md-12 text-center">
                 <h2>RB{{ experiment.reference_number }}</h2>
@@ -37,32 +41,6 @@
                                 </div>
                                 <div>
                                     <strong>End Date:</strong> {{ experiment_details.end_date }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="file-path">
-                                    <strong>Data:</strong>
-                                    {% if data %}
-                                        {% for location in data %}
-                                            {{ location.file_path }}<br/>
-                                        {% endfor %}
-                                    {% else %}
-                                        <em>No experiment data found</em>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="file-path">
-                                    <strong>Reduced:</strong>
-                                    {% if reduced_data %}
-                                        {% for location in reduced_data %}
-                                            {{ location.file_path }}<br/>
-                                        {% endfor %}
-                                    {% else %}
-                                        <em>No reduced data found</em>
-                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -106,11 +84,22 @@
                 {% else %}
                     <div class="text-center"><em>No runs found</em></div>
                 {% endif %}
+                <a {% if not paginator.has_previous %}disabled{% endif %}
+                href="{% url 'experiment_summary' reference_number=experiment.reference_number %}?page=1"
+                class="btn btn-default" title="First Page"><i class="fa fa-step-backward"></i></a>
+
+                <a {% if not paginator.has_previous %}disabled{% endif %}
+                href="{% url 'experiment_summary' reference_number=experiment.reference_number %}?page={{ paginator.previous_page_index }}"
+                class="btn btn-default" title="Previous Page"><i class="fa fa-chevron-left"></i></a>
+
+                <a {% if not paginator.has_next %}disabled{% endif %}
+                href="{% url 'experiment_summary' reference_number=experiment.reference_number %}?page={{ paginator.next_page_index }}"
+                class="btn btn-default" title="Next Page"><i class="fa fa-chevron-right"></i></a>
+
+                <a {% if not paginator.has_next %}disabled{% endif %}
+                href="{% url 'experiment_summary' reference_number=experiment.reference_number %}?page={{ last_page_index }}"
+                class="btn btn-default" title="Last Page"><i class="fa fa-step-forward"></i></a>
             </div>
-        </div>
-    {% else %}
-        <div class="text-center col-md-6 col-md-offset-3 well well-small">
-            Experiment not found.
         </div>
     {% endif %}
 {% endblock %}

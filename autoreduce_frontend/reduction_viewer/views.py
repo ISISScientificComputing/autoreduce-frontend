@@ -13,13 +13,12 @@ should remove the pylint disables and fix the code when we can be more confident
 we are not affecting the execution.
 """
 import logging
-import operator
 import traceback
 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout as django_logout
 from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.http import HttpResponseNotFound
 from django.shortcuts import redirect
@@ -372,74 +371,6 @@ def runs_list(request, instrument=None):
     except Exception:
         LOGGER.error(traceback.format_exc())
         return {'message': "An unexpected error has occurred when loading the instrument."}
-
-    return context_dictionary
-
-
-@login_and_uows_valid
-@check_permissions
-@render_with('experiment_summary.html')
-# pylint:disable=no-member,too-many-locals,broad-except
-def experiment_summary(request, reference_number=None):
-    """Render experiment summary."""
-    try:
-        experiment = Experiment.objects.get(reference_number=reference_number)
-        runs = ReductionRun.objects.filter(experiment=experiment).order_by('-run_version')
-        data = []
-        reduced_data = []
-        started_by = []
-        for run in runs:
-            for location in run.data_location.all():
-                if location not in data:
-                    data.append(location)
-            for location in run.reduction_location.all():
-                if location not in reduced_data:
-                    reduced_data.append(location)
-            started_by.append(started_by_id_to_name(run.started_by))
-        sorted_runs = sorted(runs, key=operator.attrgetter('last_updated'), reverse=True)
-        runs_with_started_by = zip(sorted_runs, started_by)
-
-        try:
-            if DEVELOPMENT_MODE:
-                # If we are in development mode use user/password for ICAT from
-                # django settings e.g. do not attempt to use same authentication
-                # as the user office
-                try:
-                    with ICATCache() as icat:
-                        experiment_details = icat.get_experiment_details(int(reference_number))
-                except ICATConnectionException as excep:
-                    render_error(request, str(excep))
-            else:
-                try:
-                    with ICATCache(AUTH='uows', SESSION={'sessionid': request.session['sessionid']}) as icat:
-                        experiment_details = icat.get_experiment_details(int(reference_number))
-                except ICATConnectionException as excep:
-                    render_error(request, str(excep))
-
-        except Exception as icat_e:
-            LOGGER.error(icat_e)
-            experiment_details = {
-                'reference_number': '',
-                'start_date': '',
-                'end_date': '',
-                'title': '',
-                'summary': '',
-                'instrument': '',
-                'pi': '',
-            }
-
-        context_dictionary = {
-            'experiment': experiment,
-            'runs_with_started_by': runs_with_started_by,
-            'run_count': len(runs),
-            'experiment_details': experiment_details,
-            'data': data,
-            'reduced_data': reduced_data,
-        }
-
-    except Exception as exception:
-        LOGGER.error(exception)
-        context_dictionary = {}
 
     return context_dictionary
 

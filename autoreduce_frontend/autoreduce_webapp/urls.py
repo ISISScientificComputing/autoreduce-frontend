@@ -11,7 +11,7 @@ from django.contrib import admin
 from django.urls import path, register_converter
 
 from autoreduce_frontend.instrument.views import runs
-from autoreduce_frontend.reduction_viewer import views as reduction_viewer_views
+from autoreduce_frontend.reduction_viewer import views as reduction_viewer_views, experiment_summary
 
 handler400 = 'autoreduce_frontend.autoreduce_webapp.views.handler400'
 handler403 = 'autoreduce_frontend.autoreduce_webapp.views.handler403'
@@ -52,7 +52,7 @@ urlpatterns = [
     path('instrument/', include('instrument.urls')),
 
     # ===========================EXPERIMENT========================== #
-    path('experiment/<negint:reference_number>/', reduction_viewer_views.experiment_summary, name='experiment_summary'),
+    path('experiment/<negint:reference_number>/', experiment_summary.experiment_summary, name='experiment_summary'),
 
     # ===========================SCRIPTS============================= #
     path('graph/', reduction_viewer_views.graph_home, name="graph"),
