@@ -10,8 +10,7 @@ import logging
 import requests
 from requests.exceptions import ConnectionError
 
-from autoreduce_frontend.instrument.views.common import decode_b64, get_vars_from_run, read_variables_from_form_post_submit
-# from autoreduce_db.instrument.models import InstrumentVariable
+from autoreduce_frontend.instrument.views.common import decode_b64, get_arguments_from_run, read_variables_from_form_post_submit
 from autoreduce_db.reduction_viewer.models import Instrument, ReductionArguments, ReductionRun, Status
 from autoreduce_qp.queue_processor.variable_utils import merge_arguments
 from autoreduce_qp.queue_processor.reduction.service import ReductionScript
@@ -45,7 +44,7 @@ def submit_runs(request, instrument=None):
         runs_for_instrument = instrument.reduction_runs.filter(batch_run=False)
         last_run = instrument.get_last_for_rerun(runs_for_instrument)
 
-        standard_vars, advanced_vars, variable_help = get_vars_from_run(last_run)
+        standard_vars, advanced_vars, variable_help = get_arguments_from_run(last_run)
         # pylint:disable=no-member
         context_dictionary = {
             'instrument': instrument,
@@ -302,7 +301,7 @@ def configure_new_runs_get(instrument_name, start=0, experiment_reference=0):
 
     last_run = instrument.get_last_for_rerun()
 
-    standard_vars, advanced_vars, variable_help = get_vars_from_run(last_run)
+    standard_vars, advanced_vars, variable_help = get_arguments_from_run(last_run)
     run_start = start if start else last_run.run_number + 1
 
     context_dictionary = {

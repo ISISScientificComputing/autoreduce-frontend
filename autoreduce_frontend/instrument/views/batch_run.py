@@ -2,7 +2,7 @@ import requests
 from requests.exceptions import ConnectionError
 import json
 from autoreduce_frontend.utilities import input_processing
-from autoreduce_frontend.instrument.views.common import get_vars_from_run, read_variables_from_form_post_submit
+from autoreduce_frontend.instrument.views.common import get_arguments_from_run, read_variables_from_form_post_submit
 from typing import Any
 from autoreduce_db.reduction_viewer.models import Instrument
 from autoreduce_qp.queue_processor.variable_utils import merge_arguments
@@ -25,7 +25,7 @@ class BatchRunSubmit(FormView):
         runs_for_instrument = instrument.reduction_runs.filter(batch_run=True)
         last_run = instrument.get_last_for_rerun(runs_for_instrument)
 
-        standard_vars, advanced_vars, variable_help = get_vars_from_run(last_run)
+        standard_vars, advanced_vars, variable_help = get_arguments_from_run(last_run)
         context['message'] = self.request.GET.get("error", None)
         context['instrument'] = instrument
         context['standard_variables'] = standard_vars

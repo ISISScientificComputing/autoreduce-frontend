@@ -34,7 +34,7 @@ from autoreduce_frontend.autoreduce_webapp.uows_client import UOWSClient
 from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions, login_and_uows_valid, render_with,
                                                               require_admin)
 from autoreduce_frontend.autoreduce_webapp.views import render_error
-from autoreduce_frontend.instrument.views.common import get_vars_from_run
+from autoreduce_frontend.instrument.views.common import get_arguments_from_run
 from autoreduce_frontend.plotting.plot_handler import PlotHandler
 from autoreduce_frontend.reduction_viewer.view_utils import (deactivate_invalid_instruments, get_interactive_plot_data,
                                                              linux_to_windows_path, make_data_analysis_url,
@@ -221,7 +221,7 @@ def run_summary_run(request, history, instrument_name=None, run_version=0):
 
     data_analysis_link_url = make_data_analysis_url(reduction_location) if reduction_location else ""
     rb_number = run.experiment.reference_number
-    standard_vars, advanced_vars, variable_help = get_vars_from_run(run)
+    standard_vars, advanced_vars, variable_help = get_arguments_from_run(run)
 
     if run.batch_run:
         run_number = ",".join(str(rn.run_number) for rn in run.run_numbers.all())

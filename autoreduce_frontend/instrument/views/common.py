@@ -1,4 +1,6 @@
 import base64
+import itertools
+from typing import Tuple
 from autoreduce_qp.queue_processor.variable_utils import VariableUtils
 from django.http.request import QueryDict
 
@@ -15,13 +17,29 @@ def _combine_dicts(current: dict, default: dict):
         current = default.copy()
 
     final = {}
-    for name, var in current.items():
-        final[name] = {"current": var, "default": default.get(name, None)}
+    for name in itertools.chain(current.keys(), default.keys()):
+        # the default valur for the "default" key and
+        # for when the variable is missing from the current variables
+        default_value = default.get(name, None)
+        final[name] = {"current": current.get(name, default_value), "default": default_value}
 
     return final
 
 
-def get_vars_from_run(reduction_run):
+def get_arguments_from_run(reduction_run) -> Tuple[dict, dict, dict]:
+    """
+    Gets the arguments from the reduction run and converts them
+    into a dictionary containing their "current" and "default" values.
+
+    Used to render the form in the webapp (with values from "current"), and
+    provide the defaults for resetting (with values from "default").
+
+    Args:
+        reduction_run: The reduction run to get the arguments from.
+
+    Returns:
+        A dictionary containing the arguments and their current and default values.
+    """
     vars_kwargs = reduction_run.arguments.as_dict()
     standard_vars = vars_kwargs["standard_vars"]
     advanced_vars = vars_kwargs["advanced_vars"]
