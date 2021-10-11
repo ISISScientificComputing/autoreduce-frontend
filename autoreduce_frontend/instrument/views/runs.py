@@ -301,48 +301,6 @@ def configure_new_runs_get(instrument_name, start=0, experiment_reference=0):
 
     last_run = instrument.get_last_for_rerun()
 
-    # run_variables = last_run.arguments.as_dict()
-    # standard_vars = run_variables["standard_vars"]
-    # advanced_vars = run_variables["advanced_vars"]
-
-    # if a specific start is provided, include vars upcoming for the specific start
-    # filter_kwargs = {"start_run__gte": start if start else last_run.run_number}
-    # if end:
-    #     # if an end run is provided - don't show variables outside the [start-end) range
-    #     filter_kwargs["start_run__lt"] = end
-
-    # upcoming_variables = instrument.instrumentvariable_set.filter(**filter_kwargs)
-    # if experiment_reference:
-    #     upcoming_experiment_variables = instrument.instrumentvariable_set.filter(
-    #         experiment_reference=experiment_reference)
-    # else:
-    #     upcoming_experiment_variables = []
-
-    # # Updates the variables values. Experiment variables are chained second
-    # # so they values will overwrite any changes from the run variables
-    # for upcoming_var in chain(upcoming_variables, upcoming_experiment_variables):
-    #     name = upcoming_var.name
-    #     if name in standard_vars or not upcoming_var.is_advanced:
-    #         standard_vars[name] = upcoming_var
-    #     elif name in advanced_vars or upcoming_var.is_advanced:
-    #         advanced_vars[name] = upcoming_var
-
-    # # Unique, comma-joined list of all start runs belonging to the upcoming variables.
-    # # This seems to be used to prevent submission if trying to resubmit variables for already
-    # # configured future run numbers - check the checkForConflicts function
-    # # This should probably be done by the POST method anyway.. so remove it when
-    # if upcoming_variables:
-    #     upcoming_run_variables = ','.join({str(var.start_run) for var in upcoming_variables})
-    # else:
-    #     upcoming_run_variables = ""
-
-    # try:
-    #     reduce_vars_variables = VariableUtils.get_default_variables(instrument)
-    # except (FileNotFoundError, ImportError, SyntaxError) as err:
-    #     return {"message": str(err)}
-
-    # final_standard = _combine_dicts(standard_vars, reduce_vars_variables["standard_vars"])
-    # final_advanced = _combine_dicts(advanced_vars, reduce_vars_variables["advanced_vars"])
     standard_vars, advanced_vars, variable_help = get_vars_from_run(last_run)
     run_start = start if start else last_run.run_number + 1
 
