@@ -231,7 +231,7 @@ def make_reduction_arguments(post_arguments, default_variables) -> dict:
 @login_and_uows_valid
 @check_permissions
 @render_with('configure_new_runs.html')
-def configure_new_runs(request, instrument=None, start=0, end=0, experiment_reference=0):
+def configure_new_runs(request, instrument=None, start=0, experiment_reference=0):
     """
     Handles request to view instrument variables
     """
@@ -240,7 +240,7 @@ def configure_new_runs(request, instrument=None, start=0, end=0, experiment_refe
     if request.method == 'POST':
         return configure_new_runs_post(request, instrument_name)
     else:
-        return configure_new_runs_get(instrument, start, end, experiment_reference)
+        return configure_new_runs_get(instrument, start, experiment_reference)
 
 
 def configure_new_runs_post(request, instrument_name):
@@ -286,12 +286,12 @@ def configure_new_runs_post(request, instrument_name):
     if start:
         update_or_create(instrument, arguments_json, {'start_run': start})
     else:
-        update_or_create(instrument, arguments_json, {'experiment_reference': start})
+        update_or_create(instrument, arguments_json, {'experiment_reference': experiment_reference})
     return redirect('instrument:variables_summary', instrument=instrument_name)
 
 
 # pylint:disable=too-many-locals
-def configure_new_runs_get(instrument_name, start=0, end=0, experiment_reference=0):
+def configure_new_runs_get(instrument_name, start=0, experiment_reference=0):
     """
     GET for the configure new runs page
     """
