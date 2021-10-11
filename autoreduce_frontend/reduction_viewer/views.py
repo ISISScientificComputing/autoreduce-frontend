@@ -190,66 +190,58 @@ def run_summary_batch_run(request, instrument_name=None, pk=None, run_version=0)
 
 
 def run_summary_run(request, history, instrument_name=None, run_number=None, run_version=0):
-    try:
-        run = next(run for run in history if run.run_version == int(run_version))
-        started_by = started_by_id_to_name(run.started_by)
+    """Gathers the context and renders a run's summary"""
+    run = next(run for run in history if run.run_version == int(run_version))
+    started_by = started_by_id_to_name(run.started_by)
 
-        # Run status value of "s" means the run is skipped
-        is_skipped = run.status.value == "s"
-        is_rerun = len(history) > 1
+    # Run status value of "s" means the run is skipped
+    is_skipped = run.status.value == "s"
+    is_rerun = len(history) > 1
 
-        location_list = run.reduction_location.all()
-        reduction_location = ""
-        if location_list:
-            reduction_location = location_list[0].file_path
-        if reduction_location and '\\' in reduction_location:
-            reduction_location = reduction_location.replace('\\', '/')
+    location_list = run.reduction_location.all()
+    reduction_location = ""
+    if location_list:
+        reduction_location = location_list[0].file_path
+    if reduction_location and '\\' in reduction_location:
+        reduction_location = reduction_location.replace('\\', '/')
 
-        data_location_list = run.data_location.all()
-        data_location = ""
-        if data_location_list:
-            data_location = data_location_list[0].file_path
-            print(data_location)
+    data_location_list = run.data_location.all()
+    data_location = ""
+    if data_location_list:
+        data_location = data_location_list[0].file_path
+        print(data_location)
 
-        path_type = request.GET.get('path_type', "")
-        if path_type == "linux":
-            data_location = windows_to_linux_path(data_location)
-        elif path_type == "windows":
-            data_location = linux_to_windows_path(data_location)
+    path_type = request.GET.get('path_type', "")
+    if path_type == "linux":
+        data_location = windows_to_linux_path(data_location)
+    elif path_type == "windows":
+        data_location = linux_to_windows_path(data_location)
 
-        data_analysis_link_url = make_data_analysis_url(reduction_location) if reduction_location else ""
-        rb_number = run.experiment.reference_number
+    data_analysis_link_url = make_data_analysis_url(reduction_location) if reduction_location else ""
+    rb_number = run.experiment.reference_number
 
-        context_dictionary = {
-            'run': run,
-            'run_number': run_number,
-            'instrument': instrument_name,
-            'run_version': run_version,
-            'is_skipped': is_skipped,
-            'is_rerun': is_rerun,
-            'history': history,
-            'data_location': data_location,
-            'reduction_location': reduction_location,
-            'started_by': started_by,
-            'data_analysis_link_url': data_analysis_link_url,
-            'current_page': int(request.GET.get('page', 1)),
-            'items_per_page': int(request.GET.get('pagination', 10)),
-            'page_type': request.GET.get('sort', 'run'),
-            'newest_run': int(request.GET.get('newest_run', run_number)),
-            'oldest_run': int(request.GET.get('oldest_run', run_number)),
-            'next_run': int(request.GET.get('next_run', run_number)),
-            'previous_run': int(request.GET.get('previous_run', run_number)),
-            'filtering': request.GET.get('filter', 'run'),
-            'new_path_type': 'linux' if path_type == 'windows' else 'windows',
-        }
-
-    except PermissionDenied:
-        raise
-    except Exception as exception:
-        # Error that we cannot recover from - something wrong with instrument,
-        # run, or experiment
-        LOGGER.error(exception)
-        return {"message": str(exception)}
+    context_dictionary = {
+        'run': run,
+        'run_number': run_number,
+        'instrument': instrument_name,
+        'run_version': run_version,
+        'is_skipped': is_skipped,
+        'is_rerun': is_rerun,
+        'history': history,
+        'data_location': data_location,
+        'reduction_location': reduction_location,
+        'started_by': started_by,
+        'data_analysis_link_url': data_analysis_link_url,
+        'current_page': int(request.GET.get('page', 1)),
+        'items_per_page': int(request.GET.get('pagination', 10)),
+        'page_type': request.GET.get('sort', 'run'),
+        'newest_run': int(request.GET.get('newest_run', run_number)),
+        'oldest_run': int(request.GET.get('oldest_run', run_number)),
+        'next_run': int(request.GET.get('next_run', run_number)),
+        'previous_run': int(request.GET.get('previous_run', run_number)),
+        'filtering': request.GET.get('filter', 'run'),
+        'new_path_type': 'linux' if path_type == 'windows' else 'windows',
+    }
 
     if reduction_location:
         try:
