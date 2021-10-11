@@ -65,9 +65,6 @@ def instrument_variables_summary(request, instrument):
     upcoming_arguments_by_experiment = ReductionArguments.objects.filter(
         experiment_reference__gte=last_run_object.experiment.reference_number, instrument=instrument)
 
-    # There's a known issue with inaccurate display of tracks script:
-    # https://github.com/ISISScientificComputing/autoreduce/issues/1187
-    # creates a nested dictionary for by-run
     upcoming_arguments_by_run_dict = {}
     for arguments in upcoming_arguments_by_run:
         if arguments.start_run not in upcoming_arguments_by_run_dict:
