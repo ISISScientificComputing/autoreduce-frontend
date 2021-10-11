@@ -1,11 +1,9 @@
-import operator
 import logging
 
 from autoreduce_db.reduction_viewer.models import Experiment, ReductionRun
-from autoreduce_frontend.autoreduce_webapp.icat_cache import ICATCache, ICATConnectionException
+from autoreduce_frontend.autoreduce_webapp.icat_cache import ICATCache
 from autoreduce_frontend.autoreduce_webapp.settings import DEVELOPMENT_MODE
 from autoreduce_frontend.autoreduce_webapp.view_utils import check_permissions, login_and_uows_valid, render_with
-from autoreduce_frontend.autoreduce_webapp.views import render_error
 from autoreduce_frontend.reduction_viewer.views import started_by_id_to_name
 from autoreduce_frontend.utilities.pagination import CustomPaginator
 
@@ -39,17 +37,11 @@ def experiment_summary(request, reference_number=None):
                 # If we are in development mode use user/password for ICAT from
                 # django settings e.g. do not attempt to use same authentication
                 # as the user office
-                try:
-                    with ICATCache() as icat:
-                        experiment_details = icat.get_experiment_details(int(reference_number))
-                except ICATConnectionException as excep:
-                    render_error(request, str(excep))
+                with ICATCache() as icat:
+                    experiment_details = icat.get_experiment_details(int(reference_number))
             else:
-                try:
-                    with ICATCache(AUTH='uows', SESSION={'sessionid': request.session['sessionid']}) as icat:
-                        experiment_details = icat.get_experiment_details(int(reference_number))
-                except ICATConnectionException as excep:
-                    render_error(request, str(excep))
+                with ICATCache(AUTH='uows', SESSION={'sessionid': request.session['sessionid']}) as icat:
+                    experiment_details = icat.get_experiment_details(int(reference_number))
 
         except Exception as icat_e:
             LOGGER.error(icat_e)
