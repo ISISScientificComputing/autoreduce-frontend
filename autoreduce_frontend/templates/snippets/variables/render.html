@@ -14,12 +14,12 @@
     <div class="col-md-9">
         <div class="col-xs-11 col-md-11">
         {% if variable.current.type == 'boolean' %}
-        <select id="var-{{ type }}-{% encode_b64 name %}" type="{% variable_type variable.current.type %}" data-type="{{ variable.current.type }}" value="{{ variable.current.value }}" data-initial="{{ variable.current.value }}" data-default="{{ variable.default.value }}" name="var-{{ type }}-{{ variable.current.encode_name_b64 }}">
+        <select id="var-{{ type }}-{% encode_b64 name %}" value="{{ variable.current }}" data-initial="{{ variable.current }}" data-default="{{ variable.default }}" name="var-{{ type }}-{{ variable.current.encode_name_b64 }}">
         <option value="True" {% if value.lower == 'true' %} selected {% endif %}>True</option>
         <option value="False" {% if value.lower == 'false' %} selected {% endif %}>False</option>
         </select>
         {% else %}
-        <input id="var-{{ type }}-{% encode_b64 name %}" type="{% variable_type variable.current.type %}" data-type="{{ variable.current.type }}" value="{{ variable.current.value }}" data-initial="{{ variable.current.value }}" data-default="{{ variable.default.value }}"
+        <input id="var-{{ type }}-{% encode_b64 name %}" value="{{ variable.current }}" data-initial="{{ variable.current }}" data-default="{{ variable.default }}"
             class="form-control variable-field"
             name="var-{{ type }}-{% encode_b64 name %}"
              />
