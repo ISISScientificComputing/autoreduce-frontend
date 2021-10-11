@@ -143,7 +143,7 @@ def run_confirmation(request, instrument: str):
             format(len(run_description), max_run_description_length)
         return context_dictionary
     for run_number in run_numbers:
-        matching_previous_runs = related_runs.order_by('-run_version')
+        matching_previous_runs = related_runs.filter(run_numbers__run_number=run_number).order_by('-run_version')
         run_suitable, reason = find_reason_to_avoid_re_run(matching_previous_runs, run_number)
         if not run_suitable:
             context_dictionary['error'] = reason
