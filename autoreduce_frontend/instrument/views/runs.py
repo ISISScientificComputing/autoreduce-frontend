@@ -105,9 +105,10 @@ def run_confirmation(request, instrument: str):
                                       "queued at a time".format(len(run_numbers), max_runs)
         return context_dictionary
 
-    related_runs: QuerySet[ReductionRun] = ReductionRun.objects.filter(instrument__name=instrument,
-                                                                       batch_run=len(run_numbers) > 1,
-                                                                       run_numbers__run_number__in=run_numbers)
+    related_runs: QuerySet[ReductionRun] = ReductionRun.objects.filter(
+        instrument__name=instrument,
+        batch_run=False,  # batch_runs are handled in BatchRunSubmit
+        run_numbers__run_number__in=run_numbers)
     # Check that RB numbers are the same for the range entered
     # pylint:disable=no-member
     rb_number = related_runs.values_list('experiment__reference_number', flat=True).distinct()
