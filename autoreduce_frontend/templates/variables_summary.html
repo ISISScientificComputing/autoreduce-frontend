@@ -10,7 +10,7 @@
         </div>
         <div class="row">
             <div class="col-md-12 text-center">
-                {% view "instrument.views.variables.summarize_variables" instrument=instrument.name last_run_object=last_instrument_run %}
+                {% include "snippets/instrument_summary.html" with instrument=instrument current_arguments=current_arguments  upcoming_arguments_by_run=upcoming_arguments_by_run upcoming_arguments_by_experiment=upcoming_arguments_by_experiment%}
             </div>
         </div>
     {% else %}

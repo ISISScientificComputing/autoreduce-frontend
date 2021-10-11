@@ -14,15 +14,49 @@ import logging
 from django.shortcuts import redirect, render
 
 from autoreduce_db.reduction_viewer.models import Instrument, ReductionArguments
-from autoreduce_qp.queue_processor.variable_utils import VariableUtils
 from autoreduce_frontend.autoreduce_webapp.view_utils import check_permissions, login_and_uows_valid, render_with
 
 LOGGER = logging.getLogger(__package__)
 
 
-def summarize_variables(request, instrument, last_run_object):
-    """Handle view request for the instrument summary page."""
+@login_and_uows_valid
+@check_permissions
+def delete_instrument_variables(_, instrument=None, start=0, end=0, experiment_reference=None):
+    """
+    Handle request for deleting instrument variables.
+
+    Args:
+        instrument: Name of the instrument for which variables are being
+        deleted.
+
+        start: Run from which variables are being deleted.
+
+        end: Limit of how many variables get deleted, otherwise a delete would
+        wipe ALL variables > start.
+
+        experiment_reference: If provided - use the experiment reference to
+        delete variables instead of start_run.
+    """
+
+    # We "save" an empty list to delete the previous variables.
+    if experiment_reference is not None:
+        ReductionArguments.objects.filter(instrument__name=instrument,
+                                          experiment_reference=experiment_reference).delete()
+    else:
+        start_run_kwargs = {"start_run__gte": start}
+        if end > 0:
+            start_run_kwargs["start_run__lte"] = end
+        ReductionArguments.objects.filter(instrument__name=instrument, **start_run_kwargs).delete()
+
+    return redirect('instrument:variables_summary', instrument=instrument)
+
+
+@login_and_uows_valid
+@check_permissions
+def instrument_variables_summary(request, instrument):
+    """Handle request to view instrument variables."""
     instrument = Instrument.objects.get(name=instrument)
+    last_run_object = instrument.reduction_runs.last()
 
     current_arguments = last_run_object.arguments
 
@@ -94,123 +128,4 @@ def summarize_variables(request, instrument, last_run_object):
         'upcoming_arguments_by_run': upcoming_arguments_by_run_ordered,
         'upcoming_arguments_by_experiment': upcoming_arguments_by_experiment_ordered,
     }
-
-    return render(request, 'snippets/instrument_summary.html', context_dictionary)
-
-
-@login_and_uows_valid
-@check_permissions
-def delete_instrument_variables(request, instrument=None, start=0, end=0, experiment_reference=None):
-    """
-    Handle request for deleting instrument variables.
-
-    Args:
-        instrument: Name of the instrument for which variables are being
-        deleted.
-
-        start: Run from which variables are being deleted.
-
-        end: Limit of how many variables get deleted, otherwise a delete would
-        wipe ALL variables > start.
-
-        experiment_reference: If provided - use the experiment reference to
-        delete variables instead of start_run.
-    """
-
-    # We "save" an empty list to delete the previous variables.
-    if experiment_reference is not None:
-        ReductionArguments.objects.filter(instrument__name=instrument,
-                                          experiment_reference=experiment_reference).delete()
-    else:
-        start_run_kwargs = {"start_run__gte": start}
-        if end > 0:
-            start_run_kwargs["start_run__lte"] = end
-        ReductionArguments.objects.filter(instrument__name=instrument, **start_run_kwargs).delete()
-
-    return redirect('instrument:variables_summary', instrument=instrument)
-
-
-@login_and_uows_valid
-@check_permissions
-@render_with('variables_summary.html')
-def instrument_variables_summary(request, instrument):
-    """Handle request to view instrument variables."""
-    instrument = Instrument.objects.get(name=instrument)
-    context_dictionary = {'instrument': instrument, 'last_instrument_run': instrument.reduction_runs.last()}
-    return context_dictionary
-
-
-@login_and_uows_valid
-@check_permissions
-@render_with('snippets/variables/form.html')
-def current_default_variables(request, instrument=None):
-    """Handle request to view default variables."""
-
-    try:
-        current_variables = VariableUtils.get_default_variables(instrument)
-    except (FileNotFoundError, ImportError, SyntaxError) as err:
-        return {"message": str(err)}
-
-    standard_vars = current_variables["standard_vars"]
-    advanced_vars = current_variables["advanced_vars"]
-    context_dictionary = {
-        'instrument': instrument,
-        'standard_variables': standard_vars,
-        'advanced_variables': advanced_vars,
-    }
-
-    return context_dictionary
-
-
-def render_run_variables(request, instrument_name, reduction_run):
-    """
-    Handles request to view the summary of a run
-    """
-    # pylint:disable=no-member
-    vars_kwargs = reduction_run.arguments.as_dict()
-    standard_vars = vars_kwargs["standard_vars"]
-    advanced_vars = vars_kwargs["advanced_vars"]
-
-    try:
-        default_variables = VariableUtils.get_default_variables(instrument_name)
-        default_standard_variables = default_variables["standard_vars"]
-        default_advanced_variables = default_variables["advanced_vars"]
-        variable_help = default_variables["variable_help"]
-    except (FileNotFoundError, ImportError, SyntaxError):
-        default_variables = {}
-        default_standard_variables = {}
-        default_advanced_variables = {}
-        variable_help = {}
-
-    final_standard = _combine_dicts(standard_vars, default_standard_variables)
-    final_advanced = _combine_dicts(advanced_vars, default_advanced_variables)
-
-    context_dictionary = {
-        'run_number': ",".join(str(rn.run_number) for rn in reduction_run.run_numbers.all()),
-        'run_version': reduction_run.run_version,
-        'has_reduce_vars': bool(default_variables),
-        'batch_run': reduction_run.batch_run,
-        'standard_variables': final_standard,
-        'advanced_variables': final_advanced,
-        'variable_help': variable_help,
-        'instrument': reduction_run.instrument,
-    }
-    return render(request, 'snippets/run_variables.html', context_dictionary)
-
-
-def _combine_dicts(current: dict, default: dict):
-    """
-    Combine the current and default variable dictionaries, into a single
-    dictionary which can be more easily rendered into the webapp.
-
-    If no current variables are provided, return the default as both current and
-    default.
-    """
-    if not current:
-        current = default.copy()
-
-    final = {}
-    for name, var in current.items():
-        final[name] = {"current": var, "default": default.get(name, None)}
-
-    return final
+    return render(request, 'variables_summary.html', context_dictionary)

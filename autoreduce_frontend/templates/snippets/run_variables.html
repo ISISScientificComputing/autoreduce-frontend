@@ -9,9 +9,9 @@
     <div class="panel-body collapse" id="rerun_form">
         <form id="run_variables" method="POST"
         {% if not batch_run %}
-        action="{% url 'run_confirmation' instrument=instrument.name %}"
+        action="{% url 'run_confirmation' instrument=instrument %}"
         {% else %}
-        action="{% url 'instrument:configure_batch_run' instrument=instrument.name %}"
+        action="{% url 'instrument:configure_batch_run' instrument=instrument %}"
         {% endif %}
         class="form-horizontal">
             {% csrf_token %}

@@ -28,7 +28,7 @@
             </div>
             {% if upcoming %}
             <br/>
-            <a href="{% url 'instrument:variables' instrument=instrument.name start=arguments.run_start end=arguments.run_end %}">edit variables</a>
+            <a href="{% url 'instrument:variables' instrument=instrument.name start=arguments.run_start %}">edit variables</a>
                 <br/>
                 <a href="{% url 'instrument:delete_variables' instrument=instrument.name start=arguments.run_start end=arguments.run_end %}">delete variables</a>
             {% endif %}
