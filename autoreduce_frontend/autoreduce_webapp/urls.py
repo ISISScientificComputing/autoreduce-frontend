@@ -61,7 +61,8 @@ urlpatterns = [
 
     # =======================GENERATE TOKEN========================== #
     path('tokens/', include('generate_token.urls')),
-    path('search_runs/', reduction_viewer_views.search_runs, name="search_runs")
+    path('search_runs/', reduction_viewer_views.search_runs, name="search_runs"),
+    path('search/', reduction_viewer_views.search, name='search'),
 ]
 
 if settings.DEBUG:

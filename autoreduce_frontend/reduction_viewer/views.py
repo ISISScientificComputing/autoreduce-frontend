@@ -37,12 +37,14 @@ from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions,
                                                               require_admin)
 from autoreduce_frontend.autoreduce_webapp.views import render_error
 from autoreduce_frontend.plotting.plot_handler import PlotHandler
+from autoreduce_frontend.reduction_viewer.filters import ReductionRunFilter
 from autoreduce_frontend.reduction_viewer.utils import ReductionRunUtils
 from autoreduce_frontend.reduction_viewer.view_utils import (deactivate_invalid_instruments, get_interactive_plot_data,
                                                              linux_to_windows_path, make_data_analysis_url,
                                                              windows_to_linux_path)
 from autoreduce_frontend.utilities.pagination import CustomPaginator
 from autoreduce_frontend.autoreduce_webapp.settings import AUTOREDUCE_API_URL
+from autoreduce_frontend.autoreduce_webapp.forms import RunsListForm
 
 LOGGER = logging.getLogger(__package__)
 
@@ -336,6 +338,7 @@ def runs_list(request, instrument=None):
     except Instrument.DoesNotExist:
         return {'message': "Instrument not found."}
 
+    form = RunsListForm()
     sort_by = request.GET.get('sort', 'run')
 
     try:
@@ -374,6 +377,7 @@ def runs_list(request, instrument=None):
             'sort': sort_by,
             'has_variables': bool(current_variables),
             'error_reason': error_reason,
+            'form': form,
         }
 
         if filter_by == 'experiment':
@@ -623,3 +627,9 @@ def search_runs(request):
         response = requests.get(url)
         search_result = response.json()
     return render(request, "search_runs.html", {'search_result': search_result})
+
+
+def search(request):
+    run_list = ReductionRun.objects.all()
+    run_filter = ReductionRunFilter(request.GET, queryset=run_list)
+    return render(request, 'search_list.html', {'filter': run_filter})
