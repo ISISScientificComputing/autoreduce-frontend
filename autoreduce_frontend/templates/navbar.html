@@ -28,6 +28,9 @@
                     <li>
                         <a href="{% url 'runs:queue' %}">Job Queue</a>
                     </li>
+                    <li>
+                        <a href="{% url 'search' %} ">Search</a>
+                    </li>
                     {% if user.is_superuser %}
                         <li>
                             <a href="{% url 'runs:failed' %}">Failed Jobs</a>
@@ -42,9 +45,6 @@
                             <a href="{% url 'help' %} ">Help</a>
                         </li>
                         <li><a href="{% url 'token:list' %}">Tokens</a></li>
-                        <li>
-                            <a href="{% url 'search' %} ">Search</a>
-                        </li>
                     {% endif %}
                     <li>
                         <a href="{% url 'logout' %}" id="logout">Logout</a>
