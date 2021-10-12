@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'autoreduce_db.reduction_viewer',
     'autoreduce_db.instrument',
     'rest_framework.authtoken',
+    'django_filters',
     'crispy_forms',
 ]
 
