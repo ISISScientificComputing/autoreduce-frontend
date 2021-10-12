@@ -34,8 +34,8 @@
 }())
 
 function changePage(page) {
-    let paginationChoice = document.getElementById("pagination_select").value;
-    let filterChoice = document.getElementById("filter_select").value;
-    let sortChoice = document.getElementById("sort_select").value
+    let paginationChoice = document.getElementById("id_pagination").value;
+    let filterChoice = document.getElementById("id_filter").value;
+    let sortChoice = document.getElementById("id_sort").value
     document.location.href = window.location.origin + window.location.pathname + '?page=' + arguments[0] + '&filter=' + filterChoice + '&pagination=' + paginationChoice + '&sort=' + sortChoice;
 }
