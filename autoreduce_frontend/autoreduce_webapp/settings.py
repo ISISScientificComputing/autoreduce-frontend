@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'django_filters',
     'crispy_forms',
+    'django_tables2',
 ]
 
 if DEBUG and DEBUG_TOOLBAR_AVAILABLE:

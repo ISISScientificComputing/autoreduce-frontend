@@ -38,6 +38,7 @@ from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions,
 from autoreduce_frontend.autoreduce_webapp.views import render_error
 from autoreduce_frontend.plotting.plot_handler import PlotHandler
 from autoreduce_frontend.reduction_viewer.filters import ReductionRunFilter
+from autoreduce_frontend.reduction_viewer.tables import ReductionRunTable
 from autoreduce_frontend.reduction_viewer.utils import ReductionRunUtils
 from autoreduce_frontend.reduction_viewer.view_utils import (deactivate_invalid_instruments, get_interactive_plot_data,
                                                              linux_to_windows_path, make_data_analysis_url,
@@ -632,4 +633,5 @@ def search_runs(request):
 def search(request):
     run_list = ReductionRun.objects.all()
     run_filter = ReductionRunFilter(request.GET, queryset=run_list)
-    return render(request, 'search_list.html', {'filter': run_filter})
+    table_class = ReductionRunTable(run_filter.qs)
+    return render(request, 'search_list.html', {'filter': run_filter, 'table': table_class})
