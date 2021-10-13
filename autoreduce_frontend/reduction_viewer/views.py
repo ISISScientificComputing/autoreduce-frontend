@@ -634,4 +634,5 @@ def search(request):
     run_list = ReductionRun.objects.all()
     run_filter = ReductionRunFilter(request.GET, queryset=run_list)
     table_class = ReductionRunTable(run_filter.qs)
-    return render(request, 'search_list.html', {'filter': run_filter, 'table': table_class})
+    message = "Sorry, no runs found for this criteria."
+    return render(request, 'search_list.html', {'filter': run_filter, 'table': table_class, 'message': message})

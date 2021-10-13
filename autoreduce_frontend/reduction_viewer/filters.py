@@ -1,15 +1,10 @@
 from autoreduce_db.reduction_viewer.models import ReductionRun
-from django.forms.widgets import DateInput
-import django_filters
-from django_filters.filters import DateFromToRangeFilter
 from django_filters.widgets import RangeWidget
+from django_filters import FilterSet, DateFromToRangeFilter
 
 
-class ReductionRunFilter(django_filters.FilterSet):
-    created = django_filters.DateFromToRangeFilter(widget=RangeWidget(attrs={
-        'type': 'date',
-        'placeholder': 'dd-mm-yyyy'
-    }))
+class ReductionRunFilter(FilterSet):
+    created = DateFromToRangeFilter(widget=RangeWidget(attrs={'type': 'date', 'placeholder': 'dd-mm-yyyy'}))
 
     class Meta:
         model = ReductionRun

@@ -19,7 +19,11 @@
     <button type="submit" class="btn btn-primary">Search</button>
   </form> {% endcomment %}
 
+{% if not table.rows %}
+    <h4>{{message}}</h4>
+{% else %}
     {% render_table table %}
+{% endif %}
 
 {% endblock %}
 
