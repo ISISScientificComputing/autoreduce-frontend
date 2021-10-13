@@ -22,7 +22,7 @@
 <tr>
 <th>Run Number</th>
 <th>Instrument</th>
-<th>Last Updated</th>
+<th>Created</th>
 </tr>
 </thead>
 <tbody>
@@ -30,7 +30,7 @@
 <tr>
 <th><a href="{% url 'runs:summary' instrument_name=run.instrument run_number=run.run_number run_version=run.run_version %}" class="run-num-links">{{run.run_number}}</a></th>
 <td>{{ run.instrument }}</td>
-<td>{{ run.last_updated }}</td>
+<td>{{ run.created }}</td>
 </tr>
 {% endfor %}
 </tbody>
