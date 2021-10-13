@@ -47,6 +47,8 @@ from autoreduce_frontend.utilities.pagination import CustomPaginator
 from autoreduce_frontend.autoreduce_webapp.settings import AUTOREDUCE_API_URL
 from autoreduce_frontend.autoreduce_webapp.forms import RunsListForm
 
+from django_tables2 import RequestConfig
+
 LOGGER = logging.getLogger(__package__)
 
 
@@ -633,6 +635,13 @@ def search_runs(request):
 def search(request):
     run_list = ReductionRun.objects.all()
     run_filter = ReductionRunFilter(request.GET, queryset=run_list)
-    table_class = ReductionRunTable(run_filter.qs)
+    table_class = ReductionRunTable(run_filter.qs, order_by="-run_number")
+    RequestConfig(request, paginate={"per_page": 10}).configure(table_class)
     message = "Sorry, no runs found for this criteria."
-    return render(request, 'search_list.html', {'filter': run_filter, 'table': table_class, 'message': message})
+    per_page = request.GET.get('per_page', 10)
+    return render(request, 'search_list.html', {
+        'filter': run_filter,
+        'table': table_class,
+        'message': message,
+        'per_page': per_page
+    })
