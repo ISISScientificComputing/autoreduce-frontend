@@ -639,9 +639,13 @@ def search(request):
     RequestConfig(request, paginate={"per_page": 10}).configure(table_class)
     message = "Sorry, no runs found for this criteria."
     per_page = request.GET.get('per_page', 10)
-    return render(request, 'search_list.html', {
-        'filter': run_filter,
-        'table': table_class,
-        'message': message,
-        'per_page': per_page
-    })
+    current_page = int(request.GET.get('page', 1))
+    return render(
+        request, 'search_list.html', {
+            'filter': run_filter,
+            'table': table_class,
+            'message': message,
+            'per_page': per_page,
+            'current_page': current_page,
+            'sort': request.GET.get('sort', '-run_number'),
+        })
