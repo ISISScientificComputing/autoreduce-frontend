@@ -632,6 +632,9 @@ def search_runs(request):
     return render(request, "search_runs.html", {'search_result': search_result})
 
 
+@login_and_uows_valid
+@check_permissions
+@render_with('search.html')
 def search(request):
     run_list = ReductionRun.objects.all()
     run_filter = ReductionRunFilter(request.GET, queryset=run_list)
@@ -640,12 +643,12 @@ def search(request):
     message = "Sorry, no runs found for this criteria."
     per_page = request.GET.get('per_page', 10)
     current_page = int(request.GET.get('page', 1))
-    return render(
-        request, 'search_list.html', {
-            'filter': run_filter,
-            'table': table_class,
-            'message': message,
-            'per_page': per_page,
-            'current_page': current_page,
-            'sort': request.GET.get('sort', '-run_number'),
-        })
+    context_dictionary = {
+        'filter': run_filter,
+        'table': table_class,
+        'message': message,
+        'per_page': per_page,
+        'current_page': current_page,
+        'sort': request.GET.get('sort', '-run_number'),
+    }
+    return context_dictionary
