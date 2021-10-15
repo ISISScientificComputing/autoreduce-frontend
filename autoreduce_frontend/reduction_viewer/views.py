@@ -641,14 +641,12 @@ def search(request):
     table_class = ReductionRunTable(run_filter.qs, order_by="-run_number")
     RequestConfig(request, paginate={"per_page": 10}).configure(table_class)
     message = "Sorry, no runs found for this criteria."
-    per_page = request.GET.get('per_page', 10)
-    current_page = int(request.GET.get('page', 1))
     context_dictionary = {
         'filter': run_filter,
         'table': table_class,
         'message': message,
-        'per_page': per_page,
-        'current_page': current_page,
+        'per_page': request.GET.get('per_page', 10),
+        'current_page': int(request.GET.get('page', 1)),
         'sort': request.GET.get('sort', '-run_number'),
     }
     return context_dictionary
