@@ -341,7 +341,6 @@ def runs_list(request, instrument=None):
     except Instrument.DoesNotExist:
         return {'message': "Instrument not found."}
 
-    form = RunsListForm()
     sort_by = request.GET.get('sort', 'run')
 
     try:
@@ -380,7 +379,6 @@ def runs_list(request, instrument=None):
             'sort': sort_by,
             'has_variables': bool(current_variables),
             'error_reason': error_reason,
-            'form': form,
         }
 
         if filter_by == 'experiment':
