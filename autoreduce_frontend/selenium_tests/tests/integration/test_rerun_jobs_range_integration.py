@@ -83,7 +83,7 @@ class TestRerunJobsRangePageIntegration(BaseTestCase):
         expected_run = "99999-100000"
         self.page.run_range_field = expected_run
         result = submit_and_wait_for_result(self, expected_runs=2)
-        expected_url = reverse("run_confirmation", kwargs={"instrument": self.instrument_name})
+        expected_url = reverse("runs:run_confirmation", kwargs={"instrument": self.instrument_name})
         assert expected_url in self.driver.current_url
         assert len(result) == 4
 
@@ -98,7 +98,7 @@ class TestRerunJobsRangePageIntegration(BaseTestCase):
         new_value = "some_new_value"
         self.page.variable1_field = new_value
         result = submit_and_wait_for_result(self, expected_runs=2)
-        expected_url = reverse("run_confirmation", kwargs={"instrument": self.instrument_name})
+        expected_url = reverse("runs:run_confirmation", kwargs={"instrument": self.instrument_name})
         assert expected_url in self.driver.current_url
         assert len(result) == 4
 

@@ -68,7 +68,7 @@ class TestConfigureNewRunsPage(NavbarTestMixin, BaseTestCase, FooterTestMixin, A
     def test_go_to_other_goes_to_experiment(self):
         """Test: clicking the link to configure by experiment goes to configure by experiment"""
         self.page.go_to_other.click()
-        url = reverse("instrument:variables_by_experiment",
+        url = reverse("runs:variables_by_experiment",
                       kwargs={
                           "instrument": self.instrument_name,
                           "experiment_reference": 1234567
@@ -81,7 +81,7 @@ class TestConfigureNewRunsPage(NavbarTestMixin, BaseTestCase, FooterTestMixin, A
         self.page.launch()
 
         self.page.go_to_other.click()
-        url = reverse("instrument:variables", kwargs={"instrument": self.instrument_name, "start": 100001})
+        url = reverse("runs:variables", kwargs={"instrument": self.instrument_name, "start": 100001})
         assert url in self.driver.current_url
 
 

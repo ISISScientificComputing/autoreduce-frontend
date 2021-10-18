@@ -10,7 +10,6 @@ from django.conf.urls import include
 from django.contrib import admin
 from django.urls import path, register_converter
 
-from autoreduce_frontend.instrument.views import runs
 from autoreduce_frontend.reduction_viewer.views import (accessibility_statement, experiment_summary, graph, help, index,
                                                         logout, overview, stats)
 
@@ -42,10 +41,6 @@ urlpatterns = [
     # ===========================RUNS================================= #
     path('overview/', overview.overview, name='overview'),
     path('runs/', include('reduction_viewer.urls')),
-    path('runs/<str:instrument>/confirmation/', runs.run_confirmation, name='run_confirmation'),
-
-    # ===========================INSTRUMENT========================== #
-    path('instrument/', include('instrument.urls')),
 
     # ===========================EXPERIMENT========================== #
     path('experiment/<negint:reference_number>/', experiment_summary.experiment_summary, name='experiment_summary'),

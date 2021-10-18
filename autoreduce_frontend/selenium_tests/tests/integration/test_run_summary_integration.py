@@ -138,7 +138,7 @@ class TestRunSummaryPageIntegration(BaseTestCase, FooterTestMixin, NavbarTestMix
     def test_submit_confirm_page(self):
         """Test that submitting a run leads to the correct page."""
         result = submit_and_wait_for_result(self)
-        expected_url = reverse("run_confirmation", kwargs={"instrument": self.instrument_name})
+        expected_url = reverse("runs:run_confirmation", kwargs={"instrument": self.instrument_name})
         assert expected_url in self.driver.current_url
         # Wait until the message processing is complete before ending the test
         # otherwise the message handling can pollute the DB state for the next

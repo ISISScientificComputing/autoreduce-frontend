@@ -28,7 +28,7 @@
             <div class="row">
                 <div class="col-md-12 text-center">
                     <p>
-                        <a href="{% url 'instrument:variables_summary' instrument=instrument.name %}">View upcoming saved configurations</a>
+                        <a href="{% url 'runs:variables_summary' instrument=instrument.name %}">View upcoming saved configurations</a>
                     </p>
                 </div>
             </div>
@@ -36,15 +36,15 @@
                 <div class="col-md-12 text-center">
                     <p>
                         {% if current_experiment_reference > 0 %}
-                        <a href="{% url 'instrument:variables' instrument=instrument.name start=run_start %}" id="go_to_other">Click here to submit variables for a run range</a>
+                        <a href="{% url 'runs:variables' instrument=instrument.name start=run_start %}" id="go_to_other">Click here to submit variables for a run range</a>
                         {% else %}
-                        <a href="{% url 'instrument:variables_by_experiment' instrument=instrument.name experiment_reference=submit_for_experiment_reference %}" id="go_to_other">Click here to submit variables for an experiment reference</a>
+                        <a href="{% url 'runs:variables_by_experiment' instrument=instrument.name experiment_reference=submit_for_experiment_reference %}" id="go_to_other">Click here to submit variables for an experiment reference</a>
                         {% endif %}
                     </p>
                 </div>
             </div>
             <br/>
-        <form id="instrument_variables" method="POST" action="{% url 'instrument:variables' instrument=instrument.name %}" class="form-horizontal">
+        <form id="instrument_variables" method="POST" action="{% url 'runs:variables' instrument=instrument.name %}" class="form-horizontal">
         {% csrf_token %}
         <input type="hidden" id="upcoming_runs" name="upcoming_runs" value="{{ upcoming_run_variables }}"/>
         <input type="hidden" id="is_editing" name="is_editing" value="{{ editing }}"/>

@@ -46,7 +46,7 @@ def submit_and_wait_for_result(test, expected_runs=1):
     replaces ALL the elements and triggers a bunch of DOM re-renders/updates, and that isn't fast.
     """
     test.listener._processing = True  # pylint:disable=protected-access
-    expected_url = reverse("run_confirmation", kwargs={"instrument": test.instrument_name})
+    expected_url = reverse("runs:run_confirmation", kwargs={"instrument": test.instrument_name})
 
     def submit_successful(driver) -> bool:
         try:

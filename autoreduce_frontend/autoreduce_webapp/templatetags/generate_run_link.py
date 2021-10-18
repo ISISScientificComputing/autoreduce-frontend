@@ -7,7 +7,12 @@ register = Library()
 
 @register.simple_tag
 def generate_run_link(instrument_name, run, page: int, newest_run, oldest_run) -> str:
-    """Generates the url and the GET parameters given the instrument and run."""
+    """
+    Generates the url and the GET parameters given the instrument and run.
+
+    Used to render runs:list entries.
+
+    """
 
     if run.batch_run:
         run_number = run.pk

@@ -2,8 +2,8 @@ import logging
 from autoreduce_db.reduction_viewer.models import ReductionRun
 from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions, login_and_uows_valid, render_with)
 
-from autoreduce_frontend.instrument.views.common import get_arguments_from_run
 from autoreduce_frontend.plotting.plot_handler import PlotHandler
+from autoreduce_frontend.reduction_viewer.views.common import get_arguments_from_run
 from autoreduce_frontend.reduction_viewer.view_utils import (get_interactive_plot_data, linux_to_windows_path,
                                                              make_data_analysis_url, windows_to_linux_path,
                                                              started_by_id_to_name)
@@ -73,10 +73,7 @@ def run_summary_run(request, history, instrument_name=None, run_version=0):
     rb_number = run.experiment.reference_number
     standard_vars, advanced_vars, variable_help = get_arguments_from_run(run)
 
-    if run.batch_run:
-        run_number = ",".join(str(rn.run_number) for rn in run.run_numbers.all())
-    else:
-        run_number = run.run_number
+    run_number = run.pk if run.batch_run else run.run_number
 
     context_dictionary = {
         'run': run,

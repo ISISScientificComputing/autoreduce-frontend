@@ -1,4 +1,4 @@
-from autoreduce_frontend.instrument.views.variables import _combine_dicts
+from autoreduce_frontend.reduction_viewer.views.common import _combine_dicts
 
 
 def test_combine_dicts_empty_current():

@@ -7,7 +7,8 @@ from autoreduce_qp.queue_processor.variable_utils import merge_arguments
 from django.shortcuts import redirect
 
 from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions, login_and_uows_valid, render_with)
-from autoreduce_frontend.instrument.views.common import (get_arguments_from_run, read_variables_from_form_post_submit)
+from autoreduce_frontend.reduction_viewer.views.common import (get_arguments_from_run,
+                                                               read_variables_from_form_post_submit)
 
 LOGGER = logging.getLogger(__package__)
 
@@ -71,7 +72,7 @@ def configure_new_runs_post(request, instrument_name):
         update_or_create(instrument, arguments_json, {'start_run': start})
     else:
         update_or_create(instrument, arguments_json, {'experiment_reference': experiment_reference})
-    return redirect('instrument:variables_summary', instrument=instrument_name)
+    return redirect('runs:variables_summary', instrument=instrument_name)
 
 
 # pylint:disable=too-many-locals
@@ -83,7 +84,7 @@ def configure_new_runs_get(instrument_name, start=0, experiment_reference=0):
 
     editing = (start > 0 or experiment_reference > 0)
 
-    last_run = instrument.get_last_for_rerun()
+    last_run = instrument.get_last_for_rerun(instrument.reduction_runs.filter(batch_run=False))
 
     standard_vars, advanced_vars, variable_help = get_arguments_from_run(last_run)
     run_start = start if start else last_run.run_number + 1

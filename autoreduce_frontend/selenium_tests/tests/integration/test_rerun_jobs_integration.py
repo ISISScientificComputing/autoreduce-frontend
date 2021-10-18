@@ -104,7 +104,7 @@ class TestRerunJobsPageIntegration(BaseTestCase):
         Test: Submitting a run leads to the correct page
         """
         result = submit_and_wait_for_result(self)
-        expected_url = reverse("run_confirmation", kwargs={"instrument": self.instrument_name})
+        expected_url = reverse("runs:run_confirmation", kwargs={"instrument": self.instrument_name})
         assert expected_url in self.driver.current_url
         assert len(result) == 2
 
@@ -135,7 +135,7 @@ class TestRerunJobsPageIntegration(BaseTestCase):
         self.page.run_range_field = expected_run
         self.page.submit_button.click()
 
-        expected_url = reverse("run_confirmation", kwargs={"instrument": self.instrument_name})
+        expected_url = reverse("runs:run_confirmation", kwargs={"instrument": self.instrument_name})
         assert expected_url in self.driver.current_url
 
         assert self.page.error_container.is_displayed()

@@ -34,7 +34,7 @@
                         &nbsp;&nbsp;Pause Autoreduction on {{ instrument_name }}
                     </a>
                 {% endif %}
-                <form id="form-pause" method="POST" action="{% url 'instrument:pause' instrument_name %}">
+                <form id="form-pause" method="POST" action="{% url 'runs:pause' instrument_name %}">
                     {% csrf_token %}
                     <input type="hidden" name="currently_paused" id="currently_paused" value="{{ instrument.is_paused }}">
                 </form>
@@ -42,7 +42,7 @@
             </div>
             <div id="btn-re-run_past_job">
                 <p>
-                    <a href="{% url 'instrument:submit_runs' instrument=instrument_name %}" class="btn btn-success btn-block"
+                    <a href="{% url 'runs:submit_runs' instrument=instrument_name %}" class="btn btn-success btn-block"
                         {% if not has_variables %}
                             disabled
                         {% endif %}>
@@ -53,7 +53,7 @@
             </div>
             <div id="btn-configure_new_runs">
                 <p>
-                    <a href="{% url 'instrument:variables' instrument=instrument_name %}"class="btn btn-success btn-block"
+                    <a href="{% url 'runs:variables' instrument=instrument_name %}"class="btn btn-success btn-block"
                         {% if not has_variables %}
                             disabled
                         {% endif %}>
@@ -64,7 +64,7 @@
             </div>
             <div id="btn-see_instrument_variables">
                 <p>
-                    <a href="{% url 'instrument:variables_summary' instrument=instrument_name %}" class="btn btn-success btn-block"
+                    <a href="{% url 'runs:variables_summary' instrument=instrument_name %}" class="btn btn-success btn-block"
                         {% if not has_variables %}
                             disabled
                         {% endif %}>
@@ -75,7 +75,7 @@
             </div>
             <div id="btn-batch_job">
                 <p>
-                    <a href="{% url 'instrument:configure_batch_run' instrument=instrument_name %}" class="btn btn-success btn-block"
+                    <a href="{% url 'runs:configure_batch_run' instrument=instrument_name %}" class="btn btn-success btn-block"
                         {% if not has_variables %}
                             disabled
                         {% endif %}>

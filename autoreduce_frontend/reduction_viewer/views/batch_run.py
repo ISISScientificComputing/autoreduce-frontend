@@ -1,8 +1,6 @@
 import requests
 from requests.exceptions import ConnectionError
 import json
-from autoreduce_frontend.utilities import input_processing
-from autoreduce_frontend.instrument.views.common import get_arguments_from_run, read_variables_from_form_post_submit
 from typing import Any
 from autoreduce_db.reduction_viewer.models import Instrument
 from autoreduce_qp.queue_processor.variable_utils import merge_arguments
@@ -12,6 +10,9 @@ from django.http.request import HttpRequest
 from django.http.response import HttpResponse
 from django.views.generic import FormView
 from django.shortcuts import render
+
+from autoreduce_frontend.utilities import input_processing
+from autoreduce_frontend.reduction_viewer.views.common import get_arguments_from_run, read_variables_from_form_post_submit
 
 
 class BatchRunSubmit(FormView):

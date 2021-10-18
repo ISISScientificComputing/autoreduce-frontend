@@ -7,9 +7,9 @@
                     <div>#{{ arguments.experiment }}</div>
                 </div>
             </div>
-            <a href="{% url 'instrument:variables_by_experiment' instrument=instrument.name experiment_reference=arguments.experiment %}">edit variables</a>
+            <a href="{% url 'runs:variables_by_experiment' instrument=instrument.name experiment_reference=arguments.experiment %}">edit variables</a>
             <br/>
-            <a href="{% url 'instrument:delete_variables_by_experiment' instrument=instrument.name experiment_reference=arguments.experiment %}">delete variables</a>
+            <a href="{% url 'runs:delete_variables_by_experiment' instrument=instrument.name experiment_reference=arguments.experiment %}">delete variables</a>
         {% else %}
             <div class="run-numbers">
                 <div class="middle">
@@ -28,9 +28,9 @@
             </div>
             {% if upcoming %}
             <br/>
-            <a href="{% url 'instrument:variables' instrument=instrument.name start=arguments.run_start %}">edit variables</a>
+            <a href="{% url 'runs:variables' instrument=instrument.name start=arguments.run_start %}">edit variables</a>
                 <br/>
-                <a href="{% url 'instrument:delete_variables' instrument=instrument.name start=arguments.run_start end=arguments.run_end %}">delete variables</a>
+                <a href="{% url 'runs:delete_variables' instrument=instrument.name start=arguments.run_start end=arguments.run_end %}">delete variables</a>
             {% endif %}
         {% endif %}
     </div>

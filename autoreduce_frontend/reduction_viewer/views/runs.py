@@ -18,7 +18,7 @@ from django.db.models.query import QuerySet
 from requests.exceptions import ConnectionError  # pylint:disable=redefined-builtin
 
 from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions, login_and_uows_valid, render_with)
-from autoreduce_frontend.instrument.views.common import (decode_b64, get_arguments_from_run)
+from autoreduce_frontend.reduction_viewer.views.common import (decode_b64, get_arguments_from_run)
 from autoreduce_frontend.utilities import input_processing
 
 LOGGER = logging.getLogger(__package__)

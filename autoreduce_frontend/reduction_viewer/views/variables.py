@@ -14,7 +14,7 @@ import logging
 from django.shortcuts import redirect, render
 
 from autoreduce_db.reduction_viewer.models import Instrument, ReductionArguments
-from autoreduce_frontend.autoreduce_webapp.view_utils import check_permissions, login_and_uows_valid, render_with
+from autoreduce_frontend.autoreduce_webapp.view_utils import check_permissions, login_and_uows_valid
 
 LOGGER = logging.getLogger(__package__)
 
@@ -48,7 +48,7 @@ def delete_instrument_variables(_, instrument=None, start=0, end=0, experiment_r
             start_run_kwargs["start_run__lte"] = end
         ReductionArguments.objects.filter(instrument__name=instrument, **start_run_kwargs).delete()
 
-    return redirect('instrument:variables_summary', instrument=instrument)
+    return redirect('runs:variables_summary', instrument=instrument)
 
 
 @login_and_uows_valid
@@ -56,7 +56,7 @@ def delete_instrument_variables(_, instrument=None, start=0, end=0, experiment_r
 def instrument_variables_summary(request, instrument):
     """Handle request to view instrument variables."""
     instrument = Instrument.objects.get(name=instrument)
-    last_run_object = instrument.reduction_runs.last()
+    last_run_object = instrument.reduction_runs.filter(batch_run=False).last()
 
     current_arguments = last_run_object.arguments
 
