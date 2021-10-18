@@ -99,7 +99,7 @@ class TestRunsListQueries(BaseTestCase, AccessibilityTestMixin, FooterTestMixin,
         """Test that changing the pagination filter also updates the URL query."""
         for pagination in (10, 25, 50, 100, 250, 500):
             self.page.launch()
-            self.page.update_filter("id_pagination", str(pagination))
+            self.page.update_filter("pagination_select", str(pagination))
             self.page.click_apply_filters()
             self._test_page_query(f"pagination={pagination}")
 
@@ -107,7 +107,7 @@ class TestRunsListQueries(BaseTestCase, AccessibilityTestMixin, FooterTestMixin,
         """Test that changing the sort by filter also updates the URL query."""
         for sort in ("number", "date"):
             self.page.launch()
-            self.page.update_filter("id_sort", sort.title())
+            self.page.update_filter("sort_select", sort.title())
             self.page.click_apply_filters()
 
             # Sorting by number is referred to as 'run' for the URL query
