@@ -4,7 +4,7 @@ from autoreduce_db.reduction_viewer.models import Experiment, ReductionRun
 from autoreduce_frontend.autoreduce_webapp.icat_cache import ICATCache
 from autoreduce_frontend.autoreduce_webapp.settings import DEVELOPMENT_MODE
 from autoreduce_frontend.autoreduce_webapp.view_utils import check_permissions, login_and_uows_valid, render_with
-from autoreduce_frontend.reduction_viewer.views import started_by_id_to_name
+from autoreduce_frontend.reduction_viewer.view_utils import started_by_id_to_name
 from autoreduce_frontend.utilities.pagination import CustomPaginator
 
 LOGGER = logging.getLogger(__package__)

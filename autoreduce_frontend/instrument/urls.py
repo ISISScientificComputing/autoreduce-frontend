@@ -20,7 +20,7 @@ urlpatterns = [
          variables.delete_instrument_variables,
          name='delete_variables'),
     path('<str:instrument>/variables/experiment/<int:experiment_reference>/',
-         runs.configure_new_runs,
+         configure_new_runs.configure_new_runs,
          name='variables_by_experiment'),
     path('<str:instrument>/variables/experiment/<int:experiment_reference>/delete/',
          variables.delete_instrument_variables,

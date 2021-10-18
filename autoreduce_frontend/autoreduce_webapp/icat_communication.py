@@ -9,12 +9,10 @@ Deals with communication with ICAT service
 """
 import datetime
 import logging
-import os
 import sys
 
 import icat
 from django.utils.encoding import smart_str
-from autoreduce_db.reduction_viewer.models import Setting
 
 from autoreduce_frontend.autoreduce_webapp.settings import ICAT, BASE_DIR
 
@@ -195,12 +193,7 @@ class ICATCommunication:
 
         instruments_dict = {}
 
-        try:
-            # pylint: disable=no-member
-            number_of_years = int(Setting.objects.get(name='ICAT_YEARS_TO_SHOW').value)
-        # pylint: disable=bare-except
-        except:
-            number_of_years = 3
+        number_of_years = 3
         years_back = datetime.datetime.now() - datetime.timedelta(days=(number_of_years * 365.24))
 
         for instrument in instruments:
@@ -223,12 +216,7 @@ class ICATCommunication:
         """
         LOGGER.debug("Calling ICATCommunication.get_valid_experiments_for_instrument")
 
-        try:
-            # pylint: disable=no-member
-            number_of_years = int(Setting.objects.get(name='ICAT_YEARS_TO_SHOW').value)
-        # pylint: disable=bare-except
-        except:
-            number_of_years = 3
+        number_of_years = 3
         years_back = datetime.datetime.now() - datetime.timedelta(days=(number_of_years * 365.24))
 
         experiments = set()

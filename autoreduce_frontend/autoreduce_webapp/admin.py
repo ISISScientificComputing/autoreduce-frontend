@@ -10,8 +10,7 @@ Initialise admin pages
 from django.contrib import admin
 
 from autoreduce_db.reduction_viewer.models import (Instrument, Experiment, Status, ReductionRun, DataLocation,
-                                                   ReductionLocation, Setting, Notification, ReductionArguments,
-                                                   ReductionScript)
+                                                   ReductionLocation, Notification, ReductionArguments, ReductionScript)
 from autoreduce_frontend.autoreduce_webapp.models import UserCache, InstrumentCache, ExperimentCache
 
 admin.site.register(UserCache)
@@ -26,5 +25,4 @@ admin.site.register(ReductionScript)
 admin.site.register(ReductionArguments)
 admin.site.register(DataLocation)
 admin.site.register(ReductionLocation)
-admin.site.register(Setting)
 admin.site.register(Notification)
