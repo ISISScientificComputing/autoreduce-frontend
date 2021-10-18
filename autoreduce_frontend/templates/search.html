@@ -9,7 +9,7 @@
 
     <form action="" method="get">
         {{ filter.form|crispy }}
-        <button type="submit" class="btn btn-primary">Search</button>
+        <button id="search-button" type="submit" class="btn btn-primary">Search</button>
     </form>
     <br>
 
@@ -41,6 +41,9 @@
     <link rel="stylesheet" href="{% static "css/vendor/bootstrap-tour.min.css" %}">
 {% endblock %}
 {% block scripts %}
+    {% if preload_runs %}
+        <script>window.preload_runs = true;</script>
+    {% endif %}
     <script src="{% static "javascript/vendor/bootstrap-tour.min.js" %}"></script>
     <script src="{% static "javascript/search_list.js" %}"></script>
     <script src="{% static "javascript/tours/overview_tour.js" %}"></script>
