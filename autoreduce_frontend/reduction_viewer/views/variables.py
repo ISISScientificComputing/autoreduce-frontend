@@ -104,10 +104,10 @@ def instrument_variables_summary(request, instrument):
         upcoming_arguments_by_run_ordered.append(upcoming_arguments_by_run_dict[key])
 
     # Create a nested dictionary for by-experiment
-    upcoming_variables_by_experiment_dict = {}
+    upcoming_arguments_by_experiment_dict = {}
     for arguments in upcoming_arguments_by_experiment:
-        if arguments.experiment_reference not in upcoming_variables_by_experiment_dict:
-            upcoming_variables_by_experiment_dict[arguments.experiment_reference] = {
+        if arguments.experiment_reference not in upcoming_arguments_by_experiment_dict:
+            upcoming_arguments_by_experiment_dict[arguments.experiment_reference] = {
                 'experiment': arguments.experiment_reference,
                 'arguments': arguments.as_dict(),
                 'instrument': instrument,
@@ -115,8 +115,8 @@ def instrument_variables_summary(request, instrument):
 
     # Move the upcoming vars into an ordered list
     upcoming_arguments_by_experiment_ordered = []
-    for key in sorted(upcoming_variables_by_experiment_dict):
-        upcoming_arguments_by_experiment_ordered.append(upcoming_variables_by_experiment_dict[key])
+    for key in sorted(upcoming_arguments_by_experiment_dict):
+        upcoming_arguments_by_experiment_ordered.append(upcoming_arguments_by_experiment_dict[key])
     sorted(upcoming_arguments_by_experiment_ordered, key=lambda r: r['experiment'])
 
     context_dictionary = {

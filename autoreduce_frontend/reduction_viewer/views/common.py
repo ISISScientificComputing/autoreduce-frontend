@@ -41,19 +41,19 @@ def get_arguments_from_run(reduction_run) -> Tuple[dict, dict, dict]:
         A dictionary containing the arguments and their current and default values.
     """
     vars_kwargs = reduction_run.arguments.as_dict()
-    standard_vars = vars_kwargs["standard_vars"]
-    advanced_vars = vars_kwargs["advanced_vars"]
+    standard_vars = vars_kwargs.get("standard_vars", {})
+    advanced_vars = vars_kwargs.get("advanced_vars", {})
 
     try:
         default_variables = VariableUtils.get_default_variables(reduction_run.instrument.name)
-        default_standard_variables = default_variables["standard_vars"]
-        default_advanced_variables = default_variables["advanced_vars"]
-        variable_help = default_variables["variable_help"]
+        default_standard_variables = default_variables.get("standard_vars", {})
+        default_advanced_variables = default_variables.get("advanced_vars", {})
+        variable_help = default_variables.get("variable_help", {"standard_vars": {}, "advanced_vars": {}})
     except (FileNotFoundError, ImportError, SyntaxError):
         default_variables = {}
         default_standard_variables = {}
         default_advanced_variables = {}
-        variable_help = {}
+        variable_help = {"standard_vars": {}, "advanced_vars": {}}
 
     final_standard = _combine_dicts(standard_vars, default_standard_variables)
     final_advanced = _combine_dicts(advanced_vars, default_advanced_variables)

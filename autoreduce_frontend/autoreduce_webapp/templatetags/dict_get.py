@@ -17,4 +17,7 @@ register = Library()
 @register.simple_tag
 def dict_get(dictionary: dict, variable_name: str):
     """Tag for retrieving the value for a key from a dictionary"""
-    return dictionary.get(variable_name, "")
+    if dictionary:
+        return dictionary.get(variable_name, "")
+    else:
+        return ""

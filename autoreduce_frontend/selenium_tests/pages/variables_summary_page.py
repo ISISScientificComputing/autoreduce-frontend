@@ -36,19 +36,19 @@ class VariableSummaryPage(Page, NavbarMixin, FooterMixin, TourMixin):
         })
 
     @property
-    def current_variables_by_run(self) -> WebElement:
-        """Return the current_variables_by_run panel"""
-        return self.driver.find_element_by_id("current_variables_by_run")
+    def current_arguments_by_run(self) -> WebElement:
+        """Return the current_arguments_by_run panel"""
+        return self.driver.find_element_by_id("current_arguments_by_run")
 
     @property
-    def upcoming_variables_by_run(self) -> WebElement:
-        """Return the upcoming_variables_by_run panel"""
-        return self.driver.find_element_by_id("upcoming_variables_by_run")
+    def upcoming_arguments_by_run(self) -> WebElement:
+        """Return the upcoming_arguments_by_run panel"""
+        return self.driver.find_element_by_id("upcoming_arguments_by_run")
 
     @property
-    def upcoming_variables_by_experiment(self) -> WebElement:
-        """Return the upcoming_variables_by_experiment panel"""
-        return self.driver.find_element_by_id("upcoming_variables_by_experiment")
+    def upcoming_arguments_by_experiment(self) -> WebElement:
+        """Return the upcoming_arguments_by_experiment panel"""
+        return self.driver.find_element_by_id("upcoming_arguments_by_experiment")
 
     def _do_run_button(self, url):
         def run_button_clicked_successfully(button, url, driver):

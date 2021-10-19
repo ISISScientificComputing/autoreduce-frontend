@@ -1,4 +1,3 @@
-{% load variable_type %}
 {% load encode_b64 %}
 {% load dict_get %}
 
@@ -6,10 +5,12 @@
 <div class="form-group">
     <label for="var-{{ type }}-{% encode_b64 name %}" class="control-label col-md-3">
     {{ name }}
+    {% if name in variable_help %}
     <a href="#" data-toggle="popover" data-html="true" data-content="{% dict_get variable_help name %}"
         data-trigger="hover click focus" data-placement="top" data-container="body">
         <i class="fa fa-info-circle"></i>
     </a>
+    {% endif %}
     </label>
     <div class="col-md-9">
         <div class="col-xs-11 col-md-11">

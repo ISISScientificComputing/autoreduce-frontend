@@ -4,9 +4,11 @@
 # Copyright &copy; 2021 ISIS Rutherford Appleton Laboratory UKRI
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
+from parameterized import parameterized
 
-from autoreduce_db.instrument.models import InstrumentVariable
+from autoreduce_db.reduction_viewer.models import ReductionArguments
 from autoreduce_qp.model.database import access as db
+
 from selenium.common.exceptions import NoSuchElementException
 
 from autoreduce_frontend.selenium_tests.pages.configure_new_runs_page import ConfigureNewRunsPage
@@ -17,6 +19,7 @@ from autoreduce_frontend.selenium_tests.utils import setup_external_services
 REDUCE_VARS_DEFAULT_VALUE = "default value from reduce_vars"
 
 
+# pylint:disable=no-member
 class TestConfigureNewRunsPageIntegration(BaseTestCase):
     fixtures = BaseTestCase.fixtures + ["run_with_one_variable"]
 
@@ -65,7 +68,7 @@ class TestConfigureNewRunsPageIntegration(BaseTestCase):
         instrument = db.get_instrument(self.instrument_name)
         return instrument.reduction_runs.filter(run_number=self.run_number)
 
-    def _submit_var_value(self, value, start=None, experiment_number=None):
+    def _submit_args_value(self, value, start=None, experiment_number=None):
         self.page = ConfigureNewRunsPage(self.driver,
                                          self.instrument_name,
                                          run_start=start,
@@ -75,152 +78,143 @@ class TestConfigureNewRunsPageIntegration(BaseTestCase):
         self.page.submit_button.click()
 
     @staticmethod
-    def assert_expected_var(var: InstrumentVariable, expected_run_number, expected_reference, expected_value):
+    def assert_expected_args(args, expected_run_number, expected_reference, expected_value):
         """
-        Assert that a var has the expected values
-        :param var: The var to check
+        Assert that a args has the expected values
+        :param args: The args to check
         :param expected_run_number: The expected run_number
         :param expected_reference: The expected reference
-        :param expected_value: The expected var value
+        :param expected_value: The expected args value
         """
+        assert args.as_dict()["standard_vars"]["variable1"] == expected_value
         if expected_run_number is not None:
-            assert var.start_run == expected_run_number
+            assert args.start_run == expected_run_number
         else:
-            assert var.start_run is None
+            assert args.start_run is None
         if expected_reference is not None:
-            assert var.experiment_reference == expected_reference
+            assert args.experiment_reference == expected_reference
         else:
-            assert var.experiment_reference is None
-        assert var.value == expected_value
+            assert args.experiment_reference is None
 
-    def test_submit_submit_same_variables_does_not_add_new_variables(self):
-        """
-        Test: Just opening the submit page and clicking rerun
-        """
-        self.page = ConfigureNewRunsPage(self.driver, self.instrument_name, run_start=self.run_number + 1)
-        self.page.launch()
-        self.page.submit_button.click()
-        assert InstrumentVariable.objects.count() == 1
+    # def test_submit_submit_same_variables_does_not_add_new_variables(self):
+    #     """
+    #     Test: Just opening the submit page and clicking rerun
+    #     Expected: The arguments get updated with the new value, and a new object is not made
+    #     """
+    #     self.page = ConfigureNewRunsPage(self.driver, self.instrument_name, run_start=self.run_number)
+    #     self.page.launch()
+    #     self.page.submit_button.click()
 
-        summary = VariableSummaryPage(self.driver, self.instrument_name)
-        assert summary.current_variables_by_run.is_displayed()
+    #     assert ReductionArguments.objects.count() == 1
 
-        with self.assertRaises(NoSuchElementException):
-            summary.upcoming_variables_by_run.is_displayed()
-        with self.assertRaises(NoSuchElementException):
-            summary.upcoming_variables_by_experiment.is_displayed()
+    #     summary = VariableSummaryPage(self.driver, self.instrument_name)
+    #     assert summary.current_arguments_by_run.is_displayed()
 
-    def test_submit_new_value(self):
-        """
-        Test: Just opening the submit page and clicking rerun
-        """
-        self._submit_var_value("new_value", self.run_number + 1)
-        assert InstrumentVariable.objects.count() == 2
-        new_var = InstrumentVariable.objects.last()
-        self.assert_expected_var(new_var, self.run_number + 1, None, "new_value")
+    #     with self.assertRaises(NoSuchElementException):
+    #         summary.upcoming_arguments_by_run.is_displayed()
+    #     with self.assertRaises(NoSuchElementException):
+    #         summary.upcoming_arguments_by_experiment.is_displayed()
 
-        summary = VariableSummaryPage(self.driver, self.instrument_name)
-        assert summary.current_variables_by_run.is_displayed()
-        assert summary.upcoming_variables_by_run.is_displayed()
+    # def test_submit_new_value_for_existing_start_run(self):
+    #     """
+    #     Test: Submitting a new variable configuration that starts from the next run number
+    #     Expected: A ReductionArguments is created with the new value, and starting at the next run number
+    #     """
+    #     self._submit_args_value("new_value", self.run_number + 1)
+    #     assert ReductionArguments.objects.count() == 2
+    #     assert ReductionArguments.objects.last().start_run == self.run_number + 1
 
-        with self.assertRaises(NoSuchElementException):
-            summary.upcoming_variables_by_experiment.is_displayed()
+    #     summary = VariableSummaryPage(self.driver, self.instrument_name)
+    #     assert summary.current_arguments_by_run.is_displayed()
+    #     assert summary.upcoming_arguments_by_run.is_displayed()
+    #     assert summary.upcoming_arguments_by_experiment.text == "No arguments found"
 
-    def test_submit_experiment_var(self):
-        """Tests the functionality foe submitting a new variable for an experiment"""
-        self._submit_var_value("new_value", experiment_number=self.rb_number)
+    # def test_submit_experiment_var(self):
+    #     """
+    #     Test: Submitting a new variable for an experiment creates the configuration
+    #     Expected: A ReductionArguments is created with the new value for the given experiment
+    #     """
+    #     self._submit_args_value("new_value", experiment_number=self.rb_number)
 
-        assert InstrumentVariable.objects.count() == 2
-        new_var = InstrumentVariable.objects.last()
-        self.assert_expected_var(new_var, None, self.rb_number, "new_value")
+    #     assert ReductionArguments.objects.count() == 2
+    #     new_args = ReductionArguments.objects.last()
+    #     # assert new_args.as_dict()["standard_vars"]["variable1"] == "new_value"
+    #     self.assert_expected_args(new_args, None, self.rb_number, "new_value")
 
-        summary = VariableSummaryPage(self.driver, self.instrument_name)
-        assert summary.current_variables_by_run.is_displayed()
-        assert summary.upcoming_variables_by_experiment.is_displayed()
+    #     summary = VariableSummaryPage(self.driver, self.instrument_name)
+    #     assert summary.current_arguments_by_run.is_displayed()
+    #     assert summary.upcoming_arguments_by_experiment.is_displayed()
 
-        with self.assertRaises(NoSuchElementException):
-            summary.upcoming_variables_by_run.is_displayed()
+    #     with self.assertRaises(NoSuchElementException):
+    #         summary.upcoming_arguments_by_run.is_displayed()
 
-    def test_submit_multiple_run_ranges(self):
-        """
-        Test submitting variables for multiple run ranges, and that they show up correctly
-        in 'see instrument variables'
-        """
-        self._submit_var_value("new_value", self.run_number + 1)
-        self._submit_var_value("the newest value", self.run_number + 101)
+    # @parameterized.expand([[1, 101], [1, 201]])
+    # def test_submit_multiple_run_ranges(self, increment_one: int, increment_two: int):
+    #     """
+    #     Test: Submitting variables for multiple run ranges
+    #     Expected: They are created with the correct ranges and
+    #               show up in the 'see instrument variables' page
+    #     """
+    #     self._submit_args_value("new_value", self.run_number + increment_one)
+    #     self._submit_args_value("the newest value", self.run_number + increment_two)
 
-        assert InstrumentVariable.objects.count() == 3
-        first_var, second_var, third_var = InstrumentVariable.objects.all()
-        self.assert_expected_var(first_var, self.run_number, None, "value1")
-        self.assert_expected_var(second_var, self.run_number + 1, None, "new_value")
-        self.assert_expected_var(third_var, self.run_number + 101, None, "the newest value")
+    #     assert ReductionArguments.objects.count() == 3
+    #     first_args, second_args, third_args = ReductionArguments.objects.all()
+    #     self.assert_expected_args(first_args, self.run_number, None, "value1")
+    #     self.assert_expected_args(second_args, self.run_number + increment_one, None, "new_value")
+    #     self.assert_expected_args(third_args, self.run_number + increment_two, None, "the newest value")
 
-        summary = VariableSummaryPage(self.driver, self.instrument_name)
-        assert summary.current_variables_by_run.is_displayed()
-        assert summary.upcoming_variables_by_run.is_displayed()
+    #     summary = VariableSummaryPage(self.driver, self.instrument_name)
+    #     assert summary.current_arguments_by_run.is_displayed()
+    #     assert summary.upcoming_arguments_by_run.is_displayed()
 
-        with self.assertRaises(NoSuchElementException):
-            assert summary.upcoming_variables_by_experiment.is_displayed()
+    #     assert summary.upcoming_arguments_by_experiment.text == "No arguments found"
 
-    def test_submit_multiple_run_ranges_with_ends(self):
-        """
-        Test submitting variables for multiple run ranges, and that they show up correctly
-        in 'see instrument variablers'
-        """
-        self._submit_var_value("new_value", self.run_number + 1)
-        self._submit_var_value("the newest value", self.run_number + 201)
+    # def test_submit_multiple_experiments(self):
+    #     """Test submitting vars for multiple experiments"""
+    #     self._submit_args_value("new_value", experiment_number=self.rb_number)
+    #     self._submit_args_value("the newest value", experiment_number=self.rb_number + 100)
 
-        assert InstrumentVariable.objects.count() == 3
-        first_var, second_var, fourth_var = InstrumentVariable.objects.all()
-        self.assert_expected_var(first_var, self.run_number, None, "value1")
-        self.assert_expected_var(second_var, self.run_number + 1, None, "new_value")
-        self.assert_expected_var(fourth_var, self.run_number + 201, None, "the newest value")
+    #     assert ReductionArguments.objects.count() == 3
+    #     first_args, second_args, third_args = ReductionArguments.objects.all()
+    #     self.assert_expected_args(first_args, self.run_number, None, "value1")
+    #     self.assert_expected_args(second_args, None, self.rb_number, "new_value")
+    #     self.assert_expected_args(third_args, None, self.rb_number + 100, "the newest value")
 
-    def test_submit_multiple_experiments(self):
-        """Test submitting vars for multiple experiments"""
-        self._submit_var_value("new_value", experiment_number=self.rb_number)
-        self._submit_var_value("the newest value", experiment_number=self.rb_number + 100)
+    #     summary = VariableSummaryPage(self.driver, self.instrument_name)
+    #     assert summary.current_arguments_by_run.is_displayed()
+    #     assert summary.upcoming_arguments_by_experiment.is_displayed()
 
-        assert InstrumentVariable.objects.count() == 3
-        first_var, second_var, third_var = InstrumentVariable.objects.all()
-        self.assert_expected_var(first_var, self.run_number, None, "value1")
-        self.assert_expected_var(second_var, None, self.rb_number, "new_value")
-        self.assert_expected_var(third_var, None, self.rb_number + 100, "the newest value")
+    #     with self.assertRaises(NoSuchElementException):
+    #         summary.upcoming_arguments_by_run.is_displayed()
 
-        summary = VariableSummaryPage(self.driver, self.instrument_name)
-        assert summary.current_variables_by_run.is_displayed()
-        assert summary.upcoming_variables_by_experiment.is_displayed()
+    # def test_submit_multiple_run_ranges_and_then_experiment(self):
+    #     """Test submitting both run range vars and experiment vars"""
+    #     self._submit_args_value("new_value", self.run_number + 1)
+    #     self._submit_args_value("the newest value", self.run_number + 201)
+    #     self._submit_args_value("some value for experiment", experiment_number=self.rb_number)
+    #     self._submit_args_value("some different value for experiment", experiment_number=self.rb_number + 100)
 
-        with self.assertRaises(NoSuchElementException):
-            summary.upcoming_variables_by_run.is_displayed()
+    #     assert ReductionArguments.objects.count() == 5
+    #     first_args, second_args, fourth_args, exp_args1, exp_args2 = ReductionArguments.objects.all()
 
-    def test_submit_multiple_run_ranges_and_then_experiment(self):
-        """Test submitting both run range vars and experiment vars"""
-        self._submit_var_value("new_value", self.run_number + 1)
-        self._submit_var_value("the newest value", self.run_number + 201)
-        self._submit_var_value("some value for experiment", experiment_number=self.rb_number)
-        self._submit_var_value("some different value for experiment", experiment_number=self.rb_number + 100)
+    #     self.assert_expected_args(first_args, self.run_number, None, "value1")
+    #     self.assert_expected_args(second_args, self.run_number + 1, None, "new_value")
+    #     self.assert_expected_args(fourth_args, self.run_number + 201, None, "the newest value")
+    #     self.assert_expected_args(exp_args1, None, self.rb_number, "some value for experiment")
+    #     self.assert_expected_args(exp_args2, None, self.rb_number + 100, "some different value for experiment")
 
-        assert InstrumentVariable.objects.count() == 5
-        first_var, second_var, fourth_var, exp_var1, exp_var2 = InstrumentVariable.objects.all()
+    #     summary = VariableSummaryPage(self.driver, self.instrument_name)
+    #     assert summary.current_arguments_by_run.is_displayed()
+    #     assert summary.upcoming_arguments_by_experiment.is_displayed()
+    #     assert summary.upcoming_arguments_by_run.is_displayed()
 
-        self.assert_expected_var(first_var, self.run_number, None, "value1")
-        self.assert_expected_var(second_var, self.run_number + 1, None, "new_value")
-        self.assert_expected_var(fourth_var, self.run_number + 201, None, "the newest value")
-        self.assert_expected_var(exp_var1, None, self.rb_number, "some value for experiment")
-        self.assert_expected_var(exp_var2, None, self.rb_number + 100, "some different value for experiment")
-
-        summary = VariableSummaryPage(self.driver, self.instrument_name)
-        assert summary.current_variables_by_run.is_displayed()
-        assert summary.upcoming_variables_by_experiment.is_displayed()
-        assert summary.upcoming_variables_by_run.is_displayed()
-
-    def test_submit_then_edit_then_delete_run_vars(self):
+    def test_submit_then_edit_then_delete_run_args(self):
         """Test submitting new variables for run ranges, then editing them, then deleting them"""
-        self._submit_var_value("new_value", self.run_number + 1)
-        self._submit_var_value("the newest value", self.run_number + 101)
-        self._submit_var_value("value for 201", self.run_number + 201)
-        self._submit_var_value("value for 301", self.run_number + 301)
+        self._submit_args_value("new_value", self.run_number + 1)
+        self._submit_args_value("the newest value", self.run_number + 101)
+        self._submit_args_value("value for 201", self.run_number + 201)
+        self._submit_args_value("value for 301", self.run_number + 301)
 
         summary = VariableSummaryPage(self.driver, self.instrument_name)
 
@@ -275,8 +269,8 @@ class TestConfigureNewRunsPageIntegration(BaseTestCase):
 
     def test_submit_then_edit_then_delete_experiment_vars(self):
         """Test submitting new variables for experiment reference, then editing them, then deleting them"""
-        self._submit_var_value("new_value", experiment_number=1234567)
-        self._submit_var_value("the newest value", experiment_number=2345678)
+        self._submit_args_value("new_value", experiment_number=1234567)
+        self._submit_args_value("the newest value", experiment_number=2345678)
         summary = VariableSummaryPage(self.driver, self.instrument_name)
         summary.click_experiment_edit_button_for(1234567)
 

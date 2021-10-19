@@ -10,6 +10,8 @@ from collections import namedtuple
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.ui import Select
 
+from autoreduce_frontend.autoreduce_webapp.templatetags.encode_b64 import encode_b64
+
 ResetButtons = namedtuple('ResetButtons', ["to_initial", "to_script"])
 
 
@@ -39,7 +41,7 @@ class RerunFormMixin:
         """
         Finds and returns the variable1 field
         """
-        return self.driver.find_element_by_id("var-standard-variable1")
+        return self.driver.find_element_by_id(f"var-standard-{encode_b64('variable1')}")
 
     @property
     def variable1_field_val(self) -> WebElement:
@@ -53,7 +55,7 @@ class RerunFormMixin:
         """
         Finds and returns the inline reset buttons for the variable1 field
         """
-        buttons = self.driver.find_elements_by_css_selector("[data-for=var-standard-variable1]")
+        buttons = self.driver.find_elements_by_css_selector(f"[data-for=var-standard-{encode_b64('variable1')}]")
         assert len(
             buttons
         ) == 2, "Found more elements with that selector that expected, further test assertions will not work properly"
@@ -73,7 +75,7 @@ class RerunFormMixin:
         """
         Finds and returns the variable string field
         """
-        return self.driver.find_element_by_id("var-standard-variable_str")
+        return self.driver.find_element_by_id(f"var-standard-{encode_b64('variable_str')}")
 
     @property
     def variable_str_field_val(self) -> WebElement:
@@ -96,7 +98,7 @@ class RerunFormMixin:
         """
         Finds and returns the variable int field
         """
-        return self.driver.find_element_by_id("var-standard-variable_int")
+        return self.driver.find_element_by_id(f"var-standard-{encode_b64('variable_int')}")
 
     @property
     def variable_int_field_val(self) -> WebElement:
@@ -119,7 +121,7 @@ class RerunFormMixin:
         """
         Finds and returns the variable float field
         """
-        return self.driver.find_element_by_id("var-standard-variable_float")
+        return self.driver.find_element_by_id(f"var-standard-{encode_b64('variable_float')}")
 
     @property
     def variable_float_field_val(self) -> WebElement:
@@ -142,7 +144,7 @@ class RerunFormMixin:
         """
         Finds and returns the variable list of ints field
         """
-        return self.driver.find_element_by_id("var-standard-variable_listint")
+        return self.driver.find_element_by_id(f"var-standard-{encode_b64('variable_listint')}")
 
     @property
     def variable_listint_field_val(self) -> WebElement:
@@ -165,7 +167,7 @@ class RerunFormMixin:
         """
         Finds and returns the variable list of str field
         """
-        return self.driver.find_element_by_id("var-standard-variable_liststr")
+        return self.driver.find_element_by_id(f"var-standard-{encode_b64('variable_liststr')}")
 
     @property
     def variable_liststr_field_val(self) -> WebElement:
@@ -188,7 +190,7 @@ class RerunFormMixin:
         """
         Finds and returns the variable None field
         """
-        return self.driver.find_element_by_id("var-standard-variable_none")
+        return self.driver.find_element_by_id(f"var-standard-{encode_b64('variable_none')}")
 
     @property
     def variable_none_field_val(self) -> WebElement:
@@ -211,7 +213,7 @@ class RerunFormMixin:
         """
         Finds and returns the variable empty field
         """
-        return self.driver.find_element_by_id("var-standard-variable_empty")
+        return self.driver.find_element_by_id(f"var-standard-{encode_b64('variable_empty')}")
 
     @property
     def variable_empty_field_val(self) -> WebElement:
@@ -234,7 +236,7 @@ class RerunFormMixin:
         """
         Finds and returns the variable bool field
         """
-        return Select(self.driver.find_element_by_id("var-standard-variable_bool"))
+        return Select(self.driver.find_element_by_id(f"var-standard-{encode_b64('variable_bool')}"))
 
     @property
     def variable_bool_field_val(self) -> Select:
