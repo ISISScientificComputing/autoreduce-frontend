@@ -10,7 +10,7 @@ Module for the job queue page model
 from typing import Optional, Union, List
 
 from functools import partial
-from selenium.webdriver.remote.webelement import WebElement
+from selenium.webdriver.support.wait import WebDriverWait
 from django.urls.base import reverse
 from autoreduce_frontend.selenium_tests.pages.component_mixins.footer_mixin import FooterMixin
 from autoreduce_frontend.selenium_tests.pages.component_mixins.navbar_mixin import NavbarMixin
@@ -51,3 +51,20 @@ class JobQueuePage(Page, NavbarMixin, FooterMixin):
 
         button = self.driver.find_element_by_css_selector(f'[href*="{url}"]')
         WebDriverWait(self.driver, 10).until(partial(run_button_clicked_successfully, button, url))
+
+    def click_run(self, run_number: Union[str, int]) -> None:
+        """
+        Click the run number in the table
+        :param run_number: The run number to click
+        """
+        url = reverse("runs:summary", kwargs={"instrument_name": "TestInstrument", "run_number": run_number})
+        self._do_run_button(url)
+
+    def click_batch_run(self, primary_key: Union[str, int]) -> None:
+        """
+        Click the batch run link in the table
+
+        :param primary_key: The primary key of the batch run
+        """
+        url = reverse("runs:batch_summary", kwargs={"instrument_name": "TestInstrument", "pk": primary_key})
+        self._do_run_button(url)

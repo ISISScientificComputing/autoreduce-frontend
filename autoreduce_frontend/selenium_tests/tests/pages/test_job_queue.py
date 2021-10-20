@@ -11,9 +11,10 @@ from autoreduce_frontend.selenium_tests.pages.job_queue_page import JobQueuePage
 from autoreduce_frontend.selenium_tests.tests.base_tests import (FooterTestMixin, BaseTestCase, NavbarTestMixin,
                                                                  AccessibilityTestMixin)
 
+from autoreduce_frontend.selenium_tests.pages.run_summary_page import RunSummaryPage
 
-class TestJobQueuePage(BaseTestCase):
-    # class TestJobQueuePage(NavbarTestMixin, BaseTestCase, FooterTestMixin, AccessibilityTestMixin):
+
+class TestJobQueuePage(NavbarTestMixin, BaseTestCase, FooterTestMixin, AccessibilityTestMixin):
     """
     Test cases for JobQueuePage
     """
@@ -69,3 +70,20 @@ class TestJobQueuePageBatchRunInQueue(BaseTestCase):
         """
         self.assertEqual("Processing", self.page.get_status_from_run(123, 125))
         self.assertEqual("Queued", self.page.get_status_from_run(456))
+
+    def test_click_run_link_in_table(self):
+        """
+        Test: Clicking a queued run correctly changes the page to the run's summary page
+              The assertion is done within the click_run method
+        """
+        self.page.click_run(run_number=456)  # 456 taken from fixture
+        run_summary_page = RunSummaryPage(self.driver, "TestInstrument", 456, 0)
+        assert run_summary_page.reduction_job_panel.is_displayed()
+
+    def test_click_batch_run_link_in_table(self):
+        """
+        Test: Clicking a queued batch run correctly changes the page to the run's summary page
+        """
+        self.page.click_batch_run(primary_key=1)  # 1 taken from fixture
+        run_summary_page = RunSummaryPage(self.driver, "TestInstrument", 1, 0, batch_run=True)
+        assert run_summary_page.reduction_job_panel.is_displayed()

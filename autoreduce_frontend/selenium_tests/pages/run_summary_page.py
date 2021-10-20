@@ -21,20 +21,29 @@ from autoreduce_frontend.selenium_tests.pages.page import Page
 
 class RunSummaryPage(Page, RerunFormMixin, NavbarMixin, FooterMixin, TourMixin):
     """Page model class for run summary page."""
-    def __init__(self, driver, instrument, run_number, version):
+    def __init__(self, driver, instrument, run_number, version, batch_run=False):
         super().__init__(driver)
         self.instrument = instrument
         self.run_number = run_number
         self.version = version
+        self.batch_run = batch_run
 
     def url_path(self) -> str:
         """Return the current URL of the page."""
-        return reverse("runs:summary",
-                       kwargs={
-                           "instrument_name": self.instrument,
-                           "run_number": self.run_number,
-                           "run_version": self.version
-                       })
+        if not self.batch_run:
+            return reverse("runs:summary",
+                           kwargs={
+                               "instrument_name": self.instrument,
+                               "run_number": self.run_number,
+                               "run_version": self.version
+                           })
+        else:
+            return reverse("runs:batch_summary",
+                           kwargs={
+                               "instrument_name": self.instrument,
+                               "pk": self.run_number,
+                               "run_version": self.version
+                           })
 
     @property
     def reduction_job_panel(self) -> WebElement:
