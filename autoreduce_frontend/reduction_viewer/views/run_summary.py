@@ -3,7 +3,7 @@ from autoreduce_db.reduction_viewer.models import ReductionRun
 from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions, login_and_uows_valid, render_with)
 
 from autoreduce_frontend.plotting.plot_handler import PlotHandler
-from autoreduce_frontend.reduction_viewer.views.common import get_arguments_from_run
+from autoreduce_frontend.reduction_viewer.views.common import get_arguments_from_file, get_arguments_from_run
 from autoreduce_frontend.reduction_viewer.view_utils import (get_interactive_plot_data, linux_to_windows_path,
                                                              make_data_analysis_url, windows_to_linux_path,
                                                              started_by_id_to_name)
@@ -72,6 +72,7 @@ def run_summary_run(request, history, instrument_name=None, run_version=0):
     data_analysis_link_url = make_data_analysis_url(reduction_location) if reduction_location else ""
     rb_number = run.experiment.reference_number
     standard_vars, advanced_vars, variable_help = get_arguments_from_run(run)
+    default_standard_variables, _, variable_help = get_arguments_from_file(run)
 
     run_number = run.pk if run.batch_run else run.run_number
 
@@ -79,7 +80,7 @@ def run_summary_run(request, history, instrument_name=None, run_version=0):
         'run': run,
         'run_number': run_number,
         'run_version': run_version,
-        'has_reduce_vars': bool(standard_vars),
+        'has_reduce_vars': bool(default_standard_variables),
         'batch_run': run.batch_run,
         'standard_variables': standard_vars,
         'advanced_variables': advanced_vars,

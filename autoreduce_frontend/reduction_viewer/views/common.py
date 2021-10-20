@@ -18,12 +18,34 @@ def _combine_dicts(current: dict, default: dict):
 
     final = {}
     for name in itertools.chain(current.keys(), default.keys()):
-        # the default valur for the "default" key and
-        # for when the variable is missing from the current variables
-        default_value = default.get(name, None)
+        # the default value for argument, also used when the variable is missing from the current variables
+        # ideally there will always be a default for each variable name, but
+        # if the variable is missing from the default dictionary, then just default to empty string
+        default_value = default.get(name, "")
         final[name] = {"current": current.get(name, default_value), "default": default_value}
 
     return final
+
+
+def get_arguments_from_file(reduction_run) -> Tuple[dict, dict, dict]:
+    """
+    Loads the default variables from the instrument's reduce_vars file.
+
+    Raises:
+        FileNotFoundError: If the instrument's reduce_vars file is not found.
+        ImportError: If the instrument's reduce_vars file contains an import error.
+        SyntaxError: If the instrument's reduce_vars file contains a syntax error.
+    """
+    try:
+        default_variables = VariableUtils.get_default_variables(reduction_run.instrument.name)
+        default_standard_variables = default_variables.get("standard_vars", {})
+        default_advanced_variables = default_variables.get("advanced_vars", {})
+        variable_help = default_variables.get("variable_help", {"standard_vars": {}, "advanced_vars": {}})
+    except (FileNotFoundError, ImportError, SyntaxError):
+        default_standard_variables = {}
+        default_advanced_variables = {}
+        variable_help = {"standard_vars": {}, "advanced_vars": {}}
+    return default_standard_variables, default_advanced_variables, variable_help
 
 
 def get_arguments_from_run(reduction_run) -> Tuple[dict, dict, dict]:
@@ -44,16 +66,7 @@ def get_arguments_from_run(reduction_run) -> Tuple[dict, dict, dict]:
     standard_vars = vars_kwargs.get("standard_vars", {})
     advanced_vars = vars_kwargs.get("advanced_vars", {})
 
-    try:
-        default_variables = VariableUtils.get_default_variables(reduction_run.instrument.name)
-        default_standard_variables = default_variables.get("standard_vars", {})
-        default_advanced_variables = default_variables.get("advanced_vars", {})
-        variable_help = default_variables.get("variable_help", {"standard_vars": {}, "advanced_vars": {}})
-    except (FileNotFoundError, ImportError, SyntaxError):
-        default_variables = {}
-        default_standard_variables = {}
-        default_advanced_variables = {}
-        variable_help = {"standard_vars": {}, "advanced_vars": {}}
+    default_standard_variables, default_advanced_variables, variable_help = get_arguments_from_file(reduction_run)
 
     final_standard = _combine_dicts(standard_vars, default_standard_variables)
     final_advanced = _combine_dicts(advanced_vars, default_advanced_variables)
