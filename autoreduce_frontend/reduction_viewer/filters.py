@@ -1,23 +1,8 @@
 from autoreduce_db.reduction_viewer.models import ReductionRun
-from django_filters.filters import Filter
+from django_filters.filters import CharFilter, Filter
 from django_filters.widgets import RangeWidget
 from django_filters import FilterSet, DateFromToRangeFilter
-
-
-class RunNumberField(Filter):
-    """ This is a custom FilterField to enable a behavior like:
-        ?run_number=1,2,3,4 ... 
-        """
-    def filter(self, queryset, value):
-
-        # If no value is passed, return initial queryset
-        if not value:
-            return queryset
-
-        self.lookup_expr = 'in'  # Setting the lookupexpression for all values
-        list_values = value.split(',')  # Split the incoming querystring by comma
-
-        return super(RunNumberField, self).filter(queryset, list_values)
+from django.db.models import Q
 
 
 class ReductionRunFilter(FilterSet):
@@ -27,7 +12,8 @@ class ReductionRunFilter(FilterSet):
         'label': 'created'
     }))
 
-    run_number = RunNumberField(field_name='run_number')
+    #run_number = RunNumberField(field_name='run_number')
+    run_number = CharFilter(method="filter_run_number")
 
     class Meta:
         model = ReductionRun
@@ -38,3 +24,25 @@ class ReductionRunFilter(FilterSet):
         # doesn't push Submit button, QueryDict (in data) is empty so not all runs displayed at start
         if self.data == {}:
             self.queryset = self.queryset.none()
+
+    def filter_run_number(self, queryset, name, value):
+        # If no value is passed, return initial queryset
+        if not value:
+            return queryset
+        if "," in value and "-" not in value:
+            list_values = value.split(',')
+            query = Q(run_number__in=list_values)
+            return queryset.filter(query)
+        if "-" in value and "," not in value:
+            list_values = value.split('-')
+            query = Q(run_number__range=(list_values[0], list_values[1]))
+            return queryset.filter(query)
+        if "-" and "," in value:
+            query = Q()
+            list_values = value.split(',')
+            for pair in list_values:
+                seperated_pair = pair.split('-')
+                query.add(Q(run_number__range=(seperated_pair[0], seperated_pair[1])), Q.OR)
+            return queryset.filter(query)
+        query = Q(run_number__exact=value)
+        return queryset.filter(query)
