@@ -1,13 +1,9 @@
 from autoreduce_frontend.selenium_tests.pages.failed_jobs_page import FailedJobsPage
-from unittest.mock import Mock, patch
 
-from autoreduce_frontend.reduction_viewer import views
-from autoreduce_frontend.autoreduce_webapp.icat_cache import DEFAULT_MESSAGE
-from autoreduce_frontend.selenium_tests.tests.base_tests import (BaseTestCase, FooterTestMixin, NavbarTestMixin)
+from autoreduce_frontend.selenium_tests.tests.base_tests import BaseTestCase
 
 
-class TestJailedJobs(BaseTestCase):
-    # class TestJailedJobs(NavbarTestMixin, BaseTestCase, FooterTestMixin):
+class TestFailedJobs(BaseTestCase):
     """
     Test cases for the error page
     """

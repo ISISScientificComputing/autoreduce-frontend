@@ -12,7 +12,8 @@ from autoreduce_frontend.selenium_tests.tests.base_tests import (FooterTestMixin
                                                                  AccessibilityTestMixin)
 
 
-class TestJobQueuePage(NavbarTestMixin, BaseTestCase, FooterTestMixin, AccessibilityTestMixin):
+class TestJobQueuePage(BaseTestCase):
+    # class TestJobQueuePage(NavbarTestMixin, BaseTestCase, FooterTestMixin, AccessibilityTestMixin):
     """
     Test cases for JobQueuePage
     """
@@ -38,4 +39,33 @@ class TestJobQueuePage(NavbarTestMixin, BaseTestCase, FooterTestMixin, Accessibi
         Test runs have expected statuses
         """
         self.assertEqual("Processing", self.page.get_status_from_run(123))
+        self.assertEqual("Queued", self.page.get_status_from_run(456))
+
+
+class TestJobQueuePageBatchRunInQueue(BaseTestCase):
+    """
+    Test cases for JobQueuePage
+    """
+    fixtures = BaseTestCase.fixtures + ["test_job_queue_fixture_batch_run"]
+
+    def setUp(self):
+        """
+        Setup and launch job queue page
+        """
+        super().setUp()
+        self.page = JobQueuePage(self.driver)
+        self.page.launch()
+
+    def test_runs_shown_in_table(self):
+        """
+        Test: All expected runs on table
+        """
+        expected_runs = ["Batch 123 → 125", "456"]
+        self.assertCountEqual(expected_runs, self.page.get_run_numbers_from_table())
+
+    def test_runs_have_correct_status(self):
+        """
+        Test runs have expected statuses
+        """
+        self.assertEqual("Processing", self.page.get_status_from_run(123, 125))
         self.assertEqual("Queued", self.page.get_status_from_run(456))

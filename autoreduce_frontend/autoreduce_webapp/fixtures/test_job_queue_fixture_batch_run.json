@@ -40,7 +40,8 @@
       "experiment_id": 1,
       "instrument_id": 1,
       "script_id": 1,
-      "arguments_id": 1
+      "arguments_id": 1,
+      "batch_run": true
     }
   },
   {
@@ -48,6 +49,22 @@
     "pk": 1,
     "fields": {
       "run_number": 123,
+      "reduction_run_id": 1
+    }
+  },
+  {
+    "model": "reduction_viewer.runnumber",
+    "pk": 2,
+    "fields": {
+      "run_number": 124,
+      "reduction_run_id": 1
+    }
+  },
+  {
+    "model": "reduction_viewer.runnumber",
+    "pk": 3,
+    "fields": {
+      "run_number": 125,
       "reduction_run_id": 1
     }
   },
@@ -70,7 +87,7 @@
   },
   {
     "model": "reduction_viewer.runnumber",
-    "pk": 2,
+    "pk": 4,
     "fields": {
       "run_number": 456,
       "reduction_run_id": 2

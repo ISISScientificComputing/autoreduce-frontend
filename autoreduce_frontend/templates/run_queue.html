@@ -32,7 +32,7 @@
                             {% endif %}
                         </td>
                         <td>{{ job.instrument.name }}</td>
-                        <td><strong>{{ job.status.value_verbose }}</strong></td>
+                        <td id="status-{{ job.run_numbers.first }}-{{ job.run_numbers.last }}"><strong>{{ job.status.value_verbose }}</strong></td>
                         <td title="{{ job.created|date:'SHORT_DATETIME_FORMAT' }}">{{ job.created|naturaltime }}</td>
                         <td> {{ started_by }} </td>
                     </tr>
