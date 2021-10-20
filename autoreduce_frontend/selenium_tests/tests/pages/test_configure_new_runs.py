@@ -120,7 +120,9 @@ class TestConfigureNewRunsPageSkippedOnly(NavbarTestMixin, BaseTestCase, FooterT
         self.page.submit_button.click()
         summary = VariableSummaryPage(self.driver, self.instrument_name)
         assert summary.current_arguments_by_run.is_displayed()
-        assert summary.current_arguments_by_run.text == "Current Variables\nNo current variables found"
+        assert summary.current_arguments_by_run.text == 'Current Arguments\nRuns\n99999\n99999\n'\
+                                                        'standard_vars\nvariable1: value1\nadvanced_vars'
+
         assert "Runs\n100000\nOngoing" in summary.upcoming_arguments_by_run.text
 
     def test_configure_skipped_only_exp_vars(self):
@@ -132,6 +134,7 @@ class TestConfigureNewRunsPageSkippedOnly(NavbarTestMixin, BaseTestCase, FooterT
         self.page.submit_button.click()
         summary = VariableSummaryPage(self.driver, self.instrument_name)
         assert summary.current_arguments_by_run.is_displayed()
-        assert summary.current_arguments_by_run.text == "Current Variables\nNo current variables found"
+        assert summary.current_arguments_by_run.text == 'Current Arguments\nRuns\n99999\nOngoing\n'\
+                                                        'standard_vars\nvariable1: value1\nadvanced_vars'
         assert summary.upcoming_arguments_by_experiment.is_displayed()
         assert "Experiment\n#1234567" in summary.upcoming_arguments_by_experiment.text
