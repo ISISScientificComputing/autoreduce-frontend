@@ -76,7 +76,7 @@ class VariableSummaryPage(Page, NavbarMixin, FooterMixin, TourMixin):
         :param end: The end run
         :return: The edit button
         """
-        url = reverse("runs:variables", kwargs={"instrument": self.instrument, "start": start, "end": end})
+        url = reverse("runs:variables", kwargs={"instrument": self.instrument, "start": start})
         self._do_run_button(url)
 
     def click_run_delete_button_for(self, start: int, end: int):
