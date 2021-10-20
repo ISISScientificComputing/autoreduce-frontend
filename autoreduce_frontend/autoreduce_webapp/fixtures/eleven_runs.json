@@ -80,7 +80,6 @@
         "model": "reduction_viewer.reductionrun",
         "pk": 3,
         "fields": {
-            "run_number": 100001,
             "status_id": 5,
             "run_version": 0,
             "last_updated": "2020-10-19 17:35:04+00:00",
@@ -106,7 +105,6 @@
         "model": "reduction_viewer.reductionrun",
         "pk": 4,
         "fields": {
-            "run_number": 100002,
             "status_id": 5,
             "run_version": 0,
             "last_updated": "2020-10-19 17:35:04+00:00",
@@ -132,7 +130,6 @@
         "model": "reduction_viewer.reductionrun",
         "pk": 5,
         "fields": {
-            "run_number": 100003,
             "status_id": 5,
             "run_version": 0,
             "last_updated": "2020-10-19 17:35:04+00:00",
@@ -158,7 +155,6 @@
         "model": "reduction_viewer.reductionrun",
         "pk": 6,
         "fields": {
-            "run_number": 100004,
             "status_id": 5,
             "run_version": 0,
             "last_updated": "2020-10-19 17:35:04+00:00",
@@ -184,7 +180,6 @@
         "model": "reduction_viewer.reductionrun",
         "pk": 7,
         "fields": {
-            "run_number": 100005,
             "status_id": 5,
             "run_version": 0,
             "last_updated": "2020-10-19 17:35:04+00:00",
@@ -210,7 +205,6 @@
         "model": "reduction_viewer.reductionrun",
         "pk": 8,
         "fields": {
-            "run_number": 100006,
             "status_id": 5,
             "run_version": 0,
             "last_updated": "2020-10-19 17:35:04+00:00",
@@ -236,7 +230,6 @@
         "model": "reduction_viewer.reductionrun",
         "pk": 9,
         "fields": {
-            "run_number": 100007,
             "status_id": 5,
             "run_version": 0,
             "last_updated": "2020-10-19 17:35:04+00:00",
@@ -262,7 +255,6 @@
         "model": "reduction_viewer.reductionrun",
         "pk": 10,
         "fields": {
-            "run_number": 100008,
             "status_id": 5,
             "run_version": 0,
             "last_updated": "2020-10-19 17:35:04+00:00",
@@ -288,7 +280,6 @@
         "model": "reduction_viewer.reductionrun",
         "pk": 11,
         "fields": {
-            "run_number": 100009,
             "status_id": 5,
             "run_version": 0,
             "last_updated": "2020-10-19 17:35:04+00:00",

@@ -12,10 +12,10 @@ from autoreduce_frontend.selenium_tests.tests.base_tests import (AccessibilityTe
                                                                  NavbarTestMixin)
 
 
-class TestRunsListPage(BaseTestCase, AccessibilityTestMixin, FooterTestMixin, NavbarTestMixin):
+class TestRunsList(BaseTestCase, AccessibilityTestMixin, FooterTestMixin, NavbarTestMixin):
     """Test cases for the InstrumentSummary page."""
 
-    fixtures = BaseTestCase.fixtures + ["test_runs_list_page"]
+    fixtures = BaseTestCase.fixtures + ["test_runs_list"]
 
     def setUp(self) -> None:
         """Sets up the InstrumentSummaryPage object."""
