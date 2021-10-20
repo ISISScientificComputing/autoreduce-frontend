@@ -63,7 +63,7 @@ def run_summary_run(request, history, instrument_name=None, run_version=0):
         data_location = data_location_list[0].file_path
         print(data_location)
 
-    path_type = request.GET.get('path_type', "")
+    path_type = request.GET.get("path_type", "linux")  # defaults to Linux
     if path_type == "linux":
         data_location = windows_to_linux_path(data_location)
     elif path_type == "windows":
@@ -100,7 +100,7 @@ def run_summary_run(request, history, instrument_name=None, run_version=0):
         'next_run': int(request.GET.get('next_run', run_number)),
         'previous_run': int(request.GET.get('previous_run', run_number)),
         'filtering': request.GET.get('filter', 'run'),
-        'new_path_type': 'windows' if path_type == 'windows' else 'linux',
+        'new_path_type': 'linux' if path_type == 'windows' else 'windows',
     }
 
     if reduction_location:
