@@ -5,8 +5,10 @@
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
 
+from django.contrib.auth import get_user_model
 from django.urls import reverse
-from autoreduce_db.instrument.models import InstrumentVariable
+from rest_framework.authtoken.models import Token
+from autoreduce_db.reduction_viewer.models import ReductionArguments
 from autoreduce_frontend.selenium_tests.pages.rerun_jobs_page import RerunJobsPage
 from autoreduce_frontend.selenium_tests.pages.run_summary_page import RunSummaryPage
 from autoreduce_frontend.selenium_tests.pages.runs_list_page import RunsListPage
@@ -19,11 +21,6 @@ from autoreduce_frontend.selenium_tests.utils import setup_external_services
 # pylint:disable=no-member
 class TestRerunJobsRangePageIntegration(BaseTestCase):
     fixtures = BaseTestCase.fixtures + ["two_runs"]
-
-    accessibility_test_ignore_rules = {
-        # https://github.com/ISISScientificComputing/autoreduce/issues/1267
-        "duplicate-id-aria": "input",
-    }
 
     @classmethod
     def setUpClass(cls):
@@ -48,6 +45,8 @@ class TestRerunJobsRangePageIntegration(BaseTestCase):
     def setUp(self) -> None:
         """Sets up and launches RerunJobsPage before each test case"""
         super().setUp()
+        user = get_user_model()
+        Token.objects.get_or_create(user=user.objects.get(username="super"))
         self.page = RerunJobsPage(self.driver, self.instrument_name)
         self.page.launch()
 
@@ -71,7 +70,7 @@ class TestRerunJobsRangePageIntegration(BaseTestCase):
             assert run_number_v1.is_displayed()
             assert RunSummaryPage(self.driver, self.instrument_name, run,
                                   1).launch().variable1_field_val == variable_value
-            vars_for_run_v1 = InstrumentVariable.objects.filter(start_run=run)
+            vars_for_run_v1 = ReductionArguments.objects.filter(start_run=run)
             for var in vars_for_run_v1:
                 assert var.value == variable_value
 

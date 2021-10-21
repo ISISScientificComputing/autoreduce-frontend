@@ -17,11 +17,6 @@ from autoreduce_frontend.selenium_tests.tests.base_tests import (BaseTestCase, F
 class TestConfigureNewRunsPage(NavbarTestMixin, BaseTestCase, FooterTestMixin, AccessibilityTestMixin):
     fixtures = BaseTestCase.fixtures + ["two_runs"]
 
-    accessibility_test_ignore_rules = {
-        # https://github.com/ISISScientificComputing/autoreduce/issues/1267
-        "duplicate-id-aria": "input",
-    }
-
     @classmethod
     def setUpClass(cls):
         """Sets up the data archive to be shared across test cases"""

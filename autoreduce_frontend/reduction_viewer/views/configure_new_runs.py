@@ -8,9 +8,11 @@ from django.shortcuts import redirect
 
 from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions, login_and_uows_valid, render_with)
 from autoreduce_frontend.reduction_viewer.views.common import (prepare_arguments_for_render,
-                                                               read_variables_from_form_post_submit, unpack_arguments)
+                                                               read_variables_from_form_post_submit)
 
 LOGGER = logging.getLogger(__package__)
+
+# pylint:disable=no-member
 
 
 @login_and_uows_valid
@@ -85,13 +87,19 @@ def configure_new_runs_get(instrument_name, start=0, experiment_reference=0):
     editing = (start > 0 or experiment_reference > 0)
 
     existing_arguments = None
-    run_start = start
     last_run = instrument.get_last_for_rerun(instrument.reduction_runs.filter(batch_run=False))
+    run_start = start if start else last_run.run_number + 1
 
     if experiment_reference:
-        existing_arguments = instrument.arguments.get(experiment_reference=experiment_reference)
+        try:
+            existing_arguments = instrument.arguments.get(experiment_reference=experiment_reference)
+        except ReductionArguments.DoesNotExist:
+            pass
     elif start:
-        existing_arguments = instrument.arguments.get(start_run=start)
+        try:
+            existing_arguments = instrument.arguments.get(start_run=start)
+        except ReductionArguments.DoesNotExist:
+            pass
 
     if existing_arguments:
         standard_vars, advanced_vars, variable_help = prepare_arguments_for_render(existing_arguments,
@@ -100,7 +108,6 @@ def configure_new_runs_get(instrument_name, start=0, experiment_reference=0):
         # load the arguments from the latest rerun
         standard_vars, advanced_vars, variable_help = prepare_arguments_for_render(last_run.arguments,
                                                                                    last_run.instrument.name)
-        run_start = last_run.run_number + 1
 
     context_dictionary = {
         'instrument': instrument,

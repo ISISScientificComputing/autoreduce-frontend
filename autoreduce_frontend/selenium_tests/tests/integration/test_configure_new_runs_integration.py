@@ -4,12 +4,12 @@
 # Copyright &copy; 2021 ISIS Rutherford Appleton Laboratory UKRI
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
+import os
+import subprocess
 from parameterized import parameterized
 
 from autoreduce_db.reduction_viewer.models import ReductionArguments
 from autoreduce_qp.model.database import access as db
-
-from selenium.common.exceptions import NoSuchElementException
 
 from autoreduce_frontend.selenium_tests.pages.configure_new_runs_page import ConfigureNewRunsPage
 from autoreduce_frontend.selenium_tests.pages.variables_summary_page import VariableSummaryPage
@@ -22,11 +22,6 @@ REDUCE_VARS_DEFAULT_VALUE = "default value from reduce_vars"
 # pylint:disable=no-member
 class TestConfigureNewRunsPageIntegration(BaseTestCase):
     fixtures = BaseTestCase.fixtures + ["run_with_one_variable"]
-
-    accessibility_test_ignore_rules = {
-        # https://github.com/ISISScientificComputing/autoreduce/issues/1267
-        "duplicate-id-aria": "input",
-    }
 
     @classmethod
     def setUpClass(cls):
@@ -110,10 +105,8 @@ class TestConfigureNewRunsPageIntegration(BaseTestCase):
         summary = VariableSummaryPage(self.driver, self.instrument_name)
         assert summary.current_arguments_by_run.is_displayed()
 
-        with self.assertRaises(NoSuchElementException):
-            summary.upcoming_arguments_by_run.is_displayed()
-        with self.assertRaises(NoSuchElementException):
-            summary.upcoming_arguments_by_experiment.is_displayed()
+        assert summary.upcoming_arguments_by_run.text == "No upcoming arguments found"
+        assert summary.upcoming_arguments_by_experiment.text == "No arguments found"
 
     def test_submit_new_value_for_existing_start_run(self):
         """
@@ -138,13 +131,12 @@ class TestConfigureNewRunsPageIntegration(BaseTestCase):
 
         assert ReductionArguments.objects.count() == 2
         new_args = ReductionArguments.objects.last()
-        # assert new_args.as_dict()["standard_vars"]["variable1"] == "new_value"
         self.assert_expected_args(new_args, None, self.rb_number, "new_value")
 
         summary = VariableSummaryPage(self.driver, self.instrument_name)
         assert summary.current_arguments_by_run.is_displayed()
         assert summary.upcoming_arguments_by_experiment.is_displayed()
-        assert summary.upcoming_arguments_by_experiment.text == "No arguments found"
+        assert summary.upcoming_arguments_by_run.text == "No upcoming arguments found"
 
     @parameterized.expand([[1, 101], [1, 201]])
     def test_submit_multiple_run_ranges(self, increment_one: int, increment_two: int):
@@ -165,7 +157,6 @@ class TestConfigureNewRunsPageIntegration(BaseTestCase):
         summary = VariableSummaryPage(self.driver, self.instrument_name)
         assert summary.current_arguments_by_run.is_displayed()
         assert summary.upcoming_arguments_by_run.is_displayed()
-
         assert summary.upcoming_arguments_by_experiment.text == "No arguments found"
 
     def test_submit_multiple_experiments(self):
@@ -183,8 +174,7 @@ class TestConfigureNewRunsPageIntegration(BaseTestCase):
         assert summary.current_arguments_by_run.is_displayed()
         assert summary.upcoming_arguments_by_experiment.is_displayed()
 
-        with self.assertRaises(NoSuchElementException):
-            summary.upcoming_arguments_by_run.is_displayed()
+        summary.upcoming_arguments_by_run.is_displayed()
 
     def test_submit_multiple_run_ranges_and_then_experiment(self):
         """Test submitting both run range vars and experiment vars"""
