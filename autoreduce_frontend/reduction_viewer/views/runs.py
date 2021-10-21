@@ -18,7 +18,7 @@ from django.db.models.query import QuerySet
 from requests.exceptions import ConnectionError  # pylint:disable=redefined-builtin
 
 from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions, login_and_uows_valid, render_with)
-from autoreduce_frontend.reduction_viewer.views.common import (decode_b64, get_arguments_from_run)
+from autoreduce_frontend.reduction_viewer.views.common import (decode_b64, prepare_arguments_for_render)
 from autoreduce_frontend.utilities import input_processing
 
 LOGGER = logging.getLogger(__package__)
@@ -43,7 +43,8 @@ def submit_runs(request, instrument=None):
         runs_for_instrument = instrument.reduction_runs.filter(batch_run=False)
         last_run = instrument.get_last_for_rerun(runs_for_instrument)
 
-        standard_vars, advanced_vars, variable_help = get_arguments_from_run(last_run)
+        standard_vars, advanced_vars, variable_help = prepare_arguments_for_render(last_run.arguments,
+                                                                                   last_run.instrument.name)
         # pylint:disable=no-member
         context_dictionary = {
             'instrument': instrument,

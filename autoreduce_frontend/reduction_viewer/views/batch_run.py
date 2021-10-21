@@ -12,7 +12,8 @@ from django.views.generic import FormView
 from django.shortcuts import render
 
 from autoreduce_frontend.utilities import input_processing
-from autoreduce_frontend.reduction_viewer.views.common import get_arguments_from_run, read_variables_from_form_post_submit
+from autoreduce_frontend.reduction_viewer.views.common import (prepare_arguments_for_render,
+                                                               read_variables_from_form_post_submit)
 
 
 class BatchRunSubmit(FormView):
@@ -26,7 +27,8 @@ class BatchRunSubmit(FormView):
         runs_for_instrument = instrument.reduction_runs.filter(batch_run=True)
         last_run = instrument.get_last_for_rerun(runs_for_instrument)
 
-        standard_vars, advanced_vars, variable_help = get_arguments_from_run(last_run)
+        standard_vars, advanced_vars, variable_help = prepare_arguments_for_render(last_run.arguments,
+                                                                                   last_run.instrument.name)
         context['message'] = self.request.GET.get("error", None)
         context['instrument'] = instrument
         context['standard_variables'] = standard_vars

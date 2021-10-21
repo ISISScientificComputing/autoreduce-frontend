@@ -1,6 +1,7 @@
 import base64
 import itertools
 from typing import Tuple
+from autoreduce_db.reduction_viewer.models import ReductionArguments
 from autoreduce_qp.queue_processor.variable_utils import VariableUtils
 from django.http.request import QueryDict
 
@@ -27,9 +28,29 @@ def _combine_dicts(current: dict, default: dict):
     return final
 
 
-def get_arguments_from_file(reduction_run) -> Tuple[dict, dict, dict]:
+def unpack_arguments(arguments: dict) -> Tuple[dict, dict, dict]:
+    """
+    Unpacks an arguments dictionary into separate dictionaries for
+    standard, advanced variables, and variable help.
+
+    Args:
+        arguments: The arguments dictionary to unpack.
+
+    Returns:
+        A tuple containing the standard variables, advanced variables, and variable help.
+    """
+    standard_arguments = arguments.get("standard_vars", {})
+    advanced_arguments = arguments.get("advanced_vars", {})
+    variable_help = arguments.get("variable_help", {"standard_vars": {}, "advanced_vars": {}})
+    return standard_arguments, advanced_arguments, variable_help
+
+
+def get_arguments_from_file(instrument: str) -> Tuple[dict, dict, dict]:
     """
     Loads the default variables from the instrument's reduce_vars file.
+
+    Args:
+        instrument: The instrument to load the variables for.
 
     Raises:
         FileNotFoundError: If the instrument's reduce_vars file is not found.
@@ -37,10 +58,8 @@ def get_arguments_from_file(reduction_run) -> Tuple[dict, dict, dict]:
         SyntaxError: If the instrument's reduce_vars file contains a syntax error.
     """
     try:
-        default_variables = VariableUtils.get_default_variables(reduction_run.instrument.name)
-        default_standard_variables = default_variables.get("standard_vars", {})
-        default_advanced_variables = default_variables.get("advanced_vars", {})
-        variable_help = default_variables.get("variable_help", {"standard_vars": {}, "advanced_vars": {}})
+        default_variables = VariableUtils.get_default_variables(instrument)
+        default_standard_variables, default_advanced_variables, variable_help = unpack_arguments(default_variables)
     except (FileNotFoundError, ImportError, SyntaxError):
         default_standard_variables = {}
         default_advanced_variables = {}
@@ -48,25 +67,25 @@ def get_arguments_from_file(reduction_run) -> Tuple[dict, dict, dict]:
     return default_standard_variables, default_advanced_variables, variable_help
 
 
-def get_arguments_from_run(reduction_run) -> Tuple[dict, dict, dict]:
+def prepare_arguments_for_render(arguments: ReductionArguments, instrument: str) -> Tuple[dict, dict, dict]:
     """
-    Gets the arguments from the reduction run and converts them
-    into a dictionary containing their "current" and "default" values.
+    Converts the arguments into a dictionary containing their "current" and "default" values.
 
     Used to render the form in the webapp (with values from "current"), and
     provide the defaults for resetting (with values from "default").
 
     Args:
-        reduction_run: The reduction run to get the arguments from.
+        arguments: The arguments to convert.
+        instrument: The instrument to get the default variables for.
 
     Returns:
         A dictionary containing the arguments and their current and default values.
     """
-    vars_kwargs = reduction_run.arguments.as_dict()
+    vars_kwargs = arguments.as_dict()
     standard_vars = vars_kwargs.get("standard_vars", {})
     advanced_vars = vars_kwargs.get("advanced_vars", {})
 
-    default_standard_variables, default_advanced_variables, variable_help = get_arguments_from_file(reduction_run)
+    default_standard_variables, default_advanced_variables, variable_help = get_arguments_from_file(instrument)
 
     final_standard = _combine_dicts(standard_vars, default_standard_variables)
     final_advanced = _combine_dicts(advanced_vars, default_advanced_variables)
