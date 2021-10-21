@@ -13,10 +13,10 @@
         {{filter.form.instrument|as_crispy_field:"bootstrap"}}
         <br>
         {{filter.form.run_description|as_crispy_field:"bootstrap"}}
+        <input type="radio" id="contains" name="run_description_qualifier" value="contains" {% if run_description_qualifier == 'contains' %} checked {% endif %}>
+        <label for="contains">Contains</label>
         <input type="radio" id="exact" name="run_description_qualifier" value="exact" {% if run_description_qualifier == 'exact' %} checked {% endif %}>
         <label for="exact">Exact</label>
-            <input type="radio" id="contains" name="run_description_qualifier" value="contains" {% if run_description_qualifier == 'contains' %} checked {% endif %}>
-        <label for="contains">Contains</label>
         <br>
         {{filter.form.created|as_crispy_field:"bootstrap"}}
         <br>

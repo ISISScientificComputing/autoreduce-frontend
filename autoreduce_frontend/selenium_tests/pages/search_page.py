@@ -41,6 +41,10 @@ class SearchPage(Page, NavbarMixin, FooterMixin):
         return dropdown
 
     @property
+    def run_description_text_area(self) -> WebElement:
+        return self.driver.find_element_by_id("id_run_description")
+
+    @property
     def created_min_date(self) -> WebElement:
         created_min = self.driver.find_element_by_id("id_created_0")
         return created_min
@@ -49,6 +53,16 @@ class SearchPage(Page, NavbarMixin, FooterMixin):
     def created_max_date(self) -> WebElement:
         created_max = self.driver.find_element_by_id("id_created_1")
         return created_max
+
+    @property
+    def run_description_contains(self) -> WebElement:
+        contains_radio_button = self.driver.find_element_by_xpath("//*[@id='contains']")
+        return contains_radio_button
+
+    @property
+    def run_description_exact(self) -> WebElement:
+        exact_radio_button = self.driver.find_element_by_xpath("//*[@id='exact']")
+        return exact_radio_button
 
     def alert_message_text(self) -> str:
         """

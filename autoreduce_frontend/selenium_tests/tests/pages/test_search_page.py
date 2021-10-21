@@ -17,7 +17,7 @@ from autoreduce_frontend.selenium_tests.tests.base_tests import (
 class TestSearchPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
     """Test cases for the search runs page."""
 
-    fixtures = BaseTestCase.fixtures + ["test_runs_list_page"]
+    fixtures = BaseTestCase.fixtures + ["pr_test"]
 
     def setUp(self) -> None:
         """
@@ -73,3 +73,19 @@ class TestSearchPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
         self.page.click_search_button()
         runs = self.page.get_run_numbers_from_table()
         assert len(runs) != 0
+
+    def test_search_description(self):
+        self.page.launch()
+        self.page.run_description_text_area.send_keys("test run_description")
+        self.page.run_description_contains.click()
+        self.page.run_description_text_area.submit()
+        runs = self.page.get_run_numbers_from_table()
+        assert len(runs) != 0
+
+    def test_search_description_exact(self):
+        self.page.launch()
+        self.page.run_description_text_area.send_keys("test run_description")
+        self.page.run_description_exact.click()
+        self.page.run_description_text_area.submit()
+        runs = self.page.get_run_numbers_from_table()
+        assert len(runs) == 0
