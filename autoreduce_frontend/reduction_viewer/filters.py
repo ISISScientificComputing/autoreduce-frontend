@@ -17,7 +17,7 @@ class ReductionRunFilter(FilterSet):
 
     class Meta:
         model = ReductionRun
-        fields = ['run_number', 'instrument', 'run_description', 'created']
+        fields = ['run_number', 'instrument', 'run_description', 'created', 'status']
 
     def __init__(self, *args, run_description_qualifier=None, **kwargs):
         super(ReductionRunFilter, self).__init__(*args, **kwargs)

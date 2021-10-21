@@ -45,7 +45,7 @@ from autoreduce_frontend.reduction_viewer.view_utils import (deactivate_invalid_
                                                              windows_to_linux_path)
 from autoreduce_frontend.utilities.pagination import CustomPaginator
 from autoreduce_frontend.autoreduce_webapp.settings import AUTOREDUCE_API_URL
-from autoreduce_frontend.autoreduce_webapp.forms import RunsListForm
+from autoreduce_frontend.reduction_viewer.forms import SearchOptionsForm
 
 from django_tables2 import RequestConfig
 
@@ -639,11 +639,13 @@ def search(request):
     run_filter = ReductionRunFilter(request.GET, run_description_qualifier=run_description_qualifier, queryset=run_list)
     table_class = ReductionRunTable(run_filter.qs, order_by="-run_number")
     RequestConfig(request, paginate={"per_page": 10}).configure(table_class)
+    options_form = SearchOptionsForm(initial={'pagination': request.GET.get('per_page', 10)})
     message = "Sorry, no runs found for this criteria."
     context_dictionary = {
         'filter': run_filter,
         'table': table_class,
         'message': message,
+        'options_form': options_form,
         'per_page': request.GET.get('per_page', 10),
         'current_page': int(request.GET.get('page', 1)),
         'sort': request.GET.get('sort', '-run_number'),
