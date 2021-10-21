@@ -635,7 +635,8 @@ def search_runs(request):
 @render_with('search.html')
 def search(request):
     run_list = ReductionRun.objects.all()
-    run_filter = ReductionRunFilter(request.GET, queryset=run_list)
+    run_description_qualifier = request.GET.get("run_description_qualifier", "contains")
+    run_filter = ReductionRunFilter(request.GET, run_description_qualifier=run_description_qualifier, queryset=run_list)
     table_class = ReductionRunTable(run_filter.qs, order_by="-run_number")
     RequestConfig(request, paginate={"per_page": 10}).configure(table_class)
     message = "Sorry, no runs found for this criteria."
@@ -646,5 +647,6 @@ def search(request):
         'per_page': request.GET.get('per_page', 10),
         'current_page': int(request.GET.get('page', 1)),
         'sort': request.GET.get('sort', '-run_number'),
+        'run_description_qualifier': run_description_qualifier,
     }
     return context_dictionary

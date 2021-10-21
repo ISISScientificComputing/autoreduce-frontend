@@ -8,7 +8,18 @@
     <h1>Search Page</h1>
 
     <form action="" method="get">
-        {{ filter.form|crispy }}
+        {{filter.form.run_number|as_crispy_field:"bootstrap"}}
+        <br>
+        {{filter.form.instrument|as_crispy_field:"bootstrap"}}
+        <br>
+        {{filter.form.run_description|as_crispy_field:"bootstrap"}}
+        <input type="radio" id="exact" name="run_description_qualifier" value="exact" {% if run_description_qualifier == 'exact' %} checked {% endif %}>
+        <label for="exact">Exact</label>
+            <input type="radio" id="contains" name="run_description_qualifier" value="contains" {% if run_description_qualifier == 'contains' %} checked {% endif %}>
+        <label for="contains">Contains</label>
+        <br>
+        {{filter.form.created|as_crispy_field:"bootstrap"}}
+        <br>
         <button id="search-button" type="submit" class="btn btn-primary">Search</button>
     </form>
     <br>
