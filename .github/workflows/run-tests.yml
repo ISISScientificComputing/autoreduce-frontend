@@ -60,16 +60,12 @@ jobs:
         with:
           python-version: 3.7
 
-      - uses: actions/cache@v2
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
       - uses: ISISScientificComputing/autoreduce-actions/build@master
         with:
           package_name: autoreduce_frontend
+
+      - name: Start Autoreduce REST API
+        run: gunicorn autoreduce_rest_api.autoreduce_django.wsgi:application -b 127.0.0.1:8001 &
 
       - name: Start Selenium docker daemon
         run: docker run --name selenium --rm -d --network=host -v /dev/shm:/dev/shm selenium/standalone-chrome:4.0.0-beta-3-prerelease-20210422
