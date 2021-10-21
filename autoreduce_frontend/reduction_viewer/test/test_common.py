@@ -1,4 +1,4 @@
-from autoreduce_frontend.reduction_viewer.views.common import _combine_dicts
+from autoreduce_frontend.reduction_viewer.views.common import DEFAULT_WHEN_NO_VALUE, _combine_dicts
 
 
 def test_combine_dicts_empty_current():
@@ -29,5 +29,14 @@ def test_combine_dicts_current_more_vars():
     """
     current_test = {"test_var": 123, "not_in_defaults": "test"}
     default_test = {"test_var": 123}
-    expected = {"test_var": {"current": 123, "default": 123}, "not_in_defaults": {"current": "test", "default": None}}
+    expected = {
+        "test_var": {
+            "current": 123,
+            "default": 123,
+        },
+        "not_in_defaults": {
+            "current": "test",
+            "default": DEFAULT_WHEN_NO_VALUE,
+        }
+    }
     assert _combine_dicts(current_test, default_test) == expected

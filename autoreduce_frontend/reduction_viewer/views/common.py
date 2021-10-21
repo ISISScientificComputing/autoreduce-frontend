@@ -5,6 +5,10 @@ from autoreduce_db.reduction_viewer.models import ReductionArguments
 from autoreduce_qp.queue_processor.variable_utils import VariableUtils
 from django.http.request import QueryDict
 
+# Holds the default value used when there is no value for the variable
+# in the default variables dictionary. Stored in a parameter for re-use in tests.
+DEFAULT_WHEN_NO_VALUE = ""
+
 
 def _combine_dicts(current: dict, default: dict):
     """
@@ -22,7 +26,7 @@ def _combine_dicts(current: dict, default: dict):
         # the default value for argument, also used when the variable is missing from the current variables
         # ideally there will always be a default for each variable name, but
         # if the variable is missing from the default dictionary, then just default to empty string
-        default_value = default.get(name, "")
+        default_value = default.get(name, DEFAULT_WHEN_NO_VALUE)
         final[name] = {"current": current.get(name, default_value), "default": default_value}
 
     return final
