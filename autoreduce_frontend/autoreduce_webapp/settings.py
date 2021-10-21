@@ -46,10 +46,8 @@ if DEBUG:
 
 if DEBUG:
     ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'reducedev2.isis.cclrc.ac.uk']
-    AUTOREDUCE_API_URL = "http://127.0.0.1:8001/api"
 else:
     ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'reduce.isis.cclrc.ac.uk']
-    AUTOREDUCE_API_URL = "https://reduce.isis.cclrc.ac.uk/api"
 
 INTERNAL_IPS = ['localhost', '127.0.0.1']
 
