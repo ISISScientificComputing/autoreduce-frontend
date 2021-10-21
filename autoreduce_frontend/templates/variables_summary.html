@@ -10,7 +10,7 @@
         </div>
         <div class="row">
             <div class="col-md-12 text-center">
-                {% include "snippets/instrument_summary.html" with instrument=instrument current_arguments=current_arguments  upcoming_arguments_by_run=upcoming_arguments_by_run upcoming_arguments_by_experiment=upcoming_arguments_by_experiment%}
+                {% include "snippets/instrument_summary.html" with instrument=instrument current_arguments=current_arguments upcoming_arguments_by_run=upcoming_arguments_by_run upcoming_arguments_by_experiment=upcoming_arguments_by_experiment%}
             </div>
         </div>
     {% else %}
@@ -21,9 +21,9 @@
 {% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{% static "css/vendor/prettify.css" %}">
+    <link rel="stylesheet" href="{% static 'css/vendor/prettify.css' %}">
 {% endblock %}
 {% block scripts %}
-    <script src="{% static "javascript/vendor/prettify.js" %}"></script>
-    <script src="{% static "javascript/run_variables.js" %}"></script>
+    <script src="{% static 'javascript/vendor/prettify.js' %}"></script>
+    <script src="{% static 'javascript/run_variables.js' %}"></script>
 {% endblock %}
