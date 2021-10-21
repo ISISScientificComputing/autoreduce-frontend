@@ -2,6 +2,7 @@
 Unit tests for the Custom pagination module
 """
 
+from typing import Union
 import unittest
 from datetime import datetime, timedelta
 from unittest.mock import patch
@@ -55,11 +56,32 @@ class TestCustomPage(unittest.TestCase):
         self.assertRaises(PageLimitException, self.page.add_record, 'test_record_2')
 
 
+class MockRunNumbers:
+    def __init__(self, run_numbers: Union[int, list]) -> None:
+        if isinstance(run_numbers, int):
+            self.run_numbers = [run_numbers]
+        else:
+            self.run_numbers = run_numbers
+
+    def first(self):
+        """Returns the first run number"""
+        return self.run_numbers[0]
+
+    def last(self):
+        """Returns the last run number"""
+        return self.run_numbers[-1]
+
+
 class MockRunData:
     """ Test class to simulate a Run record from the database """
-    def __init__(self, run_number, date):
-        self.run_number = run_number
+    def __init__(self, run_numbers: Union[int, list], date):
+        self.run_numbers = MockRunNumbers(run_numbers)
         self.last_updated = date
+
+    @property
+    def run_number(self):
+        """Simulates ReductionRun.run_number"""
+        return self.run_numbers.first()
 
 
 class TestRunPage(unittest.TestCase):
