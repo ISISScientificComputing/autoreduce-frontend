@@ -6,6 +6,8 @@
 # ############################################################################### #
 
 from django.urls import reverse
+from rest_framework.authtoken.models import Token
+from django.contrib.auth import get_user_model
 from autoreduce_frontend.selenium_tests.pages.rerun_jobs_page import RerunJobsPage
 from autoreduce_frontend.selenium_tests.tests.base_tests import BaseTestCase
 from autoreduce_frontend.selenium_tests.utils import submit_and_wait_for_result
@@ -47,6 +49,8 @@ class TestRerunJobsPageIntegration(BaseTestCase):
         super().setUp()
         self.page = RerunJobsPage(self.driver, self.instrument_name)
         self.page.launch()
+        user_model = get_user_model()
+        Token.objects.create(user=user_model.objects.first())
 
     def test_submit_rerun_same_variables(self):
         """
