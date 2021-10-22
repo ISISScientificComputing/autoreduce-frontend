@@ -9,6 +9,7 @@ from typing import List
 
 from django.urls import reverse
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.ui import Select
 
 from autoreduce_frontend.selenium_tests.pages.component_mixins.footer_mixin import FooterMixin
@@ -47,7 +48,7 @@ class RunsListPage(Page, NavbarMixin, FooterMixin, TourMixin):
         Returns:
             The page object of the opened run summary.
         """
-        runs = self.driver.find_elements_by_class_name("run-num-links")
+        runs = self.driver.find_elements_by_xpath("//div[@class='table-container']/table/tbody/tr/td/a")
         run_string = f"{run_number} - {version}" if version else f"{run_number}"
         for run in runs:
             if run.text == run_string:
@@ -63,9 +64,9 @@ class RunsListPage(Page, NavbarMixin, FooterMixin, TourMixin):
         """
         return self.driver.find_element_by_id("alert_message").text.strip()
 
-    def get_top_run(self) -> None:
+    def get_top_run(self) -> WebElement:
         """Return the element with the id 'top-run-number'."""
-        return self.driver.find_element_by_id("top-run-number")
+        return self.driver.find_element_by_xpath("//div[@class='table-container']/table/tbody/tr[1]/td[1]/a")
 
     def click_btn_by_title(self, title: str) -> None:
         """
@@ -84,6 +85,14 @@ class RunsListPage(Page, NavbarMixin, FooterMixin, TourMixin):
                 break
         else:
             raise NoSuchElementException
+
+    def click_next_page_button(self) -> None:
+        btn = self.driver.find_element_by_xpath("//li[@class='next']/a")
+        btn.click()
+
+    def click_prev_page_button(self) -> None:
+        btn = self.driver.find_element_by_xpath("//li[@class='prev']/a")
+        btn.click()
 
     def update_filter(self, filter_name, value):
         """

@@ -14,7 +14,7 @@ class ReductionRunTable(Table):
             return "text-" + colour_table_row(status.__str__()) + " run-status"
 
     run_number = tables.TemplateColumn(
-        '<a href="{% url \'runs:summary\' record.instrument record.run_number record.run_version %}?page={{current_page}}&per_page={{per_page}}&sort={{ sort }}&filter={{ filtering }}">{{record.run_number}}</a>',
+        '{% load get_run_navigation_queries %} <a href="{% url \'runs:summary\' record.instrument record.run_number record.run_version %}?{% get_run_navigation_queries record.run_number current_page last_instrument_run first_instrument_run %}&page={{current_page}}&per_page={{per_page}}&sort={{ sort }}&filter={{ filtering }}">{{record.run_number}}</a>',
         attrs={"td": {
             "class": "run-num-links"
         }})
