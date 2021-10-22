@@ -7,22 +7,22 @@
 
 {% block body %}
     {% if message %}
-        <div class="text-center col-md-6 col-md-offset-3 well well-small" id="notactive">{{ message }}</div>
+        <div class="text-center card" id="notactive">{{ message }}</div>
     {% else %}
         <!-- Instrument Name -->
         <div class="row">
-            <div class="col-md-12 text-center">
+            <div class="col-lg-12 text-center">
                 <h2>{{ instrument_name }}</h2>
             </div>
         </div>
         <!-- Instrument status and control buttons -->
         <div class="row" id="btn-instrument_active">
             <!-- Status panel -->
-            <div class="col-md-6">
+            <div class="col-lg-6">
                 {% include "snippets/instrument_status.html" with processing=processing queued=queued last_instrument_run=last_instrument_run only %}
             </div>
             <!-- Pause / Resume Reduction button-->
-            <div class="col-md-6 text-center">
+            <div class="col-lg-6 text-center">
                 {% if instrument.is_paused %}
                     <a class="btn btn-danger btn-block" id="pause">
                         <i class="fa fa-play"></i>
@@ -40,7 +40,7 @@
                 </form>
                 <p></p>
             </div>
-            <div class="col-md-6 text-center" id="btn-re-run_past_job">
+            <div class="col-lg-6 text-center" id="btn-re-run_past_job">
                 <p>
                     <a href="{% url 'instrument:submit_runs' instrument=instrument_name %}" class="btn btn-success btn-block"
                         {% if not has_variables %}
@@ -51,7 +51,7 @@
                     </a>
                 </p>
             </div>
-            <div class="col-md-6 text-center" id="btn-configure_new_runs">
+            <div class="col-lg-6 text-center" id="btn-configure_new_runs">
                 <p>
                     <a href="{% url 'instrument:variables' instrument=instrument_name %}"class="btn btn-success btn-block"
                         {% if not has_variables %}
@@ -62,7 +62,7 @@
                     </a>
                 </p>
             </div>
-            <div class="col-md-6 text-center" id="btn-see_instrument_variables">
+            <div class="col-lg-6 text-center" id="btn-see_instrument_variables">
                 <p>
                     <a href="{% url 'instrument:variables_summary' instrument=instrument_name %}" class="btn btn-success btn-block"
                         {% if not has_variables %}
@@ -74,7 +74,7 @@
                 </p>
             </div>
             {% if not has_variables %}
-                <div class="col-md-offset-6 col-md-6 text-center alert alert-warning" role="alert" id="alert_message">
+                <div class="offset-md-6 col-lg-6 text-center alert alert-warning" role="alert" id="alert_message">
                     <i class="fa fa-exclamation-triangle"></i>
                     &nbsp;&nbsp;The buttons above have been disabled because {{ error_reason }}.
                 </div>
@@ -86,7 +86,7 @@
         <div class="row" id="filter-options">
             <!-- Filter, Sort, and Pagination options -->
             <form action="{{ request.path }}" method="get" id="filter_options">
-                <div class="col-md-3">
+                <div class="col-lg-3">
                     <label for="filter_select">Filter by</label>
                     <select class="form-control" name="filter" form="filter_options" id="filter_select">
                         <option value="run" title="Display run numbers"
@@ -102,7 +102,7 @@
                         </option>
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-lg-3">
                     <label for="sort_select">Sort by</label>
                     <select class="form-control" name="sort" form="filter_options" id="sort_select">
                         <option value="run"
@@ -120,7 +120,7 @@
                     </select>
                 </div>
                 {% if filtering == 'run' %}
-                    <div class="col-md-3">
+                    <div class="col-lg-3">
                         <label for="pagination_select">Items per page</label>
                         <select title="The number of reduction jobs that should be shown per page" class="form-control" name="pagination" form="filter_options" id="pagination_select">
                             <option {% if max_items == '10' %} selected="selected" {% endif %}>10</option>
@@ -132,7 +132,7 @@
                         </select>
                     </div>
                 {% endif %}
-                <div class="col-md-3">
+                <div class="col-lg-3">
                     <input class="btn btn-primary" type="submit" value="Apply filters" id="apply_filters">
                 </div>
             </form>
@@ -140,7 +140,7 @@
         <br/>
         <!-- Display table for every reduction job -->
         <div class="row" id="runs-table">
-            <div class="tab-content col-md-12">
+            <div class="tab-content col-lg-12">
                 <!-- Run number filtered jobs -->
                 {% if filtering == 'run' %}
                     {% include "filtered_by_number.html" %}
