@@ -97,11 +97,8 @@ class TestRerunJobsPageIntegration(BaseTestCase):
         assert result[0].run_version == 0
         assert result[1].run_version == 1
 
-        for run0_var, run1_var in zip(result[0].run_variables.all(), result[1].run_variables.all()):
-            # the value of the variable has been overwritten because it's the same run number
-            assert run0_var.variable == run1_var.variable
+        assert result[1].arguments.as_dict()["standard_vars"]["variable1"] == "test_variable_value_123"
 
-        assert result[1].run_variables.first().variable.value == "test_variable_value_123"
 
     def test_submit_confirm_page(self):
         """
