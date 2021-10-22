@@ -1,6 +1,6 @@
 import django_tables2 as tables
 from django_tables2 import Table
-from autoreduce_db.reduction_viewer.models import ReductionRun
+from autoreduce_db.reduction_viewer.models import ReductionRun, Experiment
 from autoreduce_frontend.autoreduce_webapp.templatetags.colour_table_rows import colour_table_row
 import itertools
 
@@ -41,3 +41,20 @@ class ReductionRunTable(Table):
             'status',
             'created',
         )
+
+
+class ExperimentTable(Table):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    reference_number = tables.TemplateColumn(
+        '<a href="{% url \'experiment_summary\' record.reference_number %}" onClick="event.stopPropagation();">RB{{ record.reference_number }}</a>',
+        attrs={"td": {
+            "class": "run-num-links"
+        }})
+
+    class Meta:
+        model = Experiment
+        row_attrs = {"class": "run-row", "data-target": "#RB{{ experiment.reference_number }}"}
+        template_name = "django_tables2/bootstrap.html"
+        fields = ('reference_number', )
