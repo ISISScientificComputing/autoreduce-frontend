@@ -16,7 +16,7 @@ from autoreduce_frontend.selenium_tests.utils import setup_external_services
 
 
 class TestRerunJobsPageIntegration(BaseTestCase):
-    fixtures = BaseTestCase.fixtures + ["run_with_one_variable"]
+    fixtures = BaseTestCase.fixtures + ["rerun_jobs_integration"]
 
     accessibility_test_ignore_rules = {
         # https://github.com/ISISScientificComputing/autoreduce/issues/1267
@@ -27,15 +27,15 @@ class TestRerunJobsPageIntegration(BaseTestCase):
     def setUpClass(cls):
         """Starts external services and sets instrument for all test cases"""
         super().setUpClass()
-        cls.instrument_name = "TestInstrument"
+        cls.instrument_name = "INTER"
         cls.data_archive, cls.queue_client, cls.listener = setup_external_services(cls.instrument_name, 21, 21)
         cls.data_archive.add_reduction_script(cls.instrument_name,
                                               """def main(input_file, output_dir): print('some text')""")
         cls.data_archive.add_reduce_vars_script(cls.instrument_name,
                                                 """standard_vars={"variable1":"test_variable_value_123"}""")
-        cls.instrument_name = "TestInstrument"
+        # used by find_run_in_database to find the run that we're looking for
         cls.rb_number = 1234567
-        cls.run_number = 99999
+        cls.run_number = 62000
 
     @classmethod
     def tearDownClass(cls) -> None:
