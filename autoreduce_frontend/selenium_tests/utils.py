@@ -30,10 +30,10 @@ def find_run_in_database(test):
     """
     instrument = db.get_instrument(test.instrument_name)
     if isinstance(test.run_number, list):
-        args = {"run_number__in": test.run_number}
+        args = {"run_numbers__run_number__in": test.run_number}
 
     else:
-        args = {"run_number": test.run_number}
+        args = {"run_numbers__run_number": test.run_number}
     return instrument.reduction_runs.filter(**args)
 
 
