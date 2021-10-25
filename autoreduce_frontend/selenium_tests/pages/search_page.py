@@ -64,6 +64,14 @@ class SearchPage(Page, NavbarMixin, FooterMixin):
         exact_radio_button = self.driver.find_element_by_xpath("//*[@id='exact']")
         return exact_radio_button
 
+    def click_runs_tab(self) -> None:
+        runs_tab = self.driver.find_element_by_class_name("runs-tab")
+        runs_tab.click()
+
+    def click_experiments_tab(self) -> None:
+        experiments_tab = self.driver.find_element_by_class_name("experiments-tab")
+        experiments_tab.click()
+
     def alert_message_text(self) -> str:
         """
         Return the text of the alert message element with the id
