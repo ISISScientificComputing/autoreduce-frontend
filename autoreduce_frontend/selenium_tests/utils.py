@@ -81,7 +81,7 @@ def setup_external_services(instrument_name: str, start_year: int,
         queue_client, listener = setup_connection()
     except ConnectionException as err:
         raise RuntimeError("Could not connect to ActiveMQ - check your credentials. If running locally check that "
-                           "ActiveMQ is running and started by `python setup.py start`") from err
+                           "the ActiveMQ Docker container is running") from err
 
     return data_archive, queue_client, listener
 

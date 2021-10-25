@@ -10,7 +10,7 @@
         "model": "reduction_viewer.reductionarguments",
         "pk": 1,
         "fields": {
-            "raw": "{\"standard_vars\":{\"variable_str\":\"value1\",\"variable_int\":123,\"variable_float\":123.321,\"variable_listint\":[1,2,3],\"variable_liststr\":[\"a\",\"b\",\"c\"],\"variable_none\":\"None\",\"variable_empty\":\"\",\"variable_bool\":true}}",
+            "raw": "{\"standard_vars\":{\"variable_str\":\"value1\",\"variable_int\":123,\"variable_float\":123.321,\"variable_listfloat\":[1.0,2.0,3.0],\"variable_listint\":[1,2,3],\"variable_liststr\":[\"a\",\"b\",\"c\"],\"variable_none\":null,\"variable_empty\":\"\",\"variable_bool\":true,\"variable_list_no_brackets\":[1,2,3]},\"advanced_vars\":{},\"variable_help\":{\"standard_vars\":{},\"advanced_vars\":{}}}",
             "start_run": null,
             "experiment_reference": null,
             "instrument_id": 1

@@ -140,6 +140,29 @@ class RerunFormMixin:
         self._set_field(self.variable_float_field, value)
 
     @property
+    def variable_listfloat_field(self) -> WebElement:
+        """
+        Finds and returns the variable list of ints field
+        """
+        return self.driver.find_element_by_id(f"var-standard-{encode_b64('variable_listfloat')}")
+
+    @property
+    def variable_listfloat_field_val(self) -> WebElement:
+        """
+        Finds and returns the variable list of ints field value
+        """
+        return self.variable_listfloat_field.get_attribute("value")
+
+    @variable_listfloat_field.setter
+    def variable_listfloat_field(self, value) -> None:
+        """
+        Clears the field and sends the keys to the input field.
+
+        Selenium requires that we clear the field first!
+        """
+        self._set_field(self.variable_listfloat_field, value)
+
+    @property
     def variable_listint_field(self) -> WebElement:
         """
         Finds and returns the variable list of ints field
@@ -253,3 +276,26 @@ class RerunFormMixin:
         Selenium requires that we clear the field first!
         """
         self.variable_bool_field.select_by_visible_text(value)
+
+    @property
+    def variable_list_no_brackets_field(self) -> WebElement:
+        """
+        Finds and returns the variable list of str field
+        """
+        return self.driver.find_element_by_id(f"var-standard-{encode_b64('variable_list_no_brackets')}")
+
+    @property
+    def variable_list_no_brackets_field_val(self) -> WebElement:
+        """
+        Finds and returns the variable list of str field value
+        """
+        return self.variable_list_no_brackets_field.get_attribute("value")
+
+    @variable_list_no_brackets_field.setter
+    def variable_list_no_brackets_field(self, value) -> None:
+        """
+        Clears the field and sends the keys to the input field.
+
+        Selenium requires that we clear the field first!
+        """
+        self._set_field(self.variable_list_no_brackets_field, value)

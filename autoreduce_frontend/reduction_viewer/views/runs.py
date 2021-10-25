@@ -154,6 +154,34 @@ def find_reason_to_avoid_re_run(matching_previous_runs, run_number):
     return True, ""
 
 
+def convert_to_python_type(value: str):
+    """
+    Converts the string sent by the POST request to a real Python type that can be serialized by JSON
+
+    Args:
+        value: The string value to convert
+
+    Returns:
+        The converted value
+    """
+    try:
+        # json can directly loads str/int/floats and lists of them
+        return json.loads(value)
+    except json.JSONDecodeError:
+        if value.lower() == "none" or value.lower() == "null":
+            return None
+        elif value.lower() == "true":
+            return True
+        elif value.lower() == "false":
+            return False
+        elif "," in value and "[" not in value and "]" not in value:
+            return convert_to_python_type(f"[{value}]")
+        elif "'" in value:
+            return convert_to_python_type(value.replace("'", '"'))
+        else:
+            return value
+
+
 def make_reduction_arguments(post_arguments: dict, instrument: str) -> dict:
     """
     Given new variables from the POST request and the default variables from reduce_vars.py
@@ -169,19 +197,19 @@ def make_reduction_arguments(post_arguments: dict, instrument: str) -> dict:
     for key, value in post_arguments:
         if 'var-' in key:
             if 'var-advanced-' in key:
-                name = key.replace('var-advanced-', '').replace('-', ' ')
+                name = key.replace('var-advanced-', '')
                 dict_key = "advanced_vars"
             elif 'var-standard-' in key:
-                name = key.replace('var-standard-', '').replace('-', ' ')
+                name = key.replace('var-standard-', '')
                 dict_key = "standard_vars"
             else:
                 continue
 
             if name is not None:
                 name = decode_b64(name)
+                # skips variables that have been removed from the defaults
                 if name not in defaults[dict_key]:
                     continue
 
-                defaults[dict_key][name] = value
-
+                defaults[dict_key][name] = convert_to_python_type(value)
     return defaults
