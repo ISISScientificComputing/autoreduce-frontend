@@ -15,7 +15,7 @@
     <div class="col-md-9">
         <div class="col-xs-11 col-md-11">
         {% if variable.current|lower == "true" or variable.current|lower == "false" %}
-        <select id="var-{{ type }}-{% encode_b64 name %}" value="{{ variable.current }}" data-initial="{{ variable.current }}" data-default="{{ variable.default }}" name="var-{{ type }}-{{ variable.current.encode_name_b64 }}">
+        <select id="var-{{ type }}-{% encode_b64 name %}" data-initial="{{ variable.current }}" data-default="{{ variable.default }}" name="var-{{ type }}-{{ variable.current.encode_name_b64 }}">
         <option value="True" {% if value.lower == 'true' %} selected {% endif %}>True</option>
         <option value="False" {% if value.lower == 'false' %} selected {% endif %}>False</option>
         </select>
