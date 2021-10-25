@@ -76,9 +76,9 @@
         {% endif %}
 
         <div class="row" id="reduction_job_panel">
-            <div class="col-md-8 col-md-offset-2">
-                <div class="panel panel-primary panel-small panel-2-column">
-                    <div class="panel-body">
+
+                <div class="card card-2-column">
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-md-6">
                                 <div id="run_description">
@@ -216,21 +216,20 @@
                         </div>
                     </div>
                 </div>
-            </div>
         </div>
 
         <div id="re-run_and_graphs">
             {% if run.graph %}
-                <div class="panel panel-default" id="re-run_job">
-                    <div class="panel-heading">
-                        <div class="panel-title">
+                <div class="card" id="re-run_job">
+                    <div class="card-header">
+                        <div class="card-title">
                             <a data-toggle="collapse" href="#collapseGraphs" data-target="#graphs">
                                 <i class="fa fa-chevron-down"></i> Images
                             </a>
                         </div>
                     </div>
 
-                    <div class="panel-body collapse in" id="graphs">
+                    <div class="card-body collapse in" id="graphs">
                         {% for graph in run.graph %}
                             <div class="text-center">
                                 <a href="{{ graph }}" target="_blank" rel="noopener noreferrer"><img src="{{ graph }}"/></a>
@@ -244,7 +243,7 @@
                 {% view "instrument.views.variables.render_run_variables" instrument run_number run_version %}
             {% endautoescape %}
         </div>
-        <div class="row col-md-12 my-2">
+        <div class="d-flex justify-content-center">
             <div class="text-center">
                 {% if newest_run and oldest_run %}
                     <a href="{% url 'runs:summary' instrument_name=instrument run_number=newest_run run_version=run.run_version %}?{% get_run_navigation_queries newest_run current_page newest_run oldest_run %}&page={{current_page}}&per_page={{ items_per_page }}&sort={{ page_type }}" class="btn btn-primary back" id="newest"
