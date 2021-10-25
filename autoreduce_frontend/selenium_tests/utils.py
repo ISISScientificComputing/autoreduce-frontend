@@ -8,6 +8,8 @@ from typing import Tuple
 from autoreduce_db.reduction_viewer.models import ReductionRun, Status
 
 from django.urls.base import reverse
+from django.db.models import Q
+
 from selenium.common.exceptions import ElementClickInterceptedException
 from selenium.webdriver.support.wait import WebDriverWait
 
@@ -57,12 +59,9 @@ def submit_and_wait_for_result(test, expected_runs=1):
         return expected_url in driver.current_url
 
     WebDriverWait(test.driver, 30).until(submit_successful)
-    if expected_runs == 1:
-        WebDriverWait(test.driver, 30).until(lambda _: not test.listener.is_processing_message())
-    else:
-        num_current_runs = ReductionRun.objects.filter(status=Status.get_completed()).count()
-        WebDriverWait(test.driver, 30).until(lambda _: ReductionRun.objects.filter(status=Status.get_completed()).count(
-        ) == num_current_runs + expected_runs)
+    num_current_runs = ReductionRun.objects.filter(status=Status.get_completed()).count()
+    WebDriverWait(test.driver, 30).until(lambda _: ReductionRun.objects.filter(~Q(status=Status.get_completed())).count(
+    ) == num_current_runs + expected_runs)
 
     return find_run_in_database(test)
 
