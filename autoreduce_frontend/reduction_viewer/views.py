@@ -37,7 +37,7 @@ from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions,
 from autoreduce_frontend.autoreduce_webapp.views import render_error
 from autoreduce_frontend.plotting.plot_handler import PlotHandler
 from autoreduce_frontend.reduction_viewer.filters import ReductionRunFilter
-from autoreduce_frontend.reduction_viewer.tables import ExperimentTable, ReductionRunTable
+from autoreduce_frontend.reduction_viewer.tables import ExperimentTable, ReductionRunTable, ReductionRunSearchTable
 from autoreduce_frontend.reduction_viewer.utils import ReductionRunUtils
 from autoreduce_frontend.reduction_viewer.view_utils import (deactivate_invalid_instruments, get_interactive_plot_data,
                                                              linux_to_windows_path, make_data_analysis_url,
@@ -620,7 +620,7 @@ def search(request):
     run_list = ReductionRun.objects.all()
     run_description_qualifier = request.GET.get("run_description_qualifier", "contains")
     run_filter = ReductionRunFilter(request.GET, run_description_qualifier=run_description_qualifier, queryset=run_list)
-    table_class = ReductionRunTable(run_filter.qs, order_by="-run_number")
+    table_class = ReductionRunSearchTable(run_filter.qs, order_by="-run_number")
     RequestConfig(request, paginate={"per_page": 10}).configure(table_class)
     options_form = SearchOptionsForm(initial={'pagination': request.GET.get('per_page', 10)})
     message = "Sorry, no runs found for this criteria."

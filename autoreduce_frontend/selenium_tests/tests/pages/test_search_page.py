@@ -42,8 +42,8 @@ class TestSearchPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
         self.page.run_number_text_area.submit()
         runs = self.page.get_run_numbers_from_table()
         top_run = runs[0]
-        self.page.click_run(top_run)
-        assert self.page.driver.title == "Reduction job #99999 - ISIS Auto-reduction"
+        run_summary_page = self.page.click_run(top_run)
+        assert run_summary_page.driver.title == "Reduction job #99999 - ISIS Auto-reduction"
 
     def test_search_by_instrument(self):
         self.page.launch()
