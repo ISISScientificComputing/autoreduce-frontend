@@ -36,7 +36,7 @@ from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions,
                                                               require_admin)
 from autoreduce_frontend.autoreduce_webapp.views import render_error
 from autoreduce_frontend.plotting.plot_handler import PlotHandler
-from autoreduce_frontend.reduction_viewer.filters import ReductionRunFilter
+from autoreduce_frontend.reduction_viewer.filters import ExperimentFilter, ReductionRunFilter
 from autoreduce_frontend.reduction_viewer.tables import ExperimentTable, ReductionRunTable, ReductionRunSearchTable
 from autoreduce_frontend.reduction_viewer.utils import ReductionRunUtils
 from autoreduce_frontend.reduction_viewer.view_utils import (deactivate_invalid_instruments, get_interactive_plot_data,
@@ -618,16 +618,24 @@ def started_by_id_to_name(started_by_id=None):
 @render_with('search.html')
 def search(request):
     run_list = ReductionRun.objects.all()
+    experiment_list = Experiment.objects.all()
     run_description_qualifier = request.GET.get("run_description_qualifier", "contains")
     run_filter = ReductionRunFilter(request.GET, run_description_qualifier=run_description_qualifier, queryset=run_list)
-    table_class = ReductionRunSearchTable(run_filter.qs, order_by="-run_number")
-    RequestConfig(request, paginate={"per_page": 10}).configure(table_class)
+    experiment_filter = ExperimentFilter(request.GET, queryset=experiment_list)
+    run_table = ReductionRunSearchTable(run_filter.qs, order_by="-run_number")
+    RequestConfig(request, paginate={"per_page": 10}).configure(run_table)
+    experiment_table = ExperimentTable(experiment_filter.qs, order_by="-reference_number")
+    RequestConfig(request, paginate={"per_page": 10}).configure(experiment_table)
     options_form = SearchOptionsForm(initial={'pagination': request.GET.get('per_page', 10)})
-    message = "Sorry, no runs found for this criteria."
+    run_message = "Sorry, no runs found for this criteria."
+    experiment_message = "Sorry, no experiments found for this criteria."
     context_dictionary = {
-        'filter': run_filter,
-        'table': table_class,
-        'message': message,
+        'run_filter': run_filter,
+        'experiment_filter': experiment_filter,
+        'run_table': run_table,
+        'experiment_table': experiment_table,
+        'run_message': run_message,
+        'experiment_message': experiment_message,
         'options_form': options_form,
         'per_page': request.GET.get('per_page', 10),
         'current_page': int(request.GET.get('page', 1)),

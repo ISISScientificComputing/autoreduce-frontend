@@ -167,7 +167,7 @@ class TestRunSummaryPageIntegration(BaseTestCase, FooterTestMixin, NavbarTestMix
         bottom_run_element = runs_list_page.get_created_from_table()[-1]
         temp = re.sub(' a.m.', 'AM', bottom_run_element)
         temp = re.sub(' p.m.', 'PM', temp)
-        run_last_updated = datetime.datetime.strptime(temp, "%d/%m/%Y %H:%M%p")
+        run_last_updated = datetime.datetime.strptime(temp, "%d/%m/%Y %I:%M%p")
         run_datetime = gmt.localize(run_last_updated)
 
         # Calculate the difference in minutes between the current time and the

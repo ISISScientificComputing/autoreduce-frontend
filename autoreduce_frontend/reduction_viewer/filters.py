@@ -1,4 +1,4 @@
-from autoreduce_db.reduction_viewer.models import ReductionRun
+from autoreduce_db.reduction_viewer.models import Experiment, ReductionRun
 from django_filters.filters import CharFilter, Filter
 from django_filters.widgets import RangeWidget
 from django_filters import FilterSet, DateFromToRangeFilter
@@ -60,3 +60,15 @@ class ReductionRunFilter(FilterSet):
             return queryset.filter(query)
         query = Q(run_description__exact=value)
         return queryset.filter(query)
+
+
+class ExperimentFilter(FilterSet):
+    class Meta:
+        model = Experiment
+        fields = ['reference_number']
+
+    def __init__(self, *args, **kwargs):
+        super(ExperimentFilter, self).__init__(*args, **kwargs)
+        # doesn't push Submit button, QueryDict (in data) is empty so not all runs displayed at start
+        if self.data == {}:
+            self.queryset = self.queryset.none()

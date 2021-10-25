@@ -28,7 +28,6 @@ class ReductionRunTable(Table):
     class Meta:
         model = ReductionRun
         row_attrs = {"class": "run-row"}
-        template_name = "django_tables2/bootstrap4.html"
         fields = (
             'run_number',
             'instrument',
@@ -65,7 +64,6 @@ class ReductionRunSearchTable(Table):
     class Meta:
         model = ReductionRun
         row_attrs = {"class": "run-row"}
-        template_name = "django_tables2/bootstrap4.html"
         fields = (
             'run_number',
             'instrument',
@@ -87,11 +85,10 @@ class ExperimentTable(Table):
     reference_number = tables.TemplateColumn(
         '<a href="{% url \'experiment_summary\' record.reference_number %}" onClick="event.stopPropagation();">RB{{ record.reference_number }}</a>',
         attrs={"td": {
-            "class": "run-num-links"
+            "class": "experiment-num-links"
         }})
 
     class Meta:
         model = Experiment
-        row_attrs = {"class": "run-row", "data-target": "#RB{{ experiment.reference_number }}"}
-        template_name = "django_tables2/bootstrap.html"
+        row_attrs = {"class": "experiment-row", "data-target": "#RB{{ experiment.reference_number }}"}
         fields = ('reference_number', )

@@ -1,21 +1,21 @@
-(function(){
-    function setupTour(steps){
+(function () {
+    function setupTour(steps) {
         const tour = new Tour({
             steps: steps,
             storage: false,      // avoids storing process between visits
             backdrop: true,
-            backdropPadding: 2
+            backdropPadding: 2,
+            framework: 'bootstrap4',
         });
-        tour.init();
         tour.end();             // avoids bug where tour recognised as in progress on re-visit
 
         const tourButton = $("#tour-btn");
-        tourButton.click(function(){
-            if (tour.ended()){
+        tourButton.click(function () {
+            if (tour.ended()) {
                 tour.restart();
             }
             else {
-                if (confirm("A tour is currently on going\nDo you wish to restart the tour?")){
+                if (confirm("A tour is currently on going\nDo you wish to restart the tour?")) {
                     tour.restart();
                     tour.end();
                 }

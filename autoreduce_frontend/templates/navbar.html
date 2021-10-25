@@ -10,6 +10,9 @@
   <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
     <ul class="navbar-nav ml-auto">
     {% if user.is_authenticated %}
+        <span class="navbar-text navbar-username">
+            Welcome, {{ user.first_name }}
+        </span>
       <li class="nav-item">
         <a class="nav-link" href="{% url 'overview' %}">All Instruments</a>
       </li>

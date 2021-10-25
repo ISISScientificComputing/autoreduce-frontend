@@ -84,6 +84,7 @@ MIDDLEWARE = [
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap4.html"
 
 if DEBUG and DEBUG_TOOLBAR_AVAILABLE:
     MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
