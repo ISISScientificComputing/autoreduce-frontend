@@ -36,6 +36,13 @@ class RunsListPage(Page, NavbarMixin, FooterMixin, TourMixin):
         """
         return [run.text.split(" - ")[0] for run in self.driver.find_elements_by_class_name("run-num-links")]
 
+    def get_created_from_table(self) -> List[str]:
+        """
+        Return the list of created dates visible on the current table of the
+        instrument summary page.
+        """
+        return [run.text.split(" - ")[0] for run in self.driver.find_elements_by_class_name("created-dates")]
+
     def click_run(self, run_number: int, version: int = 0) -> RunSummaryPage:
         """
         Click a run and return the page object of its run summary.
