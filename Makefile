@@ -22,5 +22,6 @@ selenium:
 	sudo docker run --network host --name selenium --rm -d -v /dev/shm:/dev/shm selenium/standalone-chrome:4.0.0-beta-3-prerelease-20210422
 
 mysql-test:
-	sudo docker kill mysql-ar && docker rm mysql-ar || echo "Selenium container isn't already running, just starting it."
+	sudo docker kill mysql-ar || echo "Selenium container isn't already running, just starting it."
 	sudo docker run --name mysql-ar -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=test_autoreduce --rm -p3306:3306 -d mysql:latest
+	sudo docker logs -f mysql-ar

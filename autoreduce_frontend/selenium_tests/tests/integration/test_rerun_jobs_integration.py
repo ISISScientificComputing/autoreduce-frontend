@@ -6,24 +6,20 @@
 # ############################################################################### #
 
 from django.urls import reverse
-from rest_framework.authtoken.models import Token
-from django.contrib.auth import get_user_model
 from autoreduce_frontend.selenium_tests.pages.rerun_jobs_page import RerunJobsPage
-from autoreduce_frontend.selenium_tests.tests.base_tests import BaseTestCase
+from autoreduce_frontend.selenium_tests.tests.base_tests import BaseIntegrationTestCase
 from autoreduce_frontend.selenium_tests.utils import submit_and_wait_for_result
 
 from autoreduce_frontend.selenium_tests.utils import setup_external_services
 
 
-class TestRerunJobsPageIntegration(BaseTestCase):
-    fixtures = BaseTestCase.fixtures + ["rerun_jobs_integration"]
+class TestRerunJobsPageIntegration(BaseIntegrationTestCase):
+    fixtures = BaseIntegrationTestCase.fixtures + ["rerun_jobs_integration"]
 
     @classmethod
     def setUpClass(cls):
         """Starts external services and sets instrument for all test cases"""
         super().setUpClass()
-        cls.instrument_name = "INTER"
-        cls.data_archive, cls.queue_client, cls.listener = setup_external_services(cls.instrument_name, 21, 21)
         cls.data_archive.add_reduction_script(cls.instrument_name,
                                               """def main(input_file, output_dir): print('some text')""")
         cls.data_archive.add_reduce_vars_script(cls.instrument_name,
@@ -44,8 +40,6 @@ class TestRerunJobsPageIntegration(BaseTestCase):
         super().setUp()
         self.page = RerunJobsPage(self.driver, self.instrument_name)
         self.page.launch()
-        user_model = get_user_model()
-        Token.objects.create(user=user_model.objects.first())
 
     def test_submit_rerun_same_variables(self):
         """
@@ -131,8 +125,8 @@ class TestRerunJobsPageIntegration(BaseTestCase):
         assert self.page.error_message_text() == f"Run number {expected_run} hasn't been ran by autoreduction yet."
 
 
-class TestRerunJobsPageIntegrationSkippedOnly(BaseTestCase):
-    fixtures = BaseTestCase.fixtures + ["skipped_run"]
+class TestRerunJobsPageIntegrationSkippedOnly(BaseIntegrationTestCase):
+    fixtures = BaseIntegrationTestCase.fixtures + ["skipped_run"]
 
     @classmethod
     def setUpClass(cls):

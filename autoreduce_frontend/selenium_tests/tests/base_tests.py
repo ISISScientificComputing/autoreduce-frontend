@@ -11,13 +11,18 @@ Module containing the base test cases for a page and components
 import datetime
 from pathlib import Path
 
+from autoreduce_utils.settings import AUTOREDUCE_HOME_ROOT
 from axe_selenium_python import Axe
+from django.contrib.auth import get_user_model
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.urls.base import reverse
-from autoreduce_utils.settings import AUTOREDUCE_HOME_ROOT
+from rest_framework.authtoken.models import Token
 
 from autoreduce_frontend.selenium_tests.configuration import set_url
 from autoreduce_frontend.selenium_tests.driver import get_chrome_driver
+from autoreduce_frontend.selenium_tests.utils import setup_external_services
+
+# pylint:disable=no-member
 
 
 class BaseTestCase(StaticLiveServerTestCase):
@@ -55,6 +60,37 @@ class BaseTestCase(StaticLiveServerTestCase):
             self._feedErrorsToResult(result, self._outcome.errors)
             return len(result.failures) > 0 or len(result.errors) > 0
         return False
+
+
+class BaseIntegrationTestCase(BaseTestCase):
+    @classmethod
+    def setUpClass(cls):
+        """
+        Sets up the Datarchive complete with scripts, the database client and checks the queue client and listerner
+        are running for all testcases
+        """
+        super().setUpClass()
+        cls.instrument_name = "INTER"
+
+        cls.data_archive, cls.queue_client, cls.listener = setup_external_services(cls.instrument_name, 21, 21)
+
+        # if changing these - make sure the values in the fixtures match
+        cls.rb_number = 1234567
+        cls.run_number = 123456
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        """
+        Destroys the created data-archive and disconnects the database and queue clients
+        """
+        cls.queue_client.disconnect()
+        cls.data_archive.delete()
+        super().tearDownClass()
+
+    def setUp(self) -> None:
+        super().setUp()
+        user_model = get_user_model()
+        Token.objects.create(user=user_model.objects.first())
 
 
 class NavbarTestMixin:
