@@ -19,11 +19,13 @@
         <!-- Instrument status and control buttons -->
         <div class="row" id="btn-instrument_active">
             <!-- Status panel -->
-            <div class="col-lg-6">
+            <div class="col-6">
                 {% include "snippets/instrument_status.html" with processing=processing queued=queued last_instrument_run=last_instrument_run only %}
             </div>
             <!-- Pause / Resume Reduction button-->
-            <div class="col-lg-6 text-center">
+            <div class="col-6 text-center">
+
+<div>
                 {% if instrument.is_paused %}
                     <a class="btn btn-danger btn-block" id="pause">
                         <i class="fa fa-play"></i>
@@ -35,44 +37,34 @@
                         &nbsp;&nbsp;Pause Autoreduction on {{ instrument_name }}
                     </a>
                 {% endif %}
-                <form id="form-pause" method="POST" action="{% url 'instrument:pause' instrument_name %}">
+                                <form id="form-pause" method="POST" action="{% url 'instrument:pause' instrument_name %}">
                     {% csrf_token %}
                     <input type="hidden" name="currently_paused" id="currently_paused" value="{{ instrument.is_paused }}">
                 </form>
                 <p></p>
-            </div>
-            <div class="col-lg-6 text-center" id="btn-re-run_past_job">
-                <p>
-                    <a href="{% url 'instrument:submit_runs' instrument=instrument_name %}" class="btn btn-success btn-block"
+</div>
+
+                                    <a href="{% url 'instrument:submit_runs' instrument=instrument_name %}" class="btn btn-success btn-block"
                         {% if not has_variables %}
                             disabled
                         {% endif %}>
                         <i class="fa fa-arrow-left"></i>
                         &nbsp;&nbsp;Re-run past jobs
                     </a>
-                </p>
-            </div>
-            <div class="col-lg-6 text-center" id="btn-configure_new_runs">
-                <p>
-                    <a href="{% url 'instrument:variables' instrument=instrument_name %}"class="btn btn-success btn-block"
+                                        <a href="{% url 'instrument:variables' instrument=instrument_name %}"class="btn btn-success btn-block"
                         {% if not has_variables %}
                             disabled
                         {% endif %}>
                         <i class="fa fa-plus"></i>
                         &nbsp;&nbsp;Configure New Runs
                     </a>
-                </p>
-            </div>
-            <div class="col-lg-6 text-center" id="btn-see_instrument_variables">
-                <p>
-                    <a href="{% url 'instrument:variables_summary' instrument=instrument_name %}" class="btn btn-success btn-block"
+                                        <a href="{% url 'instrument:variables_summary' instrument=instrument_name %}" class="btn btn-success btn-block"
                         {% if not has_variables %}
                             disabled
                         {% endif %}>
                         <i class="fa fa-eye"></i>
                         &nbsp;&nbsp;See Instrument variables
                     </a>
-                </p>
             </div>
             {% if not has_variables %}
                 <div class="offset-md-6 col-lg-6 text-center alert alert-warning" role="alert" id="alert_message">
