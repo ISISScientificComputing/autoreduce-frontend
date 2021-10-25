@@ -36,11 +36,16 @@ from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions,
                                                               require_admin)
 from autoreduce_frontend.autoreduce_webapp.views import render_error
 from autoreduce_frontend.plotting.plot_handler import PlotHandler
+from autoreduce_frontend.reduction_viewer.filters import ReductionRunFilter
+from autoreduce_frontend.reduction_viewer.tables import ExperimentTable, ReductionRunTable, ReductionRunSearchTable
 from autoreduce_frontend.reduction_viewer.utils import ReductionRunUtils
 from autoreduce_frontend.reduction_viewer.view_utils import (deactivate_invalid_instruments, get_interactive_plot_data,
                                                              linux_to_windows_path, make_data_analysis_url,
                                                              windows_to_linux_path)
 from autoreduce_frontend.utilities.pagination import CustomPaginator
+from autoreduce_frontend.reduction_viewer.forms import SearchOptionsForm
+
+from django_tables2 import RequestConfig
 
 LOGGER = logging.getLogger(__package__)
 
@@ -280,8 +285,8 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
             'has_run_variables': bool(run.run_variables.count()),
             'data_analysis_link_url': data_analysis_link_url,
             'current_page': int(request.GET.get('page', 1)),
-            'items_per_page': int(request.GET.get('pagination', 10)),
-            'page_type': request.GET.get('sort', 'run'),
+            'items_per_page': int(request.GET.get('per_page', 10)),
+            'page_type': request.GET.get('sort', '-run_number'),
             'newest_run': int(request.GET.get('newest_run', run_number)),
             'oldest_run': int(request.GET.get('oldest_run', run_number)),
             'next_run': int(request.GET.get('next_run', run_number)),
@@ -334,13 +339,16 @@ def runs_list(request, instrument=None):
     except Instrument.DoesNotExist:
         return {'message': "Instrument not found."}
 
-    sort_by = request.GET.get('sort', 'run')
+    sort_by = request.GET.get('sort', '-run_number')
 
     try:
         runs = (ReductionRun.objects.only('status', 'last_updated', 'run_number', 'run_version',
                                           'run_description').select_related('status').filter(instrument=instrument_obj))
         last_instrument_run = runs.last
         first_instrument_run = runs.first
+
+        run_table = ReductionRunTable(runs, order_by="-run_number")
+        RequestConfig(request, paginate={"per_page": 10}).configure(run_table)
 
         if sort_by == "run":
             runs = runs.order_by('-run_number', 'run_version')
@@ -372,6 +380,9 @@ def runs_list(request, instrument=None):
             'sort': sort_by,
             'has_variables': bool(current_variables),
             'error_reason': error_reason,
+            'run_table': run_table,
+            'per_page': request.GET.get('per_page', 10),
+            'current_page': request.GET.get('page', 1),
         }
 
         if filter_by == 'experiment':
@@ -382,19 +393,10 @@ def runs_list(request, instrument=None):
                 associated_runs = runs.filter(experiment=experiment). \
                     order_by('-created')
                 experiments_and_runs[experiment] = associated_runs
+            experiment_table = ExperimentTable(experiments, order_by="-reference_number")
+            RequestConfig(request, paginate={"per_page": 10}).configure(experiment_table)
             context_dictionary['experiments'] = experiments_and_runs
-        else:
-            max_items_per_page = request.GET.get('pagination', 10)
-            custom_paginator = CustomPaginator(
-                page_type=sort_by,
-                query_set=runs,
-                items_per_page=max_items_per_page,
-                page_tolerance=3,
-                current_page=request.GET.get('page', 1),
-            )
-            context_dictionary['paginator'] = custom_paginator
-            context_dictionary['last_page_index'] = len(custom_paginator.page_list)
-            context_dictionary['max_items'] = max_items_per_page
+            context_dictionary['experiment_table'] = experiment_table
 
     except Exception:
         LOGGER.error(traceback.format_exc())
@@ -609,3 +611,27 @@ def started_by_id_to_name(started_by_id=None):
     except ObjectDoesNotExist as exception:
         LOGGER.error(exception)
         return None
+
+
+@login_and_uows_valid
+@check_permissions
+@render_with('search.html')
+def search(request):
+    run_list = ReductionRun.objects.all()
+    run_description_qualifier = request.GET.get("run_description_qualifier", "contains")
+    run_filter = ReductionRunFilter(request.GET, run_description_qualifier=run_description_qualifier, queryset=run_list)
+    table_class = ReductionRunSearchTable(run_filter.qs, order_by="-run_number")
+    RequestConfig(request, paginate={"per_page": 10}).configure(table_class)
+    options_form = SearchOptionsForm(initial={'pagination': request.GET.get('per_page', 10)})
+    message = "Sorry, no runs found for this criteria."
+    context_dictionary = {
+        'filter': run_filter,
+        'table': table_class,
+        'message': message,
+        'options_form': options_form,
+        'per_page': request.GET.get('per_page', 10),
+        'current_page': int(request.GET.get('page', 1)),
+        'sort': request.GET.get('sort', '-run_number'),
+        'run_description_qualifier': run_description_qualifier,
+    }
+    return context_dictionary

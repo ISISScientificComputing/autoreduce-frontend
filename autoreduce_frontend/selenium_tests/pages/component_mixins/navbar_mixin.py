@@ -24,12 +24,13 @@ class NavbarMixin:
     FAILED_JOBS_XPATH = ".//a[contains(text(), 'Failed Jobs')]"
     GRAPHS_XPATH = ".//a[contains(text(), 'Graphs')]"
     HELP_XPATH = ".//a[contains(text(), 'Help')]"
+    SEARCH_XPATH = ".//a[contains(text(), 'Search')]"
 
     def click_navbar_logo(self):
         """
         Click the brand logo in the navbar and return the current page
         """
-        self.driver.find_element_by_class_name(self.NAVBAR_CLASS).click()
+        self.driver.find_element_by_class_name(self.LOGO_CLASS).click()
         return self
 
     def click_navbar_all_instruments(self):
@@ -61,6 +62,12 @@ class NavbarMixin:
         Click the help link in the navbar
         """
         self.driver.find_element_by_xpath(self.HELP_XPATH).click()
+
+    def click_navbar_search(self):
+        """
+        Click the search link in the navbar
+        """
+        self.driver.find_element_by_xpath(self.SEARCH_XPATH).click()
 
     def _get_navbar(self) -> WebElement:
         return self.driver.find_element_by_class_name(self.NAVBAR_CLASS)

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Search{% endblock %}
+{% load static %}
+{% include crispy_tags %}
+{% load crispy_forms_tags %}
+{% load render_table from django_tables2 %}
+
+{% block body %}
+    <h1>Search Page</h1>
+
+    <form action="" method="get">
+        {{filter.form.run_number|as_crispy_field}}
+
+        {{filter.form.instrument|as_crispy_field}}
+
+        {{filter.form.run_description|as_crispy_field}}
+        <div class="radios">
+            <input type="radio" id="contains" name="run_description_qualifier" value="contains" {% if run_description_qualifier == 'contains' %} checked {% endif %}>
+            <label for="contains">Contains</label>
+            <input type="radio" id="exact" name="run_description_qualifier" value="exact" {% if run_description_qualifier == 'exact' %} checked {% endif %}>
+            <label for="exact">Exact</label>
+        </div>
+
+        {{filter.form.created|as_crispy_field}}
+
+        {{filter.form.status|as_crispy_field}}
+
+        <button id="search-button" type="submit" class="btn btn-primary">Search</button>
+    </form>
+    <hr/>
+
+    <div>
+        {% if table.rows %}
+            {{options_form.pagination|as_crispy_field}} 
+        {% endif %}
+    </div>
+    
+    <br>
+
+{% if not table.rows %}
+    <h4 id="message">{{message}}</h4>
+{% else %}
+    {% render_table table %}
+{% endif %}
+
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{% static "css/vendor/bootstrap-tour.min.css" %}">
+{% endblock %}
+{% block scripts %}
+    <script src="{% static "javascript/vendor/bootstrap-tour.min.js" %}"></script>
+    <script src="{% static "javascript/search_list.js" %}"></script>
+    <script src="{% static "javascript/tours/overview_tour.js" %}"></script>
+    <script src="{% static "javascript/tours/navbar_tour.js" %}"></script>
+    <script src="{% static "javascript/create_tour.js" %}"></script>
+{% endblock %}

@@ -53,10 +53,21 @@ INTERNAL_IPS = ['localhost', '127.0.0.1']
 
 # Application definition
 INSTALLED_APPS = [
-    'django.contrib.admin', 'django.contrib.auth', 'django.contrib.contenttypes', 'django.contrib.sessions',
-    'django.contrib.messages', 'django.contrib.staticfiles', 'django.contrib.humanize',
-    'autoreduce_frontend.autoreduce_webapp', 'autoreduce_frontend.generate_token', 'autoreduce_db.reduction_viewer',
-    'autoreduce_db.instrument', 'rest_framework.authtoken'
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'django.contrib.humanize',
+    'autoreduce_frontend.autoreduce_webapp',
+    'autoreduce_frontend.generate_token',
+    'autoreduce_db.reduction_viewer',
+    'autoreduce_db.instrument',
+    'rest_framework.authtoken',
+    'django_filters',
+    'crispy_forms',
+    'django_tables2',
 ]
 
 if DEBUG and DEBUG_TOOLBAR_AVAILABLE:
@@ -72,6 +83,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
 if DEBUG and DEBUG_TOOLBAR_AVAILABLE:
     MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
 
@@ -86,7 +99,6 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'templates')],
-        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -94,6 +106,12 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'autoreduce_frontend.autoreduce_webapp.context_processors.support_email_processor',
+            ],
+            'loaders': [
+                ('django.template.loaders.cached.Loader', [
+                    'django.template.loaders.filesystem.Loader',
+                    'django.template.loaders.app_directories.Loader',
+                ]),
             ],
         },
     },

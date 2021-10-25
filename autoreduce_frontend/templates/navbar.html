@@ -1,35 +1,51 @@
 {% load static %}
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container">
-        <a class="navbar-brand" href="#">
-            <img src="{% static "images/logo.png" %}" alt="STFC logo">
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav mr-auto">
-                {% if user.is_authenticated %}
-                    <span class="navbar-text">
-                        Welcome, {{ user.first_name }}
-                    </span>
-                    <a class="nav-link" href="{% url 'overview' %}">All Instruments</a>
-                    <a class="nav-link" href="{% url 'runs:queue' %}">Job Queue</a>
-                    {% if user.is_superuser %}
-                        <a class="nav-link" href="{% url 'runs:failed' %}">Failed Jobs</a>
-                        <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
-                        <a class="nav-link" href="{% url 'graph' %} ">Graphs</a>
-                        <a class="nav-link" href="{% url 'help' %} ">Help</a>
-                        <a class="nav-link" href="{% url 'token:list' %}">Tokens</a>
-                    {% endif %}
-                    <a class="nav-link" href="{% url 'logout' %}" id="logout">Logout</a>
-                {% else %}
-                    <li>
-                        <p class="navbar-text">Welcome, please <a href="{{ authenticate_url }}">sign in</a></p>
-                    </li>
-                {% endif %}
-            </div>
-        </div>
-    </div>
+<div class="container">
+  <a class="navbar-brand" href="/"><img src="{% static "images/logo.png" %}" alt="STFC logo"></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+    <ul class="navbar-nav ml-auto">
+    {% if user.is_authenticated %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'overview' %}">All Instruments</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'runs:queue' %}">Job Queue</a>
+      </li>
+        {% if user.is_superuser %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'runs:failed' %}">Failed Jobs</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'graph' %} ">Graphs</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'search' %} ">Search</a>
+            </li>
+            <li clas
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'help' %} ">Help</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'token:list' %}">Tokens</a>
+            </li>
+        {% endif %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}" id="logout">Logout</a>
+        </li>
+        {% else %}
+            <li>
+                <p class="navbar-text">Welcome, please <a href="{{ authenticate_url }}">sign in</a></p>
+            </li>
+    {% endif %}
+    </ul>
+  </div>
+</div>
 </nav>

@@ -76,23 +76,25 @@ class TestRunsListQueries(BaseTestCase, AccessibilityTestMixin, FooterTestMixin,
         assert query in self.page.get_top_run().get_attribute('href')
 
         # Check query after clicking the top run
-        top_run_num = int(self.page.get_top_run().text)
+        runs = self.page.get_run_numbers_from_table()
+        top_run_num = runs[0]
         run_summary_page = self.page.click_run(top_run_num)
         assert query in run_summary_page.driver.current_url
         assert query in run_summary_page.cancel_button.get_attribute('href')
 
         # Check query after returning to runs list
         runs_list_page = run_summary_page.click_cancel_btn()
+        runs = runs_list_page.get_run_numbers_from_table()
         assert query in runs_list_page.get_top_run().get_attribute('href')
         assert query in runs_list_page.driver.current_url
 
     def test_each_query(self):
         """Test that each potential query is maintained."""
-        for query in ("sort=run", "pagination=10", "filter=run", "page="):
+        for query in ("sort=-run_number", "per_page=10", "filter=run", "page="):
             self.page.launch()
             self._test_page_query(query + ("1" if query == "page=" else ""))
 
-            self.page.click_btn_by_title("Next Page")
+            self.page.click_next_page_button()
             self._test_page_query(query + ("2" if query == "page=" else ""))
 
     def test_pagination_filter(self):
@@ -101,7 +103,7 @@ class TestRunsListQueries(BaseTestCase, AccessibilityTestMixin, FooterTestMixin,
             self.page.launch()
             self.page.update_filter("pagination_select", str(pagination))
             self.page.click_apply_filters()
-            self._test_page_query(f"pagination={pagination}")
+            self._test_page_query(f"per_page={pagination}")
 
     def test_sort_by_filter(self):
         """Test that changing the sort by filter also updates the URL query."""
@@ -145,7 +147,7 @@ class TestRunsListQueries(BaseTestCase, AccessibilityTestMixin, FooterTestMixin,
 
             # The first run is on the second page so need to navigate to it
             if run_number == 99999:
-                self.page.click_btn_by_title("Next Page")
+                self.page.click_next_page_button()
 
             run_summary_page = self.page.click_run(run_number)
             assert run_summary_page.is_disabled(btn_id)

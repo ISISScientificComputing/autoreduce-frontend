@@ -4,6 +4,7 @@
 {% load static %}
 {% load colour_table_rows %}
 {% load get_run_navigation_queries %}
+{% load render_table from django_tables2 %}
 
 {% block body %}
     {% if message %}
@@ -83,10 +84,10 @@
         <br/>
         <hr/>
         <!-- Display table for reduction jobs -->
-        <div class="row" id="filter-options">
-            <!-- Filter, Sort, and Pagination options -->
-            <form action="{{ request.path }}" method="get" id="filter_options">
-                <div class="col-lg-3">
+        <div id="filter-options">
+        <form action="{{ request.path }}" method="get" id="filter_options">
+  <div class="form-row align-items-center">
+    <div class="col-auto">
                     <label for="filter_select">Filter by</label>
                     <select class="form-control" name="filter" form="filter_options" id="filter_select">
                         <option value="run" title="Display run numbers"
@@ -101,8 +102,8 @@
                             >Experiment Reference (RB)
                         </option>
                     </select>
-                </div>
-                <div class="col-lg-3">
+    </div>
+    <div class="col-auto">
                     <label for="sort_select">Sort by</label>
                     <select class="form-control" name="sort" form="filter_options" id="sort_select">
                         <option value="run"
@@ -118,11 +119,10 @@
                             >Date
                         </option>
                     </select>
-                </div>
-                {% if filtering == 'run' %}
-                    <div class="col-lg-3">
+    </div>
+    <div class="col-auto">
                         <label for="pagination_select">Items per page</label>
-                        <select title="The number of reduction jobs that should be shown per page" class="form-control" name="pagination" form="filter_options" id="pagination_select">
+                        <select title="The number of reduction jobs that should be shown per page" class="form-control" name="per_page" form="filter_options" id="pagination_select">
                             <option {% if max_items == '10' %} selected="selected" {% endif %}>10</option>
                             <option {% if max_items == '25' %} selected="selected" {% endif %}>25</option>
                             <option {% if max_items == '50' %} selected="selected" {% endif %}>50</option>
@@ -130,68 +130,28 @@
                             <option {% if max_items == '250' %} selected="selected" {% endif %}>250</option>
                             <option {% if max_items == '500' %} selected="selected" {% endif %}>500</option>
                         </select>
-                    </div>
-                {% endif %}
-                <div class="col-lg-3">
-                    <input class="btn btn-primary" type="submit" value="Apply filters" id="apply_filters">
-                </div>
-            </form>
-        </div>
+    </div>
+    <div class="col-auto">
+      <button type="submit" class="btn btn-primary mb-2" value="Apply filters" id="apply_filters">Submit</button>
+    </div>
+  </div>
+</form>
+</div>
         <br/>
         <!-- Display table for every reduction job -->
-        <div class="row" id="runs-table">
-            <div class="tab-content col-lg-12">
-                <!-- Run number filtered jobs -->
-                {% if filtering == 'run' %}
-                    {% include "filtered_by_number.html" %}
-                <!-- Experiment filtered jobs -->
-                {% elif filtering == 'experiment' %}
-                    {% include "filtered_by_reference.html" %}
-                {% else %}
-                    <div class="row">No runs to show</div>
-                {% endif %}
-            </div>
+        <div class="row table-responsive" id="runs-table">
+                    <!-- Run number filtered jobs -->
+                    {% if filtering == 'run' %}
+                        {% render_table run_table %}
+                    <!-- Experiment filtered jobs -->
+                    {% elif filtering == 'experiment' %}
+                        {% render_table experiment_table %}
+                    {% else %}
+                        <div class="row">No runs to show</div>
+                    {% endif %}
         </div>
             <br/>
-            <!-- Paginator -->
-            {% if filtering == 'run' %}
-                <div class="row">
-                    {% if paginator %}
-                        <div class="col-md-12 text-center">
-                            <div class="btn-group" role="group">
-                                {% if paginator.has_previous %}
-                                    <button title="First Page" class="btn btn-default" onclick="changePage(1)">
-                                        <i class="fa fa-step-backward"></i>
-                                    </button>
-                                    <button title="Previous Page" class="btn btn-default" onclick="changePage({{ paginator.previous_page_index }})">
-                                        <i class="fa fa-chevron-left"></i>
-                                    </button>
-                                {% endif %}
-                                {% for page in paginator.display_list %}
-                                    {% if page.is_visible %}
-                                        {% if page.number == paginator.current_page_index %}
-                                            <button title="Current Page" class="btn btn-primary inline">{{ page.display_name }}</button>
-                                        {% else %}
-                                            <button class="btn btn-default" onclick="changePage({{ page.number }})">{{ page.display_name }}</button>
-                                        {% endif %}
-                                    {% else %}
-                                        <button title="There are additional pages. Please access them using the navigation buttons." class="btn btn-default disabled">...</button>
-                                    {% endif %}
-                                {% endfor %}
-                                {% if paginator.has_next %}
-                                    <button title="Next Page" class="btn btn-default" onclick="changePage({{ paginator.next_page_index }})">
-                                        <i class="fa fa-chevron-right"></i>
-                                    </button>
-                                    <button title="Last page" class="btn btn-default" onclick="changePage({{ last_page_index }})">
-                                        <i class="fa fa-step-forward"></i>
-                                    </button>
-                                {% endif %}
-                            </div>
-                        </div>
-                    {% endif %}
-                </div>
-            {% endif %}
-        </div>
+
     {% endif %}
 {% endblock %}
 {% block stylesheets %}
