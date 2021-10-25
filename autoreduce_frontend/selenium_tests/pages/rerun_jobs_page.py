@@ -29,7 +29,7 @@ class RerunJobsPage(Page, RerunFormMixin, NavbarMixin, FooterMixin, TourMixin):
         Return the current URL of the page.
         :return: (str) the url path
         """
-        return reverse("runs:submit_runs", kwargs={
+        return reverse("runs:rerun_jobs", kwargs={
             "instrument": self.instrument,
         })
 

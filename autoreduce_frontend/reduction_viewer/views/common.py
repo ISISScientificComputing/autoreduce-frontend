@@ -61,13 +61,8 @@ def get_arguments_from_file(instrument: str) -> Tuple[dict, dict, dict]:
         ImportError: If the instrument's reduce_vars file contains an import error.
         SyntaxError: If the instrument's reduce_vars file contains a syntax error.
     """
-    try:
-        default_variables = VariableUtils.get_default_variables(instrument)
-        default_standard_variables, default_advanced_variables, variable_help = unpack_arguments(default_variables)
-    except (FileNotFoundError, ImportError, SyntaxError):
-        default_standard_variables = {}
-        default_advanced_variables = {}
-        variable_help = {"standard_vars": {}, "advanced_vars": {}}
+    default_variables = VariableUtils.get_default_variables(instrument)
+    default_standard_variables, default_advanced_variables, variable_help = unpack_arguments(default_variables)
     return default_standard_variables, default_advanced_variables, variable_help
 
 

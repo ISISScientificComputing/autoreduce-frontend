@@ -42,7 +42,7 @@
             </div>
             <div id="btn-re-run_past_job">
                 <p>
-                    <a href="{% url 'runs:submit_runs' instrument=instrument_name %}" class="btn btn-success btn-block"
+                    <a href="{% url 'runs:rerun_jobs' instrument=instrument_name %}" class="btn btn-success btn-block"
                         {% if not has_variables %}
                             disabled
                         {% endif %}>

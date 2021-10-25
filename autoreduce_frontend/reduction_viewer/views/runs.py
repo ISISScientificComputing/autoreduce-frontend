@@ -24,41 +24,6 @@ from autoreduce_frontend.utilities import input_processing
 LOGGER = logging.getLogger(__package__)
 
 
-# pylint:disable=inconsistent-return-statements
-@login_and_uows_valid
-@check_permissions
-@render_with('submit_runs.html')
-def submit_runs(request, instrument=None):
-    """
-    Handles run submission request
-    """
-    LOGGER.info('Submitting runs')
-    # pylint:disable=no-member
-    instrument = Instrument.objects.prefetch_related('reduction_runs').get(name=instrument)
-    if request.method == 'GET':
-        processing_status = Status.get_processing()
-        queued_status = Status.get_queued()
-
-        # pylint:disable=no-member
-        runs_for_instrument = instrument.reduction_runs.filter(batch_run=False)
-        last_run = instrument.get_last_for_rerun(runs_for_instrument)
-
-        standard_vars, advanced_vars, variable_help = prepare_arguments_for_render(last_run.arguments,
-                                                                                   last_run.instrument.name)
-        # pylint:disable=no-member
-        context_dictionary = {
-            'instrument': instrument,
-            'last_instrument_run': last_run,
-            'processing': runs_for_instrument.filter(status=processing_status),
-            'queued': runs_for_instrument.filter(status=queued_status),
-            'standard_variables': standard_vars,
-            'advanced_variables': advanced_vars,
-            'variable_help': variable_help
-        }
-
-        return context_dictionary
-
-
 # pylint:disable=too-many-return-statements,too-many-branches,too-many-statements,too-many-locals
 @login_and_uows_valid
 @check_permissions
