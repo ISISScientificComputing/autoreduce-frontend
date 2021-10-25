@@ -18,11 +18,6 @@ from autoreduce_frontend.selenium_tests.utils import setup_external_services
 class TestRerunJobsPageIntegration(BaseTestCase):
     fixtures = BaseTestCase.fixtures + ["rerun_jobs_integration"]
 
-    accessibility_test_ignore_rules = {
-        # https://github.com/ISISScientificComputing/autoreduce/issues/1267
-        "duplicate-id-aria": "input",
-    }
-
     @classmethod
     def setUpClass(cls):
         """Starts external services and sets instrument for all test cases"""
@@ -62,8 +57,7 @@ class TestRerunJobsPageIntegration(BaseTestCase):
         assert result[0].run_version == 0
         assert result[1].run_version == 1
 
-        for run0_var, run1_var in zip(result[0].run_variables.all(), result[1].run_variables.all()):
-            assert run0_var.variable == run1_var.variable
+        assert result[0].arguments == result[1].arguments
 
     def test_submit_rerun_changed_variable_arbitrary_value(self):
         """
@@ -78,12 +72,7 @@ class TestRerunJobsPageIntegration(BaseTestCase):
 
         assert result[0].run_version == 0
         assert result[1].run_version == 1
-
-        for run0_var, run1_var in zip(result[0].run_variables.all(), result[1].run_variables.all()):
-            # the value of the variable has been overwritten because it's the same run number
-            assert run0_var.variable == run1_var.variable
-
-        assert result[1].run_variables.first().variable.value == new_value
+        assert result[1].arguments.as_dict()["standard_vars"]["variable1"] == new_value
 
     def test_submit_rerun_after_clicking_reset_current_script(self):
         """
@@ -98,7 +87,6 @@ class TestRerunJobsPageIntegration(BaseTestCase):
         assert result[1].run_version == 1
 
         assert result[1].arguments.as_dict()["standard_vars"]["variable1"] == "test_variable_value_123"
-
 
     def test_submit_confirm_page(self):
         """
@@ -186,8 +174,4 @@ class TestRerunJobsPageIntegrationSkippedOnly(BaseTestCase):
         assert result[0].run_version == 0
         assert result[1].run_version == 1
 
-        for run0_var, run1_var in zip(result[0].run_variables.all(), result[1].run_variables.all()):
-            # the value of the variable has been overwritten because it's the same run number
-            assert run0_var.variable == run1_var.variable
-
-        assert result[1].run_variables.first().variable.value == "test_variable_value_123"
+        assert result[1].arguments.as_dict()["standard_vars"]["variable1"] == "test_variable_value_123"

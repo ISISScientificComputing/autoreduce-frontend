@@ -118,13 +118,7 @@ def run_confirmation(request, instrument: str):
         return context_dictionary
 
     try:
-        default_variables = VariableUtils.get_default_variables(instrument)
-    except (FileNotFoundError, ImportError, SyntaxError) as err:
-        context_dictionary['error'] = err
-        return context_dictionary
-
-    try:
-        new_script_arguments = make_reduction_arguments(request.POST.items(), default_variables)
+        new_script_arguments = make_reduction_arguments(request.POST.items(), instrument)
         context_dictionary['variables'] = new_script_arguments
     except ValueError as err:
         context_dictionary['error'] = err
@@ -147,7 +141,7 @@ def run_confirmation(request, instrument: str):
         run_suitable, reason = find_reason_to_avoid_re_run(matching_previous_runs, run_number)
         if not run_suitable:
             context_dictionary['error'] = reason
-            break
+            return context_dictionary
 
         most_recent_run: ReductionRun = matching_previous_runs.first()
         # list stores (run_number, run_version)
@@ -195,15 +189,18 @@ def find_reason_to_avoid_re_run(matching_previous_runs, run_number):
     return True, ""
 
 
-def make_reduction_arguments(post_arguments, default_variables) -> dict:
+def make_reduction_arguments(post_arguments: dict, instrument: str) -> dict:
     """
-    Given new variables and the default variables create a dictionary of the new variables
+    Given new variables from the POST request and the default variables from reduce_vars.py
+     create a dictionary of the new variables
     :param post_arguments: The new variables to be created
     :param default_variables: The default variables
     :return: The new variables as a dict
     :raises ValueError if any variable values exceed the allowed maximum
     """
-    new_script_arguments = {"standard_vars": {}, "advanced_vars": {}}
+
+    defaults = VariableUtils.get_default_variables(instrument)
+
     for key, value in post_arguments:
         if 'var-' in key:
             if 'var-advanced-' in key:
@@ -217,12 +214,9 @@ def make_reduction_arguments(post_arguments, default_variables) -> dict:
 
             if name is not None:
                 name = decode_b64(name)
-                if name not in default_variables[dict_key]:
+                if name not in defaults[dict_key]:
                     continue
 
-                new_script_arguments[dict_key][name] = value
+                defaults[dict_key][name] = value
 
-    if not new_script_arguments:
-        raise ValueError('No variables were found to be submitted.')
-
-    return new_script_arguments
+    return defaults
