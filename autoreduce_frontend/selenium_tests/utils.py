@@ -58,10 +58,21 @@ def submit_and_wait_for_result(test, expected_runs=1):
         # the submit is successful if the URL has changed
         return expected_url in driver.current_url
 
+    total_expected = ReductionRun.objects.count() + expected_runs
+
     WebDriverWait(test.driver, 30).until(submit_successful)
-    num_current_runs = ReductionRun.objects.filter(status=Status.get_completed()).count()
-    WebDriverWait(test.driver, 30).until(lambda _: ReductionRun.objects.filter(~Q(status=Status.get_completed())).count(
-    ) == num_current_runs + expected_runs)
+
+    def runs_completed(_):
+        current = ReductionRun.objects.filter(~Q(status=Status.get_queued())).count()
+        if current == total_expected:
+            return True
+        return False
+
+    WebDriverWait(test.driver, 30).until(runs_completed)
+
+    # num_current_runs = ReductionRun.objects.filter(status=Status.get_completed()).count()
+    # WebDriverWait(test.driver, 30).until(lambda _: ReductionRun.objects.filter(~Q(status=Status.get_completed())).count(
+    # ) == num_current_runs + expected_runs)
 
     return find_run_in_database(test)
 

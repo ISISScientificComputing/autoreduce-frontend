@@ -10,8 +10,6 @@ from autoreduce_frontend.selenium_tests.pages.rerun_jobs_page import RerunJobsPa
 from autoreduce_frontend.selenium_tests.tests.base_tests import BaseIntegrationTestCase
 from autoreduce_frontend.selenium_tests.utils import submit_and_wait_for_result
 
-from autoreduce_frontend.selenium_tests.utils import setup_external_services
-
 
 class TestRerunJobsPageIntegration(BaseIntegrationTestCase):
     fixtures = BaseIntegrationTestCase.fixtures + ["rerun_jobs_integration"]
@@ -27,13 +25,6 @@ class TestRerunJobsPageIntegration(BaseIntegrationTestCase):
         # used by find_run_in_database to find the run that we're looking for
         cls.rb_number = 1234567
         cls.run_number = 62000
-
-    @classmethod
-    def tearDownClass(cls) -> None:
-        """Stops external services."""
-        cls.queue_client.disconnect()
-        cls.data_archive.delete()
-        super().tearDownClass()
 
     def setUp(self) -> None:
         """Sets up RerunJobsPage before each test case"""
@@ -132,23 +123,13 @@ class TestRerunJobsPageIntegrationSkippedOnly(BaseIntegrationTestCase):
     def setUpClass(cls):
         """Starts external services and sets instrument for all test cases"""
         super().setUpClass()
-        cls.instrument_name = "TestInstrument"
-        cls.data_archive, cls.queue_client, cls.listener = setup_external_services(cls.instrument_name, 21, 21)
         cls.data_archive.add_reduction_script(cls.instrument_name,
                                               """def main(input_file, output_dir): print('some text')""")
         cls.data_archive.add_reduce_vars_script(cls.instrument_name,
                                                 """standard_vars={"variable1":"test_variable_value_123"}""")
 
-        cls.instrument_name = "TestInstrument"
         cls.rb_number = 1234567
         cls.run_number = 99999
-
-    @classmethod
-    def tearDownClass(cls) -> None:
-        """Stops external services."""
-        cls.queue_client.disconnect()
-        cls.data_archive.delete()
-        super().tearDownClass()
 
     def setUp(self) -> None:
         """Sets up RerunJobsPage before each test case"""

@@ -12,24 +12,23 @@ from django.urls import reverse
 
 from autoreduce_frontend.selenium_tests.pages.run_summary_page import RunSummaryPage
 from autoreduce_frontend.selenium_tests.pages.runs_list_page import RunsListPage
-from autoreduce_frontend.selenium_tests.tests.base_tests import (AccessibilityTestMixin, BaseTestCase, FooterTestMixin,
-                                                                 NavbarTestMixin)
+from autoreduce_frontend.selenium_tests.tests.base_tests import (AccessibilityTestMixin, BaseIntegrationTestCase,
+                                                                 BaseTestCase, FooterTestMixin, NavbarTestMixin)
 from autoreduce_frontend.selenium_tests.utils import setup_external_services, submit_and_wait_for_result
 
 
-class TestRunSummaryPageIntegration(BaseTestCase, FooterTestMixin, NavbarTestMixin, AccessibilityTestMixin):
+class TestRunSummaryPageIntegration(BaseIntegrationTestCase, FooterTestMixin, NavbarTestMixin, AccessibilityTestMixin):
     """
     Test cases for the InstrumentSummary page when the Rerun form is NOT
     visible.
     """
 
-    fixtures = BaseTestCase.fixtures + ["run_with_one_variable"]
+    fixtures = BaseIntegrationTestCase.fixtures + ["run_with_one_variable"]
 
     @classmethod
     def setUpClass(cls):
         """Start all external services."""
         super().setUpClass()
-        cls.instrument_name = "TestInstrument"
         cls.rb_number = 1234567
         cls.run_number = 99999
         cls.data_archive, cls.queue_client, cls.listener = setup_external_services(cls.instrument_name, 21, 21)

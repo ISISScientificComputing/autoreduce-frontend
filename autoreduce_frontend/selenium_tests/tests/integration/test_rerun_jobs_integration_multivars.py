@@ -33,6 +33,10 @@ class TestRerunJobsPageIntegrationMultiVar(BaseIntegrationTestCase):
     def setUpClass(cls):
         """Starts external services and sets instrument for all test cases"""
         super().setUpClass()
+        # these should match the values in the fixture that is being loaded
+        cls.rb_number = 1234567
+        cls.run_number = 123456
+
         cls.data_archive.add_reduction_script(cls.instrument_name, SCRIPT)
         cls.data_archive.add_reduce_vars_script(
             cls.instrument_name, """standard_vars={"variable_str":"test_variable_value_123",

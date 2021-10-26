@@ -11,6 +11,7 @@ Module containing the base test cases for a page and components
 import datetime
 from pathlib import Path
 
+from autoreduce_db.reduction_viewer.models import Instrument
 from autoreduce_utils.settings import AUTOREDUCE_HOME_ROOT
 from axe_selenium_python import Axe
 from django.contrib.auth import get_user_model
@@ -70,13 +71,9 @@ class BaseIntegrationTestCase(BaseTestCase):
         are running for all testcases
         """
         super().setUpClass()
-        cls.instrument_name = "INTER"
+        cls.instrument_name = "TESTINSTRUMENT"
 
         cls.data_archive, cls.queue_client, cls.listener = setup_external_services(cls.instrument_name, 21, 21)
-
-        # if changing these - make sure the values in the fixtures match
-        cls.rb_number = 1234567
-        cls.run_number = 123456
 
     @classmethod
     def tearDownClass(cls) -> None:
