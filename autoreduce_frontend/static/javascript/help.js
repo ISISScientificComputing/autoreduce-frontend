@@ -49,7 +49,7 @@
         $('.main-content section .card-header h3').each(function () {
             let id = headingTextToDashed($(this).text());
             let link = `<a href="#${id}">${$(this).text()}</a>`;
-            sidenav.append('<li>' + link + '</li>');
+            sidenav.append('<li class="nav-item">' + link + '</li>');
             $(this).html(link);
             $(this).attr("id", id);
         });
@@ -114,7 +114,7 @@
 
         // Scroll to anchor link after window loaded
         // 1 millisecond delay due to known chrome issue https://support.google.com/chrome/thread/11993079?hl=en
-        $(window).load(function () {
+        $(window).on('load', function () {
             let hash = $(location).attr('hash');
             if (hash) {
                 setTimeout(function () {

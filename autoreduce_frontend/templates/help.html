@@ -4,7 +4,7 @@
 
 {% block stylesheets %}
     <link rel="stylesheet" href="{% static "css/help.css" %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/github.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/github.min.css">
 {% endblock %}
 
 {% block body %}
@@ -28,43 +28,23 @@
         <div id="category-col" class="text-center">
             <fieldset id="category-chooser" class="form-group">
                 <legend>Category:</legend>
-                <div id="category-filter" class="btn-group btn-group-toggle" data-toggle="buttons">
-                    <label class="btn btn-secondary active" data-category="all">
-                        <input type="radio" name="categories" id="category-all" checked>
-                        All
-                    </label>
-                    <label class="btn btn-secondary" data-category="question">
-                        <input type="radio" name="categories" id="category-question">
-                        Questions
-                    </label>
-                    <label class="btn btn-secondary" data-category="usage">
-                        <input type="radio" name="categories" id="category-usage">
-                        Usage
-                    </label>
+                <div id="category-filter" class="btn-group" role="group" aria-label="Basic example">
+                    <button type="button" class="btn btn-secondary active" data-category="all" id="category-all">All</button>
+                    <button type="button" class="btn btn-secondary" data-category="question" id="category-question">Question</button>
+                    <button type="button" class="btn btn-secondary" data-category="usage" id="category-usage">Usage</button>
                 </div>
             </fieldset>
         </div>
     </div>
 
-    <div id="collapsible-topics-nav" class="navbar navbar-default" role="navigation">
-        <div id="topics-navbar-brand" class="navbar-brand">Topics</div>
-        <button type="button" id="hamburger-toggle" class="navbar-toggle">
-            <span class="sr-only">Toggle topics sidebar</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
-    </div>
-
-    <div>
-        <div class="card col-xs-6 col-sm-3" id="topics-sidebar" role="navigation">
-            <div class="card-header">
-                <h3>All Topics</h3>
-            </div>
-            <ul class="nav" id="sidenav-contents"></ul>
+    <div class="container">
+    <div class="row">
+        <div class="col-sm-3 flex-column" id="topics-sidebar" role="navigation">
+            <h3>All Topics</h3>
+            <ul class="nav flex-column flex-sm-column" id="sidenav-contents"></ul>
         </div>
 
-        <div id="help-topics" class="col-xs-12 col-sm-9">
+        <div class="col-sm-9 flex-column" id="help-topics">
             <section class="help-topic card" data-category="usage">
                 <div class="card-header">
                     <h3>Accessing my reduced data</h3>
@@ -508,7 +488,7 @@ with open(os.path.join(output_dir, f"{filename}.json")) as figfile:
                 </div>
             </section>
 
-            <div class="no-results collapse row well">
+            <div class="no-results collapse row card card-body">
                 <div class="col-md-12 text-center">
                     Sorry, no help topics matched your query.<br/>
                     If you still require help, please <a href="mailto:{{ support_email }}">Contact Us</a>.
@@ -516,11 +496,12 @@ with open(os.path.join(output_dir, f"{filename}.json")) as figfile:
             </div>
         </div>
     </div>
+    </div>
 
 {% endblock %}
 
 {% block scripts %}
     <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.basic.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
     <script src="{% static "javascript/help.js" %}"></script>
 {% endblock %}

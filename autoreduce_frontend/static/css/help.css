@@ -27,10 +27,6 @@
     display: contents;
 }
 
-#category-filter * {
-    background-color: #f5f5f5;
-}
-
 /* Used for a top margin when using anchor links */
 h3::before {
     display: block;

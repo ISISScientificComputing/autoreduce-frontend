@@ -2,7 +2,7 @@
 
 {% for name, variable in variables.items %}
 <div class="form-group">
-    <label for="var-{{ type }}-{{ variable.current.sanitized_name }}" class="control-label col-md-3">
+    <label for="var-{{ type }}-{{ variable.current.sanitized_name }}" class="col-form-label col-md-3">
     {{ name }}
     {% if variable.current.help_text %}
         <a href="#" data-toggle="popover" data-html="true" data-content="{{ variable.current.help_text }}"

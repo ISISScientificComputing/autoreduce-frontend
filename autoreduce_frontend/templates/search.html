@@ -25,11 +25,14 @@
         {{run_filter.form.instrument|as_crispy_field}}
 
         {{run_filter.form.run_description|as_crispy_field}}
-        <div class="radios">
-            <input type="radio" id="contains" name="run_description_qualifier" value="contains" {% if run_description_qualifier == 'contains' %} checked {% endif %}>
-            <label for="contains">Contains</label>
-            <input type="radio" id="exact" name="run_description_qualifier" value="exact" {% if run_description_qualifier == 'exact' %} checked {% endif %}>
-            <label for="exact">Exact</label>
+
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="run_description_qualifier" id="contains" value="contains" {% if run_description_qualifier == 'contains' %} checked {% endif %}>
+            <label class="form-check-label" for="contains">Contains</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="run_description_qualifier" id="exact" value="exact" {% if run_description_qualifier == 'exact' %} checked {% endif %}>
+            <label class="form-check-label" for="exact">Exact</label>
         </div>
 
         {{run_filter.form.created|as_crispy_field}}
@@ -84,7 +87,6 @@
 {% block scripts %}
     <script src="{% static "javascript/vendor/bootstrap-tourist.js" %}"></script>
     <script src="{% static "javascript/search_list.js" %}"></script>
-    <script src="{% static "javascript/tours/overview_tour.js" %}"></script>
     <script src="{% static "javascript/tours/navbar_tour.js" %}"></script>
     <script src="{% static "javascript/create_tour.js" %}"></script>
 {% endblock %}
