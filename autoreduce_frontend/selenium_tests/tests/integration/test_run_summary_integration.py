@@ -12,12 +12,11 @@ from django.urls import reverse
 
 from autoreduce_frontend.selenium_tests.pages.run_summary_page import RunSummaryPage
 from autoreduce_frontend.selenium_tests.pages.runs_list_page import RunsListPage
-from autoreduce_frontend.selenium_tests.tests.base_tests import (AccessibilityTestMixin, BaseIntegrationTestCase,
-                                                                 BaseTestCase, FooterTestMixin, NavbarTestMixin)
+from autoreduce_frontend.selenium_tests.tests.base_tests import BaseIntegrationTestCase
 from autoreduce_frontend.selenium_tests.utils import setup_external_services, submit_and_wait_for_result
 
 
-class TestRunSummaryPageIntegration(BaseIntegrationTestCase, FooterTestMixin, NavbarTestMixin, AccessibilityTestMixin):
+class TestRunSummaryPageIntegration(BaseIntegrationTestCase):
     """
     Test cases for the InstrumentSummary page when the Rerun form is NOT
     visible.
@@ -35,13 +34,6 @@ class TestRunSummaryPageIntegration(BaseIntegrationTestCase, FooterTestMixin, Na
         cls.data_archive.add_reduction_script(cls.instrument_name, """print('some text')""")
         cls.data_archive.add_reduce_vars_script(cls.instrument_name,
                                                 """standard_vars={"variable1":"test_variable_value_123"}""")
-
-    @classmethod
-    def tearDownClass(cls) -> None:
-        """Stop all external services."""
-        cls.queue_client.disconnect()
-        cls.data_archive.delete()
-        super().tearDownClass()
 
     def setUp(self) -> None:
         """
