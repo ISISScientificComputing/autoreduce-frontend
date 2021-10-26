@@ -31,7 +31,8 @@ class TestRunSummaryPageIntegration(BaseIntegrationTestCase):
         cls.rb_number = 1234567
         cls.run_number = 99999
         cls.data_archive, cls.queue_client, cls.listener = setup_external_services(cls.instrument_name, 21, 21)
-        cls.data_archive.add_reduction_script(cls.instrument_name, """print('some text')""")
+        cls.data_archive.add_reduction_script(cls.instrument_name,
+                                              """def main(input_file, output_dir): print('some text')""")
         cls.data_archive.add_reduce_vars_script(cls.instrument_name,
                                                 """standard_vars={"variable1":"test_variable_value_123"}""")
 
@@ -55,8 +56,7 @@ class TestRunSummaryPageIntegration(BaseIntegrationTestCase):
         assert result[0].run_version == 0
         assert result[1].run_version == 1
 
-        for run0_var, run1_var in zip(result[0].run_variables.all(), result[1].run_variables.all()):
-            assert run0_var.variable == run1_var.variable
+        assert result[0].arguments == result[1].arguments
 
     def test_submit_rerun_changed_variable_arbitrary_value(self):
         """
@@ -72,12 +72,8 @@ class TestRunSummaryPageIntegration(BaseIntegrationTestCase):
         assert result[0].run_version == 0
         assert result[1].run_version == 1
 
-        for run0_var, run1_var in zip(result[0].run_variables.all(), result[1].run_variables.all()):
-            # The value of the variable has been overwritten because it's the
-            # same run number
-            assert run0_var.variable == run1_var.variable
-
-        assert result[1].run_variables.first().variable.value == "the new value in the field"
+        assert result[0].arguments != result[1].arguments
+        assert result[1].arguments.as_dict()["standard_vars"]["variable1"] == "the new value in the field"
 
     def test_submit_rerun_after_clicking_reset_initial(self):
         """
@@ -94,12 +90,8 @@ class TestRunSummaryPageIntegration(BaseIntegrationTestCase):
         assert result[0].run_version == 0
         assert result[1].run_version == 1
 
-        for run0_var, run1_var in zip(result[0].run_variables.all(), result[1].run_variables.all()):
-            # The value of the variable has been overwritten because it's the
-            # same run number
-            assert run0_var.variable == run1_var.variable
-
-        assert result[1].run_variables.first().variable.value == "value1"
+        assert result[0].arguments == result[1].arguments
+        assert result[1].arguments.as_dict()["standard_vars"]["variable1"] == "value1"
 
     def test_submit_rerun_after_clicking_reset_current_script(self):
         """
@@ -114,6 +106,7 @@ class TestRunSummaryPageIntegration(BaseIntegrationTestCase):
         assert result[0].run_version == 0
         assert result[1].run_version == 1
 
+        assert result[0].arguments != result[1].arguments
         assert result[1].arguments.as_dict()["standard_vars"]["variable1"] == "test_variable_value_123"
 
     def test_submit_respects_bst(self):

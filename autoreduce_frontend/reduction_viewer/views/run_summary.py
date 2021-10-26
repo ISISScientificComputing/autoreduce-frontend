@@ -72,7 +72,6 @@ def run_summary_run(request, history, instrument_name=None, run_version=0):
     data_analysis_link_url = make_data_analysis_url(reduction_location) if reduction_location else ""
     rb_number = run.experiment.reference_number
     standard_vars, advanced_vars, variable_help = prepare_arguments_for_render(run.arguments, run.instrument.name)
-    default_standard_variables, _, variable_help = get_arguments_from_file(run)
 
     run_number = run.pk if run.batch_run else run.run_number
 
@@ -80,7 +79,7 @@ def run_summary_run(request, history, instrument_name=None, run_version=0):
         'run': run,
         'run_number': run_number,
         'run_version': run_version,
-        'has_reduce_vars': bool(default_standard_variables),
+        'has_reduce_vars': bool(standard_vars),
         'batch_run': run.batch_run,
         'standard_variables': standard_vars,
         'advanced_variables': advanced_vars,
