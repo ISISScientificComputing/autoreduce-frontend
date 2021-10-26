@@ -64,6 +64,12 @@ jobs:
         with:
           package_name: autoreduce_frontend
 
+      - name: Run MySQL Docker
+        run: docker run --rm --name mysql-ar -e MYSQL_ROOT_PASSWORD=password -d --network=host mysql:latest
+
+      - name: Wait until MySQL is ready
+        run: until nc -w 1 127.0.0.1 3306; do sleep 1; done
+
       - name: Start Autoreduce REST API
         run: gunicorn autoreduce_rest_api.autoreduce_django.wsgi:application -b 127.0.0.1:8001 -e TESTING_MYSQL_DB=true &
 
