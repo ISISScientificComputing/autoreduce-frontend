@@ -114,25 +114,7 @@ class TestRunSummaryPageIntegration(BaseIntegrationTestCase):
         assert result[0].run_version == 0
         assert result[1].run_version == 1
 
-        for run0_var, run1_var in zip(result[0].run_variables.all(), result[1].run_variables.all()):
-            # The value of the variable has been overwritten because it's the
-            # same run number
-            assert run0_var.variable == run1_var.variable
-
-        assert result[1].run_variables.first().variable.value == "test_variable_value_123"
-
-    def test_submit_confirm_page(self):
-        """Test that submitting a run leads to the correct page."""
-        result = submit_and_wait_for_result(self)
-        expected_url = reverse("runs:run_confirmation", kwargs={"instrument": self.instrument_name})
-        assert expected_url in self.driver.current_url
-        # Wait until the message processing is complete before ending the test
-        # otherwise the message handling can pollute the DB state for the next
-        # test
-        assert len(result) == 2
-        # Check that the error is because of missing Mantid. If this fails then
-        # something else in the reduction caused an error
-        assert "Mantid" in result[1].admin_log
+        assert result[1].arguments.as_dict()["standard_vars"]["variable1"] == "test_variable_value_123"
 
     def test_submit_respects_bst(self):
         """
