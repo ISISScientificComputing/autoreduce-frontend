@@ -218,6 +218,8 @@
                 </div>
         </div>
 
+        <br>
+
         <div id="re-run_and_graphs">
             {% if run.graph %}
                 <div class="card" id="re-run_job">
@@ -243,6 +245,9 @@
                 {% view "instrument.views.variables.render_run_variables" instrument run_number run_version %}
             {% endautoescape %}
         </div>
+
+        <br>
+        
         <div class="d-flex justify-content-center">
             <div class="text-center">
                 {% if newest_run and oldest_run %}

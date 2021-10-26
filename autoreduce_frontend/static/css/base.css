@@ -228,6 +228,10 @@ a.back {
     transform-style: preserve-3d;
 }
 
+.variables-buttons{
+    padding-top: 10px;
+}
+
 @media screen and (min-width: 767px) {
     .run-numbers .middle {
         position: relative;
