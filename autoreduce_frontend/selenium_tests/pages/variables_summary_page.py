@@ -123,4 +123,4 @@ class VariableSummaryPage(Page, NavbarMixin, FooterMixin, TourMixin):
     @property
     def panels(self) -> List[WebElement]:
         """Return the variable summary panels"""
-        return self.driver.find_elements_by_class_name("panel-body")
+        return self.driver.find_elements_by_class_name("card-body")

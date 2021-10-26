@@ -53,7 +53,7 @@ h3::before {
 
 }
 
-#topics-sidebar .panel-heading {
+#topics-sidebar .card-header {
     padding-left: 0;
 }
 
@@ -102,7 +102,7 @@ code {
         display: block;
     }
 
-    #topics-sidebar .panel-heading {
+    #topics-sidebar .card-header {
         display: none;
     }
 }

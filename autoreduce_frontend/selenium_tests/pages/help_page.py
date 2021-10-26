@@ -63,14 +63,14 @@ class HelpPage(Page, NavbarMixin, FooterMixin):
         Get each content text for each help topic
         :return: (List) A list of topic contents
         """
-        return [x.find_element_by_class_name("panel-body").text for x in self.get_help_topic_elements()]
+        return [x.find_element_by_class_name("card-body").text for x in self.get_help_topic_elements()]
 
     def get_help_topic_header_elements(self) -> List[WebElement]:
         """
         Get the help topic headers
-        :return: (List) A list of <div> WebElements of class .panel-header
+        :return: (List) A list of <div> WebElements of class .card-header
         """
-        return [x.find_element_by_xpath("./div[@class='panel-heading']") for x in self.get_help_topic_elements()]
+        return [x.find_element_by_xpath("./div[@class='card-header']") for x in self.get_help_topic_elements()]
 
     def get_help_topic_header_link_elements(self) -> List[WebElement]:
         """

@@ -57,19 +57,19 @@
     </div>
 
     <div>
-        <div class="panel col-xs-6 col-sm-3" id="topics-sidebar" role="navigation">
-            <div class="panel-heading">
+        <div class="card col-xs-6 col-sm-3" id="topics-sidebar" role="navigation">
+            <div class="card-header">
                 <h3>All Topics</h3>
             </div>
             <ul class="nav" id="sidenav-contents"></ul>
         </div>
 
         <div id="help-topics" class="col-xs-12 col-sm-9">
-            <section class="help-topic panel panel-default" data-category="usage">
-                <div class="panel-heading">
+            <section class="help-topic card" data-category="usage">
+                <div class="card-header">
                     <h3>Accessing my reduced data</h3>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     <p>
                         The reduced data can be access in two ways. Either through an IDAaaS virtual machine or
                         using the IDAaaS FileBrowser.
@@ -100,11 +100,11 @@
                     </ol>
                 </div>
             </section>
-            <section class="help-topic panel panel-default" data-category="usage">
-                <div class="panel-heading">
+            <section class="help-topic card" data-category="usage">
+                <div class="card-header">
                     <h3>Reduction Variables Script</h3>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     <h4>reduce_vars.py</h4>
                     <p>
                         It is possible to define some additional variables for scripts that can be used
@@ -128,11 +128,11 @@ variable_help = {
 }</code></pre>
                 </div>
             </section>
-            <section class="help-topic panel panel-default" data-category="usage">
-                <div class="panel-heading">
+            <section class="help-topic card" data-category="usage">
+                <div class="card-header">
                     <h3>Reduction Script</h3>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
 
                     <h4>reduce.py</h4>
                     <p>
@@ -237,21 +237,21 @@ import reduce_vars as params</code></pre>
                     </p>
                 </div>
             </section>
-            <section class="help-topic panel panel-default" data-category="usage">
-                <div class="panel-heading">
+            <section class="help-topic card" data-category="usage">
+                <div class="card-header">
                     <h3>Autoreduction GitHub Repository</h3>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     Here is a link to the
                     <a href="https://github.com/ISISScientificComputing/autoreduce">Autoreduction Github repository</a>
                 </div>
             </section>
 
-            <section class="help-topic panel panel-default" data-category="usage">
-                <div class="panel-heading">
+            <section class="help-topic card " data-category="usage">
+                <div class="card-header">
                     <h3>How do I add new instrument variables?</h3>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     <p>
                         To add new instrument variables first you must be part of the instrument scientist
                         team within ICAT. Once you are part of this team you should see an "Edit Reduction
@@ -263,11 +263,11 @@ import reduce_vars as params</code></pre>
                 </div>
             </section>
 
-            <section class="help-topic panel panel-default" data-category="question">
-                <div class="panel-heading">
+            <section class="help-topic card " data-category="question">
+                <div class="card-header">
                     <h3>When changing variables why is value X invalid for variable Y?</h3>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     <p>
                         Any value entered for a variable must match the type of the default value already in
                         the reduction script. If a value doesn't match, you should see a warning message
@@ -282,11 +282,11 @@ import reduce_vars as params</code></pre>
                 </div>
             </section>
 
-            <section class="help-topic panel panel-default" data-category="question">
-                <div class="panel-heading">
+            <section class="help-topic card " data-category="question">
+                <div class="card-header">
                     <h3>I've modified my reduction scripts, why aren't my new runs using it?</h3>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     <p>
                         To make sure new reductions coming straight from the instrument use new <code>reduce.py</code>
                         scripts automatically, you can navigate to the instrument summary page for a
@@ -314,11 +314,11 @@ import reduce_vars as params</code></pre>
                 </div>
             </section>
 
-            <section class="help-topic panel panel-default" data-category="question">
-                <div class="panel-heading">
+            <section class="help-topic card " data-category="question">
+                <div class="card-header">
                     <h3>How can I make a reduction script compatible with Autoreduction?</h3>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     <p>
                         For a reduction script to be compatible with the Autoreduction web application,
                         it must be named <code>reduce.py</code> Please make sure to expose what reduction variables
@@ -353,11 +353,11 @@ import reduce_vars as params</code></pre>
                 </div>
             </section>
 
-            <section class="help-topic panel panel-default" data-category="question">
-                <div class="panel-heading">
+            <section class="help-topic card " data-category="question">
+                <div class="card-header">
                     <h3>Where should I put reduction scripts?</h3>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     <p>
                         When you have made sure your reduction script is in the correct format and the
                         variables are exposed, it must be placed within the Autoreduction directory
@@ -372,11 +372,11 @@ import reduce_vars as params</code></pre>
                 </div>
             </section>
 
-            <section class="help-topic panel panel-default" data-category="question">
-                <div class="panel-heading" id="reduction_data_location">
+            <section class="help-topic card " data-category="question">
+                <div class="card-header" id="reduction_data_location">
                     <h3>Where does my reduced data go?</h3>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     <p>
                         When a reduction job has completed, the reduced data is moved to the CEPH storage
                         cluster. The full file path to the data is detailed in the run summary pages for
@@ -388,11 +388,11 @@ import reduce_vars as params</code></pre>
                     </p>
                 </div>
             </section>
-            <section class="help-topic panel panel-default" data-category="question">
-                <div class="panel-heading">
+            <section class="help-topic card " data-category="question">
+                <div class="card-header">
                     <h3>What do the reduction statuses mean?</h3>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     There are 5 different states a reduction can be in:
                     <ul>
                         <li>Queued - The run is waiting to be processed</li>
@@ -406,11 +406,11 @@ import reduce_vars as params</code></pre>
                     </ul>
                 </div>
             </section>
-            <section class="help-topic panel panel-default" data-category="question">
-                <div class="panel-heading">
+            <section class="help-topic card " data-category="question">
+                <div class="card-header">
                     <h3>How do I save out plots from my reduce.py?</h3>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     <p>To get a plot to show into the web app you need to save it into the reduction output directory
                         with the following file name:</p>
                     <pre><code class="language-xml">&lt;name-part-of-the-data-file&gt;*&lt;.png or other extension&gt;</code></pre>
@@ -439,11 +439,11 @@ filename = get_name_of_data_file(input_file)
 my_matplotlib_figure.savefig(os.path.join(output_dir, f"{filename}.png"), dpi=None)</code></pre>
                 </div>
             </section>
-            <section class="help-topic panel panel-default" data-category="question">
-                <div class="panel-heading">
+            <section class="help-topic card " data-category="question">
+                <div class="card-header">
                     <h3>How do I save out interactive plots with Plotly?</h3>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     <p>To get an interactive plot in the webapp you need to do the plotting with <strong>Plotly</strong> and save it to a .json file.</p>
                     <pre><code class="language-xml">&lt;name-part-of-the-data-file&gt;.json</code></pre>
                     <p>where e.g. if the data file is "GEM90963.nxs" then "GEM90963" is the <code>name-part-of-the-data-file</code>,
@@ -459,30 +459,30 @@ with open(os.path.join(output_dir, f"{filename}.json")) as figfile:
     figfile.write(figure_json)</code></pre>
                 <p>Note: the above uses Python 3's <a href="https://www.python.org/dev/peps/pep-0498/">f-string</a> syntax to make the output JSON filename.</p>
             </section>
-            <section class="help-topic panel panel-default" data-category="question">
-                <div class="panel-heading">
+            <section class="help-topic card " data-category="question">
+                <div class="card-header">
                     <h3>Plotting with Plotly</h3>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     <p>Plotly is slightly different from Matplotlib, but the difference is mostly in the syntax, while the fundamental features remain the same.
                     As long as Plotly successfully serialises the plot <code>to_json</code>, it should also work in the webapp.</p>
                     <p>Because Mantid integrates Matplotlib, it is <strong>not possible</strong> to plot workspaces directly into Plotly. You will have to extract the data manually via the <code>readX</code>, <code>readY</code>, and similar methods.</p>
                     <p>To avoid adding plotting code here that will get out of date, it is recommended to have a look at the <a href="https://plotly.com/python/line-and-scatter/#scatter-and-line-plot-with-goscatter">documentation</a>.</p>
-                <section class="help-topic panel panel-default" data-category="question">
-                  <div class="panel-heading">
+                <section class="help-topic card " data-category="question">
+                  <div class="card-header">
                       <h3>Plotly express or graphics_objects (go)?</h3>
                   </div>
-                  <div class="panel-body">
+                  <div class="card-body">
                   <p>Both of Plotly's plotting APIs should work. Just use whatever works best for your case.</p>
                   </div>
                 </section>
             </section>
-            <section class="help-topic panel panel-default" data-category="question"
+            <section class="help-topic card " data-category="question"
                      data-topics="output type structure reduction directory format">
-                <div class="panel-heading">
+                <div class="card-header">
                     <h3>What are the output structures available in autoreduction?</h3>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     <p>
                         There are 2 different output structures for reduction runs:
                     </p>

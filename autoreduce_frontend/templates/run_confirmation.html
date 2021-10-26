@@ -10,9 +10,9 @@
     {% if runs and not error %}
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
-                <div class="panel panel-success">
-                    <div class="panel-heading">
-                        <div class="panel-title">
+                <div class="card panel-success">
+                    <div class="card-header">
+                        <div class="card-title">
                             Successfully submitted
                             {% if runs|length == 1 %}
                              run
@@ -30,7 +30,7 @@
 
                         </div>
                     </div>
-                    <div class="panel-body">
+                    <div class="card-body">
                         {% if queued %}
                             <div class="row">
                                 <div class="col-md-12 text-center">

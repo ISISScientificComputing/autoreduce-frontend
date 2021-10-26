@@ -3,11 +3,11 @@
         <h3 class="text-center">Variables by run number</h3>
         <div class="row" id="current_variables_by_run">
             <div class="col-md-12">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <div class="panel-title">Current Variables</div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Current Variables</div>
                     </div>
-                    <div class="panel-body">
+                    <div class="card-body">
                             {% if current_variables.variables %}
                                 {% include "snippets/variables.html" with instrument_variables=current_variables instrument=instrument csrf_token=csrf_token upcoming=False only %}
                             {% else %}
@@ -20,11 +20,11 @@
         {% if upcoming_variables_by_run %}
             <div class="row" id="upcoming_variables_by_run">
                 <div class="col-md-12">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <div class="panel-title">Upcoming Variables</div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Upcoming Variables</div>
                         </div>
-                        <div class="panel-body zebra-rows">
+                        <div class="card-body zebra-rows">
                             {% for upcoming_variable in upcoming_variables_by_run %}
                                 {% include "snippets/variables.html" with instrument_variables=upcoming_variable instrument=instrument csrf_token=csrf_token upcoming=True only %}
                             {% endfor %}
@@ -39,11 +39,11 @@
         {% if upcoming_variables_by_experiment %}
             <div class="row" id="upcoming_variables_by_experiment">
                 <div class="col-md-12">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <div class="panel-title">Upcoming Variables</div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Upcoming Variables</div>
                         </div>
-                        <div class="panel-body zebra-rows">
+                        <div class="card-body zebra-rows">
                             {% for upcoming_variable in upcoming_variables_by_experiment %}
                                 {% include "snippets/variables.html" with instrument_variables=upcoming_variable instrument=instrument csrf_token=csrf_token only %}
                             {% endfor %}
