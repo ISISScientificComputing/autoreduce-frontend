@@ -48,7 +48,7 @@
     <br>
 
 {% if not run_table.rows %}
-    <h4 id="message">{{message}}</h4>
+    <h4 id="run_message">{{run_message}}</h4>
 {% else %}
     {% render_table run_table %}
 {% endif %}
@@ -68,7 +68,7 @@
     </div>
 
         {% if not experiment_table.rows %}
-            <h4 id="message">{{experiment_message}}</h4>
+            <h4 id="experiment_message">{{experiment_message}}</h4>
         {% else %}
             {% render_table experiment_table %}
         {% endif %}
