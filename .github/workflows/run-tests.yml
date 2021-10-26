@@ -28,7 +28,7 @@ jobs:
 
       - name: Run tests
         run: |
-          SELENIUM_REMOTE=1 pytest autoreduce_frontend --cov-report=xml --cov=autoreduce_frontend --ignore=autoreduce_frontend/selenium_tests/tests/integration
+          SELENIUM_REMOTE=1 pytest autoreduce_frontend --cov-report=xml --cov=autoreduce_frontend --ignore=autoreduce_frontend/selenium_tests/tests/integration -v
 
       - uses: codecov/codecov-action@v1
         with:
@@ -75,7 +75,7 @@ jobs:
 
       - name: Run tests
         run: |
-          SELENIUM_REMOTE=1 pytest autoreduce_frontend/selenium_tests/tests/integration --cov-report=xml --cov=autoreduce_frontend
+          SELENIUM_REMOTE=1 pytest autoreduce_frontend/selenium_tests/tests/integration --cov-report=xml --cov=autoreduce_frontend -v
 
       - uses: codecov/codecov-action@v1
         with:
