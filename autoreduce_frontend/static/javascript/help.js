@@ -48,7 +48,7 @@
         const sidenav = $('#sidenav-contents');
         $('.main-content section .card-header h3').each(function () {
             let id = headingTextToDashed($(this).text());
-            let link = `<a href="#${id}">${$(this).text()}</a>`;
+            let link = `<a class="nav-link" href="#${id}">${$(this).text()}</a>`;
             sidenav.append('<li class="nav-item">' + link + '</li>');
             $(this).html(link);
             $(this).attr("id", id);

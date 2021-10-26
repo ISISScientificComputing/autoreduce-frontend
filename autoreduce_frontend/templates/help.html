@@ -28,23 +28,29 @@
         <div id="category-col" class="text-center">
             <fieldset id="category-chooser" class="form-group">
                 <legend>Category:</legend>
-                <div id="category-filter" class="btn-group" role="group" aria-label="Basic example">
-                    <button type="button" class="btn btn-secondary active" data-category="all" id="category-all">All</button>
-                    <button type="button" class="btn btn-secondary" data-category="question" id="category-question">Question</button>
-                    <button type="button" class="btn btn-secondary" data-category="usage" id="category-usage">Usage</button>
+                <div class="btn-group btn-group-toggle" id="category-filter" data-toggle="buttons">
+                    <label class="btn btn-secondary active" data-category="all">
+                        <input type="radio" name="categories" id="category-all" checked> All
+                    </label>
+                    <label class="btn btn-secondary" data-category="question">
+                        <input type="radio" name="categories" id="category-question"> Question
+                    </label>
+                    <label class="btn btn-secondary" data-category="usage">
+                        <input type="radio" name="categories" id="category-usage"> Usage
+                    </label>
                 </div>
             </fieldset>
         </div>
     </div>
 
-    <div class="container">
-    <div class="row">
-        <div class="col-sm-3 flex-column" id="topics-sidebar" role="navigation">
+    <div class="container-fluid">
+    <div class="row d-flex">
+        <div class="col-sm-3" id="topics-sidebar" role="navigation">
             <h3>All Topics</h3>
-            <ul class="nav flex-column flex-sm-column" id="sidenav-contents"></ul>
+            <ul class="nav flex-column" id="sidenav-contents"></nav>
         </div>
 
-        <div class="col-sm-9 flex-column" id="help-topics">
+        <div class="col-sm-9" id="help-topics">
             <section class="help-topic card" data-category="usage">
                 <div class="card-header">
                     <h3>Accessing my reduced data</h3>
