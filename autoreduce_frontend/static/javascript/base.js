@@ -23,11 +23,14 @@
         });
     };
 
-    var toggleIconOnCollapse = function toggleIconOnCollapse() {
-        $('a[data-toggle="collapse"]').on('click.bs.collapse.data-api', function () {
-            $(this).find('i').toggleClass('fa-chevron-down fa-chevron-right');
+    document.addEventListener('DOMContentLoaded', function () {
+        $('a[id^="toggle_form"]').on('click', function () {
+            $(this)
+                .find('[data-fa-i2svg]')
+                .toggleClass('fa-chevron-right')
+                .toggleClass('fa-chevron-down');
         });
-    };
+    });
 
     var fixIeDataURILinks = function fixIeDataURILinks() {
         $("a[href]").each(function () {
@@ -54,7 +57,6 @@
         $('body').on('click', '[data-toggle="popover"],[data-toggle="collapse"]', function (e) { e.preventDefault(); return true; });
         $('a[href^="#back"]').on('click', goBack);
         showNotifications();
-        toggleIconOnCollapse();
         if (isIE()) {
             fixIeDataURILinks();
         }

@@ -180,9 +180,9 @@
                                             {{ data_location }}
                                         {% endfor %}
                                         {% if path_type == "Windows" or "\\" in data_location%}
-                                            <a class="btn btn-primary btn-xs" aria-label="Switch to Linux" id='datapath_toggle' href="{% url 'runs:summary' instrument_name=instrument run_number=run.run_number run_version=run.run_version %}?page={{current_page}}&per_page={{ items_per_page }}&sort={{ page_type }}&path_type={{"linux"}}"><i class="fa fa-linux" aria-hidden="true"></i></a>
+                                            <a class="btn btn-primary btn-xs" aria-label="Switch to Linux" id='datapath_toggle' href="{% url 'runs:summary' instrument_name=instrument run_number=run.run_number run_version=run.run_version %}?page={{current_page}}&per_page={{ items_per_page }}&sort={{ page_type }}&path_type={{"linux"}}"><i class="fab fa-linux" aria-hidden="true"></i></a>
                                         {% else %}
-                                            <a class="btn btn-primary btn-xs" aria-label="Switch to Windows" id='datapath_toggle' href="{% url 'runs:summary' instrument_name=instrument run_number=run.run_number run_version=run.run_version %}?page={{current_page}}&per_page={{ items_per_page }}&sort={{ page_type }}&path_type={{"windows"}}"><i class="fa fa-windows" aria-hidden="true"></i></a>
+                                            <a class="btn btn-primary btn-xs" aria-label="Switch to Windows" id='datapath_toggle' href="{% url 'runs:summary' instrument_name=instrument run_number=run.run_number run_version=run.run_version %}?page={{current_page}}&per_page={{ items_per_page }}&sort={{ page_type }}&path_type={{"windows"}}"><i class="fab fa-windows" aria-hidden="true"></i></a>
                                         {% endif %}<br/>
                                     {% else %}
                                         <em>No data found</em>
@@ -195,7 +195,7 @@
                                     <strong>Reduced:</strong>
                                     {% if reduction_location %}
                                         <a href="{{ data_analysis_link_url }}" target="_blank">{{ reduction_location }}
-                                            <i class="fa fa-external-link" aria-hidden="true"></i>
+                                            <i class="fas fa-external-link-alt"></i>
                                         </a><br/>
                                     {% elif run.reduction_location.all %}
                                         {% for location in run.reduction_location.all %}
@@ -225,7 +225,7 @@
                     <div class="card-header">
                         <div class="card-title">
                             <a data-toggle="collapse" href="#collapseGraphs" data-target="#graphs">
-                                <i class="fa fa-chevron-down"></i> Images
+                                <i class="fas fa-chevron-down"></i> Images
                             </a>
                         </div>
                     </div>

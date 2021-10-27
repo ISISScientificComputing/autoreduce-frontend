@@ -75,14 +75,14 @@ class SearchPage(Page, NavbarMixin, FooterMixin):
     def alert_runs_message_text(self) -> str:
         """
         Return the text of the alert message element with the id
-        'alert_message'.
+        'run_message'.
         """
         return self.driver.find_element_by_id("run_message").text.strip()
 
     def alert_experiments_message_text(self) -> str:
         """
         Return the text of the alert message element with the id
-        'alert_message'.
+        'experiment_message'.
         """
         return self.driver.find_element_by_id("experiment_message").text.strip()
 

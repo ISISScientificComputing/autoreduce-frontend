@@ -27,12 +27,12 @@
 <div>
                 {% if instrument.is_paused %}
                     <a class="btn btn-danger btn-block" id="pause">
-                        <i class="fa fa-play"></i>
+                        <i class="fas fa-play"></i>
                         &nbsp;&nbsp;Resume Autoreduction on {{ instrument_name }}
                     </a>
                 {% else %}
                     <a class="btn btn-success btn-block" id="pause">
-                        <i class="fa fa-pause"></i>
+                        <i class="fas fa-pause"></i>
                         &nbsp;&nbsp;Pause Autoreduction on {{ instrument_name }}
                     </a>
                 {% endif %}
@@ -47,27 +47,27 @@
                         {% if not has_variables %}
                             disabled
                         {% endif %}>
-                        <i class="fa fa-arrow-left"></i>
+                        <i class="fas fa-arrow-left"></i>
                         &nbsp;&nbsp;Re-run past jobs
                     </a>
                                         <a href="{% url 'instrument:variables' instrument=instrument_name %}"class="btn btn-success btn-block"
                         {% if not has_variables %}
                             disabled
                         {% endif %}>
-                        <i class="fa fa-plus"></i>
+                        <i class="fas fa-plus"></i>
                         &nbsp;&nbsp;Configure New Runs
                     </a>
                                         <a href="{% url 'instrument:variables_summary' instrument=instrument_name %}" class="btn btn-success btn-block"
                         {% if not has_variables %}
                             disabled
                         {% endif %}>
-                        <i class="fa fa-eye"></i>
+                        <i class="far fa-eye"></i>
                         &nbsp;&nbsp;See Instrument variables
                     </a>
             </div>
             {% if not has_variables %}
                 <div class="offset-md-6 col-lg-6 text-center alert alert-warning" role="alert" id="alert_message">
-                    <i class="fa fa-exclamation-triangle"></i>
+                    <i class="fas fa-exclamation-triangle"></i>
                     &nbsp;&nbsp;The buttons above have been disabled because {{ error_reason }}.
                 </div>
             {% endif %}

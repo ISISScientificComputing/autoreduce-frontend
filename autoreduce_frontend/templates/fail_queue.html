@@ -14,7 +14,7 @@
             </div>
             {% if message %}
                 <div class="alert alert-danger word-wrap" role="alert">
-                    <i class="fa fa-exclamation fa-exclamation-circle fa-lg"></i>
+                    <i class="fas fa-exclamation fa-exclamation-circle fa-lg"></i>
                     {{ message }}
                 </div>
             {% endif %}
@@ -84,10 +84,10 @@
                     {% if paginator.has_previous %}
                         <button title="First Page" class="btn btn-default"
                                 onclick="changePage(1)"><i
-                                class="fa fa-step-backward"></i></button>
+                                class="fas fa-step-backward"></i></button>
                         <button title="Previous Page" class="btn btn-default"
                                 onclick="changePage({{ paginator.previous_page_index }})">
-                            <i class="fa fa-chevron-left"></i></button>
+                            <i class="fas fa-chevron-left"></i></button>
                     {% endif %}
 
                     {% for page in paginator.display_list %}
@@ -109,10 +109,10 @@
                     {% if paginator.has_next %}
                         <button title="Next Page" class="btn btn-default"
                                 onclick="changePage({{ paginator.next_page_index }})"><i
-                                class="fa fa-chevron-right"></i></button>
+                                class="fas fa-chevron-right"></i></button>
                         <button title="Last page" class="btn btn-default"
                                 onclick="changePage({{ last_page_index }})"><i
-                                class="fa fa-step-forward"></i></button>
+                                class="fas fa-step-forward"></i></button>
                     {% endif %}
                 </div>
                 <form action="{{ request.path }}" method="get" id="items-per-page">

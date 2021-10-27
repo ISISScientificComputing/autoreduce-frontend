@@ -12,7 +12,6 @@
         <title>{% block title %}{% endblock %} - ISIS Auto-reduction</title>
         <link rel="shortcut icon" href="{% static "images/favicon.ico" %}" type="image/x-icon"/>
         <link rel="stylesheet" href="{% static "css/vendor/bootstrap.min.css" %}">
-        <link rel="stylesheet" href="{% static "css/vendor/font-awesome.min.css" %}">
         <link rel="stylesheet" href="{% static "css/base.css" %}">
         {% block stylesheets %}{% endblock %}
     </head>
@@ -31,6 +30,7 @@
             {% block footer %}{% endblock %}
             {% include "footer.html" %}
         </div>
+        <script src="{% static "javascript/vendor/all.min.js" %}"></script>
         <script src="{% static "javascript/vendor/jquery.min.js" %}"></script>
         <script src="{% static "javascript/vendor/bootstrap.bundle.min.js" %}"></script>
         <script src="{% static "javascript/cookies.js" %}"></script>

@@ -7,7 +7,7 @@
     {% if variable.current.help_text %}
         <a href="#" data-toggle="popover" data-html="true" data-content="{{ variable.current.help_text }}"
             data-trigger="hover click focus" data-placement="top" data-container="body">
-            <i class="fa fa-info-circle"></i>
+            <i class="fas fa-info-circle"></i>
         </a>
     {% endif %}
     </label>
@@ -26,8 +26,8 @@
         {% endif %}
         </div>
         <div class="col-2">
-            <a aria-label="Reset to original value" title="Reset to initial value" data-for="var-{{ type }}-{{ variable.current.sanitized_name }}" data-toggle="popover" data-html="true" data-content="Reset to the initial value used for this reduction run." data-trigger="hover click focus" data-placement="top" data-container="body" tabindex="0" onclick="reset_to_initial(this)"><i class="fa fa-repeat fa-lg"></i></a>
-            <a aria-label="Reset to script value" title="Reset to script value" data-for="var-{{ type }}-{{ variable.current.sanitized_name }}" data-toggle="popover" data-html="true" data-content="Reset to the value currently contained in the reduce_vars script." data-trigger="hover click focus" data-placement="top" data-container="body" tabindex="0" onclick="reset_to_default(this)"><i class="fa fa-file-code-o fa-lg"></i></a>
+            <a aria-label="Reset to original value" title="Reset to initial value" tabindex="0" data-toggle="popover" data-for="var-{{ type }}-{{ variable.current.sanitized_name }}" data-trigger="hover" data-html="true" data-content="Reset to the initial value used for this reduction run." data-placement="top" data-container="body" onclick="reset_to_initial(this)"><i class="fas fa-redo"></i></a>
+            <a aria-label="Reset to script value" title="Reset to script value" tabindex="0" data-toggle="popover" data-for="var-{{ type }}-{{ variable.current.sanitized_name }}" data-trigger="hover" data-html="true" data-content="Reset to the value currently contained in the reduce_vars script." data-placement="top" data-container="body" onclick="reset_to_default(this)"><i class="far fa-file-code"></i></a>
         </div>
     </div>
     </div>
