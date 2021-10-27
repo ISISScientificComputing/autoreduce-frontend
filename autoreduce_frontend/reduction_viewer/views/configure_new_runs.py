@@ -2,13 +2,10 @@ import json
 import logging
 
 from autoreduce_db.reduction_viewer.models import (Instrument, ReductionArguments, ReductionRun, Status)
-from autoreduce_qp.queue_processor.reduction.service import ReductionScript
-from autoreduce_qp.queue_processor.variable_utils import merge_arguments
 from django.shortcuts import redirect
 
 from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions, login_and_uows_valid, render_with)
-from autoreduce_frontend.reduction_viewer.views.common import (prepare_arguments_for_render,
-                                                               read_variables_from_form_post_submit)
+from autoreduce_frontend.reduction_viewer.views.common import prepare_arguments_for_render, make_reduction_arguments
 
 LOGGER = logging.getLogger(__package__)
 
@@ -44,22 +41,9 @@ def configure_new_runs_post(request, instrument_name):
     if not start and not experiment_reference:
         return {"message": "Invalid run range or experiment reference submitted."}
 
-    all_vars = read_variables_from_form_post_submit(request.POST)
-
-    reduce_vars = ReductionScript(instrument_name, 'reduce_vars.py')
-    reduce_vars_module = reduce_vars.load()
-    try:
-        args_for_range = merge_arguments(all_vars, reduce_vars_module)
-    except KeyError as err:
-        return {
-            "message":
-            f"Error encountered when processing variable with name: {err}. \
-            Please check that the names of the variables in reduce_vars.py match the \
-            names of the variables shown in the web app."
-        }
-
     instrument = Instrument.objects.get(name=instrument_name)
 
+    args_for_range = make_reduction_arguments(request.POST.items(), instrument_name)
     arguments_json = json.dumps(args_for_range, separators=(',', ':'))
 
     def update_or_create(instrument, arguments_json, kwargs):

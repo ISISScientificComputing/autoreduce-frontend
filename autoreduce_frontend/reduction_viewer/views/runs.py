@@ -9,8 +9,7 @@ import json
 import logging
 
 import requests
-from autoreduce_db.reduction_viewer.models import (Instrument, ReductionRun, Status)
-from autoreduce_qp.queue_processor.variable_utils import VariableUtils
+from autoreduce_db.reduction_viewer.models import (ReductionRun, Status)
 from autoreduce_utils.settings import AUTOREDUCE_API_URL
 from django.db.models.query import QuerySet
 # without this import the exception does NOT get captured in the except ConnectionError
@@ -18,7 +17,7 @@ from django.db.models.query import QuerySet
 from requests.exceptions import ConnectionError  # pylint:disable=redefined-builtin
 
 from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions, login_and_uows_valid, render_with)
-from autoreduce_frontend.reduction_viewer.views.common import (decode_b64, prepare_arguments_for_render)
+from autoreduce_frontend.reduction_viewer.views.common import make_reduction_arguments
 from autoreduce_frontend.utilities import input_processing
 
 LOGGER = logging.getLogger(__package__)
@@ -152,64 +151,3 @@ def find_reason_to_avoid_re_run(matching_previous_runs, run_number):
         return False, f"Run number {queued_runs.run_number} is already queued to run"
 
     return True, ""
-
-
-def convert_to_python_type(value: str):
-    """
-    Converts the string sent by the POST request to a real Python type that can be serialized by JSON
-
-    Args:
-        value: The string value to convert
-
-    Returns:
-        The converted value
-    """
-    try:
-        # json can directly loads str/int/floats and lists of them
-        return json.loads(value)
-    except json.JSONDecodeError:
-        if value.lower() == "none" or value.lower() == "null":
-            return None
-        elif value.lower() == "true":
-            return True
-        elif value.lower() == "false":
-            return False
-        elif "," in value and "[" not in value and "]" not in value:
-            return convert_to_python_type(f"[{value}]")
-        elif "'" in value:
-            return convert_to_python_type(value.replace("'", '"'))
-        else:
-            return value
-
-
-def make_reduction_arguments(post_arguments: dict, instrument: str) -> dict:
-    """
-    Given new variables from the POST request and the default variables from reduce_vars.py
-     create a dictionary of the new variables
-    :param post_arguments: The new variables to be created
-    :param default_variables: The default variables
-    :return: The new variables as a dict
-    :raises ValueError if any variable values exceed the allowed maximum
-    """
-
-    defaults = VariableUtils.get_default_variables(instrument)
-
-    for key, value in post_arguments:
-        if 'var-' in key:
-            if 'var-advanced-' in key:
-                name = key.replace('var-advanced-', '')
-                dict_key = "advanced_vars"
-            elif 'var-standard-' in key:
-                name = key.replace('var-standard-', '')
-                dict_key = "standard_vars"
-            else:
-                continue
-
-            if name is not None:
-                name = decode_b64(name)
-                # skips variables that have been removed from the defaults
-                if name not in defaults[dict_key]:
-                    continue
-
-                defaults[dict_key][name] = convert_to_python_type(value)
-    return defaults

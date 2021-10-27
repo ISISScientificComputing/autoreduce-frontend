@@ -1,5 +1,6 @@
 import base64
 import itertools
+import json
 from typing import Tuple
 from autoreduce_db.reduction_viewer.models import ReductionArguments
 from autoreduce_qp.queue_processor.variable_utils import VariableUtils
@@ -99,20 +100,62 @@ def decode_b64(value: str):
     return base64.urlsafe_b64decode(value).decode("utf-8")
 
 
-def read_variables_from_form_post_submit(post_data: QueryDict) -> dict:
-    """Process the variables submitted in the request's POST data
-    and return a dictionary containing the standard and advanced variables
+def convert_to_python_type(value: str):
+    """
+    Converts the string sent by the POST request to a real Python type that can be serialized by JSON
 
-    :param post_data: The request's POST dictionary. It will be filtered for variables
-    :return: Dictionary containign standard_vars and advanced_vars keys.
+    Args:
+        value: The string value to convert
+
+    Returns:
+        The converted value
+    """
+    try:
+        # json can directly load str/int/floats and lists of them
+        return json.loads(value)
+    except json.JSONDecodeError:
+        if value.lower() == "none" or value.lower() == "null":
+            return None
+        elif value.lower() == "true":
+            return True
+        elif value.lower() == "false":
+            return False
+        elif "," in value and "[" not in value and "]" not in value:
+            return convert_to_python_type(f"[{value}]")
+        elif "'" in value:
+            return convert_to_python_type(value.replace("'", '"'))
+        else:
+            return value
+
+
+def make_reduction_arguments(post_arguments: dict, instrument: str) -> dict:
+    """
+    Given new variables from the POST request and the default variables from reduce_vars.py
+     create a dictionary of the new variables
+    :param post_arguments: The new variables to be created
+    :param default_variables: The default variables
+    :return: The new variables as a dict
+    :raises ValueError if any variable values exceed the allowed maximum
     """
 
-    # [(startswith+name, value) or ("var-advanced-"+name, value)]
-    var_list = [t for t in post_data.items() if t[0].startswith("var-")]
+    defaults = VariableUtils.get_default_variables(instrument)
 
-    def _decode_dict(var_list, startswith: str):
-        return {decode_b64(var[0].replace(startswith, "")): var[1] for var in var_list if var[0].startswith(startswith)}
+    for key, value in post_arguments:
+        if 'var-' in key:
+            if 'var-advanced-' in key:
+                name = key.replace('var-advanced-', '')
+                dict_key = "advanced_vars"
+            elif 'var-standard-' in key:
+                name = key.replace('var-standard-', '')
+                dict_key = "standard_vars"
+            else:
+                continue
 
-    standard_vars = _decode_dict(var_list, "var-standard-")
-    advanced_vars = _decode_dict(var_list, "var-advanced-")
-    return {"standard_vars": standard_vars, "advanced_vars": advanced_vars}
+            if name is not None:
+                name = decode_b64(name)
+                # skips variables that have been removed from the defaults
+                if name not in defaults[dict_key]:
+                    continue
+
+                defaults[dict_key][name] = convert_to_python_type(value)
+    return defaults

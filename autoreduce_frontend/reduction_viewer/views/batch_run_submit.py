@@ -3,8 +3,6 @@ from requests.exceptions import ConnectionError
 import json
 from typing import Any
 from autoreduce_db.reduction_viewer.models import Instrument
-from autoreduce_qp.queue_processor.variable_utils import merge_arguments
-from autoreduce_qp.queue_processor.reduction.service import ReductionScript
 from autoreduce_utils.settings import AUTOREDUCE_API_URL
 from django.http.request import HttpRequest
 from django.http.response import HttpResponse
@@ -12,8 +10,7 @@ from django.views.generic import FormView
 from django.shortcuts import render
 
 from autoreduce_frontend.utilities import input_processing
-from autoreduce_frontend.reduction_viewer.views.common import (prepare_arguments_for_render,
-                                                               read_variables_from_form_post_submit)
+from autoreduce_frontend.reduction_viewer.views.common import prepare_arguments_for_render, make_reduction_arguments
 
 
 class BatchRunSubmit(FormView):
@@ -65,17 +62,7 @@ class BatchRunSubmit(FormView):
         except AttributeError as err:
             return self.render_error(request, "User is not authorized to submit batch runs.", input_runs, **kwargs)
         runs = input_processing.parse_user_run_numbers(input_runs)
-        all_vars = read_variables_from_form_post_submit(request.POST)
-
-        reduce_vars = ReductionScript(instrument_name, 'reduce_vars.py')
-        reduce_vars_module = reduce_vars.load()
-        try:
-            args_for_range = merge_arguments(all_vars, reduce_vars_module)
-        except KeyError as err:
-            return self.render_error(
-                request, f"Error encountered when processing variable with name: {err}. \
-                 Please check that the names of the variables in reduce_vars.py match the \
-                 names of the variables shown in the web app.", **kwargs)
+        args_for_range = make_reduction_arguments(request.POST.items(), instrument_name)
 
         try:
             response = requests.post(f"{AUTOREDUCE_API_URL}/runs/batch/{kwargs['instrument']}",

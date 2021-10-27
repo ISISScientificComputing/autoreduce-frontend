@@ -17,11 +17,6 @@ from autoreduce_frontend.selenium_tests.utils import setup_external_services, su
 
 
 class TestRunSummaryPageIntegration(BaseIntegrationTestCase):
-    """
-    Test cases for the InstrumentSummary page when the Rerun form is NOT
-    visible.
-    """
-
     fixtures = BaseIntegrationTestCase.fixtures + ["run_with_one_variable"]
 
     @classmethod
