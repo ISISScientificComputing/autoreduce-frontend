@@ -3,7 +3,6 @@
 {% load view %}
 {% load static %}
 {% load colour_table_rows %}
-{% load get_run_navigation_queries %}
 {% load render_table from django_tables2 %}
 
 {% block body %}
@@ -98,8 +97,8 @@
     <div class="col-auto">
                     <label for="sort_select">Sort by</label>
                     <select class="form-control" name="sort" form="filter_options" id="sort_select">
-                        <option value="run"
-                            {% if sort == 'run' %}
+                        <option value="-run_number"
+                            {% if sort == '-run_number' %}
                                 selected="selected"
                             {% endif %}
                             >Number

@@ -37,11 +37,11 @@ from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions,
 from autoreduce_frontend.autoreduce_webapp.views import render_error
 from autoreduce_frontend.plotting.plot_handler import PlotHandler
 from autoreduce_frontend.reduction_viewer.filters import ExperimentFilter, ReductionRunFilter
-from autoreduce_frontend.reduction_viewer.tables import ExperimentTable, ReductionRunTable, ReductionRunSearchTable
+from autoreduce_frontend.reduction_viewer.tables import ExperimentTable, ReductionRunTable
 from autoreduce_frontend.reduction_viewer.utils import ReductionRunUtils
 from autoreduce_frontend.reduction_viewer.view_utils import (deactivate_invalid_instruments, get_interactive_plot_data,
-                                                             linux_to_windows_path, make_data_analysis_url,
-                                                             windows_to_linux_path)
+                                                             get_run_navigation_queries, linux_to_windows_path,
+                                                             make_data_analysis_url, windows_to_linux_path)
 from autoreduce_frontend.utilities.pagination import CustomPaginator
 from autoreduce_frontend.reduction_viewer.forms import SearchOptionsForm
 
@@ -271,6 +271,9 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
         data_analysis_link_url = make_data_analysis_url(reduction_location) if reduction_location else ""
         rb_number = run.experiment.reference_number
 
+        page_type = request.GET.get('sort', '-run_number')
+        next_run, previous_run, newest_run, oldest_run = get_run_navigation_queries(instrument_name, run, page_type)
+
         context_dictionary = {
             'run': run,
             'run_number': run_number,
@@ -286,11 +289,11 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
             'data_analysis_link_url': data_analysis_link_url,
             'current_page': int(request.GET.get('page', 1)),
             'items_per_page': int(request.GET.get('per_page', 10)),
-            'page_type': request.GET.get('sort', '-run_number'),
-            'newest_run': int(request.GET.get('newest_run', run_number)),
-            'oldest_run': int(request.GET.get('oldest_run', run_number)),
-            'next_run': int(request.GET.get('next_run', run_number)),
-            'previous_run': int(request.GET.get('previous_run', run_number)),
+            'page_type': page_type,
+            'newest_run': newest_run.run_number,
+            'oldest_run': oldest_run.run_number,
+            'next_run': next_run.run_number,
+            'previous_run': previous_run.run_number,
             'filtering': request.GET.get('filter', 'run'),
             'path_type': path_type,
         }
@@ -339,21 +342,16 @@ def runs_list(request, instrument=None):
     except Instrument.DoesNotExist:
         return {'message': "Instrument not found."}
 
-    sort_by = request.GET.get('sort', '-run_number')
-
     try:
         runs = (ReductionRun.objects.only('status', 'last_updated', 'run_number', 'run_version',
                                           'run_description').select_related('status').filter(instrument=instrument_obj))
         last_instrument_run = runs.last
         first_instrument_run = runs.first
 
-        run_table = ReductionRunTable(runs, order_by="-run_number")
-        RequestConfig(request, paginate={"per_page": 10}).configure(run_table)
+        sort_by = request.GET.get('sort', '-run_number')
 
-        if sort_by == "run":
-            runs = runs.order_by('-run_number', 'run_version')
-        elif sort_by == "date":
-            runs = runs.order_by('-last_updated')
+        run_table = ReductionRunTable(runs, order_by=sort_by)
+        RequestConfig(request, paginate={"per_page": 10}).configure(run_table)
 
         if len(runs) == 0:
             return {'message': "No runs found for instrument."}
@@ -620,7 +618,7 @@ def search(request):
     run_list = ReductionRun.objects.none()
     run_description_qualifier = request.GET.get("run_description_qualifier", "contains")
     run_filter = ReductionRunFilter(request.GET, run_description_qualifier=run_description_qualifier, queryset=run_list)
-    run_table = ReductionRunSearchTable(run_list, order_by="-run_number")
+    run_table = ReductionRunTable(run_list, order_by="-run_number")
 
     experiment_list = Experiment.objects.none()
     experiment_filter = ExperimentFilter(request.GET, queryset=experiment_list)
@@ -633,7 +631,7 @@ def search(request):
         run_filter = ReductionRunFilter(request.GET,
                                         run_description_qualifier=run_description_qualifier,
                                         queryset=run_list)
-        run_table = ReductionRunSearchTable(run_filter.qs, order_by="-run_number")
+        run_table = ReductionRunTable(run_filter.qs, order_by="-run_number")
         RequestConfig(request, paginate={"per_page": 10}).configure(run_table)
     if "experiment_reference" in request.GET:
         experiment_list = Experiment.objects.all()
