@@ -39,16 +39,6 @@ class TestConfigureNewRunsPageIntegration(BaseIntegrationTestCase):
         super().setUp()
         self.page = ConfigureNewRunsPage(self.driver, self.instrument_name, run_start=self.run_number + 1)
 
-    def _find_run_in_database(self):
-        """
-        Find a ReductionRun record in the database
-        This includes a timeout to wait for several seconds to ensure the database has received
-        the record in question
-        :return: The resulting record
-        """
-        instrument = db.get_instrument(self.instrument_name)
-        return instrument.reduction_runs.filter(run_number=self.run_number)
-
     def _submit_args_value(self, value, start=None, experiment_number=None):
         self.page = ConfigureNewRunsPage(self.driver,
                                          self.instrument_name,
