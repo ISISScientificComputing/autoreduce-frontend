@@ -2,10 +2,9 @@ import json
 import logging
 from django.db.models import Q
 
-from autoreduce_frontend.utilities.pagination import CustomPaginator
 from autoreduce_db.reduction_viewer.models import ReductionRun, Status
 from autoreduce_frontend.autoreduce_webapp.view_utils import (login_and_uows_valid, render_with, require_admin)
-from autoreduce_frontend.reduction_viewer.utils import ReductionRunUtils
+from autoreduce_frontend.utilities.pagination import CustomPaginator
 
 LOGGER = logging.getLogger(__package__)
 
@@ -54,14 +53,6 @@ def fail_queue(request):
                 if action == "hide":
                     reduction_run.hidden_in_failviewer = True
                     reduction_run.save()
-
-                elif action == "rerun":
-                    highest_version = max([int(runL[1]) for runL in selected_runs if int(runL[0]) == run_number])
-                    if run_version != highest_version:
-                        continue  # Do not run multiples of the same run
-
-                    ReductionRunUtils.send_retry_message_same_args(request.user.id, reduction_run)
-
                 elif action == "default":
                     pass
 

@@ -22,7 +22,6 @@
                 <label for="runAction" hidden>Select action to apply to selected runs</label>
                 <select class="form-control" id="runAction">
                     <option value="default">Select action to apply to selected runs</option>
-                    <option value="rerun">Re-run</option>
                     <option value="hide">Hide</option>
                 </select>
                 <form id="actionForm" method="POST" action="{% url 'runs:failed' %}"
