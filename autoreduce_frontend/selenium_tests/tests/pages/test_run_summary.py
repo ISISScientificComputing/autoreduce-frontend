@@ -32,7 +32,7 @@ class TestRunSummaryPage(BaseTestCase):
         Set up a DataArchive with scripts and set instrument for all test cases.
         """
         super().setUpClass()
-        cls.instrument_name = "TESTINSTUMENT"
+        cls.instrument_name = "TESTINSTRUMENT"
         cls.data_archive = DataArchive([cls.instrument_name], 21, 21)
         cls.data_archive.create()
         cls.data_archive.add_reduce_vars_script(cls.instrument_name,
