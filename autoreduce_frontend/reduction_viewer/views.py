@@ -43,7 +43,7 @@ from autoreduce_frontend.reduction_viewer.view_utils import (deactivate_invalid_
                                                              get_run_navigation_queries, linux_to_windows_path,
                                                              make_data_analysis_url, windows_to_linux_path)
 from autoreduce_frontend.utilities.pagination import CustomPaginator
-from autoreduce_frontend.reduction_viewer.forms import SearchOptionsForm
+from autoreduce_frontend.reduction_viewer.forms import SearchOptionsForm, RunsListOptionsForm
 
 from django_tables2 import RequestConfig
 
@@ -353,6 +353,11 @@ def runs_list(request, instrument=None):
         run_table = ReductionRunTable(runs, order_by=sort_by)
         RequestConfig(request, paginate={"per_page": 10}).configure(run_table)
 
+        options_form = RunsListOptionsForm(initial={
+            'per_page': request.GET.get('per_page', 10),
+            'filter': request.GET.get('filter', "run")
+        })
+
         if len(runs) == 0:
             return {'message': "No runs found for instrument."}
 
@@ -379,6 +384,7 @@ def runs_list(request, instrument=None):
             'has_variables': bool(current_variables),
             'error_reason': error_reason,
             'run_table': run_table,
+            'options_form': options_form,
             'per_page': request.GET.get('per_page', 10),
             'current_page': request.GET.get('page', 1),
         }
