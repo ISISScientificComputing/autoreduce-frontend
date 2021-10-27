@@ -3,6 +3,8 @@
 {% load view %}
 {% load static %}
 {% load colour_table_rows %}
+{% include crispy_tags %}
+{% load crispy_forms_tags %}
 {% load render_table from django_tables2 %}
 
 {% block body %}
@@ -82,56 +84,17 @@
         <hr/>
         <!-- Display table for reduction jobs -->
         <div id="filter-options">
-        <form action="{{ request.path }}" method="get" id="filter_options">
+
+<form action="{{ request.path }}" method="get" id="filter_options">
   <div class="form-row align-items-center">
-    <div class="col-auto">
-                    <label for="filter_select">Filter by</label>
-                    <select class="form-control" name="filter" form="filter_options" id="filter_select">
-                        <option value="run" title="Display run numbers"
-                            {% if filtering == 'run' %}
-                                selected="selected"
-                            {% endif %}
-                            >Run number</option>
-                        <option value="experiment" title="Display run number grouped by RB number"
-                            {% if filtering == 'experiment' %}
-                                selected="selected"
-                            {% endif %}
-                            >Experiment Reference (RB)
-                        </option>
-                    </select>
+    <div class="col-auto my-1">
+        {{options_form.filter|as_crispy_field}} 
     </div>
-    <div class="col-auto">
-                    <label for="sort_select">Sort by</label>
-                    <select class="form-control" name="sort" form="filter_options" id="sort_select">
-                        <option value="-run_number"
-                            {% if sort == '-run_number' %}
-                                selected="selected"
-                            {% endif %}
-                            >Number
-                        </option>
-                        <option value="date"
-                            {% if sort == 'date' %}
-                                selected="selected"
-                            {% endif %}
-                            >Date
-                        </option>
-                    </select>
-    </div>
-    <div class="col-auto">
-                        <label for="pagination_select">Items per page</label>
-                        <select title="The number of reduction jobs that should be shown per page" class="form-control" name="per_page" form="filter_options" id="pagination_select">
-                            <option {% if max_items == '10' %} selected="selected" {% endif %}>10</option>
-                            <option {% if max_items == '25' %} selected="selected" {% endif %}>25</option>
-                            <option {% if max_items == '50' %} selected="selected" {% endif %}>50</option>
-                            <option {% if max_items == '100' %} selected="selected" {% endif %}>100</option>
-                            <option {% if max_items == '250' %} selected="selected" {% endif %}>250</option>
-                            <option {% if max_items == '500' %} selected="selected" {% endif %}>500</option>
-                        </select>
-    </div>
-    <div class="col-auto">
+    <div class="col-auto my-1">
       <button type="submit" class="btn btn-primary mb-2" value="Apply filters" id="apply_filters">Submit</button>
     </div>
   </div>
+  {{options_form.per_page|as_crispy_field}} 
 </form>
 </div>
         <br/>

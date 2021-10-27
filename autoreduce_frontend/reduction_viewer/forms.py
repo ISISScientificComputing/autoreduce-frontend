@@ -11,6 +11,11 @@ ITEMS_PER_PAGE = (
     (500, '500'),
 )
 
+FILTER_BY = (
+    ("run", 'Run Number'),
+    ("experiment", 'Experiment Reference (RB)'),
+)
+
 
 class SearchOptionsForm(forms.Form):
     def __init__(self, *args, **kwargs):
@@ -29,3 +34,31 @@ class SearchOptionsForm(forms.Form):
 
     helper = FormHelper()
     helper.layout = Layout('pagination')
+
+
+class RunsListOptionsForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super(RunsListOptionsForm, self).__init__(*args, **kwargs)
+
+    per_page = forms.ChoiceField(
+        widget=forms.Select(
+            attrs={
+                'id': "pagination_select",
+                'title': "The number of reduction jobs that should be shown per page",
+                'name': "per_page",
+                'onchange': 'update_page()'
+            }),
+        choices=ITEMS_PER_PAGE,
+    )
+
+    filter = forms.ChoiceField(
+        widget=forms.Select(attrs={
+            'id': "filter_select",
+            'title': "Filter by Runs or by Experiments",
+            'name': "filter"
+        }),
+        choices=FILTER_BY,
+    )
+
+    helper = FormHelper()
+    helper.layout = Layout('filter', 'per_page')
