@@ -1,2 +1,2 @@
 [run]
-omit = **/tests/*,**/__init__.py
+omit = **/tests/*,**/selenium_tests/pages/*,**/__init__.py
