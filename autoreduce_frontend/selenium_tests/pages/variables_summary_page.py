@@ -116,11 +116,6 @@ class VariableSummaryPage(Page, NavbarMixin, FooterMixin, TourMixin):
         self._do_delete_button(url)
 
     @property
-    def message(self) -> WebElement:
-        """Return the message"""
-        return self.driver.find_element_by_id("message")
-
-    @property
     def panels(self) -> List[WebElement]:
         """Return the variable summary panels"""
         return self.driver.find_elements_by_class_name("panel-body")
