@@ -30,7 +30,7 @@ class TestRunSummaryPagePlots(BaseTestCase):
         Set up the instrument name and page
         """
         super().setUp()
-        self.instrument_name = "TestInstrument"
+        self.instrument_name = "TESTINSTRUMENT"
 
         self.page = RunSummaryPage(self.driver, self.instrument_name, 99999, 0)
         self.run = ReductionRun.objects.first()

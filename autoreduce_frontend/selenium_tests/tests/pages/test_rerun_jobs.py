@@ -7,7 +7,7 @@ from autoreduce_frontend.selenium_tests.tests.base_tests import (NavbarTestMixin
 
 
 # pylint:disable=no-member
-class TestRerunJobsPage(NavbarTestMixin, BaseTestCase, FooterTestMixin, AccessibilityTestMixin):
+class TestRerunJobsPage(BaseTestCase, NavbarTestMixin, FooterTestMixin, AccessibilityTestMixin):
     """
     Test cases for the InstrumentSummary page when the Rerun form is NOT visible
     """
@@ -18,11 +18,10 @@ class TestRerunJobsPage(NavbarTestMixin, BaseTestCase, FooterTestMixin, Accessib
     def setUpClass(cls):
         """Sets up DataArchive for all tests and sets instrument for all tests"""
         super().setUpClass()
-        cls.instrument_name = "TestInstrument"
+        cls.instrument_name = "TESTINSTRUMENT"
         cls.data_archive = DataArchive([cls.instrument_name], 21, 21)
         cls.data_archive.create()
         cls.data_archive.add_reduction_script(cls.instrument_name, """print('some text')""")
-
         cls.data_archive.add_reduce_vars_script(
             cls.instrument_name, """standard_vars={"variable_str":"value1","variable_int":123,"variable_float":123.321,
             "variable_listint":[1,2,3],"variable_liststr":["a","b","c"],"variable_none":None,

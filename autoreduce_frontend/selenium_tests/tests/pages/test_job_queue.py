@@ -77,7 +77,7 @@ class TestJobQueuePageBatchRunInQueue(BaseTestCase):
               The assertion is done within the click_run method
         """
         self.page.click_run(run_number=456)  # 456 taken from fixture
-        run_summary_page = RunSummaryPage(self.driver, "TestInstrument", 456, 0)
+        run_summary_page = RunSummaryPage(self.driver, "TESTINSTRUMENT", 456, 0)
         assert run_summary_page.reduction_job_panel.is_displayed()
 
     def test_click_batch_run_link_in_table(self):
@@ -85,5 +85,5 @@ class TestJobQueuePageBatchRunInQueue(BaseTestCase):
         Test: Clicking a queued batch run correctly changes the page to the run's summary page
         """
         self.page.click_batch_run(primary_key=1)  # 1 taken from fixture
-        run_summary_page = RunSummaryPage(self.driver, "TestInstrument", 1, 0, batch_run=True)
+        run_summary_page = RunSummaryPage(self.driver, "TESTINSTRUMENT", 1, 0, batch_run=True)
         assert run_summary_page.reduction_job_panel.is_displayed()

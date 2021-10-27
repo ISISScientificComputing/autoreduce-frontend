@@ -17,8 +17,8 @@ from autoreduce_frontend.selenium_tests.tests.base_tests import BaseTestCase, Fo
 
 
 # pylint:disable=no-member
+# class TestRunSummaryPage(BaseTestCase, FooterTestMixin, NavbarTestMixin):
 class TestRunSummaryPage(BaseTestCase):
-    # class TestRunSummaryPage(BaseTestCase, FooterTestMixin, NavbarTestMixin):
     """
     Test cases for the InstrumentSummary page when the Rerun form is NOT
     visible.
@@ -32,7 +32,7 @@ class TestRunSummaryPage(BaseTestCase):
         Set up a DataArchive with scripts and set instrument for all test cases.
         """
         super().setUpClass()
-        cls.instrument_name = "TestInstrument"
+        cls.instrument_name = "TESTINSTUMENT"
         cls.data_archive = DataArchive([cls.instrument_name], 21, 21)
         cls.data_archive.create()
         cls.data_archive.add_reduce_vars_script(cls.instrument_name,

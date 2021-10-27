@@ -23,7 +23,7 @@ class TestSeeInstrumentVariablesPage(BaseTestCase):
     def setUpClass(cls):
         """Sets up the data archive with a reduce and reduce_vars script to be shared between test cases"""
         super().setUpClass()
-        cls.instrument_name = "TestInstrument"
+        cls.instrument_name = "TESTINSTRUMENT"
         cls.data_archive = DataArchive([cls.instrument_name], 21, 21)
         cls.data_archive.create()
         cls.data_archive.add_reduction_script(cls.instrument_name, """print('some text')""")

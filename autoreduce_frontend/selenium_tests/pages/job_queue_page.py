@@ -57,7 +57,7 @@ class JobQueuePage(Page, NavbarMixin, FooterMixin):
         Click the run number in the table
         :param run_number: The run number to click
         """
-        url = reverse("runs:summary", kwargs={"instrument_name": "TestInstrument", "run_number": run_number})
+        url = reverse("runs:summary", kwargs={"instrument_name": "TESTINSTRUMENT", "run_number": run_number})
         self._do_run_button(url)
 
     def click_batch_run(self, primary_key: Union[str, int]) -> None:
@@ -66,5 +66,5 @@ class JobQueuePage(Page, NavbarMixin, FooterMixin):
 
         :param primary_key: The primary key of the batch run
         """
-        url = reverse("runs:batch_summary", kwargs={"instrument_name": "TestInstrument", "pk": primary_key})
+        url = reverse("runs:batch_summary", kwargs={"instrument_name": "TESTINSTRUMENT", "pk": primary_key})
         self._do_run_button(url)

@@ -20,7 +20,7 @@ class TestRunsList(BaseTestCase, AccessibilityTestMixin, FooterTestMixin, Navbar
     def setUp(self) -> None:
         """Sets up the InstrumentSummaryPage object."""
         super().setUp()
-        self.instrument_name = "TestInstrument"
+        self.instrument_name = "TESTINSTRUMENT"
         self.page = RunsListPage(self.driver, self.instrument_name)
 
     def test_reduction_run_displayed(self):
@@ -65,7 +65,7 @@ class TestRunsListQueries(BaseTestCase, AccessibilityTestMixin, FooterTestMixin,
     def setUp(self) -> None:
         """Sets up the InstrumentSummaryPage object."""
         super().setUp()
-        self.instrument_name = "TestInstrument"
+        self.instrument_name = "TESTINSTRUMENT"
         self.page = RunsListPage(self.driver, self.instrument_name)
 
     def _test_page_query(self, query):

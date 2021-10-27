@@ -19,7 +19,7 @@ class TestRunSummaryPageNoArchive(NavbarTestMixin, BaseTestCase, FooterTestMixin
     def setUpClass(cls):
         """Set the instrument for all test cases."""
         super().setUpClass()
-        cls.instrument_name = "TestInstrument"
+        cls.instrument_name = "TESTINSTRUMENT"
 
     def setUp(self) -> None:
         """Set up RunSummaryPage before each test case."""
