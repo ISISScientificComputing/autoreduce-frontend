@@ -41,7 +41,7 @@ def runs_list(request, instrument=None):
 
         current_variables = {}
         try:
-            current_variables.update(VariableUtils.get_default_variables(instrument_obj.name))
+            current_variables.update(VariableUtils.get_default_variables(instrument_obj.name, raise_exc=True))
         except FileNotFoundError:
             error_reason = "reduce_vars.py is missing for this instrument"
         except (ImportError, SyntaxError):
