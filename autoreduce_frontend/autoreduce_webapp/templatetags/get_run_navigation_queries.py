@@ -18,7 +18,7 @@ def get_run_navigation_queries(instrument_name: str, run: ReductionRun, page_typ
     """Return a string of run queries."""
     instrument_obj = ReductionRun.objects.filter(instrument__name=instrument_name)
 
-    if page_type == "run":
+    if page_type == "-run_number":
         instrument_obj = instrument_obj.order_by('-pk', 'run_version')
     elif page_type == "date":
         instrument_obj = instrument_obj.order_by('-last_updated')

@@ -110,12 +110,6 @@ search#run_search {
     margin-bottom: 5px;
 }
 
-.tab-content {
-    border-left: 1px solid #ddd;
-    border-right: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
-}
-
 .instrument .instrument-heading {
     font-size: 1.3em;
     border-top: 1px solid #ddd;

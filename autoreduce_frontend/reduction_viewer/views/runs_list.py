@@ -4,8 +4,9 @@ import logging
 from autoreduce_db.reduction_viewer.models import Experiment, Instrument, ReductionRun, Status
 from autoreduce_qp.queue_processor.variable_utils import VariableUtils
 from autoreduce_frontend.autoreduce_webapp.view_utils import check_permissions, login_and_uows_valid, render_with
-
-from autoreduce_frontend.utilities.pagination import CustomPaginator
+from autoreduce_frontend.reduction_viewer.filters import ReductionRunFilter
+from autoreduce_frontend.reduction_viewer.tables import ExperimentTable, ReductionRunTable
+from django_tables2 import RequestConfig
 
 LOGGER = logging.getLogger(__package__)
 
@@ -22,7 +23,7 @@ def runs_list(request, instrument=None):
     except Instrument.DoesNotExist:
         return {'message': "Instrument not found."}
 
-    sort_by = request.GET.get('sort', 'run')
+    sort_by = request.GET.get('sort', '-run_number')
 
     try:
         runs = ReductionRun.objects.only('status', 'last_updated', 'run_version',
@@ -31,10 +32,13 @@ def runs_list(request, instrument=None):
         last_instrument_run = runs.filter(batch_run=False).last()
         first_instrument_run = runs.filter(batch_run=False).first()
 
-        if sort_by == "run":
+        if sort_by == "-run_number":
             runs = runs.order_by('-run_numbers__run_number', 'run_version')
         elif sort_by == "date":
             runs = runs.order_by('-last_updated')
+
+        run_table = ReductionRunTable(runs, order_by="-run_numbers__run_number")
+        RequestConfig(request, paginate={"per_page": 10}).configure(run_table)
 
         if len(runs) == 0:
             return {'message': "No runs found for instrument."}
@@ -61,6 +65,9 @@ def runs_list(request, instrument=None):
             'sort': sort_by,
             'has_variables': bool(current_variables),
             'error_reason': error_reason,
+            'run_table': run_table,
+            'per_page': request.GET.get('per_page', 10),
+            'current_page': request.GET.get('page', 1),
         }
 
         if filter_by == 'experiment':
@@ -71,33 +78,16 @@ def runs_list(request, instrument=None):
                 associated_runs = runs.filter(experiment=experiment). \
                     order_by('-created')
                 experiments_and_runs[experiment] = associated_runs
+            experiment_table = ExperimentTable(experiments, order_by="-reference_number")
+            RequestConfig(request, paginate={"per_page": 10}).configure(experiment_table)
             context_dictionary['experiments'] = experiments_and_runs
+            context_dictionary['experiment_table'] = experiment_table
         elif filter_by == 'batch_runs':
             runs = ReductionRun.objects.only('status', 'last_updated', 'run_version',
                                              'run_description').filter(instrument=instrument_obj, batch_run=True)
+            run_table = ReductionRunTable(runs, order_by="-run_numbers__run_number")
+            RequestConfig(request, paginate={"per_page": 10}).configure(run_table)
             max_items_per_page = request.GET.get('pagination', 10)
-            custom_paginator = CustomPaginator(
-                page_type=sort_by,
-                query_set=runs.filter(batch_run=True),
-                items_per_page=max_items_per_page,
-                page_tolerance=3,
-                current_page=request.GET.get('page', 1),
-            )
-            context_dictionary['paginator'] = custom_paginator
-            context_dictionary['last_page_index'] = len(custom_paginator.page_list)
-            context_dictionary['max_items'] = max_items_per_page
-        else:
-            max_items_per_page = request.GET.get('pagination', 10)
-            custom_paginator = CustomPaginator(
-                page_type=sort_by,
-                query_set=runs,
-                items_per_page=max_items_per_page,
-                page_tolerance=3,
-                current_page=request.GET.get('page', 1),
-            )
-            context_dictionary['paginator'] = custom_paginator
-            context_dictionary['last_page_index'] = len(custom_paginator.page_list)
-            context_dictionary['max_items'] = max_items_per_page
 
     except Exception:
         LOGGER.error(traceback.format_exc())

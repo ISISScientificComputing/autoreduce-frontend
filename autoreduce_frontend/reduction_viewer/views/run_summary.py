@@ -77,7 +77,7 @@ def run_summary_run(request, history, instrument_name=None, run_version=0):
 
     run_number = run.pk if run.batch_run else run.run_number
 
-    page_type = request.GET.get('sort', 'run')
+    page_type = request.GET.get('sort', '-run_number')
     next_run, previous_run, first_run, last_run = get_run_navigation_queries(instrument_name, run, page_type)
 
     context_dictionary = {
@@ -98,7 +98,7 @@ def run_summary_run(request, history, instrument_name=None, run_version=0):
         'started_by': started_by,
         'data_analysis_link_url': data_analysis_link_url,
         'current_page': int(request.GET.get('page', 1)),
-        'items_per_page': int(request.GET.get('pagination', 10)),
+        'items_per_page': int(request.GET.get('per_page', 10)),
         'page_type': page_type,
         'newest_run': first_run,
         'oldest_run': last_run,

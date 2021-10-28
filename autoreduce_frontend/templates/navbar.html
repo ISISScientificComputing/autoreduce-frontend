@@ -28,6 +28,9 @@
                     <li>
                         <a href="{% url 'runs:queue' %}">Job Queue</a>
                     </li>
+                    <li>
+                        <a href="{% url 'search' %} ">Search</a>
+                    </li>
                     {% if user.is_superuser %}
                         <li>
                             <a href="{% url 'runs:failed' %}">Failed Jobs</a>
