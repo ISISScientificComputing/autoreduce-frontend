@@ -1,8 +1,25 @@
-[{
+[
+    {
+        "model": "reduction_viewer.reductionscript",
+        "pk": 1,
+        "fields": {
+            "text": "def main(input_file, output_dir): print(123)"
+        }
+    },
+    {
+        "model": "reduction_viewer.reductionarguments",
+        "pk": 1,
+        "fields": {
+            "raw": "{\"standard_vars\":{\"variable1\":\"value1\"},\"advanced_vars\":{},\"variable_help\":{\"standard_vars\":{},\"advanced_vars\":{}}}",
+            "start_run": 99999,
+            "experiment_reference": null,
+            "instrument_id": 1
+        }
+    },
+    {
         "model": "reduction_viewer.reductionrun",
         "pk": 1,
         "fields": {
-            "run_number": 99999,
             "status_id": 2,
             "run_version": 0,
             "run_description": "This is the test run_description",
@@ -14,7 +31,17 @@
             "experiment_id": 1,
             "instrument_id": 1,
             "started_by": -1,
-            "reduction_host": "test-host-123"
+            "reduction_host": "test-host-123",
+            "script_id": 1,
+            "arguments_id": 1
+        }
+    },
+    {
+        "model": "reduction_viewer.runnumber",
+        "pk": 1,
+        "fields": {
+            "run_number": 99999,
+            "reduction_run_id": 1
         }
     },
     {
@@ -36,39 +63,9 @@
         "model": "reduction_viewer.instrument",
         "pk": 1,
         "fields": {
-            "name": "TestInstrument",
+            "name": "TESTINSTRUMENT",
             "is_active": true,
             "is_paused": false
-        }
-    },
-    {
-        "model": "instrument.variable",
-        "pk": 1,
-        "fields": {
-            "name": "variable1",
-            "value": "value1",
-            "type": "text",
-            "is_advanced": false,
-            "help_text": ""
-        }
-    },
-    {
-        "model": "instrument.instrumentvariable",
-        "pk": 1,
-        "fields": {
-            "variable_ptr_id": 1,
-            "instrument_id": 1,
-            "experiment_reference": null,
-            "start_run": 99999,
-            "tracks_script": true
-        }
-    },
-    {
-        "model": "instrument.runvariable",
-        "pk": 1,
-        "fields": {
-            "variable_id": 1,
-            "reduction_run_id": 1
         }
     }
 ]

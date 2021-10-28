@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% block title %}{{ instrument.name|default:"Instrument not found" }} - Re-run past jobs{% endblock %}
-{% load view %}
 {% load static %}
 
 {% block body %}
@@ -22,7 +21,7 @@
             </div>
             <br/>
             <input type="hidden" id="last_run_number" value="{{ last_instrument_run.run_number }}"/>
-            <form id="submit_jobs" method="POST" action="{% url 'run_confirmation' instrument=instrument.name %}"
+            <form id="submit_jobs" method="POST" action="{% url 'runs:run_confirmation' instrument=instrument.name %}"
                   class="form-horizontal">
                 {% csrf_token %}
                 <div class="row">
@@ -38,7 +37,7 @@
                         </div>
                         <div class="js-variable-by-run">
                             <div class="row">
-                                <label for="run_range" class="col-form-label col-md-3">
+                                <label for="runs" class="control-label col-md-3">
                                     Run Numbers
                                     <a href="#" data-toggle="popover"
                                        data-content="A list of run number to re-run, the list can include ranges e.g. 1, 4-6. All the run numbers must be in the same experiment in order to apply the desired variables."
@@ -47,7 +46,7 @@
                                     </a>
                                 </label>
                                 <div class="col-md-5">
-                                    <input type="text" id="run_range" name="run_range"
+                                    <input type="text" id="runs" name="runs"
                                            value="{{ last_instrument_run.run_number }}" class="form-control"/>
                                 </div>
                                 <div class="col-md-4">
@@ -75,7 +74,7 @@
                             </div>
                         </div>
                         <div class="js-variables-container">
-                            {% include "snippets/variables/form.html" with standard_variables=standard_variables advanced_variables=advanced_variables instrument=instrument.name only %}
+                            {% include "snippets/variables/form.html" with standard_variables=standard_variables advanced_variables=advanced_variables variable_help=variable_help instrument=instrument.name only %}
                         </div>
                     </div>
                     <div class="col-md-3">

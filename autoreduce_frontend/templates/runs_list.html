@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block title %}{{ instrument_name|default:"Instrument not found" }}{% endblock %}
-{% load view %}
 {% load static %}
-{% load colour_table_rows %}
 {% include crispy_tags %}
 {% load crispy_forms_tags %}
+{% load colour_table_row %}
+{% load get_run_navigation_queries %}
 {% load render_table from django_tables2 %}
 
 {% block body %}
@@ -25,6 +25,7 @@
             </div>
             <!-- Pause / Resume Reduction button-->
             <div class="col-6 text-center">
+            <div>
                 {% if instrument.is_paused %}
                     <a class="btn btn-danger btn-block" id="pause">
                         <i class="fas fa-play"></i>
@@ -36,70 +37,85 @@
                         &nbsp;&nbsp;Pause Autoreduction on {{ instrument_name }}
                     </a>
                 {% endif %}
-                                <form id="form-pause" method="POST" action="{% url 'instrument:pause' instrument_name %}">
+                <form id="form-pause" method="POST" action="{% url 'runs:pause' instrument_name %}">
                     {% csrf_token %}
                     <input type="hidden" name="currently_paused" id="currently_paused" value="{{ instrument.is_paused }}">
                 </form>
                 <p></p>
-
-                <div id="btn-re-run_past_job">
-                    <p>
-                        <a href="{% url 'instrument:submit_runs' instrument=instrument_name %}" class="btn btn-success btn-block {% if not has_variables %} disabled {% endif %}">
-                            <i class="fas fa-arrow-left"></i>
-                            &nbsp;&nbsp;Re-run past jobs
-                        </a>
-                    </p>
-                </div>
-
-                <div id="btn-configure_new_runs">
-                    <p>
-                        <a href="{% url 'instrument:variables' instrument=instrument_name %}"class="btn btn-success btn-block {% if not has_variables %} disabled {% endif %}">
-                            <i class="fas fa-plus"></i>
-                            &nbsp;&nbsp;Configure New Runs
-                        </a>
-                    </p>
-                </div>
-
-                <div id="btn-see_instrument_variables">
-                    <p>
-                        <a href="{% url 'instrument:variables_summary' instrument=instrument_name %}" class="btn btn-success btn-block {% if not has_variables %} disabled {% endif %}">
-                            <i class="far fa-eye"></i>
-                            &nbsp;&nbsp;See Instrument variables
-                        </a>
-                    </p>
-                </div>
-
-                {% if not has_variables %}
-                    <div class="alert alert-warning" role="alert" id="alert_message">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        &nbsp;&nbsp;The buttons above have been disabled because {{ error_reason }}.
-                    </div>
-                {% endif %}
-
             </div>
-
-
+            <div id="btn-re-run_past_job">
+                <p>
+                    <a href="{% url 'runs:rerun_jobs' instrument=instrument_name %}" class="btn btn-success btn-block"
+                        {% if not has_variables %}
+                            disabled
+                        {% endif %}>
+                        <i class="fa fa-arrow-left"></i>
+                        &nbsp;&nbsp;Re-run past jobs
+                    </a>
+                </p>
+            </div>
+            <div id="btn-configure_new_runs">
+                <p>
+                    <a href="{% url 'runs:variables' instrument=instrument_name %}"class="btn btn-success btn-block"
+                        {% if not has_variables %}
+                            disabled
+                        {% endif %}>
+                        <i class="fa fa-plus"></i>
+                        &nbsp;&nbsp;Configure New Runs
+                    </a>
+                </p>
+            </div>
+            <div id="btn-see_instrument_variables">
+                <p>
+                    <a href="{% url 'runs:variables_summary' instrument=instrument_name %}" class="btn btn-success btn-block"
+                        {% if not has_variables %}
+                            disabled
+                        {% endif %}>
+                        <i class="fa fa-eye"></i>
+                        &nbsp;&nbsp;See Instrument variables
+                    </a>
+                </p>
+            </div>
+            <div id="btn-batch_job">
+                <p>
+                    <a href="{% url 'runs:configure_batch_run' instrument=instrument_name %}" class="btn btn-success btn-block"
+                        {% if not has_variables %}
+                            disabled
+                        {% endif %}>
+                        <i class="fa fa-cog"></i>
+                        &nbsp;&nbsp;Submit batch job
+                    </a>
+                </p>
+            </div>
+            {% if not has_variables %}
+                <div class="alert alert-warning" role="alert" id="alert_message">
+                    <i class="fa fa-exclamation-triangle"></i>
+                    &nbsp;&nbsp;The buttons above have been disabled because {{ error_reason }}.
+                </div>
+            {% endif %}
+            </div>
         </div>
         <br/>
         <hr/>
+
         <!-- Display table for reduction jobs -->
         <div id="filter-options">
-
-<form action="{{ request.path }}" method="get" id="filter_options">
-  <div class="form-row align-items-center">
-    <div class="col-auto my-1">
-        {{options_form.filter|as_crispy_field}} 
-    </div>
-    <div class="col-auto my-1">
-      <button type="submit" class="btn btn-primary mb-2" value="Apply filters" id="apply_filters">Submit</button>
-    </div>
-  </div>
-  {{options_form.per_page|as_crispy_field}} 
-</form>
-</div>
+            <form action="{{ request.path }}" method="get" id="filter_options">
+                <div class="form-row align-items-center">
+                    <div class="col-auto my-1">
+                        {{options_form.filter|as_crispy_field}} 
+                    </div>
+                    <div class="col-auto my-1">
+                    <button type="submit" class="btn btn-primary mb-2" value="Apply filters" id="apply_filters">Submit</button>
+                    </div>
+                </div>
+                {{options_form.per_page|as_crispy_field}} 
+            </form>
+        </div>
+        
         <br/>
         <!-- Display table for every reduction job -->
-        <div class="row table-responsive" id="runs-table">
+        <div class="row table" id="runs-table">
                     <!-- Run number filtered jobs -->
                     {% if filtering == 'run' %}
                         {% render_table run_table %}

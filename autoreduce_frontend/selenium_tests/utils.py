@@ -8,6 +8,8 @@ from typing import Tuple
 from autoreduce_db.reduction_viewer.models import ReductionRun, Status
 
 from django.urls.base import reverse
+from django.db.models import Q
+
 from selenium.common.exceptions import ElementClickInterceptedException
 from selenium.webdriver.support.wait import WebDriverWait
 
@@ -30,10 +32,10 @@ def find_run_in_database(test):
     """
     instrument = db.get_instrument(test.instrument_name)
     if isinstance(test.run_number, list):
-        args = {"run_number__in": test.run_number}
+        args = {"run_numbers__run_number__in": test.run_number}
 
     else:
-        args = {"run_number": test.run_number}
+        args = {"run_numbers__run_number": test.run_number}
     return instrument.reduction_runs.filter(**args)
 
 
@@ -46,7 +48,7 @@ def submit_and_wait_for_result(test, expected_runs=1):
     replaces ALL the elements and triggers a bunch of DOM re-renders/updates, and that isn't fast.
     """
     test.listener._processing = True  # pylint:disable=protected-access
-    expected_url = reverse("run_confirmation", kwargs={"instrument": test.instrument_name})
+    expected_url = reverse("runs:run_confirmation", kwargs={"instrument": test.instrument_name})
 
     def submit_successful(driver) -> bool:
         try:
@@ -56,13 +58,21 @@ def submit_and_wait_for_result(test, expected_runs=1):
         # the submit is successful if the URL has changed
         return expected_url in driver.current_url
 
+    total_expected = ReductionRun.objects.count() + expected_runs
+
     WebDriverWait(test.driver, 30).until(submit_successful)
-    if expected_runs == 1:
-        WebDriverWait(test.driver, 30).until(lambda _: not test.listener.is_processing_message())
-    else:
-        num_current_runs = ReductionRun.objects.filter(status=Status.get_completed()).count()
-        WebDriverWait(test.driver, 30).until(lambda _: ReductionRun.objects.filter(status=Status.get_completed()).count(
-        ) == num_current_runs + expected_runs)
+
+    def runs_completed(_):
+        current = ReductionRun.objects.filter(~Q(status=Status.get_queued())).count()
+        if current == total_expected:
+            return True
+        return False
+
+    WebDriverWait(test.driver, 30).until(runs_completed, "Timed out while waiting for the runs to finish")
+
+    # num_current_runs = ReductionRun.objects.filter(status=Status.get_completed()).count()
+    # WebDriverWait(test.driver, 30).until(lambda _: ReductionRun.objects.filter(~Q(status=Status.get_completed())).count(
+    # ) == num_current_runs + expected_runs)
 
     return find_run_in_database(test)
 
@@ -82,7 +92,7 @@ def setup_external_services(instrument_name: str, start_year: int,
         queue_client, listener = setup_connection()
     except ConnectionException as err:
         raise RuntimeError("Could not connect to ActiveMQ - check your credentials. If running locally check that "
-                           "ActiveMQ is running and started by `python setup.py start`") from err
+                           "the ActiveMQ Docker container is running") from err
 
     return data_archive, queue_client, listener
 

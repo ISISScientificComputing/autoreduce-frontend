@@ -11,12 +11,14 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 from autoreduce_db.reduction_viewer.models import ReductionRun
 from autoreduce_qp.systemtests.utils.data_archive import DataArchive
+from autoreduce_frontend.autoreduce_webapp.templatetags.encode_b64 import encode_b64
 from autoreduce_frontend.selenium_tests.pages.run_summary_page import RunSummaryPage
 from autoreduce_frontend.selenium_tests.tests.base_tests import BaseTestCase, FooterTestMixin, NavbarTestMixin
 
 
 # pylint:disable=no-member
-class TestRunSummaryPage(BaseTestCase, FooterTestMixin, NavbarTestMixin):
+# class TestRunSummaryPage(BaseTestCase, FooterTestMixin, NavbarTestMixin):
+class TestRunSummaryPage(BaseTestCase):
     """
     Test cases for the InstrumentSummary page when the Rerun form is NOT
     visible.
@@ -30,7 +32,7 @@ class TestRunSummaryPage(BaseTestCase, FooterTestMixin, NavbarTestMixin):
         Set up a DataArchive with scripts and set instrument for all test cases.
         """
         super().setUpClass()
-        cls.instrument_name = "TestInstrument"
+        cls.instrument_name = "TESTINSTRUMENT"
         cls.data_archive = DataArchive([cls.instrument_name], 21, 21)
         cls.data_archive.create()
         cls.data_archive.add_reduce_vars_script(cls.instrument_name,
@@ -98,7 +100,8 @@ class TestRunSummaryPage(BaseTestCase, FooterTestMixin, NavbarTestMixin):
         assert not rerun_form.is_displayed()
         self.page.toggle_button.click()
         assert rerun_form.is_displayed()
-        assert rerun_form.find_element_by_id("var-standard-variable1").get_attribute("value") == "value1"
+        assert rerun_form.find_element_by_id(f"var-standard-{encode_b64('variable1')}").get_attribute(
+            "value") == "value1"
         labels = rerun_form.find_elements_by_tag_name("label")
 
         WebDriverWait(self.driver, 10).until(lambda _: labels[0].text == "Re-run description")

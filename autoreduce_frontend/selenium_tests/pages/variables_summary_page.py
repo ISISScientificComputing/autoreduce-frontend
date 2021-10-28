@@ -31,24 +31,24 @@ class VariableSummaryPage(Page, NavbarMixin, FooterMixin, TourMixin):
         Return the current URL of the page.
         :return: (str) the url path
         """
-        return reverse("instrument:variables_summary", kwargs={
+        return reverse("runs:variables_summary", kwargs={
             "instrument": self.instrument,
         })
 
     @property
-    def current_variables_by_run(self) -> WebElement:
-        """Return the current_variables_by_run panel"""
-        return self.driver.find_element_by_id("current_variables_by_run")
+    def current_arguments_by_run(self) -> WebElement:
+        """Return the current_arguments_by_run panel"""
+        return self.driver.find_element_by_id("current_arguments_by_run")
 
     @property
-    def upcoming_variables_by_run(self) -> WebElement:
-        """Return the upcoming_variables_by_run panel"""
-        return self.driver.find_element_by_id("upcoming_variables_by_run")
+    def upcoming_arguments_by_run(self) -> WebElement:
+        """Return the upcoming_arguments_by_run panel"""
+        return self.driver.find_element_by_id("upcoming_arguments_by_run")
 
     @property
-    def upcoming_variables_by_experiment(self) -> WebElement:
-        """Return the upcoming_variables_by_experiment panel"""
-        return self.driver.find_element_by_id("upcoming_variables_by_experiment")
+    def upcoming_arguments_by_experiment(self) -> WebElement:
+        """Return the upcoming_arguments_by_experiment panel"""
+        return self.driver.find_element_by_id("upcoming_arguments_by_experiment")
 
     def _do_run_button(self, url):
         def run_button_clicked_successfully(button, url, driver):
@@ -76,7 +76,7 @@ class VariableSummaryPage(Page, NavbarMixin, FooterMixin, TourMixin):
         :param end: The end run
         :return: The edit button
         """
-        url = reverse("instrument:variables", kwargs={"instrument": self.instrument, "start": start, "end": end})
+        url = reverse("runs:variables", kwargs={"instrument": self.instrument, "start": start})
         self._do_run_button(url)
 
     def click_run_delete_button_for(self, start: int, end: int):
@@ -86,7 +86,7 @@ class VariableSummaryPage(Page, NavbarMixin, FooterMixin, TourMixin):
         :param end: The end run
         :return: The delete button
         """
-        url = reverse("instrument:delete_variables", kwargs={"instrument": self.instrument, "start": start, "end": end})
+        url = reverse("runs:delete_variables", kwargs={"instrument": self.instrument, "start": start, "end": end})
         self._do_delete_button(url)
 
     def click_experiment_edit_button_for(self, experiment_reference: int):
@@ -95,7 +95,7 @@ class VariableSummaryPage(Page, NavbarMixin, FooterMixin, TourMixin):
         :param experiment_reference: The experiment reference
         :return: The edit button
         """
-        url = reverse("instrument:variables_by_experiment",
+        url = reverse("runs:variables_by_experiment",
                       kwargs={
                           "instrument": self.instrument,
                           "experiment_reference": experiment_reference
@@ -108,17 +108,12 @@ class VariableSummaryPage(Page, NavbarMixin, FooterMixin, TourMixin):
         :param experiment_reference: The experiment refence
         :return: The delete button
         """
-        url = reverse("instrument:delete_variables_by_experiment",
+        url = reverse("runs:delete_variables_by_experiment",
                       kwargs={
                           "instrument": self.instrument,
                           "experiment_reference": experiment_reference
                       })
         self._do_delete_button(url)
-
-    @property
-    def message(self) -> WebElement:
-        """Return the message"""
-        return self.driver.find_element_by_id("message")
 
     @property
     def panels(self) -> List[WebElement]:

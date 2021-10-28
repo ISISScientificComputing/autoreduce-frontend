@@ -6,22 +6,50 @@
             </a>
         </div>
     </div>
-
-    <div class="card-body collapse" id="rerun_form">
-
-
-        <form id="run_variables" method="POST" action="{% url 'run_confirmation' instrument=instrument.name %}">
-        {% csrf_token %}
-        <input type="hidden" name="run_range" value="{{ run_number }}">
-        <input type="hidden" name="run_version" value="{{ run_version }}">
-            <div class="form-group">
-            {% include "snippets/variables/form_warnings.html" %}
-            <div class="card">
-                <div class="card-header">Additional Actions</div>
-                <div class="card-body">
-                    <ul class="js-form-actions">
-                        {% include "snippets/reset_buttons.html" %}
-                    </ul>
+    <div class="panel-body collapse" id="rerun_form">
+        <form id="run_variables" method="POST"
+        {% if not batch_run %}
+        action="{% url 'runs:run_confirmation' instrument=instrument %}"
+        {% else %}
+        action="{% url 'runs:configure_batch_run' instrument=instrument %}"
+        {% endif %}
+        class="form-horizontal">
+            {% csrf_token %}
+            <input type="hidden" name="runs" value="{{ run_number }}">
+            <input type="hidden" name="run_version" value="{{ run_version }}">
+            <div class="row">
+                <div class="col-md-9">
+                    {% include "snippets/variables/form_warnings.html" %}
+                    <div class="form-group">
+                        <label for="run_description" class="control-label col-md-2">
+                            Re-run description
+                            <a href="#" data-toggle="popover"
+                               data-content="This will be appended onto the run number for you and others to identify the reason for re-submitting."
+                               data-trigger="hover click focus" data-placement="top" data-container="body" aria-label="This will be appended onto the run number for you and others to identify the reason for re-submitting.">
+                                <i class="fa fa-info-circle"></i>
+                            </a>
+                        </label>
+                        <div class="col-md-10">
+                            <input type="text" name="run_description" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="js-variables-container">
+                        {% include "snippets/variables/form.html" with standard_variables=standard_variables advanced_variables=advanced_variables variable_help=variable_help instrument=instrument.name only %}
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="well well-sm">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>Additional Actions</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <ul class="js-form-actions">
+                                {% include "snippets/reset_buttons.html" %}
+                            </ul>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="js-action-explaination"></div>
                     </div>

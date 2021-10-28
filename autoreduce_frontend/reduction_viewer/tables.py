@@ -1,7 +1,7 @@
 import django_tables2 as tables
 from django_tables2 import Table
 from autoreduce_db.reduction_viewer.models import ReductionRun, Experiment
-from autoreduce_frontend.autoreduce_webapp.templatetags.colour_table_rows import colour_table_row
+from autoreduce_frontend.autoreduce_webapp.templatetags.colour_table_row import colour_table_row
 
 
 class ReductionRunTable(Table):
@@ -13,10 +13,11 @@ class ReductionRunTable(Table):
             return "text-" + colour_table_row(status.__str__()) + " run-status"
 
     run_number = tables.TemplateColumn(
-        '<a href="{% url \'runs:summary\' record.instrument record.run_number record.run_version %}?page={{current_page}}&per_page={{per_page}}&sort={{sort}}&filter={{ filtering }}">{{record.run_number}}</a>',
+        '{% load generate_run_link %} <a href="{% generate_run_link record.instrument record %}?page={{current_page}}&per_page={{per_page}}&sort={{ sort }}&filter={{ filtering }}">{{record.run_number}}</a>',
         attrs={"td": {
             "class": "run-num-links"
-        }})
+        }},
+        accessor="run_numbers__run_number")
 
     status = tables.Column(attrs={"td": {"class": data_status}})
 

@@ -45,6 +45,12 @@
             "type": "shell",
             "command": "make selenium",
             "problemMatcher": []
+        },
+        {
+            "label": "Run MySQL test db",
+            "type": "shell",
+            "command": "make mysql-test",
+            "problemMatcher": []
         }
     ]
 }

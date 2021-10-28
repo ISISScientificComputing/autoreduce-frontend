@@ -40,5 +40,6 @@ function update_page(item) {
 
 function changePage(page) {
     let filterChoice = document.getElementById("filter_select").value;
-    document.location.href = window.location.origin + window.location.pathname + '?page=' + arguments[0] + '&filter=' + filterChoice;
+    let sortChoice = document.getElementById("sort_select").value
+    document.location.href = window.location.origin + window.location.pathname + '?page=' + arguments[0] + '&filter=' + filterChoice + '&per_page=' + paginationChoice + '&sort=' + sortChoice;
 }

@@ -13,7 +13,7 @@ from django.http import HttpRequest
 from django.shortcuts import redirect
 from django.shortcuts import render
 
-from autoreduce_db.reduction_viewer.models import Notification, Setting
+from autoreduce_db.reduction_viewer.models import Notification
 from autoreduce_db.reduction_viewer.models import ReductionRun, Experiment
 from autoreduce_frontend.autoreduce_webapp.views import render_error
 from autoreduce_frontend.autoreduce_webapp.icat_cache import ICATCache, ICATConnectionException
@@ -144,11 +144,6 @@ def render_with(template):
                 output['current_browser'] = family
                 output['version'] = version
                 output['outdated'] = outdated
-
-            if 'support_email' not in output:
-                support_email = Setting.objects.filter(name='support_email').first()
-                if support_email:
-                    output['support_email'] = support_email.value
 
             return output
 

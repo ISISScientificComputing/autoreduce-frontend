@@ -5,45 +5,31 @@
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
 
+from django.contrib.auth import get_user_model
 from django.urls import reverse
-from autoreduce_db.instrument.models import InstrumentVariable
+from rest_framework.authtoken.models import Token
+from autoreduce_db.reduction_viewer.models import ReductionArguments, ReductionRun
 from autoreduce_frontend.selenium_tests.pages.rerun_jobs_page import RerunJobsPage
 from autoreduce_frontend.selenium_tests.pages.run_summary_page import RunSummaryPage
 from autoreduce_frontend.selenium_tests.pages.runs_list_page import RunsListPage
-from autoreduce_frontend.selenium_tests.tests.base_tests import BaseTestCase
+from autoreduce_frontend.selenium_tests.tests.base_tests import BaseIntegrationTestCase
 from autoreduce_frontend.selenium_tests.utils import submit_and_wait_for_result
-
-from autoreduce_frontend.selenium_tests.utils import setup_external_services
 
 
 # pylint:disable=no-member
-class TestRerunJobsRangePageIntegration(BaseTestCase):
-    fixtures = BaseTestCase.fixtures + ["two_runs"]
-
-    accessibility_test_ignore_rules = {
-        # https://github.com/ISISScientificComputing/autoreduce/issues/1267
-        "duplicate-id-aria": "input",
-    }
+class TestRerunJobsRangePageIntegration(BaseIntegrationTestCase):
+    fixtures = BaseIntegrationTestCase.fixtures + ["two_runs"]
 
     @classmethod
     def setUpClass(cls):
         """Starts all external services"""
         super().setUpClass()
-        cls.instrument_name = "TestInstrument"
-        cls.data_archive, cls.queue_client, cls.listener = setup_external_services(cls.instrument_name, 21, 21)
         cls.data_archive.add_reduction_script(cls.instrument_name,
                                               """def main(input_file, output_dir): print('some text')""")
         cls.data_archive.add_reduce_vars_script(cls.instrument_name,
                                                 """standard_vars={"variable1":"test_variable_value_123"}""")
         cls.rb_number = 1234567
         cls.run_number = [99999, 100000]
-
-    @classmethod
-    def tearDownClass(cls) -> None:
-        """Stops all external services"""
-        cls.queue_client.disconnect()
-        cls.data_archive.delete()
-        super().tearDownClass()
 
     def setUp(self) -> None:
         """Sets up and launches RerunJobsPage before each test case"""
@@ -71,9 +57,9 @@ class TestRerunJobsRangePageIntegration(BaseTestCase):
             assert run_number_v1.is_displayed()
             assert RunSummaryPage(self.driver, self.instrument_name, run,
                                   1).launch().variable1_field_val == variable_value
-            vars_for_run_v1 = InstrumentVariable.objects.filter(start_run=run)
-            for var in vars_for_run_v1:
-                assert var.value == variable_value
+            vars_for_run_v1 = ReductionRun.objects.filter(run_numbers__run_number=run).last().arguments.as_dict()
+            for _, value in vars_for_run_v1["standard_vars"].items():
+                assert value == variable_value
 
     def test_run_range_default_variable_value(self):
         """
@@ -83,7 +69,7 @@ class TestRerunJobsRangePageIntegration(BaseTestCase):
         expected_run = "99999-100000"
         self.page.run_range_field = expected_run
         result = submit_and_wait_for_result(self, expected_runs=2)
-        expected_url = reverse("run_confirmation", kwargs={"instrument": self.instrument_name})
+        expected_url = reverse("runs:run_confirmation", kwargs={"instrument": self.instrument_name})
         assert expected_url in self.driver.current_url
         assert len(result) == 4
 
@@ -98,7 +84,7 @@ class TestRerunJobsRangePageIntegration(BaseTestCase):
         new_value = "some_new_value"
         self.page.variable1_field = new_value
         result = submit_and_wait_for_result(self, expected_runs=2)
-        expected_url = reverse("run_confirmation", kwargs={"instrument": self.instrument_name})
+        expected_url = reverse("runs:run_confirmation", kwargs={"instrument": self.instrument_name})
         assert expected_url in self.driver.current_url
         assert len(result) == 4
 

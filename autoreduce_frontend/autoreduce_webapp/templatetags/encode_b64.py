@@ -7,6 +7,8 @@
 """
 Asserts the variable type of tables
 """
+
+import base64
 from django.template import Library
 
 # pylint:disable=invalid-name
@@ -14,12 +16,11 @@ register = Library()
 
 
 @register.simple_tag
-def variable_type(var_type):
+def encode_b64(value):
     """
-    :return: variable type expected deepening on table element
+    Encodes the name in a urlsafe base64 representaiton.
+    Used to encode variable names with any character without
+    special handling for having whitespaces or special characters.
     """
-    if var_type == 'boolean':
-        return 'checkbox'
-    if var_type in ('list_number', 'list_text'):
-        return 'text'
-    return var_type
+    # pylint:disable=no-member
+    return base64.urlsafe_b64encode(value.encode("utf-8")).decode("utf-8")

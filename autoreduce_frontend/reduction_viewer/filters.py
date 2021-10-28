@@ -13,7 +13,7 @@ class ReductionRunFilter(FilterSet):
     }))
 
     run_description = CharFilter(method='filter_run_description')
-    run_number = CharFilter(method="filter_run_number")
+    run_number = CharFilter(field_name="run_number", method="filter_run_number", label='Run Number')
 
     class Meta:
         model = ReductionRun
@@ -32,20 +32,20 @@ class ReductionRunFilter(FilterSet):
             return queryset
         if "," in value and "-" not in value:
             list_values = value.split(',')
-            query = Q(run_number__in=list_values)
+            query = Q(run_numbers__run_number__in=list_values)
             return queryset.filter(query)
         if "-" in value and "," not in value:
             list_values = value.split('-')
-            query = Q(run_number__range=(list_values[0], list_values[1]))
+            query = Q(run_numbers__run_number__range=(list_values[0], list_values[1]))
             return queryset.filter(query)
         if "-" and "," in value:
             query = Q()
             list_values = value.split(',')
             for pair in list_values:
                 seperated_pair = pair.split('-')
-                query.add(Q(run_number__range=(seperated_pair[0], seperated_pair[1])), Q.OR)
+                query.add(Q(run_numbers__run_number__range=(seperated_pair[0], seperated_pair[1])), Q.OR)
             return queryset.filter(query)
-        query = Q(run_number__exact=value)
+        query = Q(run_numbers__run_number__exact=value)
         return queryset.filter(query)
 
     def filter_run_description(self, queryset, name, value):

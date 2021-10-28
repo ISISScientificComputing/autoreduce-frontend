@@ -1,5 +1,4 @@
-
-{% include "snippets/variables/render.html" with variables=standard_variables type="standard" only %}
+{% include "snippets/variables/render.html" with variables=standard_variables variable_help=variable_help.standard_vars type="standard" only %}
 
 {% if advanced_variables %}
     <div class="card">
@@ -11,8 +10,8 @@
                 </a>
             </div>
         </div>
-        <div class="card-body collapse" id="advanced_variables">
-            {% include "snippets/variables/render.html" with variables=advanced_variables type="advanced" only %}
+        <div class="panel-body collapse" id="advanced_variables">
+            {% include "snippets/variables/render.html" with variables=advanced_variables variable_help=variable_help.advanced_vars type="advanced" only %}
         </div>
     </div>
 {% endif %}
