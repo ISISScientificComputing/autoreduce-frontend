@@ -17,14 +17,14 @@ from autoreduce_frontend.selenium_tests.tests.base_tests import (
 class TestSearchPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
     """Test cases for the search runs page."""
 
-    fixtures = BaseTestCase.fixtures + ["pr_test"]
+    fixtures = BaseTestCase.fixtures + ["run_with_one_variable"]
 
     def setUp(self) -> None:
         """
         Sets up the HelpPage object
         """
         super().setUp()
-        self.instrument_name = "TestInstrument"
+        self.instrument_name = "TESTINSTRUMENT"
         self.page = SearchPage(self.driver, self.instrument_name)
         self.page.launch()
 
@@ -48,7 +48,7 @@ class TestSearchPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
     def test_search_by_instrument(self):
         self.page.launch()
         dropdown = self.page.run_instrument_dropdown
-        dropdown.select_by_visible_text("TestInstrument")
+        dropdown.select_by_visible_text("TESTINSTRUMENT")
         self.page.click_search_button()
         runs = self.page.get_run_numbers_from_table()
         assert len(runs) != 0
@@ -65,7 +65,7 @@ class TestSearchPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
     def test_combining_queries(self):
         self.page.run_number_text_area.send_keys("99999")
         dropdown = self.page.run_instrument_dropdown
-        dropdown.select_by_visible_text("TestInstrument")
+        dropdown.select_by_visible_text("TESTINSTRUMENT")
         min_datefield = self.page.created_min_date
         max_datefield = self.page.created_max_date
         min_datefield.send_keys("01012011")
