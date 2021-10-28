@@ -168,8 +168,8 @@
                                     {% endif %}
                                         <a class="btn btn-primary btn-xs"
                                         id='datapath_toggle'
-                                        href="{% if not run.batch_run %}{% url 'runs:summary' instrument_name=instrument run_number=run_number run_version=run.run_version %}?{% get_run_navigation_queries run_number current_page newest_run oldest_run %}{% else %}
-                                            {% url 'runs:batch_summary' instrument_name=instrument pk=run_number run_version=run.run_version %}?{% get_run_navigation_queries run_number current_page newest_run oldest_run %}{% endif %}&pagination={{ items_per_page }}&sort={{ page_type }}&path_type={{ new_path_type }}"
+                                        href="{% if not run.batch_run %}{% url 'runs:summary' instrument_name=instrument run_number=run_unique_id run_version=run.run_version %}?{% get_run_navigation_queries run_unique_id current_page newest_run oldest_run %}{% else %}
+                                            {% url 'runs:batch_summary' instrument_name=instrument pk=run_unique_id run_version=run.run_version %}?{% get_run_navigation_queries run_unique_id current_page newest_run oldest_run %}{% endif %}&pagination={{ items_per_page }}&sort={{ page_type }}&path_type={{ new_path_type }}"
                                         aria-label="Switch to {{ new_path_type|title }}"><i class="fa fa-{{ new_path_type }}" aria-hidden="true"></i></a>
                                 </div>
                                 <div id="reduction_host"><strong>Host:</strong> {{ run.reduction_host }}</div>
@@ -210,12 +210,12 @@
         <div class="row col-md-12 my-2">
             <div class="text-center">
                 <a href="{% make_summary_url batch_run=batch_run instrument_name=instrument run_number=newest_run run_version=run.run_version %}?{% get_run_navigation_queries newest_run current_page newest_run oldest_run %}&pagination={{ items_per_page }}&sort={{ page_type }}" class="btn btn-primary back" id="newest"
-                    {% if newest_run == run.run_number %}
+                    {% if newest_run == run_unique_id %}
                         disabled
                     {% endif%}>&#124;&#60; Newest
                 </a>
                 <a href="{% make_summary_url batch_run=batch_run instrument_name=instrument run_number=next_run run_version=run.run_version %}?{% get_run_navigation_queries next_run current_page newest_run oldest_run %}&pagination={{ items_per_page }}&sort={{ page_type }}" class="btn btn-primary back" id="next"
-                    {% if newest_run == run.run_number %}
+                    {% if newest_run == run_unique_id %}
                         disabled
                     {% endif%}>&#60;&#60; Next
                 </a>
@@ -223,7 +223,7 @@
                     >Back to {{ run.instrument.name }} runs
                 </a>
                 <a href="{% make_summary_url batch_run=batch_run instrument_name=instrument run_number=previous_run run_version=run.run_version %}?{% get_run_navigation_queries previous_run current_page newest_run oldest_run %}&pagination={{ items_per_page }}&sort={{ page_type }}" class="btn btn-primary back" id="previous"
-                    {% if oldest_run == run.run_number %}
+                    {% if oldest_run == run_unique_id %}
                         disabled
                     {% endif%}>Previous &#62;&#62;
                 </a>

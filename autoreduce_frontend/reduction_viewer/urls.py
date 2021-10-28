@@ -6,8 +6,9 @@
 # ############################################################################### #
 
 from django.urls import path
-from autoreduce_frontend.reduction_viewer.views import (run_queue, run_summary, runs_list, fail_queue, runs, variables,
-                                                        pause, batch_run_submit, configure_new_runs, rerun_jobs)
+from autoreduce_frontend.reduction_viewer.views import (run_queue, run_summary, runs_list, fail_queue, run_confirmation,
+                                                        variables, pause, batch_run_submit, configure_new_runs,
+                                                        rerun_jobs)
 
 app_name = "runs"
 
@@ -37,5 +38,5 @@ urlpatterns = [
          variables.delete_instrument_variables,
          name='delete_variables_by_experiment'),
     path('<str:instrument>/pause/', pause.instrument_pause, name='pause'),
-    path('<str:instrument>/confirmation/', runs.run_confirmation, name='run_confirmation'),
+    path('<str:instrument>/confirmation/', run_confirmation.run_confirmation, name='run_confirmation'),
 ]

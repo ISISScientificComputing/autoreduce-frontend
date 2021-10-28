@@ -61,7 +61,6 @@ def run_summary_run(request, history, instrument_name=None, run_version=0):
     data_location = ""
     if data_location_list:
         data_location = data_location_list[0].file_path
-        print(data_location)
 
     path_type = request.GET.get("path_type", "linux")  # defaults to Linux
     if path_type == "linux":
@@ -74,11 +73,15 @@ def run_summary_run(request, history, instrument_name=None, run_version=0):
     standard_vars, advanced_vars, variable_help = prepare_arguments_for_render(run.arguments, run.instrument.name)
     default_standard_variables, _, __ = get_arguments_from_file(run.instrument.name)
 
-    run_number = run.pk if run.batch_run else run.run_number
+    # picks the unique identifier for a run - for batch runs, it's the pk,
+    # and for normal runs it's just the run number
+    run_unique_id = run.pk if run.batch_run else run.run_number
+    runs = ",".join([str(r.run_number) for r in run.run_numbers.all()])
 
     context_dictionary = {
         'run': run,
-        'run_number': run_number,
+        'runs': runs,
+        'run_unique_id': run_unique_id,
         'run_version': run_version,
         'has_reduce_vars': bool(default_standard_variables),
         'batch_run': run.batch_run,
@@ -96,10 +99,10 @@ def run_summary_run(request, history, instrument_name=None, run_version=0):
         'current_page': int(request.GET.get('page', 1)),
         'items_per_page': int(request.GET.get('pagination', 10)),
         'page_type': request.GET.get('sort', 'run'),
-        'newest_run': int(request.GET.get('newest_run', run_number)),
-        'oldest_run': int(request.GET.get('oldest_run', run_number)),
-        'next_run': int(request.GET.get('next_run', run_number)),
-        'previous_run': int(request.GET.get('previous_run', run_number)),
+        'newest_run': int(request.GET.get('newest_run', run_unique_id)),
+        'oldest_run': int(request.GET.get('oldest_run', run_unique_id)),
+        'next_run': int(request.GET.get('next_run', run_unique_id)),
+        'previous_run': int(request.GET.get('previous_run', run_unique_id)),
         'filtering': request.GET.get('filter', 'run'),
         'new_path_type': 'linux' if path_type == 'windows' else 'windows',
     }
