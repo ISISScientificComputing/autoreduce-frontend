@@ -58,7 +58,7 @@ class TestRunSummaryPage(BaseTestCase):
         assert self.page.run_description_text() == f"Run description: {run.run_description}"
         # because it's started_by: -1, determined in `started_by_id_to_name`
         assert self.page.started_by_text() == "Started by: Development team"
-        assert self.page.status_text() == "Status: Processing"
+        assert self.page.status_text() == "Status: Completed"
         assert self.page.instrument_text() == f"Instrument: {run.instrument.name}"
         assert self.page.rb_number_text() == f"RB Number: {run.experiment.reference_number}"
         assert self.page.last_updated_text() == "Last Updated: 19 Oct 2020, 6:35 p.m."
