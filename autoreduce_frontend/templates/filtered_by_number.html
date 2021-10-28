@@ -1,4 +1,5 @@
 {% load colour_table_row %}
+{% load get_run_navigation_queries %}
 {% load generate_run_link %}
 
 <div class="row" id="by-run-number">
@@ -10,7 +11,7 @@
         {% endif %}
 
     <div class="col-md-5 col-sm-5 col-md-offset-1 col-xs-4">
-        <a href="{% generate_run_link instrument_name run paginator.current_page_index last_instrument_run first_instrument_run %}&pagination={{ paginator.items_per_page }}&sort={{ paginator.page_type }}&filter={{ filtering }}"
+        <a href="{% generate_run_link instrument_name run %}?page={{paginator.current_page_index }}&pagination={{ paginator.items_per_page }}&sort={{ paginator.page_type }}&filter={{ filtering }}"
             {% if forloop.first %}
                 id="top-run-number"
             {% endif %}

@@ -7,6 +7,7 @@ from autoreduce_frontend.reduction_viewer.views.common import get_arguments_from
 from autoreduce_frontend.reduction_viewer.view_utils import (get_interactive_plot_data, linux_to_windows_path,
                                                              make_data_analysis_url, windows_to_linux_path,
                                                              started_by_id_to_name)
+from autoreduce_frontend.autoreduce_webapp.templatetags.get_run_navigation_queries import get_run_navigation_queries
 
 LOGGER = logging.getLogger(__package__)
 
@@ -76,6 +77,9 @@ def run_summary_run(request, history, instrument_name=None, run_version=0):
 
     run_number = run.pk if run.batch_run else run.run_number
 
+    page_type = request.GET.get('sort', 'run')
+    next_run, previous_run, first_run, last_run = get_run_navigation_queries(instrument_name, run, page_type)
+
     context_dictionary = {
         'run': run,
         'run_number': run_number,
@@ -95,11 +99,11 @@ def run_summary_run(request, history, instrument_name=None, run_version=0):
         'data_analysis_link_url': data_analysis_link_url,
         'current_page': int(request.GET.get('page', 1)),
         'items_per_page': int(request.GET.get('pagination', 10)),
-        'page_type': request.GET.get('sort', 'run'),
-        'newest_run': int(request.GET.get('newest_run', run_number)),
-        'oldest_run': int(request.GET.get('oldest_run', run_number)),
-        'next_run': int(request.GET.get('next_run', run_number)),
-        'previous_run': int(request.GET.get('previous_run', run_number)),
+        'page_type': page_type,
+        'newest_run': first_run,
+        'oldest_run': last_run,
+        'next_run': next_run,
+        'previous_run': previous_run,
         'filtering': request.GET.get('filter', 'run'),
         'new_path_type': 'linux' if path_type == 'windows' else 'windows',
     }
