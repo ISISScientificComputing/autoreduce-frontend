@@ -32,9 +32,10 @@ def find_run_in_database(test):
     """
     instrument = db.get_instrument(test.instrument_name)
     if isinstance(test.run_number, list):
-        return instrument.reduction_runs.filter(run_numbers__run_number__in=test.run_number, batch_run=True).distinct()
+        return instrument.reduction_runs.filter(run_numbers__run_number__in=test.run_number,
+                                                batch_run=test.batch_run_test).distinct()
     else:
-        return instrument.reduction_runs.filter(run_numbers__run_number=test.run_number, batch_run=False)
+        return instrument.reduction_runs.filter(run_numbers__run_number=test.run_number)
 
 
 def submit_and_wait_for_result(test, expected_runs=1, after_submit_url: Optional[str] = None):

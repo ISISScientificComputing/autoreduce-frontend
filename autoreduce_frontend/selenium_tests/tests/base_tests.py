@@ -72,6 +72,7 @@ class BaseIntegrationTestCase(BaseTestCase):
         """
         super().setUpClass()
         cls.instrument_name = "TESTINSTRUMENT"
+        cls.batch_run_test = False
 
         cls.data_archive, cls.queue_client, cls.listener = setup_external_services(cls.instrument_name, 21, 21)
 
