@@ -4,7 +4,6 @@ import json
 from typing import Tuple
 from autoreduce_db.reduction_viewer.models import ReductionArguments
 from autoreduce_qp.queue_processor.variable_utils import VariableUtils
-from django.http.request import QueryDict
 
 # Holds the default value used when there is no value for the variable
 # in the default variables dictionary. Stored in a parameter for re-use in tests.
