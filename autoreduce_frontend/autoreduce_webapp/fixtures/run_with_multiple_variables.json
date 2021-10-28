@@ -20,7 +20,7 @@
         "model": "reduction_viewer.reductionrun",
         "pk": 1,
         "fields": {
-            "status_id": 2,
+            "status_id": 5,
             "run_version": 0,
             "run_description": "This is the test run_description",
             "run_title": "Test title",

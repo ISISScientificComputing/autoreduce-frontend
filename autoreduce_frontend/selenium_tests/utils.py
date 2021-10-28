@@ -75,11 +75,7 @@ def submit_and_wait_for_result(test, expected_runs=1, after_submit_url: Optional
             return True
         return False
 
-    WebDriverWait(test.driver, 30).until(runs_completed, "Timed out while waiting for the runs to finish")
-
-    # num_current_runs = ReductionRun.objects.filter(status=Status.get_completed()).count()
-    # WebDriverWait(test.driver, 30).until(lambda _: ReductionRun.objects.filter(~Q(status=Status.get_completed())).count(
-    # ) == num_current_runs + expected_runs)
+    WebDriverWait(test.driver, 60).until(runs_completed, "Timed out while waiting for the runs to finish")
 
     return find_run_in_database(test)
 
