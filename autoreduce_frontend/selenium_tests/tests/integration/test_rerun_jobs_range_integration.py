@@ -5,10 +5,8 @@
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
 
-from django.contrib.auth import get_user_model
 from django.urls import reverse
-from rest_framework.authtoken.models import Token
-from autoreduce_db.reduction_viewer.models import ReductionArguments, ReductionRun
+from autoreduce_db.reduction_viewer.models import ReductionRun
 from autoreduce_frontend.selenium_tests.pages.rerun_jobs_page import RerunJobsPage
 from autoreduce_frontend.selenium_tests.pages.run_summary_page import RunSummaryPage
 from autoreduce_frontend.selenium_tests.pages.runs_list_page import RunsListPage
