@@ -14,7 +14,7 @@
     {% endif %}
 
     {% if not run %}
-        <div class="text-center col-lg-6 offset-md-3 card card-body p-3 mb-2 bg-light text-dark">Reduction run not found or error encountered: {{ message }}.</div>
+        <div class="text-center col-md-6 col-md-offset-3 card-body">Reduction run not found or error encountered: {{ message }}.</div>
     {% else %}
         <title>Reduction Job #{{ run.title }}</title>
         <div class="row">
@@ -30,20 +30,20 @@
         </div>
         {% if plot_error_message %}
             <div class="row">
-                <div class="col-lg-8 offset-md-2">
-                    <p class="card text-white bg-warning text-center">{{ plot_error_message }}</p>
+                <div class="col-md-8 col-md-offset-2">
+                    <p class="card text-center">{{ plot_error_message }}</p>
                 </div>
             </div>
         {% else %}
             {% if static_plots %}
                 <div class="row plot-container">
-                    {% for plot_file in static_plots %}
-                        {% if static_plots|length == 1 %}
-                            <img class="mx-auto" src="{{ plot_file }}" alt="Plot image stored at {{ plot_file }}">
-                        {% else %}
-                            <img class="col-lg-6" src="{{ plot_file }}" alt="Plot image stored at {{ plot_file }}">
-                        {% endif %} 
-                    {% endfor %}
+                {% for plot_file in static_plots %}
+                    {% if static_plots|length == 1 %}
+                        <img class="center-block" src="{{ plot_file }}" alt="Plot image stored at {{ plot_file }}">
+                    {% else %}
+                        <img class="col-md-6" src="{{ plot_file }}" alt="Plot image stored at {{ plot_file }}">
+                    {% endif %}
+                {% endfor %}
                 </div>
             {% endif %}
             {% if interactive_plots %}
@@ -75,7 +75,7 @@
         {% endif %}
 
         <div class="row" id="reduction_job_panel">
-
+            <div class="col-md-8 col-md-offset-2">
                 <div class="card card-2-column">
                     <div class="card-body">
                         <div class="row">
@@ -163,14 +163,13 @@
                                         {% for location in run.data_location.all %}
                                             {{ data_location }}
                                         {% endfor %}
-                                        <a class="btn btn-primary btn-xs"
-                                        id='datapath_toggle'
-                                        href="{% generate_run_link instrument run %}?page={{current_page}}&per_page={{ per_page }}&sort={{ page_type }}&filter={{ filtering }}&path_type={{ new_path_type }}"
-                                        aria-label="Switch to {{ new_path_type|title }}"><i class="fa fa-{{ new_path_type }}" aria-hidden="true"></i></a>
                                     {% else %}
                                         <em>No data found</em>
                                     {% endif %}
-
+                                        <a class="btn btn-primary btn-xs"
+                                        id='datapath_toggle'
+                                        href="{% generate_run_link instrument run %}?page={{current_page}}&per_page={{ per_page }}&sort={{ page_type }}&filter={{ filtering }}&path_type={{ new_path_type }}"
+                                        aria-label="Switch to {{ new_path_type|title }}"><i class="fab fa-{{ new_path_type }}" aria-hidden="true"></i></a>
                                 </div>
                                 <div id="reduction_host"><strong>Host:</strong> {{ run.reduction_host }}</div>
                             </div>
@@ -179,7 +178,7 @@
                                     <strong>Reduced:</strong>
                                     {% if reduction_location %}
                                         <a href="{{ data_analysis_link_url }}" target="_blank">{{ reduction_location }}
-                                            <i class="fas fa-external-link-alt"></i>
+                                            <i class="fas fa-external-link-alt" aria-hidden="true"></i>
                                         </a><br/>
                                     {% elif run.reduction_location.all %}
                                         {% for location in run.reduction_location.all %}
@@ -199,11 +198,10 @@
                         </div>
                     </div>
                 </div>
+            </div>
         </div>
 
-        <br>
-
-                <div class="d-flex justify-content-center">
+        <div class="row col-md-12 my-2">
             <div class="text-center">
                 <a href="{% generate_run_link instrument newest_run %}?page={{current_page}}&per_page={{ per_page }}&sort={{ page_type }}&filter={{ filtering }}" class="btn btn-primary back {% if newest_run_number == run_unique_id %} disabled {% endif %}" id="newest">&#124;&#60; Newest
                 </a>
@@ -217,16 +215,11 @@
             </div>
         </div>
 
-        <br>
-
         <div id="re-run_and_graphs">
             {% autoescape on %}
                 {% include "snippets/run_variables.html" with run_number=run_number run_version=run_version has_reduce_vars=has_reduce_vars batch_run=batch_run standard_variables=standard_variables advanced_variables=advanced_variables variable_help=variable_help instrument=instrument %}
             {% endautoescape %}
         </div>
-
-        <br>
-        
 
 
         {% include 'snippets/run_summary/history.html' with history=history started_by=started_by %}
