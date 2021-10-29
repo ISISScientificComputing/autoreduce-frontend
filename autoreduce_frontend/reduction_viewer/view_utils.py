@@ -153,7 +153,7 @@ def get_navigation_runs(instrument_name: str, run: ReductionRun, page_type: str)
         next_run = runs.filter(run_numbers__run_number__gt=run.run_number).last()
         previous_run = runs.filter(run_numbers__run_number__lt=run.run_number).first()
     else:
-        next_run = runs.filter(pk__gt=run.pk).first()
+        next_run = runs.filter(pk__gt=run.pk).last()
         previous_run = runs.filter(pk__lt=run.pk).first()
 
     if next_run is None:

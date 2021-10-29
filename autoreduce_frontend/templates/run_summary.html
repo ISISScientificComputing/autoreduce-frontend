@@ -209,12 +209,12 @@
         </div>
         <div class="row col-md-12 my-2">
             <div class="text-center">
-                <a href="{% generate_run_link instrument_name=instrument run=newest_run %}?page={{current_page}}&pagination={{ items_per_page }}&sort={{ page_type }}" class="btn btn-primary back" id="newest"
+                <a href="{% generate_run_link instrument_name=instrument run=newest_run %}?page={{current_page}}&pagination={{ items_per_page }}&sort={{ page_type }}&filter={{ filtering }}" class="btn btn-primary back" id="newest"
                     {% if newest_run == run %}
                         disabled
                     {% endif%}>&#124;&#60; Newest
                 </a>
-                <a href="{% generate_run_link instrument_name=instrument run=next_run %}?page={{current_page}}&pagination={{ items_per_page }}&sort={{ page_type }}" class="btn btn-primary back" id="next"
+                <a href="{% generate_run_link instrument_name=instrument run=next_run %}?page={{current_page}}&pagination={{ items_per_page }}&sort={{ page_type }}&filter={{ filtering }}" class="btn btn-primary back" id="next"
                     {% if next_run == run %}
                         disabled
                     {% endif%}>&#60;&#60; Next
@@ -222,7 +222,7 @@
                 <a href="{% url 'runs:list' run.instrument.name %}?page={{ current_page }}&pagination={{ items_per_page }}&sort={{ page_type }}&filter={{ filtering }}" class="btn btn-primary back" id="cancel"
                     >Back to {{ run.instrument.name }} runs
                 </a>
-                <a href="{% generate_run_link instrument_name=instrument run=previous_run %}?page={{current_page}}&pagination={{ items_per_page }}&sort={{ page_type }}" class="btn btn-primary back" id="previous"
+                <a href="{% generate_run_link instrument_name=instrument run=previous_run %}?page={{current_page}}&pagination={{ items_per_page }}&sort={{ page_type }}&filter={{ filtering }}" class="btn btn-primary back" id="previous"
                     {% if previous_run == run %}
                         disabled
                     {% endif%}>Previous &#62;&#62;
