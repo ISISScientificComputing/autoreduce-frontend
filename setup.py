@@ -26,7 +26,7 @@ setup(
     author="ISIS Autoreduction Team",
     url="https://github.com/ISISScientificComputing/autoreduce-frontend/",
     install_requires=[
-        "autoreduce_qp==22.0.0.dev9", "Django==3.2.6", "django_extensions==3.1.3", "django-user-agents==0.4.0",
+        "autoreduce_qp==22.0.0.dev17", "Django==3.2.6", "django_extensions==3.1.3", "django-user-agents==0.4.0",
         "djangorestframework==3.12.4"
     ],
     packages=find_packages(),
