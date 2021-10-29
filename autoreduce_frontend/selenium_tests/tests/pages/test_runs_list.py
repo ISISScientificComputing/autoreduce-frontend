@@ -77,13 +77,15 @@ class TestRunsListQueries(BaseTestCase, AccessibilityTestMixin, FooterTestMixin,
         assert query in self.page.get_top_run().get_attribute('href')
 
         # Check query after clicking the top run
-        top_run_num = int(self.page.get_top_run().text)
+        runs = self.page.get_run_numbers_from_table()
+        top_run_num = runs[0]
         run_summary_page = self.page.click_run(top_run_num)
         assert query in run_summary_page.driver.current_url
         assert query in run_summary_page.cancel_button.get_attribute('href')
 
         # Check query after returning to runs list
         runs_list_page = run_summary_page.click_cancel_btn()
+        runs = runs_list_page.get_run_numbers_from_table()
         assert query in runs_list_page.get_top_run().get_attribute('href')
         assert query in runs_list_page.driver.current_url
 
@@ -101,21 +103,7 @@ class TestRunsListQueries(BaseTestCase, AccessibilityTestMixin, FooterTestMixin,
         for pagination in (10, 25, 50, 100, 250, 500):
             self.page.launch()
             self.page.update_filter("pagination_select", str(pagination))
-            self.page.click_apply_filters()
             self._test_page_query(f"per_page={pagination}")
-
-    def test_sort_by_filter(self):
-        """Test that changing the sort by filter also updates the URL query."""
-        for sort in ("number", "date"):
-            self.page.launch()
-            self.page.update_filter("sort_select", sort.title())
-            self.page.click_apply_filters()
-
-            # Sorting by number is referred to as 'run' for the URL query
-            if sort == "number":
-                sort = "-run_number"
-
-            self._test_page_query(f"sort={sort}")
 
     def test_run_navigation_btns(self):
         """

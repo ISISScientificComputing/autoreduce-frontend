@@ -5,6 +5,7 @@ from autoreduce_db.reduction_viewer.models import Experiment, Instrument, Reduct
 from autoreduce_qp.queue_processor.variable_utils import VariableUtils
 from autoreduce_frontend.autoreduce_webapp.view_utils import check_permissions, login_and_uows_valid, render_with
 from autoreduce_frontend.reduction_viewer.tables import ExperimentTable, ReductionRunTable
+from autoreduce_frontend.reduction_viewer.forms import RunsListOptionsForm
 
 from django_tables2 import RequestConfig
 
@@ -40,6 +41,11 @@ def runs_list(request, instrument=None):
         run_table = ReductionRunTable(runs)
         RequestConfig(request, paginate={"per_page": 10}).configure(run_table)
 
+        options_form = RunsListOptionsForm(initial={
+            'per_page': request.GET.get('per_page', 10),
+            'filter': request.GET.get('filter', "run")
+        })
+
         if len(runs) == 0:
             return {'message': "No runs found for instrument."}
 
@@ -68,6 +74,7 @@ def runs_list(request, instrument=None):
             'run_table': run_table,
             'per_page': request.GET.get('per_page', 10),
             'current_page': request.GET.get('page', 1),
+            'options_form': options_form
         }
 
         if filter_by == 'experiment':

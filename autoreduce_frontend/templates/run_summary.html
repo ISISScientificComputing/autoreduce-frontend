@@ -203,15 +203,7 @@
 
         <br>
 
-        <div id="re-run_and_graphs">
-            {% autoescape on %}
-                {% include "snippets/run_variables.html" with run_number=run_number run_version=run_version has_reduce_vars=has_reduce_vars batch_run=batch_run standard_variables=standard_variables advanced_variables=advanced_variables variable_help=variable_help instrument=instrument %}
-            {% endautoescape %}
-        </div>
-
-        <br>
-        
-        <div class="d-flex justify-content-center">
+                <div class="d-flex justify-content-center">
             <div class="text-center">
                 <a href="{% generate_run_link instrument newest_run %}?page={{current_page}}&per_page={{ per_page }}&sort={{ page_type }}&filter={{ filtering }}" class="btn btn-primary back {% if newest_run_number == run_unique_id %} disabled {% endif %}" id="newest">&#124;&#60; Newest
                 </a>
@@ -224,6 +216,18 @@
                 </a>
             </div>
         </div>
+
+        <br>
+
+        <div id="re-run_and_graphs">
+            {% autoescape on %}
+                {% include "snippets/run_variables.html" with run_number=run_number run_version=run_version has_reduce_vars=has_reduce_vars batch_run=batch_run standard_variables=standard_variables advanced_variables=advanced_variables variable_help=variable_help instrument=instrument %}
+            {% endautoescape %}
+        </div>
+
+        <br>
+        
+
 
         {% include 'snippets/run_summary/history.html' with history=history started_by=started_by %}
         {% include 'snippets/run_summary/reduction_log.html' with run=run %}

@@ -1,4 +1,4 @@
-(function(){
+(function () {
 
     const runAction = function runAction() {
 
@@ -26,22 +26,20 @@
     };
 
 
-    const toggleAllRuns = function toggleAllRuns()
-    {
+    const toggleAllRuns = function toggleAllRuns() {
         $(".runCheckbox").prop("checked", $('#selectAllRuns').is(":checked"));
     }
-    
-    const init = function init()
-    {
+
+    const init = function init() {
         $('#runActionButton').on('click', runAction);
         $('#selectAllRuns').on('click', toggleAllRuns);
     };
 
     init();
-    
+
 }())
 
 function changePage(page) {
     let paginationChoice = document.getElementById("pagination_select").value;
-    document.location.href = window.location.origin + window.location.pathname + '?page=' + arguments[0] + '&pagination=' + paginationChoice;
+    document.location.href = window.location.origin + window.location.pathname + '?page=' + arguments[0] + '&per_page=' + paginationChoice;
 }

@@ -22,7 +22,7 @@ def experiment_summary(request, reference_number=None):
         page = request.GET.get('page', 1)
         if page == '':
             page = 1
-        max_items_per_page = request.GET.get('pagination', 10)
+        max_items_per_page = request.GET.get('per_page', 10)
         custom_paginator = CustomPaginator(page_type='run',
                                            query_set=runs,
                                            items_per_page=max_items_per_page,

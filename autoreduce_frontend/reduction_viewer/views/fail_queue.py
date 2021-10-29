@@ -22,7 +22,7 @@ def fail_queue(request):
     if len(failed_jobs) == 0:
         return {'queue': []}
 
-    max_items_per_page = request.GET.get('pagination', 10)
+    max_items_per_page = request.GET.get('per_page', 10)
     custom_paginator = CustomPaginator(page_type='run',
                                        query_set=failed_jobs,
                                        items_per_page=max_items_per_page,
