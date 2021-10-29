@@ -5,6 +5,7 @@
 {% load replace %}
 {% load naturaltime from humanize %}
 {% load static %}
+{% load generate_run_link %}
 
 {% block body %}
     <!-- Only pull in plotly if there are interactive plots -->
@@ -163,9 +164,9 @@
                                             {{ data_location }}
                                         {% endfor %}
                                         {% if path_type == "Windows" or "\\" in data_location%}
-                                            <a class="btn btn-primary btn-xs" aria-label="Switch to Linux" id='datapath_toggle' href="{% make_summary_url batch_run=batch_run instrument_name=instrument run_number=previous_run run_version=run.run_version %}?page={{current_page}}&pagination={{ items_per_page }}&sort={{ page_type }}&path_type={{"linux"}}"><i class="fa fa-linux" aria-hidden="true"></i></a>
+                                            <a class="btn btn-primary btn-xs" aria-label="Switch to Linux" id='datapath_toggle' href="{% generate_run_link instrument_name=instrument run=run %}?page={{current_page}}&pagination={{ items_per_page }}&sort={{ page_type }}&path_type={{"linux"}}"><i class="fa fa-linux" aria-hidden="true"></i></a>
                                         {% else %}
-                                            <a class="btn btn-primary btn-xs" aria-label="Switch to Windows" id='datapath_toggle' href="{% make_summary_url batch_run=batch_run instrument_name=instrument run_number=previous_run run_version=run.run_version %}?page={{current_page}}&pagination={{ items_per_page }}&sort={{ page_type }}&path_type={{"windows"}}"><i class="fa fa-windows" aria-hidden="true"></i></a>
+                                            <a class="btn btn-primary btn-xs" aria-label="Switch to Windows" id='datapath_toggle' href="{% generate_run_link instrument_name=instrument run=run %}?page={{current_page}}&pagination={{ items_per_page }}&sort={{ page_type }}&path_type={{"windows"}}"><i class="fa fa-windows" aria-hidden="true"></i></a>
                                         {% endif %}<br/>
                                     {% else %}
                                         <em>No data found</em>
@@ -203,26 +204,26 @@
 
         <div id="re-run_and_graphs">
             {% autoescape on %}
-                {% include "snippets/run_variables.html" with run_number=run_number run_version=run_version has_reduce_vars=has_reduce_vars batch_run=batch_run standard_variables=standard_variables advanced_variables=advanced_variables variable_help=variable_help instrument=instrument %}
+                {% include "snippets/run_variables.html" with run_number=run_number run_version=run_version has_reduce_vars=has_reduce_vars run=run standard_variables=standard_variables advanced_variables=advanced_variables variable_help=variable_help instrument=instrument %}
             {% endautoescape %}
         </div>
         <div class="row col-md-12 my-2">
             <div class="text-center">
-                <a href="{% make_summary_url batch_run=batch_run instrument_name=instrument run_number=newest_run run_version=run.run_version %}?page={{current_page}}&pagination={{ items_per_page }}&sort={{ page_type }}" class="btn btn-primary back" id="newest"
-                    {% if newest_run == run_unique_id %}
+                <a href="{% generate_run_link instrument_name=instrument run=newest_run %}?page={{current_page}}&pagination={{ items_per_page }}&sort={{ page_type }}" class="btn btn-primary back" id="newest"
+                    {% if newest_run == run %}
                         disabled
                     {% endif%}>&#124;&#60; Newest
                 </a>
-                <a href="{% make_summary_url batch_run=batch_run instrument_name=instrument run_number=next_run run_version=run.run_version %}?page={{current_page}}&pagination={{ items_per_page }}&sort={{ page_type }}" class="btn btn-primary back" id="next"
-                    {% if newest_run == run_unique_id %}
+                <a href="{% generate_run_link instrument_name=instrument run=next_run %}?page={{current_page}}&pagination={{ items_per_page }}&sort={{ page_type }}" class="btn btn-primary back" id="next"
+                    {% if next_run == run %}
                         disabled
                     {% endif%}>&#60;&#60; Next
                 </a>
                 <a href="{% url 'runs:list' run.instrument.name %}?page={{ current_page }}&pagination={{ items_per_page }}&sort={{ page_type }}&filter={{ filtering }}" class="btn btn-primary back" id="cancel"
                     >Back to {{ run.instrument.name }} runs
                 </a>
-                <a href="{% make_summary_url batch_run=batch_run instrument_name=instrument run_number=previous_run run_version=run.run_version %}?page={{current_page}}&pagination={{ items_per_page }}&sort={{ page_type }}" class="btn btn-primary back" id="previous"
-                    {% if oldest_run == run_unique_id %}
+                <a href="{% generate_run_link instrument_name=instrument run=previous_run %}?page={{current_page}}&pagination={{ items_per_page }}&sort={{ page_type }}" class="btn btn-primary back" id="previous"
+                    {% if previous_run == run %}
                         disabled
                     {% endif%}>Previous &#62;&#62;
                 </a>

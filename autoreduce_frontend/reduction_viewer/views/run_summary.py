@@ -104,10 +104,10 @@ def run_summary_run(request, history, instrument_name=None, run_version=0):
         'page_type': request.GET.get('sort', 'run'),
         'filtering': request.GET.get('filter', 'run'),
         'path_type': path_type,
-        'newest_run': newest_run.run_number if newest_run.batch_run is False else newest_run.pk,
-        'oldest_run': oldest_run.run_number if oldest_run.batch_run is False else oldest_run.pk,
-        'next_run': next_run.run_number if next_run.batch_run is False else next_run.pk,
-        'previous_run': previous_run.run_number if previous_run.batch_run is False else previous_run.pk,
+        'newest_run': newest_run,
+        'oldest_run': oldest_run,
+        'next_run': next_run,
+        'previous_run': previous_run,
     }
 
     if reduction_location:
