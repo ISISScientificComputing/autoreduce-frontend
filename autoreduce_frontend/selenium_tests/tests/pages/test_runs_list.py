@@ -113,7 +113,7 @@ class TestRunsListQueries(BaseTestCase, AccessibilityTestMixin, FooterTestMixin,
 
             # Sorting by number is referred to as 'run' for the URL query
             if sort == "number":
-                sort = "run"
+                sort = "-run_number"
 
             self._test_page_query(f"sort={sort}")
 

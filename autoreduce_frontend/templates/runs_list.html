@@ -8,18 +8,18 @@
 
 {% block body %}
     {% if message %}
-        <div class="text-center col-md-6 col-md-offset-3 well well-small" id="notactive">{{ message }}</div>
+        <div class="text-center card" id="notactive">{{ message }}</div>
     {% else %}
         <!-- Instrument Name -->
         <div class="row">
-            <div class="col-md-12 text-center">
+            <div class="col-lg-12 text-center">
                 <h2>{{ instrument_name }}</h2>
             </div>
         </div>
         <!-- Instrument status and control buttons -->
         <div class="row" id="btn-instrument_active">
             <!-- Status panel -->
-            <div class="col-md-6">
+            <div class="col-6">
                 {% include "snippets/instrument_status.html" with processing=processing queued=queued last_instrument_run=last_instrument_run only %}
             </div>
             <!-- Pause / Resume Reduction button-->
@@ -27,12 +27,12 @@
             <div>
                 {% if instrument.is_paused %}
                     <a class="btn btn-danger btn-block" id="pause">
-                        <i class="fa fa-play"></i>
+                        <i class="fas fa-play"></i>
                         &nbsp;&nbsp;Resume Autoreduction on {{ instrument_name }}
                     </a>
                 {% else %}
                     <a class="btn btn-success btn-block" id="pause">
-                        <i class="fa fa-pause"></i>
+                        <i class="fas fa-pause"></i>
                         &nbsp;&nbsp;Pause Autoreduction on {{ instrument_name }}
                     </a>
                 {% endif %}
@@ -48,7 +48,7 @@
                         {% if not has_variables %}
                             disabled
                         {% endif %}>
-                        <i class="fa fa-arrow-left"></i>
+                        <i class="fas fa-arrow-left"></i>
                         &nbsp;&nbsp;Re-run past jobs
                     </a>
                 </p>
@@ -59,7 +59,7 @@
                         {% if not has_variables %}
                             disabled
                         {% endif %}>
-                        <i class="fa fa-plus"></i>
+                        <i class="fas fa-plus"></i>
                         &nbsp;&nbsp;Configure New Runs
                     </a>
                 </p>
@@ -70,10 +70,9 @@
                         {% if not has_variables %}
                             disabled
                         {% endif %}>
-                        <i class="fa fa-eye"></i>
+                        <i class="far fa-eye"></i>
                         &nbsp;&nbsp;See Instrument variables
                     </a>
-                </p>
             </div>
             <div id="btn-batch_job">
                 <p>
@@ -97,10 +96,10 @@
         <br/>
         <hr/>
         <!-- Display table for reduction jobs -->
-        <div class="row" id="filter-options">
-            <!-- Filter, Sort, and Pagination options -->
-            <form action="{{ request.path }}" method="get" id="filter_options">
-                <div class="col-md-3">
+        <div id="filter-options">
+        <form action="{{ request.path }}" method="get" id="filter_options">
+  <div class="form-row align-items-center">
+    <div class="col-auto">
                     <label for="filter_select">Filter by</label>
                     <select class="form-control" name="filter" form="filter_options" id="filter_select">
                         <option value="run" title="Display run numbers"
@@ -121,12 +120,12 @@
                             >Batch runs
                         </option>
                     </select>
-                </div>
-                <div class="col-md-3">
+    </div>
+    <div class="col-auto">
                     <label for="sort_select">Sort by</label>
                     <select class="form-control" name="sort" form="filter_options" id="sort_select">
-                        <option value="run"
-                            {% if sort == 'run' %}
+                        <option value="-run_number"
+                            {% if sort == '-run_number' %}
                                 selected="selected"
                             {% endif %}
                             >Number

@@ -72,12 +72,19 @@ class SearchPage(Page, NavbarMixin, FooterMixin):
         experiments_tab = self.driver.find_element_by_class_name("experiments-tab")
         experiments_tab.click()
 
-    def alert_message_text(self) -> str:
+    def alert_runs_message_text(self) -> str:
         """
         Return the text of the alert message element with the id
-        'alert_message'.
+        'run_message'.
         """
-        return self.driver.find_element_by_id("message").text.strip()
+        return self.driver.find_element_by_id("run_message").text.strip()
+
+    def alert_experiments_message_text(self) -> str:
+        """
+        Return the text of the alert message element with the id
+        'experiment_message'.
+        """
+        return self.driver.find_element_by_id("experiment_message").text.strip()
 
     def get_run_numbers_from_table(self) -> List[str]:
         """

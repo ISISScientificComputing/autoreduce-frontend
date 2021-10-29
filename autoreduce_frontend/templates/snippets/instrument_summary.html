@@ -3,11 +3,11 @@
         <h3 class="text-center">Arguments by run number</h3>
         <div class="row" id="current_arguments_by_run">
             <div class="col-md-12">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <div class="panel-title">Current Arguments</div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Current Arguments</div>
                     </div>
-                    <div class="panel-body">
+                    <div class="card-body">
                             {% if current_arguments.arguments %}
                                 {% include "snippets/arguments.html" with arguments=current_arguments instrument=instrument csrf_token=csrf_token upcoming=False only %}
                             {% else %}
@@ -20,11 +20,11 @@
         <div class="row" id="upcoming_arguments_by_run">
             <div class="col-md-12">
         {% if upcoming_arguments_by_run %}
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <div class="panel-title">Upcoming Arguments</div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Upcoming Arguments</div>
                         </div>
-                        <div class="panel-body zebra-rows">
+                        <div class="card-body zebra-rows">
                             {% for upcoming_args in upcoming_arguments_by_run %}
                                 {% include "snippets/arguments.html" with arguments=upcoming_args instrument=instrument csrf_token=csrf_token upcoming=True only %}
                             {% endfor %}
@@ -41,11 +41,11 @@
         <div class="row" id="upcoming_arguments_by_experiment">
         {% if upcoming_arguments_by_experiment %}
                 <div class="col-md-12">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <div class="panel-title">Upcoming Arguments</div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Upcoming Arguments</div>
                         </div>
-                        <div class="panel-body zebra-rows">
+                        <div class="card-body zebra-rows">
                             {% for upcoming_args in upcoming_arguments_by_experiment %}
                                 {% include "snippets/arguments.html" with arguments=upcoming_args instrument=instrument csrf_token=csrf_token only %}
                             {% endfor %}

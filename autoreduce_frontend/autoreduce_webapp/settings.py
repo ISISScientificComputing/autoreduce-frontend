@@ -83,8 +83,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CRISPY_TEMPLATE_PACK = 'bootstrap3'
-DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap.html"
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap4.html"
 
 if DEBUG and DEBUG_TOOLBAR_AVAILABLE:
     MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')

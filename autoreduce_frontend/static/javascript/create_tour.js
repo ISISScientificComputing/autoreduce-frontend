@@ -4,7 +4,8 @@
             steps: steps,
             storage: false,      // avoids storing process between visits
             backdrop: true,
-            backdropPadding: 2
+            backdropPadding: 2,
+            framework: 'bootstrap4',
         });
         tour.end();             // avoids bug where tour recognised as in progress on re-visit
 

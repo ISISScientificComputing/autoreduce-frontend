@@ -28,13 +28,13 @@ class TestSearchPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
         self.page = SearchPage(self.driver, self.instrument_name)
         self.page.launch()
 
-    def test_alert_message_when_no_results(self):
+    def test_alert_message_when_no_run_results(self):
         """
         Test that the correct message is shown when there are no results for the search
         """
         self.page.launch()
         expected = "Sorry, no runs found for this criteria."
-        assert self.page.alert_message_text() == expected
+        assert self.page.alert_runs_message_text() == expected
 
     def test_search_by_run_number(self):
         self.page.launch()

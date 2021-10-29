@@ -4,7 +4,7 @@
 
 {% block body %}
     {% if not instrument %}
-        <div class="text-center col-md-6 col-md-offset-3 well well-small">
+        <div class="text-center col-md-6 col-md-offset-3 card card-body">
             {{ message }}
         </div>
     {% else %}
@@ -42,7 +42,7 @@
                                     <a href="#" data-toggle="popover"
                                        data-content="A list of run number to re-run, the list can include ranges e.g. 1, 4-6. All the run numbers must be in the same experiment in order to apply the desired variables."
                                        data-trigger="hover click focus" data-placement="top" data-container="body" aria-label="A list of run number to re-run, the list can include ranges e.g. 1, 4-6. All the run numbers must be in the same experiment in order to apply the desired variables.">
-                                        <i class="fa fa-info-circle"></i>
+                                        <i class="fas fa-info-circle"></i>
                                     </a>
                                 </label>
                                 <div class="col-md-5">
@@ -51,7 +51,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="only_re_runs" class="control-label col-md-10">Only submit
+                                        <label for="only_re_runs" class="col-form-label col-md-10">Only submit
                                             re-runs</label>
                                         <div class="col-md-2">
                                             <input type="checkbox" id="only_re_runs" name="only_re_runs" checked
@@ -62,12 +62,12 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="submit_run_description" class="control-label col-md-3">
+                            <label for="submit_run_description" class="col-form-label col-md-3">
                                 Re-run description
                                 <a href="#" data-toggle="popover"
                                    data-content="This will be appended onto the run number for you and others to identify the reason for re-submitting."
                                    data-trigger="hover click focus" data-placement="top" data-container="body" aria-label="This will be appended onto the run number for you and others to identify the reason for re-submitting."><i
-                                        class="fa fa-info-circle"></i></a>
+                                        class="fas fa-info-circle"></i></a>
                             </label>
                             <div class="col-md-9">
                                 <input type="text" id="submit_run_description" name="run_description" class="form-control"/>
@@ -78,7 +78,7 @@
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="well well-sm">
+                        <div class="card card-body">
                             <div class="row">
                                 <div class="col-md-12"><h4>Additional Actions</h4></div>
                             </div>
@@ -150,7 +150,7 @@
             </div>
 
         {% else %}
-            <div class="text-center col-md-6 col-md-offset-3 well well-small">
+            <div class="text-center col-md-6 col-md-offset-3 card card-body">
                 Instrument is not active - it has no runs.
             </div>
         {% endif %}

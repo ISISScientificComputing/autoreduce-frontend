@@ -78,6 +78,16 @@ class RunSummaryPage(Page, RerunFormMixin, NavbarMixin, FooterMixin, TourMixin):
         return self.driver.find_element_by_id("warning_message")
 
     @property
+    def next_run_button(self) -> WebElement:
+        """Return the button for returning the next run."""
+        return self.driver.find_element_by_id("next")
+
+    @property
+    def previous_run_button(self) -> WebElement:
+        """Return the button for returning the previous run."""
+        return self.driver.find_element_by_id("previous")
+
+    @property
     def toggle_data_path_button(self) -> WebElement:
         """Return the toggle button for toggling the form on the page."""
         return self.driver.find_element_by_id("datapath_toggle")

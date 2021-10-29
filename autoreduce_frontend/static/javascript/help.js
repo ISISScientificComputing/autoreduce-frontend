@@ -46,10 +46,10 @@
     // Generate a link for each topic heading and add the link also to the sidebar
     function generateSideNavLinks() {
         const sidenav = $('#sidenav-contents');
-        $('.main-content section .panel-heading h3').each(function () {
+        $('.main-content section .card-header h3').each(function () {
             let id = headingTextToDashed($(this).text());
-            let link = `<a href="#${id}">${$(this).text()}</a>`;
-            sidenav.append('<li>' + link + '</li>');
+            let link = `<a class="nav-link" href="#${id}">${$(this).text()}</a>`;
+            sidenav.append('<li class="nav-item">' + link + '</li>');
             $(this).html(link);
             $(this).attr("id", id);
         });
@@ -68,8 +68,8 @@
             const topicElement = $(topicElementSelector);
             topics.push({
                 "selector": topicElementSelector,
-                "title": topicElement.find('.panel-heading').text(),
-                "body": topicElement.find('.panel-body').text(),
+                "title": topicElement.find('.card-header').text(),
+                "body": topicElement.find('.card-body').text(),
                 "category": topicElement.data("category")
             });
         });
@@ -114,7 +114,7 @@
 
         // Scroll to anchor link after window loaded
         // 1 millisecond delay due to known chrome issue https://support.google.com/chrome/thread/11993079?hl=en
-        $(window).load(function () {
+        $(window).on('load', function () {
             let hash = $(location).attr('hash');
             if (hash) {
                 setTimeout(function () {

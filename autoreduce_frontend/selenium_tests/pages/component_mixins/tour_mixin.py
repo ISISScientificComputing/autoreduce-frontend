@@ -72,11 +72,11 @@ class TourMixin:
         Checks if the previous step button is currently enabled
         :return: (bool) True if button is enabled, False otherwise
         """
-        return self.driver.find_element_by_xpath(self.PREV_BUTTON_XPATH).is_enabled()
+        return "disabled" not in self.driver.find_element_by_xpath(self.PREV_BUTTON_XPATH).get_attribute("class")
 
     def is_tour_next_button_enabled(self):
         """
         Checks if the next step button is currently enabled
         :return: (bool) True if button is enabled, False otherwise
         """
-        return self.driver.find_element_by_xpath(self.NEXT_BUTTON_XPATH).is_enabled()
+        return "disabled" not in self.driver.find_element_by_xpath(self.NEXT_BUTTON_XPATH).get_attribute("class")

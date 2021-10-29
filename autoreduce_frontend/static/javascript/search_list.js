@@ -3,7 +3,7 @@ function update_page(item) {
     document.location.href = document.location.href + "&per_page=" + per_page;
 }
 
-$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+$('a[data-toggle="pill"]').on('shown.bs.tab', function (e) {
     console.log("tab shown...");
     localStorage.setItem('activeTab', $(e.target).attr('href'));
 });
@@ -11,5 +11,5 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 // read hash from page load and change tab
 var activeTab = localStorage.getItem('activeTab');
 if (activeTab) {
-    $('.nav-tabs a[href="' + activeTab + '"]').tab('show');
+    $('.nav-pills a[href="' + activeTab + '"]').tab('show');
 }
