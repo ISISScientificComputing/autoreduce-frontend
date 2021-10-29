@@ -4,9 +4,9 @@ from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions,
 
 from autoreduce_frontend.plotting.plot_handler import PlotHandler
 from autoreduce_frontend.reduction_viewer.views.common import get_arguments_from_file, prepare_arguments_for_render
-from autoreduce_frontend.reduction_viewer.view_utils import (get_interactive_plot_data, linux_to_windows_path,
-                                                             make_data_analysis_url, windows_to_linux_path,
-                                                             started_by_id_to_name)
+from autoreduce_frontend.reduction_viewer.view_utils import (get_interactive_plot_data, get_navigation_runs,
+                                                             linux_to_windows_path, make_data_analysis_url,
+                                                             windows_to_linux_path, started_by_id_to_name)
 
 LOGGER = logging.getLogger(__package__)
 
@@ -78,6 +78,9 @@ def run_summary_run(request, history, instrument_name=None, run_version=0):
     run_unique_id = run.pk if run.batch_run else run.run_number
     runs = ",".join([str(r.run_number) for r in run.run_numbers.all()])
 
+    page_type = request.GET.get('sort', 'run')
+    next_run, previous_run, newest_run, oldest_run = get_navigation_runs(instrument_name, run, page_type)
+
     context_dictionary = {
         'run': run,
         'runs': runs,
@@ -97,14 +100,18 @@ def run_summary_run(request, history, instrument_name=None, run_version=0):
         'started_by': started_by,
         'data_analysis_link_url': data_analysis_link_url,
         'current_page': int(request.GET.get('page', 1)),
-        'items_per_page': int(request.GET.get('per_page', 10)),
+        'per_page': int(request.GET.get('per_page', 10)),
         'page_type': request.GET.get('sort', 'run'),
-        'newest_run': int(request.GET.get('newest_run', run_unique_id)),
-        'oldest_run': int(request.GET.get('oldest_run', run_unique_id)),
-        'next_run': int(request.GET.get('next_run', run_unique_id)),
-        'previous_run': int(request.GET.get('previous_run', run_unique_id)),
         'filtering': request.GET.get('filter', 'run'),
         'new_path_type': 'linux' if path_type == 'windows' else 'windows',
+        'newest_run': newest_run if newest_run.batch_run is False else newest_run,
+        'oldest_run': oldest_run if oldest_run.batch_run is False else oldest_run,
+        'next_run': next_run if next_run.batch_run is False else next_run,
+        'previous_run': previous_run if previous_run.batch_run is False else previous_run,
+        'newest_run_number': newest_run.run_number if newest_run.batch_run is False else newest_run.pk,
+        'oldest_run_number': oldest_run.run_number if oldest_run.batch_run is False else oldest_run.pk,
+        'next_run_number': next_run.run_number if next_run.batch_run is False else next_run.pk,
+        'previous_run_number': previous_run.run_number if previous_run.batch_run is False else previous_run.pk,
     }
 
     if reduction_location:
