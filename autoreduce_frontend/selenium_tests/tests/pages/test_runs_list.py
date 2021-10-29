@@ -127,10 +127,9 @@ class TestRunsListQueries(BaseTestCase, AccessibilityTestMixin, FooterTestMixin,
             runs = self.page.get_run_numbers_from_table()
             fifth_run = runs[4]
             run_summary_page = self.page.click_run(fifth_run)
-            assert self.page.driver.title == "Reduction job #100005 - ISIS Auto-reduction"
+            assert run_summary_page.title_text() == "Reduction Job #100005"
+            time.sleep(3)
             run_summary_page.click_btn_by_id(nav)
-
-            run_summary_page.driver.refresh()
             time.sleep(3)
             if nav == "next":
                 assert run_summary_page.title_text() == "Reduction Job #100006"

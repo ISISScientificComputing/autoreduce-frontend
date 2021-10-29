@@ -13,7 +13,7 @@ class ReductionRunTable(Table):
             return "text-" + colour_table_row(status.__str__()) + " run-status"
 
     run_number = tables.TemplateColumn(
-        '{% load generate_run_link %} <a href="{% generate_run_link record.instrument record %}?per_page={{ per_page }}&sort={{ sort }}&filter={{ filtering }}">{{record.run_number}}</a>',
+        '{% load generate_run_link %} <a href="{% generate_run_link record.instrument record %}?page={{ current_page }}&per_page={{ per_page }}&sort={{ sort }}&filter={{ filtering }}">{{record.run_number}}</a>',
         attrs={"td": {
             "class": "run-num-links"
         }},
@@ -52,7 +52,7 @@ class ReductionRunSearchTable(Table):
             return "text-" + colour_table_row(status.__str__()) + " run-status"
 
     run_number = tables.TemplateColumn(
-        '{% load generate_run_link %} <a href="{% generate_run_link record.instrument record %}?per_page={{ per_page }}&sort={{ sort }}&filter={{ filtering }}">{{record.run_number}}</a>',
+        '{% load generate_run_link %} <a href="{% generate_run_link record.instrument record %}?page={{ current_page }}&per_page={{ per_page }}&sort={{ sort }}&filter={{ filtering }}">{{record.run_number}}</a>',
         attrs={"td": {
             "class": "run-num-links"
         }},

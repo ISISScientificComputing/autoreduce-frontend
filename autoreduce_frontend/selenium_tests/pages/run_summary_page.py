@@ -162,4 +162,4 @@ class RunSummaryPage(Page, RerunFormMixin, NavbarMixin, FooterMixin, TourMixin):
 
     def is_disabled(self, element_id):
         """Return True if the element with the given id is disabled, otherwise, False."""
-        return self.driver.find_element_by_id(element_id).get_attribute("disabled") == "true"
+        return "disabled" in self.driver.find_element_by_id(element_id).get_attribute("class")
