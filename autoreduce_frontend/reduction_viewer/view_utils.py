@@ -146,7 +146,7 @@ def get_navigation_runs(instrument_name: str, run: ReductionRun, page_type: str)
         page_type: The type of page that is being viewed.
     """
 
-    if page_type == "run":
+    if page_type == "run" or "-run_number" or "run_number":
         order = '-pk'
     elif page_type == "date":
         order = '-last_updated'
