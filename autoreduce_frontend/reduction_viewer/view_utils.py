@@ -136,24 +136,31 @@ def make_return_url(request, next_url):
         return UOWS_LOGIN_URL + request.build_absolute_uri()
 
 
-def get_run_navigation_queries(instrument_name: str, run: ReductionRun, page_type: str) -> Tuple[ReductionRun]:
-    """Return a tuple of run navigation queries."""
+def get_navigation_runs(instrument_name: str, run: ReductionRun, page_type: str) -> Tuple[ReductionRun]:
+    """
+    Return a tuple of runs that will be used for navigation in the view.
+
+    Args:
+        instrument_name: The name of the instrument.
+        run: The run that is currently being viewed.
+        page_type: The type of page that is being viewed.
+    """
     if page_type == "run":
-        order = '-run_number'
+        order = '-run_numbers__run_number'
     elif page_type == "date":
         order = '-last_updated'
 
-    instrument_obj = ReductionRun.objects.only('run_number').filter(instrument__name=instrument_name).order_by(order)
+    runs = ReductionRun.objects.filter(instrument__name=instrument_name, batch_run=run.batch_run).order_by(order)
 
-    next_run = prev_in_order(run, qs=instrument_obj)
+    next_run = prev_in_order(run, qs=runs)
     if next_run is None:
         next_run = run
 
-    previous_run = next_in_order(run, qs=instrument_obj)
+    previous_run = next_in_order(run, qs=runs)
     if previous_run is None:
         previous_run = run
 
-    newest_run = instrument_obj.first()
-    oldest_run = instrument_obj.last()
+    newest_run = runs.first()
+    oldest_run = runs.last()
 
     return next_run, previous_run, newest_run, oldest_run
