@@ -14,26 +14,20 @@ from autoreduce_frontend.selenium_tests.tests.base_tests import (BaseTestCase, F
                                                                  AccessibilityTestMixin)
 
 
-class TestConfigureNewRunsPage(NavbarTestMixin, BaseTestCase, FooterTestMixin, AccessibilityTestMixin):
+class TestConfigureNewRunsPage(BaseTestCase, NavbarTestMixin, FooterTestMixin, AccessibilityTestMixin):
     fixtures = BaseTestCase.fixtures + ["two_runs"]
-
-    accessibility_test_ignore_rules = {
-        # https://github.com/ISISScientificComputing/autoreduce/issues/1267
-        "duplicate-id-aria": "input",
-    }
 
     @classmethod
     def setUpClass(cls):
         """Sets up the data archive to be shared across test cases"""
         super().setUpClass()
-        cls.instrument_name = "TestInstrument"
+        cls.instrument_name = "TESTINSTRUMENT"
         cls.data_archive = DataArchive([cls.instrument_name], 21, 21)
         cls.data_archive.create()
         cls.data_archive.add_reduction_script(cls.instrument_name,
                                               """def main(input_file, output_dir): print('some text')""")
         cls.data_archive.add_reduce_vars_script(cls.instrument_name,
                                                 """standard_vars={"variable1":"test_variable_value_123"}""")
-        cls.instrument_name = "TestInstrument"
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -68,7 +62,7 @@ class TestConfigureNewRunsPage(NavbarTestMixin, BaseTestCase, FooterTestMixin, A
     def test_go_to_other_goes_to_experiment(self):
         """Test: clicking the link to configure by experiment goes to configure by experiment"""
         self.page.go_to_other.click()
-        url = reverse("instrument:variables_by_experiment",
+        url = reverse("runs:variables_by_experiment",
                       kwargs={
                           "instrument": self.instrument_name,
                           "experiment_reference": 1234567
@@ -81,25 +75,24 @@ class TestConfigureNewRunsPage(NavbarTestMixin, BaseTestCase, FooterTestMixin, A
         self.page.launch()
 
         self.page.go_to_other.click()
-        url = reverse("instrument:variables", kwargs={"instrument": self.instrument_name, "start": 100001})
+        url = reverse("runs:variables", kwargs={"instrument": self.instrument_name, "start": 100001})
         assert url in self.driver.current_url
 
 
-class TestConfigureNewRunsPageSkippedOnly(NavbarTestMixin, BaseTestCase, FooterTestMixin):
+class TestConfigureNewRunsPageSkippedOnly(BaseTestCase, NavbarTestMixin, FooterTestMixin):
     fixtures = BaseTestCase.fixtures + ["skipped_run"]
 
     @classmethod
     def setUpClass(cls):
         """Makes test data archive and sets instrument for all test cases"""
         super().setUpClass()
-        cls.instrument_name = "TestInstrument"
+        cls.instrument_name = "TESTINSTRUMENT"
         cls.data_archive = DataArchive([cls.instrument_name], 21, 21)
         cls.data_archive.create()
         cls.data_archive.add_reduction_script(cls.instrument_name,
                                               """def main(input_file, output_dir): print('some text')""")
         cls.data_archive.add_reduce_vars_script(cls.instrument_name,
                                                 """standard_vars={"variable1":"test_variable_value_123"}""")
-        cls.instrument_name = "TestInstrument"
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -119,9 +112,11 @@ class TestConfigureNewRunsPageSkippedOnly(NavbarTestMixin, BaseTestCase, FooterT
 
         self.page.submit_button.click()
         summary = VariableSummaryPage(self.driver, self.instrument_name)
-        assert summary.current_variables_by_run.is_displayed()
-        assert summary.current_variables_by_run.text == "Current Variables\nNo current variables found"
-        assert "Runs\n100000\nOngoing" in summary.upcoming_variables_by_run.text
+        assert summary.current_arguments_by_run.is_displayed()
+        assert summary.current_arguments_by_run.text == 'Current Arguments\nRuns\n99999\n99999\n'\
+                                                        'standard_vars\nvariable1: value1\nadvanced_vars'
+
+        assert "Runs\n100000\nOngoing" in summary.upcoming_arguments_by_run.text
 
     def test_configure_skipped_only_exp_vars(self):
         """Test that configuring new runs works even with only skipped runs present"""
@@ -131,7 +126,8 @@ class TestConfigureNewRunsPageSkippedOnly(NavbarTestMixin, BaseTestCase, FooterT
 
         self.page.submit_button.click()
         summary = VariableSummaryPage(self.driver, self.instrument_name)
-        assert summary.current_variables_by_run.is_displayed()
-        assert summary.current_variables_by_run.text == "Current Variables\nNo current variables found"
-        assert summary.upcoming_variables_by_experiment.is_displayed()
-        assert "Experiment\n#1234567" in summary.upcoming_variables_by_experiment.text
+        assert summary.current_arguments_by_run.is_displayed()
+        assert summary.current_arguments_by_run.text == 'Current Arguments\nRuns\n99999\nOngoing\n'\
+                                                        'standard_vars\nvariable1: value1\nadvanced_vars'
+        assert summary.upcoming_arguments_by_experiment.is_displayed()
+        assert "Experiment\n#1234567" in summary.upcoming_arguments_by_experiment.text

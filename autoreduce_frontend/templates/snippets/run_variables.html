@@ -7,9 +7,15 @@
         </div>
     </div>
     <div class="panel-body collapse" id="rerun_form">
-        <form id="run_variables" method="POST" action="{% url 'run_confirmation' instrument=instrument.name %}" class="form-horizontal">
+        <form id="run_variables" method="POST"
+        {% if not batch_run %}
+        action="{% url 'runs:run_confirmation' instrument=instrument %}"
+        {% else %}
+        action="{% url 'runs:configure_batch_run' instrument=instrument %}"
+        {% endif %}
+        class="form-horizontal">
             {% csrf_token %}
-            <input type="hidden" name="run_range" value="{{ run_number }}">
+            <input type="hidden" name="runs" value="{{ runs }}">
             <input type="hidden" name="run_version" value="{{ run_version }}">
             <div class="row">
                 <div class="col-md-9">
@@ -28,7 +34,7 @@
                         </div>
                     </div>
                     <div class="js-variables-container">
-                        {% include "snippets/variables/form.html" with standard_variables=standard_variables advanced_variables=advanced_variables instrument=instrument.name only %}
+                        {% include "snippets/variables/form.html" with standard_variables=standard_variables advanced_variables=advanced_variables variable_help=variable_help instrument=instrument.name only %}
                     </div>
                 </div>
                 <div class="col-md-3">

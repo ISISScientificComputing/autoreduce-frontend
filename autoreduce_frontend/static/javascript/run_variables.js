@@ -158,25 +158,25 @@ function reset_to_default_all(event) {
             }
         };
         var validateBatchRunRange = function validateBatchRunRange() {
-            const run_range = document.getElementById('run_range');
-            if (!run_range) {
+            const runs = document.getElementById('runs');
+            if (!runs) {
                 return
             }
 
             // Check all comma and '-' seperated elements
-            const comma_split_items = run_range.value.split(',');
+            const comma_split_items = runs.value.split(',');
             let still_valid = true
             for (let i = 0; (i < comma_split_items.length) && still_valid; i++) {
                 var all_split_items = comma_split_items[i].split('-');
 
                 for (let i = 0; i < all_split_items.length; i++) {
                     if (!isNumber(all_split_items[i])) {
-                        addInvalid($(run_range), '<strong>Run Numbers</strong> must be a comma separated list of either numbers or ranges.');
+                        addInvalid($(runs), '<strong>Run Numbers</strong> must be a comma separated list of either numbers or ranges.');
                         still_valid = false
                         break;
                     }
                     if (i > 0 && parseInt(all_split_items[i]) < parseInt(all_split_items[i - 1])) {
-                        addInvalid($(run_range), '<strong>Run Range</strong> must end in a later run.');
+                        addInvalid($(runs), '<strong>Run Range</strong> must end in a later run.');
                         still_valid = false
                         break;
                     }

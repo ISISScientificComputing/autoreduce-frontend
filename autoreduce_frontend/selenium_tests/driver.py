@@ -37,5 +37,5 @@ def get_chrome_driver() -> Union[webdriver.Chrome, webdriver.Remote]:
     else:
         driver = webdriver.Chrome(options=options)
     driver.implicitly_wait(10)
-    driver.set_page_load_timeout(30)
+    driver.set_page_load_timeout(300)
     return driver

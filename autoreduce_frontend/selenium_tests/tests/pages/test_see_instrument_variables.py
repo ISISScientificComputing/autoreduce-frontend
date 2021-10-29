@@ -16,33 +16,6 @@ from autoreduce_frontend.selenium_tests.tests.base_tests import (BaseTestCase, F
                                                                  AccessibilityTestMixin)
 
 
-class TestSeeInstrumentVariablesPageWithMissingFiles(BaseTestCase, NavbarTestMixin, FooterTestMixin,
-                                                     AccessibilityTestMixin):
-    """
-    Test the SeeInstrumentVariablesPage without creating the test archive files first.
-    This tests error cases, e.g. when reduce_vars is missing.
-    """
-
-    fixtures = BaseTestCase.fixtures + ["one_run_mixed_vars"]
-
-    def setUp(self) -> None:
-        """
-        Sets up the VariableSummaryPage before each test
-        """
-        super().setUp()
-        self.instrument_name = "TestInstrument"
-        self.page = VariableSummaryPage(self.driver, self.instrument_name)
-        self.page.launch()
-
-    def test_edit_no_reduce_vars_shows_error(self):
-        """Tests: Error is shown when no reduce_vars.py exists and edit variables is clicked."""
-        self.page.click_run_edit_button_for(100100, 100150)
-        message = self.page.message
-        assert message.is_displayed()
-        assert "No such file or directory" in message.text
-        assert "user/scripts/autoreduction/reduce_vars.py" in message.text
-
-
 class TestSeeInstrumentVariablesPage(BaseTestCase):
     fixtures = BaseTestCase.fixtures + ["one_run_mixed_vars"]
 
@@ -50,7 +23,7 @@ class TestSeeInstrumentVariablesPage(BaseTestCase):
     def setUpClass(cls):
         """Sets up the data archive with a reduce and reduce_vars script to be shared between test cases"""
         super().setUpClass()
-        cls.instrument_name = "TestInstrument"
+        cls.instrument_name = "TESTINSTRUMENT"
         cls.data_archive = DataArchive([cls.instrument_name], 21, 21)
         cls.data_archive.create()
         cls.data_archive.add_reduction_script(cls.instrument_name, """print('some text')""")
@@ -88,7 +61,6 @@ class TestSeeInstrumentVariablesPage(BaseTestCase):
         assert new_runs_page.variable1_field_val == value_to_modify
         new_runs_page.variable1_field = "some new value"
         new_runs_page.submit_button.click()
-        new_runs_page.replace_confirm.click()
 
         upcoming_panel = self.page.panels[1]
         # make sure the value we are modifying is no longer visible
@@ -98,8 +70,11 @@ class TestSeeInstrumentVariablesPage(BaseTestCase):
         for expected in expected_strings:
             assert expected in upcoming_panel.get_attribute("textContent")
 
-    @parameterized.expand([(100100, 100150, "value2", 100150), (100151, 100199, "value3", 100099),
-                           (100200, 0, "value4", 100099)])
+    @parameterized.expand([
+        (100100, 100150, "value2", 100150),
+        (100151, 100199, "value3", 100099),
+        (100200, 0, "value4", 100099),
+    ])
     def test_delete_variable_for_run(self, start: int, end: int, value_to_delete: str, end_run_for_current_vars: int):
         """Tests that variables can be deleted from upcoming runs"""
         upcoming_panel = self.page.panels[1]

@@ -8,46 +8,8 @@
 # pylint: disable=unused-argument,bare-except,no-member
 from django.http import HttpRequest
 from django.shortcuts import render
-from django.template import RequestContext
 
-from autoreduce_db.reduction_viewer.models import Setting
-
-
-def get_admin_email():
-    """Check the settings for a valid admin email."""
-    try:
-        admin_email = Setting.objects.get(name='admin_email')
-        return admin_email.value
-    except:
-        return ''
-
-
-def handler400(request, exception):
-    """Error 400 handler."""
-    response = render(None, '400.html', {'admin_email': get_admin_email()}, RequestContext(request))
-    response.status_code = 400
-    return response
-
-
-def handler404(request, exception):
-    """Error 404 handler."""
-    response = render('404.html', {'admin_email': get_admin_email()}, RequestContext(request))
-    response.status_code = 404
-    return response
-
-
-def handler403(request, exception):
-    """Error 403 handler."""
-    response = render('403.html', {'admin_email': get_admin_email()}, RequestContext(request))
-    response.status_code = 403
-    return response
-
-
-def handler500(request):
-    """Error 500 handler."""
-    response = render(RequestContext(request), '500.html', {'admin_email': get_admin_email()})
-    response.status_code = 500
-    return response
+from autoreduce_frontend.autoreduce_webapp.settings import EMAIL_ERROR_RECIPIENTS
 
 
 def render_error(request: HttpRequest, message: str):
@@ -62,4 +24,4 @@ def render_error(request: HttpRequest, message: str):
     Return:
         The error page.
     """
-    return render(request, 'error.html', {'message': message, 'admin_email': get_admin_email()}, status=500)
+    return render(request, 'error.html', {'message': message, 'admin_email': EMAIL_ERROR_RECIPIENTS[0]}, status=500)

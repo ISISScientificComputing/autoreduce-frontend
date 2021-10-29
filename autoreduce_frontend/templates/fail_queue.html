@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block title %}Failed jobs{% endblock %}
-{% load colour_table_rows %}
+{% load colour_table_row %}
 {% load naturaltime from humanize %}
 {% load static %}
 
@@ -22,7 +22,6 @@
                 <label for="runAction" hidden>Select action to apply to selected runs</label>
                 <select class="form-control" id="runAction">
                     <option value="default">Select action to apply to selected runs</option>
-                    <option value="rerun">Re-run</option>
                     <option value="hide">Hide</option>
                 </select>
                 <form id="actionForm" method="POST" action="{% url 'runs:failed' %}"
@@ -55,18 +54,22 @@
                             <tr class="{% colour_table_row job.status.value_verbose %}">
                         {% endif %}
                         <td>
-                            <label for="selectRun{{ job.run_number }}-{{ job.run_version }}" hidden>
+                            <label for="selectRun{{ job.pk }}-{{ job.run_version }}" hidden>
                                 Select run
                             </label>
                             <input type='checkbox'
-                                   id="selectRun{{ job.run_number }}-{{ job.run_version }}"
+                                   id="selectRun{{ job.pk }}-{{ job.run_version }}"
                                    class='runCheckbox'
-                                   data-run_number='{{ job.run_number }}'
+                                   data-run_number='{{ job.pk }}'
                                    data-run_version='{{ job.run_version }}'
                                    data-rb_number='{{ job.experiment.reference_number }}'>
                         </td>
                         <td>
+                            {% if not job.batch_run %}
                             <a class="failed-run-link" href="{% url 'runs:summary' instrument_name=job.instrument.name run_number=job.run_number run_version=job.run_version %}">
+                            {% else %}
+                            <a class="failed-run-link" href="{% url 'runs:batch_summary' instrument_name=job.instrument.name pk=job.pk run_version=job.run_version %}">
+                            {% endif %}
                                 {{ job.title }}</a>
                         </td>
                         <td>{{ job.instrument.name }}</td>

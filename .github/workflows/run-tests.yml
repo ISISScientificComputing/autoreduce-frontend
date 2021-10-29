@@ -16,13 +16,6 @@ jobs:
         with:
           python-version: 3.7
 
-      - uses: actions/cache@v2
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
       - uses: ISISScientificComputing/autoreduce-actions/build@master
         with:
           package_name: autoreduce_frontend
@@ -35,7 +28,7 @@ jobs:
 
       - name: Run tests
         run: |
-          SELENIUM_REMOTE=1 pytest autoreduce_frontend --cov-report=xml --cov=autoreduce_frontend --ignore=autoreduce_frontend/selenium_tests/tests/integration
+          SELENIUM_REMOTE=1 RUNNING_VIA_PYTEST=true pytest autoreduce_frontend --cov-report=xml --cov=autoreduce_frontend --ignore=autoreduce_frontend/selenium_tests/tests/integration -v
 
       - uses: codecov/codecov-action@v1
         with:
@@ -67,16 +60,18 @@ jobs:
         with:
           python-version: 3.7
 
-      - uses: actions/cache@v2
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
       - uses: ISISScientificComputing/autoreduce-actions/build@master
         with:
           package_name: autoreduce_frontend
+
+      - name: Run MySQL Docker
+        run: docker run --rm --name mysql-ar -e MYSQL_ROOT_PASSWORD=password -d --network=host mysql:latest
+
+      - name: Wait until MySQL is ready
+        run: until nc -w 1 127.0.0.1 3306; do sleep 1; done
+
+      - name: Start Autoreduce REST API
+        run: gunicorn autoreduce_rest_api.autoreduce_django.wsgi:application -b 127.0.0.1:8001 -e TESTING_MYSQL_DB=true &
 
       - name: Start Selenium docker daemon
         run: docker run --name selenium --rm -d --network=host -v /dev/shm:/dev/shm selenium/standalone-chrome:4.0.0-beta-3-prerelease-20210422
@@ -86,7 +81,7 @@ jobs:
 
       - name: Run tests
         run: |
-          SELENIUM_REMOTE=1 pytest autoreduce_frontend/selenium_tests/tests/integration --cov-report=xml --cov=autoreduce_frontend
+          SELENIUM_REMOTE=1 RUNNING_VIA_PYTEST=true TESTING_MYSQL_DB=true pytest autoreduce_frontend/selenium_tests/tests/integration --cov-report=xml --cov=autoreduce_frontend -v
 
       - uses: codecov/codecov-action@v1
         with:

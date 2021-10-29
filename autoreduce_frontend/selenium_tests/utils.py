@@ -4,10 +4,12 @@
 # Copyright &copy; 2021 ISIS Rutherford Appleton Laboratory UKRI
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
-from typing import Tuple
+from typing import Optional, Tuple
 from autoreduce_db.reduction_viewer.models import ReductionRun, Status
 
 from django.urls.base import reverse
+from django.db.models import Q
+
 from selenium.common.exceptions import ElementClickInterceptedException
 from selenium.webdriver.support.wait import WebDriverWait
 
@@ -30,23 +32,29 @@ def find_run_in_database(test):
     """
     instrument = db.get_instrument(test.instrument_name)
     if isinstance(test.run_number, list):
-        args = {"run_number__in": test.run_number}
-
+        return instrument.reduction_runs.filter(run_numbers__run_number__in=test.run_number,
+                                                batch_run=test.batch_run_test).distinct()
     else:
-        args = {"run_number": test.run_number}
-    return instrument.reduction_runs.filter(**args)
+        return instrument.reduction_runs.filter(run_numbers__run_number=test.run_number)
 
 
-def submit_and_wait_for_result(test, expected_runs=1):
+def submit_and_wait_for_result(test, expected_runs=1, after_submit_url: Optional[str] = None):
     """
     Submit after a reset button has been clicked. Then waits until the queue listener has finished processing.
 
     Sticks the submission in a loop in case the first time doesn't work. The reason
     it may not work is that resetting actually swaps out the whole form using JS, which
     replaces ALL the elements and triggers a bunch of DOM re-renders/updates, and that isn't fast.
+
+    Args:
+        expected_runs: The number of additional runs that should be in the database after the submission
+        after_submit_url: The url to go to after the submission. If None, the default url is used.
     """
     test.listener._processing = True  # pylint:disable=protected-access
-    expected_url = reverse("run_confirmation", kwargs={"instrument": test.instrument_name})
+    if not after_submit_url:
+        expected_url = reverse("runs:run_confirmation", kwargs={"instrument": test.instrument_name})
+    else:
+        expected_url = after_submit_url
 
     def submit_successful(driver) -> bool:
         try:
@@ -56,13 +64,19 @@ def submit_and_wait_for_result(test, expected_runs=1):
         # the submit is successful if the URL has changed
         return expected_url in driver.current_url
 
+    total_expected = ReductionRun.objects.count() + expected_runs
     WebDriverWait(test.driver, 30).until(submit_successful)
-    if expected_runs == 1:
-        WebDriverWait(test.driver, 30).until(lambda _: not test.listener.is_processing_message())
-    else:
-        num_current_runs = ReductionRun.objects.filter(status=Status.get_completed()).count()
-        WebDriverWait(test.driver, 30).until(lambda _: ReductionRun.objects.filter(status=Status.get_completed()).count(
-        ) == num_current_runs + expected_runs)
+
+    def runs_completed(_):
+        # If your count is innacurate - check that the status of the runs
+        # in the fixtures is not set to be "queued" by accident. Any other status will work.
+        current = ReductionRun.objects.filter(~Q(status=Status.get_queued())
+                                              & ~Q(status=Status.get_processing())).count()
+        if current == total_expected:
+            return True
+        return False
+
+    WebDriverWait(test.driver, 60).until(runs_completed, "Timed out while waiting for the runs to finish")
 
     return find_run_in_database(test)
 
@@ -82,7 +96,7 @@ def setup_external_services(instrument_name: str, start_year: int,
         queue_client, listener = setup_connection()
     except ConnectionException as err:
         raise RuntimeError("Could not connect to ActiveMQ - check your credentials. If running locally check that "
-                           "ActiveMQ is running and started by `python setup.py start`") from err
+                           "the ActiveMQ Docker container is running") from err
 
     return data_archive, queue_client, listener
 

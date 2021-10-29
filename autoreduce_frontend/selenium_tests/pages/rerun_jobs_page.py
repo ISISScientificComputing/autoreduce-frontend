@@ -29,7 +29,7 @@ class RerunJobsPage(Page, RerunFormMixin, NavbarMixin, FooterMixin, TourMixin):
         Return the current URL of the page.
         :return: (str) the url path
         """
-        return reverse("instrument:submit_runs", kwargs={
+        return reverse("runs:rerun_jobs", kwargs={
             "instrument": self.instrument,
         })
 
@@ -48,7 +48,7 @@ class RerunJobsPage(Page, RerunFormMixin, NavbarMixin, FooterMixin, TourMixin):
         """
         Finds and returns the back button for toggling the form on the page.
         """
-        return self.driver.find_element_by_id("run_range")
+        return self.driver.find_element_by_id("runs")
 
     @run_range_field.setter
     def run_range_field(self, value) -> None:

@@ -7,40 +7,24 @@
 
 from django.urls import reverse
 from autoreduce_frontend.selenium_tests.pages.rerun_jobs_page import RerunJobsPage
-from autoreduce_frontend.selenium_tests.tests.base_tests import BaseTestCase
+from autoreduce_frontend.selenium_tests.tests.base_tests import BaseIntegrationTestCase
 from autoreduce_frontend.selenium_tests.utils import submit_and_wait_for_result
 
-from autoreduce_frontend.selenium_tests.utils import setup_external_services
 
-
-class TestRerunJobsPageIntegration(BaseTestCase):
-    fixtures = BaseTestCase.fixtures + ["run_with_one_variable"]
-
-    accessibility_test_ignore_rules = {
-        # https://github.com/ISISScientificComputing/autoreduce/issues/1267
-        "duplicate-id-aria": "input",
-    }
+class TestRerunJobsPageIntegration(BaseIntegrationTestCase):
+    fixtures = BaseIntegrationTestCase.fixtures + ["rerun_jobs_integration"]
 
     @classmethod
     def setUpClass(cls):
         """Starts external services and sets instrument for all test cases"""
         super().setUpClass()
-        cls.instrument_name = "TestInstrument"
-        cls.data_archive, cls.queue_client, cls.listener = setup_external_services(cls.instrument_name, 21, 21)
         cls.data_archive.add_reduction_script(cls.instrument_name,
                                               """def main(input_file, output_dir): print('some text')""")
         cls.data_archive.add_reduce_vars_script(cls.instrument_name,
                                                 """standard_vars={"variable1":"test_variable_value_123"}""")
-        cls.instrument_name = "TestInstrument"
+        # used by find_run_in_database to find the run that we're looking for
         cls.rb_number = 1234567
-        cls.run_number = 99999
-
-    @classmethod
-    def tearDownClass(cls) -> None:
-        """Stops external services."""
-        cls.queue_client.disconnect()
-        cls.data_archive.delete()
-        super().tearDownClass()
+        cls.run_number = 62000
 
     def setUp(self) -> None:
         """Sets up RerunJobsPage before each test case"""
@@ -58,8 +42,7 @@ class TestRerunJobsPageIntegration(BaseTestCase):
         assert result[0].run_version == 0
         assert result[1].run_version == 1
 
-        for run0_var, run1_var in zip(result[0].run_variables.all(), result[1].run_variables.all()):
-            assert run0_var.variable == run1_var.variable
+        assert result[0].arguments == result[1].arguments
 
     def test_submit_rerun_changed_variable_arbitrary_value(self):
         """
@@ -74,12 +57,7 @@ class TestRerunJobsPageIntegration(BaseTestCase):
 
         assert result[0].run_version == 0
         assert result[1].run_version == 1
-
-        for run0_var, run1_var in zip(result[0].run_variables.all(), result[1].run_variables.all()):
-            # the value of the variable has been overwritten because it's the same run number
-            assert run0_var.variable == run1_var.variable
-
-        assert result[1].run_variables.first().variable.value == new_value
+        assert result[1].arguments.as_dict()["standard_vars"]["variable1"] == new_value
 
     def test_submit_rerun_after_clicking_reset_current_script(self):
         """
@@ -93,18 +71,14 @@ class TestRerunJobsPageIntegration(BaseTestCase):
         assert result[0].run_version == 0
         assert result[1].run_version == 1
 
-        for run0_var, run1_var in zip(result[0].run_variables.all(), result[1].run_variables.all()):
-            # the value of the variable has been overwritten because it's the same run number
-            assert run0_var.variable == run1_var.variable
-
-        assert result[1].run_variables.first().variable.value == "test_variable_value_123"
+        assert result[1].arguments.as_dict()["standard_vars"]["variable1"] == "test_variable_value_123"
 
     def test_submit_confirm_page(self):
         """
         Test: Submitting a run leads to the correct page
         """
         result = submit_and_wait_for_result(self)
-        expected_url = reverse("run_confirmation", kwargs={"instrument": self.instrument_name})
+        expected_url = reverse("runs:run_confirmation", kwargs={"instrument": self.instrument_name})
         assert expected_url in self.driver.current_url
         assert len(result) == 2
 
@@ -135,37 +109,27 @@ class TestRerunJobsPageIntegration(BaseTestCase):
         self.page.run_range_field = expected_run
         self.page.submit_button.click()
 
-        expected_url = reverse("run_confirmation", kwargs={"instrument": self.instrument_name})
+        expected_url = reverse("runs:run_confirmation", kwargs={"instrument": self.instrument_name})
         assert expected_url in self.driver.current_url
 
         assert self.page.error_container.is_displayed()
         assert self.page.error_message_text() == f"Run number {expected_run} hasn't been ran by autoreduction yet."
 
 
-class TestRerunJobsPageIntegrationSkippedOnly(BaseTestCase):
-    fixtures = BaseTestCase.fixtures + ["skipped_run"]
+class TestRerunJobsPageIntegrationSkippedOnly(BaseIntegrationTestCase):
+    fixtures = BaseIntegrationTestCase.fixtures + ["skipped_run"]
 
     @classmethod
     def setUpClass(cls):
         """Starts external services and sets instrument for all test cases"""
         super().setUpClass()
-        cls.instrument_name = "TestInstrument"
-        cls.data_archive, cls.queue_client, cls.listener = setup_external_services(cls.instrument_name, 21, 21)
         cls.data_archive.add_reduction_script(cls.instrument_name,
                                               """def main(input_file, output_dir): print('some text')""")
         cls.data_archive.add_reduce_vars_script(cls.instrument_name,
                                                 """standard_vars={"variable1":"test_variable_value_123"}""")
 
-        cls.instrument_name = "TestInstrument"
         cls.rb_number = 1234567
         cls.run_number = 99999
-
-    @classmethod
-    def tearDownClass(cls) -> None:
-        """Stops external services."""
-        cls.queue_client.disconnect()
-        cls.data_archive.delete()
-        super().tearDownClass()
 
     def setUp(self) -> None:
         """Sets up RerunJobsPage before each test case"""
@@ -185,8 +149,4 @@ class TestRerunJobsPageIntegrationSkippedOnly(BaseTestCase):
         assert result[0].run_version == 0
         assert result[1].run_version == 1
 
-        for run0_var, run1_var in zip(result[0].run_variables.all(), result[1].run_variables.all()):
-            # the value of the variable has been overwritten because it's the same run number
-            assert run0_var.variable == run1_var.variable
-
-        assert result[1].run_variables.first().variable.value == "test_variable_value_123"
+        assert result[1].arguments.as_dict()["standard_vars"]["variable1"] == "test_variable_value_123"
