@@ -1,6 +1,9 @@
+from django.core.exceptions import ObjectDoesNotExist
 from unittest.mock import Mock, mock_open, patch
+from parameterized import parameterized
 from autoreduce_frontend.autoreduce_webapp.settings import DATA_ANALYSIS_BASE_URL
-from autoreduce_frontend.reduction_viewer.view_utils import get_interactive_plot_data, make_data_analysis_url
+from autoreduce_frontend.reduction_viewer.view_utils import (get_interactive_plot_data, make_data_analysis_url,
+                                                             started_by_id_to_name)
 
 
 def test_make_data_analysis_url_no_instrument_in_string():
@@ -26,3 +29,25 @@ def test_get_interactive_plot_data():
     mopen.assert_any_call(locations[1], 'r')
     mopen.assert_any_call(locations[3], 'r')
     assert mopen.call_count == 2
+
+
+@parameterized.expand([
+    [-1, "Development team"],
+    [0, "Autoreduction service"],
+])
+def test_started_by_id_to_name(user_id: int, expected_name: str):
+    """
+    Test that started_by_id_to_name will return the correct name
+    """
+    assert started_by_id_to_name(user_id) == expected_name
+
+
+@patch("autoreduce_frontend.reduction_viewer.view_utils.get_user_model")
+@patch("autoreduce_frontend.reduction_viewer.view_utils.LOGGER")
+def test_started_by_id_to_name_missing_user(logger: Mock, get_user_model_mock: Mock):
+    """
+    Test that started_by_id_to_name will log the error if the user does not exist
+    """
+    get_user_model_mock.return_value.objects.get.side_effect = ObjectDoesNotExist
+    assert started_by_id_to_name(100) is None
+    logger.error.assert_called_once()
