@@ -80,7 +80,8 @@ def run_summary_run(request, history, instrument_name=None, run_version=0):
     runs = ",".join([str(r.run_number) for r in run.run_numbers.all()])
 
     page_type = request.GET.get('sort', '-run_number')
-    next_run, previous_run, first_run, last_run = get_run_navigation_queries(instrument_name, run, page_type)
+    next_run, previous_run, first_run, last_run = get_run_navigation_queries(instrument_name, run, page_type,
+                                                                             run_unique_id)
 
     context_dictionary = {
         'run': run,

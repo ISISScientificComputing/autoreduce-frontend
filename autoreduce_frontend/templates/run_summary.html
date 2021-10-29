@@ -168,7 +168,7 @@
                                     {% endif %}
                                         <a class="btn btn-primary btn-xs"
                                         id='datapath_toggle'
-                                        href="{% make_summary_url batch_run=batch_run instrument_name=instrument run_number=newest_run run_version=run.run_version %}?per_page={{ items_per_page }}&sort={{ page_type }}&path_type={{ new_path_type }}"
+                                        href="{% make_summary_url batch_run=batch_run instrument_name=instrument run_number=run_unique_id run_version=run.run_version %}?per_page={{ items_per_page }}&sort={{ page_type }}&path_type={{ new_path_type }}"
                                         aria-label="Switch to {{ new_path_type|title }}"><i class="fab fa-{{ new_path_type }}" aria-hidden="true"></i></a>
                                 </div>
                                 <div id="reduction_host"><strong>Host:</strong> {{ run.reduction_host }}</div>

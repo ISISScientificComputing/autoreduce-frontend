@@ -14,34 +14,34 @@ register = Library()
 
 
 @register.simple_tag
-def get_run_navigation_queries(instrument_name: str, run: ReductionRun, page_type: str) -> Tuple[ReductionRun]:
+def get_run_navigation_queries(instrument_name: str,
+                               run: ReductionRun,
+                               page_type: str,
+                               run_unique_id: int = None) -> Tuple[ReductionRun]:
     """Return a string of run queries."""
-    instrument_obj = ReductionRun.objects.filter(instrument__name=instrument_name)
-
-    if page_type == "-run_number":
-        instrument_obj = instrument_obj.order_by('-pk', 'run_version')
-    elif page_type == "date":
-        instrument_obj = instrument_obj.order_by('-last_updated')
-
-    next_run = prev_in_order(run, qs=instrument_obj)
-    if next_run is None:
-        next_run = run
-
-    previous_run = next_in_order(run, qs=instrument_obj)
-    if previous_run is None:
-        previous_run = run
-
-    newest_run = instrument_obj.first()
-    oldest_run = instrument_obj.last()
 
     if run.batch_run:
-        first_run = newest_run.run_numbers.last()
-        last_run = oldest_run.run_numbers.first()
+        next_run = run_unique_id
+        previous_run = run_unique_id
+        first_run = run_unique_id
+        last_run = run_unique_id
+        return next_run, previous_run, first_run, last_run
+
     else:
+        instrument_obj = ReductionRun.objects.filter(instrument__name=instrument_name).order_by('-pk', 'run_version')
+        next_run = prev_in_order(run, qs=instrument_obj)
+        if next_run is None:
+            next_run = run
+
+        previous_run = next_in_order(run, qs=instrument_obj)
+        if previous_run is None:
+            previous_run = run
+
+        newest_run = instrument_obj.first()
+        oldest_run = instrument_obj.last()
         first_run = newest_run.run_number
         last_run = oldest_run.run_number
-
-    return next_run, previous_run, first_run, last_run
+        return next_run, previous_run, first_run, last_run
 
 
 @register.simple_tag
