@@ -120,18 +120,25 @@ def run_confirmation(request, instrument: str):
                                      "description": run_description
                                  },
                                  headers={"Authorization": f"Token {auth_token}"})
-        if response.status_code != 200:
-            content = json.loads(response.content)
-            context_dictionary['error'] = content.get("message", "Unknown error encountered")
-            return context_dictionary
     except ConnectionError as err:  # pylint:disable=broad-except
         context_dictionary['error'] = "Unable to connect to the Autoreduce job submission service. If the error "\
                     "persists please let the Autoreduce team know at ISISREDUCE@stfc.ac.uk"
+        return context_dictionary
 
     except Exception as err:  # pylint:disable=broad-except
         context_dictionary['error'] = "Encountered unexpected error, "\
                 f"please let the Autoreduce team know at ISISREDUCE@stfc.ac.uk: {err}"
+        return context_dictionary
 
+    try:
+        if response.status_code != 200:
+            content = json.loads(response.content)
+            context_dictionary['error'] = content.get("message", "Unknown error encountered")
+            return context_dictionary
+    except Exception as err:  # pylint:disable=broad-except
+        context_dictionary['error'] = f"Encountered unexpected error: {err} while parsing '{response.content}', "\
+                f"please let the Autoreduce team know at ISISREDUCE@stfc.ac.uk: {err}"
+        return context_dictionary
     return context_dictionary
 
 
