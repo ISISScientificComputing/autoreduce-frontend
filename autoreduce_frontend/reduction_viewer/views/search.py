@@ -1,6 +1,5 @@
 from autoreduce_db.reduction_viewer.models import Experiment, ReductionRun
-from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions, login_and_uows_valid, render_with,
-                                                              require_admin)
+from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions, login_and_uows_valid, render_with)
 
 from autoreduce_frontend.reduction_viewer.filters import ExperimentFilter, ReductionRunFilter
 from autoreduce_frontend.reduction_viewer.tables import ExperimentTable, ReductionRunSearchTable
