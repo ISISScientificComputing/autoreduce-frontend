@@ -1,7 +1,11 @@
 {% extends "base.html" %}
 {% block title %}{{ instrument_name|default:"Instrument not found" }}{% endblock %}
 {% load static %}
+{% include crispy_tags %}
+{% load crispy_forms_tags %}
 {% load colour_table_row %}
+{% load get_run_navigation_queries %}
+{% load render_table from django_tables2 %}
 
 {% block body %}
     {% if message %}
@@ -139,7 +143,7 @@
                 {% if filtering == 'run' or filtering == 'batch_runs' %}
                     <div class="col-md-3">
                         <label for="pagination_select">Items per page</label>
-                        <select title="The number of reduction jobs that should be shown per page" class="form-control" name="pagination" form="filter_options" id="pagination_select">
+                        <select title="The number of reduction jobs that should be shown per page" class="form-control" name="per_page" form="filter_options" id="pagination_select">
                             <option {% if max_items == '10' %} selected="selected" {% endif %}>10</option>
                             <option {% if max_items == '25' %} selected="selected" {% endif %}>25</option>
                             <option {% if max_items == '50' %} selected="selected" {% endif %}>50</option>
@@ -159,9 +163,9 @@
         <div class="row" id="runs-table">
             <div class="tab-content col-md-12">
                 {% if filtering == 'run' or filtering == 'batch_runs' %}
-                    {% include "filtered_by_number.html" %}
+                    {% render_table run_table %}
                 {% elif filtering == 'experiment' %}
-                    {% include "filtered_by_reference.html" %}
+                    {% render_table experiment_table %}
                 {% else %}
                     <div class="row">No runs to show</div>
                 {% endif %}

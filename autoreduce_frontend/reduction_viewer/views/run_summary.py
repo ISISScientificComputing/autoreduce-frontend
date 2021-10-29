@@ -97,7 +97,7 @@ def run_summary_run(request, history, instrument_name=None, run_version=0):
         'started_by': started_by,
         'data_analysis_link_url': data_analysis_link_url,
         'current_page': int(request.GET.get('page', 1)),
-        'items_per_page': int(request.GET.get('pagination', 10)),
+        'items_per_page': int(request.GET.get('per_page', 10)),
         'page_type': request.GET.get('sort', 'run'),
         'newest_run': int(request.GET.get('newest_run', run_unique_id)),
         'oldest_run': int(request.GET.get('oldest_run', run_unique_id)),

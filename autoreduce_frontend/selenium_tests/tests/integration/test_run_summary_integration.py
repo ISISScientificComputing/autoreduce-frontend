@@ -120,10 +120,10 @@ class TestRunSummaryPageIntegration(BaseIntegrationTestCase):
         now_datetime = gmt.localize(datetime.datetime.now())
 
         # Get the bottom run from the runs list page and cast it to datetime
-        bottom_run_element = runs_list_page.driver.find_elements_by_class_name("col-md-4")[-1]
-        run_last_updated = datetime.datetime.strptime(
-            bottom_run_element.text.partition(": ")[2].replace(" p.m.", "PM").replace(" a.m.", "AM"),
-            "%d %b %Y, %I:%M%p")
+        bottom_run_element = runs_list_page.get_created_from_table()[-1]
+        temp = re.sub(' a.m.', 'AM', bottom_run_element)
+        temp = re.sub(' p.m.', 'PM', temp)
+        run_last_updated = datetime.datetime.strptime(temp, "%d/%m/%Y %I:%M%p")
         run_datetime = gmt.localize(run_last_updated)
 
         # Calculate the difference in minutes between the current time and the
