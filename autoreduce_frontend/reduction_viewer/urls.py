@@ -7,7 +7,7 @@
 
 from django.urls import path
 from autoreduce_frontend.reduction_viewer.views import (run_queue, run_summary, runs_list, fail_queue, run_confirmation,
-                                                        variables, pause, batch_run_submit, configure_new_runs,
+                                                        variables, pause, configure_new_batch_run, configure_new_runs,
                                                         rerun_jobs)
 
 app_name = "runs"
@@ -23,7 +23,8 @@ urlpatterns = [
          name='batch_summary'),
     path('<str:instrument_name>/<int:run_number>/<int:run_version>/', run_summary.run_summary, name='summary'),
     path('<str:instrument>/rerun_jobs/', rerun_jobs.rerun_jobs, name='rerun_jobs'),
-    path('<str:instrument>/configure_batch_run/', batch_run_submit.BatchRunSubmit.as_view(),
+    path('<str:instrument>/configure_batch_run/',
+         configure_new_batch_run.BatchRunSubmit.as_view(),
          name='configure_batch_run'),
     path('<str:instrument>/configure_new_runs/', configure_new_runs.configure_new_runs, name='variables'),
     path('<str:instrument>/configure_new_runs/<int:start>/', configure_new_runs.configure_new_runs, name='variables'),

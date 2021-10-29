@@ -12,6 +12,15 @@ from django.shortcuts import render
 from autoreduce_frontend.utilities import input_processing
 from autoreduce_frontend.reduction_viewer.views.common import prepare_arguments_for_render, make_reduction_arguments
 
+UNKNOWN_ERROR_MESSAGE = "Unknown error encountered"
+RUN_EMPTY_MESSAGE = "Run field was invalid or empty"
+UNAUTHORIZED_MESSAGE = "User is not authorized to submit batch runs. Please contact the Autoreduce team "\
+                       "at ISISREDUCE@stfc.ac.uk to request the permissions."
+UNABLE_TO_CONNECT_MESSAGE = "Unable to connect to the Autoreduce job submission service. If the error "\
+                            "persists please let the Autoreduce team know at ISISREDUCE@stfc.ac.uk"
+
+PARSING_ERROR_MESSAGE = "Encountered error: {} while parsing: '{}'"
+
 
 class BatchRunSubmit(FormView):
     template_name = 'batch_run.html'
@@ -55,12 +64,12 @@ class BatchRunSubmit(FormView):
 
         input_runs = request.POST.get("runs", None)
         if not input_runs:
-            return self.render_error(request, "Run field was invalid or empty", input_runs, **kwargs)
+            return self.render_error(request, RUN_EMPTY_MESSAGE, input_runs, **kwargs)
 
         try:
             auth_token = str(request.user.auth_token)
         except AttributeError as err:
-            return self.render_error(request, "User is not authorized to submit batch runs.", input_runs, **kwargs)
+            return self.render_error(request, UNAUTHORIZED_MESSAGE, input_runs, **kwargs)
         runs = input_processing.parse_user_run_numbers(input_runs)
         args_for_range = make_reduction_arguments(request.POST.items(), instrument_name)
 
@@ -73,14 +82,15 @@ class BatchRunSubmit(FormView):
                                          "description": request.POST.get("run_description", "")
                                      },
                                      headers={"Authorization": f"Token {auth_token}"})
-            if response.status_code != 200:
-                content = json.loads(response.content)
-                return self.render_error(request, content.get("message", "Unknown error encountered"), input_runs,
-                                         **kwargs)
-        except ConnectionError as err:  # pylint:disable=broad-except
-            return self.render_error(
-                request, "Unable to connect to the Autoreduce job submission service. If the error \
-                    persists please let the Autoreduce team know at ISISREDUCE@stfc.ac.uk", input_runs, **kwargs)
+        except ConnectionError as err:
+            return self.render_error(request, UNABLE_TO_CONNECT_MESSAGE, input_runs, **kwargs)
         except Exception as err:  # pylint:disable=broad-except
             return self.render_error(request, str(err), input_runs, **kwargs)
+
+        try:
+            if response.status_code != 200:
+                content = json.loads(response.content)
+                return self.render_error(request, content.get("message", UNKNOWN_ERROR_MESSAGE), input_runs, **kwargs)
+        except Exception as err:  # pylint:disable=broad-except
+            return self.render_error(request, PARSING_ERROR_MESSAGE.format(err, response.content), input_runs, **kwargs)
         return self.render_confirm(request, instrument_name, runs, kwargs)
