@@ -13,7 +13,9 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 
-from autoreduce_frontend.reduction_viewer.views.configure_new_batch_run import PARSING_ERROR_MESSAGE, UNABLE_TO_CONNECT_MESSAGE, UNAUTHORIZED_MESSAGE
+from autoreduce_frontend.reduction_viewer.views.configure_new_batch_run import (PARSING_ERROR_MESSAGE,
+                                                                                UNABLE_TO_CONNECT_MESSAGE,
+                                                                                UNAUTHORIZED_MESSAGE)
 from autoreduce_frontend.selenium_tests.pages.configure_new_batch_run_page import ConfigureNewBatchRunsPage
 from autoreduce_frontend.selenium_tests.tests.base_tests import BaseTestCase
 
