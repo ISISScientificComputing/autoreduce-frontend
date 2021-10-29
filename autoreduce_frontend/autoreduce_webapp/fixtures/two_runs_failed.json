@@ -10,7 +10,7 @@
         "model": "reduction_viewer.reductionarguments",
         "pk": 1,
         "fields": {
-            "raw": "{\"standard_vars\":{\"variable1\":\"value1\"},\"advanced_vars\":{},\"variable_help\":{\"standard_vars\":{},\"advanced_vars\":{}}",
+            "raw": "{\"standard_vars\":{\"variable1\":\"value1\"},\"advanced_vars\":{},\"variable_help\":{\"standard_vars\":{},\"advanced_vars\":{}}}",
             "start_run": 99999,
             "experiment_reference": null,
             "instrument_id": 1
@@ -20,7 +20,7 @@
         "model": "reduction_viewer.reductionarguments",
         "pk": 2,
         "fields": {
-            "raw": "{\"standard_vars\":{\"variable1\":\"value2\"},\"advanced_vars\":{},\"variable_help\":{\"standard_vars\":{},\"advanced_vars\":{}}",
+            "raw": "{\"standard_vars\":{\"variable1\":\"value2\"},\"advanced_vars\":{},\"variable_help\":{\"standard_vars\":{},\"advanced_vars\":{}}}",
             "start_run": 100000,
             "experiment_reference": null,
             "instrument_id": 1
