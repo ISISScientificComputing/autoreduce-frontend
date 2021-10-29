@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Search{% endblock %}
+{% load static %}
+{% include crispy_tags %}
+{% load crispy_forms_tags %}
+{% load render_table from django_tables2 %}
+
+{% block body %}
+
+    <h1>Search Page</h1>
+
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active runs-tab"><a href="#runs" aria-controls="runs" role="tab" data-toggle="tab">Runs</a></li>
+    <li role="presentation"><a href="#experiments" aria-controls="experiments" role="tab" data-toggle="tab">Experiments</a></li>
+  </ul>
+  <br>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="runs">
+        <form action="" method="get">
+        {{run_filter.form.run_number|as_crispy_field}}
+
+        {{run_filter.form.instrument|as_crispy_field}}
+
+        {{run_filter.form.run_description|as_crispy_field}}
+        <div class="radios">
+            <input type="radio" id="contains" name="run_description_qualifier" value="contains" {% if run_description_qualifier == 'contains' %} checked {% endif %}>
+            <label for="contains">Contains</label>
+            <input type="radio" id="exact" name="run_description_qualifier" value="exact" {% if run_description_qualifier == 'exact' %} checked {% endif %}>
+            <label for="exact">Exact</label>
+        </div>
+
+        {{run_filter.form.created|as_crispy_field}}
+
+        {{run_filter.form.status|as_crispy_field}}
+
+        <button id="search-button" type="submit" class="btn btn-primary">Search</button>
+    </form>
+    <hr/>
+        <div>
+        {% if run_table.rows %}
+            {{options_form.pagination|as_crispy_field}} 
+        {% endif %}
+    </div>
+
+        {% if not run_table.rows %}
+            <h4 id="message">{{run_message}}</h4>
+        {% else %}
+            {% render_table run_table %}
+        {% endif %}
+    </div>
+    <div role="tabpanel" class="tab-pane {% if 'reference_number' in request.path %} active {% endif %}" id="experiments">
+            <form action="" method="get">
+        {{experiment_filter.form.reference_number|as_crispy_field}}
+
+        <button id="search-button" type="submit" class="btn btn-primary">Search</button>
+    </form>
+    <hr/>
+        <div>
+        {% if experiment_table.rows %}
+            {{options_form.pagination|as_crispy_field}} 
+        {% endif %}
+    </div>
+
+        {% if not experiment_table.rows %}
+            <h4 id="message">{{experiment_message}}</h4>
+        {% else %}
+            {% render_table experiment_table %}
+        {% endif %}
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{% static "css/vendor/bootstrap-tourist.css" %}">
+{% endblock %}
+{% block scripts %}
+    <script src="{% static "javascript/vendor/bootstrap-tourist.js" %}"></script>
+    <script src="{% static "javascript/search_list.js" %}"></script>
+    <script src="{% static "javascript/tours/overview_tour.js" %}"></script>
+    <script src="{% static "javascript/tours/navbar_tour.js" %}"></script>
+    <script src="{% static "javascript/create_tour.js" %}"></script>
+{% endblock %}

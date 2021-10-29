@@ -2,6 +2,8 @@
 {% block title %}{{ instrument_name|default:"Instrument not found" }}{% endblock %}
 {% load static %}
 {% load colour_table_row %}
+{% load get_run_navigation_queries %}
+{% load render_table from django_tables2 %}
 
 {% block body %}
     {% if message %}
@@ -139,7 +141,7 @@
                 {% if filtering == 'run' or filtering == 'batch_runs' %}
                     <div class="col-md-3">
                         <label for="pagination_select">Items per page</label>
-                        <select title="The number of reduction jobs that should be shown per page" class="form-control" name="pagination" form="filter_options" id="pagination_select">
+                        <select title="The number of reduction jobs that should be shown per page" class="form-control" name="per_page" form="filter_options" id="pagination_select">
                             <option {% if max_items == '10' %} selected="selected" {% endif %}>10</option>
                             <option {% if max_items == '25' %} selected="selected" {% endif %}>25</option>
                             <option {% if max_items == '50' %} selected="selected" {% endif %}>50</option>
@@ -204,13 +206,13 @@
                             </div>
                         </div>
                     {% endif %}
-                </div>
-            {% endif %}
         </div>
+            <br/>
+
     {% endif %}
 {% endblock %}
 {% block stylesheets %}
-    <link rel="stylesheet" href="{% static "css/vendor/bootstrap-tour.min.css" %}">
+    <link rel="stylesheet" href="{% static "css/vendor/bootstrap-tourist.css" %}">
 {% endblock %}
 {% block scripts %}
     {% if preload_runs %}
@@ -219,7 +221,7 @@
     <script src="{% static "javascript/pause_instrument.js" %}"></script>
     <script src="{% static "javascript/instrument_variables.js" %}"></script>
     <script src="{% static "javascript/runs_list.js" %}"></script>
-    <script src="{% static "javascript/vendor/bootstrap-tour.min.js" %}"></script>
+    <script src="{% static "javascript/vendor/bootstrap-tourist.js" %}"></script>
     <script src="{% static "javascript/tours/instrument_summary_tour.js" %}"></script>
     <script src="{% static "javascript/tours/navbar_tour.js" %}"></script>
     <script src="{% static "javascript/create_tour.js" %}"></script>
