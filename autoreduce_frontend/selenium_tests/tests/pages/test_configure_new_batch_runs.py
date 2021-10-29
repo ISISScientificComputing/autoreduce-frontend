@@ -7,19 +7,17 @@
 
 import requests
 from unittest.mock import Mock, patch
-from django.urls import reverse
+
 from autoreduce_qp.systemtests.utils.data_archive import DataArchive
-from autoreduce_frontend.reduction_viewer.views.batch_run_submit import PARSING_ERROR_MESSAGE, UNABLE_TO_CONNECT_MESSAGE, UNAUTHORIZED_MESSAGE
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 
-from autoreduce_frontend.selenium_tests.pages.configure_new_batch_run import ConfigureNewBatchRunsPage
-from autoreduce_frontend.selenium_tests.pages.variables_summary_page import VariableSummaryPage
-from autoreduce_frontend.selenium_tests.tests.base_tests import (BaseTestCase, FooterTestMixin, NavbarTestMixin,
-                                                                 AccessibilityTestMixin)
+from autoreduce_frontend.reduction_viewer.views.configure_new_batch_run import PARSING_ERROR_MESSAGE, UNABLE_TO_CONNECT_MESSAGE, UNAUTHORIZED_MESSAGE
+from autoreduce_frontend.selenium_tests.pages.configure_new_batch_run_page import ConfigureNewBatchRunsPage
+from autoreduce_frontend.selenium_tests.tests.base_tests import BaseTestCase
 
 
-# class TestConfigureNewBatchRunsPage(BaseTestCase, NavbarTestMixin, FooterTestMixin, AccessibilityTestMixin):
 class TestConfigureNewBatchRunsPage(BaseTestCase):
     fixtures = BaseTestCase.fixtures + ["batch_run"]
 
@@ -77,7 +75,7 @@ class TestConfigureNewBatchRunsPage(BaseTestCase):
         self.page.submit_button.click()
         assert self.page.error_text == UNAUTHORIZED_MESSAGE
 
-    @patch("autoreduce_frontend.reduction_viewer.views.batch_run_submit.requests.post")
+    @patch("autoreduce_frontend.reduction_viewer.views.configure_new_batch_run.requests.post")
     def test_submit_run_post_non_200_status_code(self, requests_post: Mock):
         """
         Test: Render an error for a response with non-200 status code.
@@ -91,7 +89,7 @@ class TestConfigureNewBatchRunsPage(BaseTestCase):
         self.page.submit_button.click()
         assert self.page.error_text == test_error_message
 
-    @patch("autoreduce_frontend.reduction_viewer.views.batch_run_submit.requests.post")
+    @patch("autoreduce_frontend.reduction_viewer.views.configure_new_batch_run.requests.post")
     def test_submit_run_post_bad_json(self, requests_post: Mock):
         """
         Test: Render an error for a response with non-200 status code.
@@ -105,7 +103,7 @@ class TestConfigureNewBatchRunsPage(BaseTestCase):
         assert self.page.error_text == PARSING_ERROR_MESSAGE.format("Expecting value: line 1 column 1 (char 0)",
                                                                     response.content)
 
-    @patch("autoreduce_frontend.reduction_viewer.views.batch_run_submit.requests.post")
+    @patch("autoreduce_frontend.reduction_viewer.views.configure_new_batch_run.requests.post")
     def test_submit_run_post_raises_connection_error(self, requests_post: Mock):
         """
         Test: Render an error for a response with non-200 status code.
@@ -116,7 +114,7 @@ class TestConfigureNewBatchRunsPage(BaseTestCase):
         self.page.submit_button.click()
         assert self.page.error_text == UNABLE_TO_CONNECT_MESSAGE
 
-    @patch("autoreduce_frontend.reduction_viewer.views.batch_run_submit.requests.post")
+    @patch("autoreduce_frontend.reduction_viewer.views.configure_new_batch_run.requests.post")
     def test_submit_run_post_raises_other_exc(self, requests_post: Mock):
         """
         Test: Render an error for a response with non-200 status code.
@@ -127,57 +125,3 @@ class TestConfigureNewBatchRunsPage(BaseTestCase):
         self.page.runs = "99999-100000"
         self.page.submit_button.click()
         assert self.page.error_text == test_error_message
-
-
-# class TestConfigureNewRunsPageSkippedOnly(BaseTestCase, NavbarTestMixin, FooterTestMixin):
-#     fixtures = BaseTestCase.fixtures + ["skipped_run"]
-
-#     @classmethod
-#     def setUpClass(cls):
-#         """Makes test data archive and sets instrument for all test cases"""
-#         super().setUpClass()
-#         cls.instrument_name = "TESTINSTRUMENT"
-#         cls.data_archive = DataArchive([cls.instrument_name], 21, 21)
-#         cls.data_archive.create()
-#         cls.data_archive.add_reduction_script(cls.instrument_name,
-#                                               """def main(input_file, output_dir): print('some text')""")
-#         cls.data_archive.add_reduce_vars_script(cls.instrument_name,
-#                                                 """standard_vars={"variable1":"test_variable_value_123"}""")
-
-#     @classmethod
-#     def tearDownClass(cls) -> None:
-#         """Destroys the data archive"""
-#         cls.data_archive.delete()
-#         super().tearDownClass()
-
-#     def setUp(self) -> None:
-#         """Sets up the ConfigureNewRunsPage before each test case"""
-#         super().setUp()
-#         self.page = ConfigureNewRunsPage(self.driver, self.instrument_name)
-#         self.page.launch()
-
-#     def test_configure_skipped_only_run_vars(self):
-#         """Test that configuring new runs works even with only skipped runs present"""
-#         self.page.variable1_field = "the new value in the field"
-
-#         self.page.submit_button.click()
-#         summary = VariableSummaryPage(self.driver, self.instrument_name)
-#         assert summary.current_arguments_by_run.is_displayed()
-#         assert summary.current_arguments_by_run.text == 'Current Arguments\nRuns\n99999\n99999\n'\
-#                                                         'standard_vars\nvariable1: value1\nadvanced_vars'
-
-#         assert "Runs\n100000\nOngoing" in summary.upcoming_arguments_by_run.text
-
-#     def test_configure_skipped_only_exp_vars(self):
-#         """Test that configuring new runs works even with only skipped runs present"""
-#         self.page = ConfigureNewRunsPage(self.driver, self.instrument_name, experiment_reference=1234567)
-#         self.page.launch()
-#         self.page.variable1_field = "the new value in the field"
-
-#         self.page.submit_button.click()
-#         summary = VariableSummaryPage(self.driver, self.instrument_name)
-#         assert summary.current_arguments_by_run.is_displayed()
-#         assert summary.current_arguments_by_run.text == 'Current Arguments\nRuns\n99999\nOngoing\n'\
-#                                                         'standard_vars\nvariable1: value1\nadvanced_vars'
-#         assert summary.upcoming_arguments_by_experiment.is_displayed()
-#         assert "Experiment\n#1234567" in summary.upcoming_arguments_by_experiment.text
