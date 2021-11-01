@@ -146,10 +146,14 @@ def get_navigation_runs(instrument_name: str, run: ReductionRun, page_type: str)
         page_type: The type of page that is being viewed.
     """
 
-    if page_type == "run" or "-run_number" or "run_number":
+    if page_type == "-run_number":
         order = '-pk'
-    elif page_type == "date":
-        order = '-last_updated'
+    elif page_type == "run_number":
+        order = 'pk'
+    elif page_type == "created":
+        order = 'created'
+    elif page_type == "-created":
+        order = '-created'
 
     if run.batch_run:
         runs = ReductionRun.objects.filter(instrument__name=instrument_name, batch_run=True).order_by(order)

@@ -23,7 +23,7 @@ def runs_list(request, instrument=None):
     except Instrument.DoesNotExist:
         return {'message': "Instrument not found."}
 
-    sort_by = request.GET.get('sort', 'run')
+    sort_by = request.GET.get('sort', '-run_number')
 
     try:
         runs = ReductionRun.objects.only('status', 'last_updated', 'run_version',
@@ -32,9 +32,9 @@ def runs_list(request, instrument=None):
         last_instrument_run = runs.filter(batch_run=False).last()
         first_instrument_run = runs.filter(batch_run=False).first()
 
-        if sort_by == "run":
+        if sort_by == "-run_number":
             runs = runs.order_by('-run_numbers__run_number', 'run_version')
-        elif sort_by == "date":
+        elif sort_by == "created":
             runs = runs.order_by('-last_updated')
 
         run_table = ReductionRunTable(runs)
