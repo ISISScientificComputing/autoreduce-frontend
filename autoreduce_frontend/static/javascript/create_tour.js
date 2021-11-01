@@ -2,12 +2,10 @@
     function setupTour(steps) {
         const tour = new Tour({
             steps: steps,
-            storage: false,      // avoids storing process between visits
             backdrop: true,
             backdropPadding: 2,
             framework: 'bootstrap4',
         });
-        tour.end();             // avoids bug where tour recognised as in progress on re-visit
 
         const tourButton = $("#tour-btn");
         tourButton.click(function () {
@@ -20,7 +18,7 @@
                     tour.end();
                 }
             }
-            tour.start(true);   // added 'true' arg forces start (alternative to localStorage.remove)
+            tour.start(true);
         });
     }
 

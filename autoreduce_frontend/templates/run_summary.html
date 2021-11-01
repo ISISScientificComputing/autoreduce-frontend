@@ -61,7 +61,7 @@
         {% endif %}
 
         {% if run.message %}
-            {% if 'Skipped' in run.message %}
+            {% if is_skipped %}
                 <div class="alert alert-{% replace run.status.value_verbose 'Skipped' 'info' %} word-wrap" role="alert">
                     <i class="fa fa-{% replace run.status.value_verbose 'Skipped' 'question' %} fa-{% replace run.status.value_verbose 'Skipped' 'question' %}-circle fa-lg"></i>
                     <a href="#" class="js-log-display"> {{ run.message }}</a>
@@ -74,7 +74,7 @@
             {% endif %}
         {% endif %}
 
-        <div class="row" id="reduction_job_panel">
+        <div class="d-flex justify-content-center" id="reduction_job_panel">
                 <div class="card card-2-column">
                     <div class="card-body">
                         <div class="row">
