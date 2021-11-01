@@ -104,14 +104,10 @@ def run_summary_run(request, history, instrument_name=None, run_version=0):
         'page_type': page_type,
         'filtering': request.GET.get('filter', 'run'),
         'new_path_type': 'linux' if path_type == 'windows' else 'windows',
-        'newest_run': newest_run if newest_run.batch_run is False else newest_run,
-        'oldest_run': oldest_run if oldest_run.batch_run is False else oldest_run,
-        'next_run': next_run if next_run.batch_run is False else next_run,
-        'previous_run': previous_run if previous_run.batch_run is False else previous_run,
-        'newest_run_number': newest_run.run_number if newest_run.batch_run is False else newest_run.pk,
-        'oldest_run_number': oldest_run.run_number if oldest_run.batch_run is False else oldest_run.pk,
-        'next_run_number': next_run.run_number if next_run.batch_run is False else next_run.pk,
-        'previous_run_number': previous_run.run_number if previous_run.batch_run is False else previous_run.pk,
+        'newest_run': newest_run,
+        'oldest_run': oldest_run,
+        'next_run': next_run,
+        'previous_run': previous_run,
     }
 
     if reduction_location:

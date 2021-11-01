@@ -19,8 +19,6 @@ from autoreduce_frontend.autoreduce_webapp.settings import DATA_ANALYSIS_BASE_UR
 from autoreduce_frontend.autoreduce_webapp.settings import (ALLOWED_HOSTS, UOWS_LOGIN_URL)
 from typing import Tuple
 
-from next_prev import next_in_order, prev_in_order
-
 LOGGER = logging.getLogger(__package__)
 
 
@@ -155,16 +153,18 @@ def get_navigation_runs(instrument_name: str, run: ReductionRun, page_type: str)
     elif page_type == "-created":
         order = '-created'
 
-    if run.batch_run:
-        runs = ReductionRun.objects.filter(instrument__name=instrument_name, batch_run=True).order_by(order)
-    else:
-        runs = ReductionRun.objects.filter(instrument__name=instrument_name, batch_run=False).order_by(order)
+    runs = ReductionRun.objects.filter(instrument__name=instrument_name, batch_run=run.batch_run).order_by(order)
 
-    next_run = prev_in_order(run, qs=runs)
+    if not run.batch_run:
+        next_run = runs.filter(run_numbers__run_number__gt=run.run_number).last()
+        previous_run = runs.filter(run_numbers__run_number__lt=run.run_number).first()
+    else:
+        next_run = runs.filter(pk__gt=run.pk).last()
+        previous_run = runs.filter(pk__lt=run.pk).first()
+
     if next_run is None:
         next_run = run
 
-    previous_run = next_in_order(run, qs=runs)
     if previous_run is None:
         previous_run = run
 
