@@ -7,9 +7,6 @@
 """Selenium tests for the runs summary page."""
 import datetime
 import pytz
-import re
-
-from django.urls import reverse
 
 from autoreduce_frontend.selenium_tests.pages.run_summary_page import RunSummaryPage
 from autoreduce_frontend.selenium_tests.pages.runs_list_page import RunsListPage

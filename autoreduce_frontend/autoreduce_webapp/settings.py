@@ -40,7 +40,7 @@ DEBUG_TOOLBAR_AVAILABLE = False
 if DEBUG:
     try:
         import debug_toolbar
-        DEBUG_TOOLBAR_AVAILABLE = True
+        DEBUG_TOOLBAR_AVAILABLE = False
     except ImportError:
         pass
 
