@@ -21,11 +21,11 @@
                 <div class="col-md-9">
                     {% include "snippets/variables/form_warnings.html" %}
                     <div class="form-group">
-                        <label for="run_description" class="control-label col-md-2">
+                        <label for="run_description" class="col-form-label col-md-6">
                             Re-run description
                             <a href="#" data-toggle="popover"
                                data-content="This will be appended onto the run number for you and others to identify the reason for re-submitting."
-                               data-trigger="hover click focus" data-placement="top" data-container="body" aria-label="This will be appended onto the run number for you and others to identify the reason for re-submitting.">
+                               data-trigger="hover" data-placement="top" data-container="body" aria-label="This will be appended onto the run number for you and others to identify the reason for re-submitting.">
                                 <i class="fa fa-info-circle"></i>
                             </a>
                         </label>
@@ -38,7 +38,7 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="well well-sm">
+                    <div class="card card-body">
                         <div class="row">
                             <div class="col-md-12">
                                 <h4>Additional Actions</h4>
@@ -56,15 +56,15 @@
                 </div>
             </div>
             <div class="form-group variables-buttons">
-                <div class="col-md-9 text-right">
                     {% if not has_reduce_vars %}
-                    <div class="alert alert-warning">
-                        <p class="text-center " id="warning_message">
-                            <i class="fas fa-exclamation-triangle"></i>
-                                &nbsp;&nbsp;The reduce_vars.py script is missing for this instrument. Please create it before being able to submit re-runs.
-                        </p>
-                    </div>
+                        <div class="alert alert-warning">
+                            <p class="text-center " id="warning_message">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                    &nbsp;&nbsp;The reduce_vars.py script is missing for this instrument. Please create it before being able to submit re-runs.
+                            </p>
+                        </div>
                     {% endif %}
+                <div class="col-md-9">
                     <input type="submit" value="Re-run with new variables" class="btn btn-success {% if not has_reduce_vars %} disabled {% endif %}" id="variableSubmit"/>
                 </div>
             </div>

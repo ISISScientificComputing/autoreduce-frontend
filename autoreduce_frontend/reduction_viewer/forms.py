@@ -46,8 +46,7 @@ class RunsListOptionsForm(forms.Form):
             attrs={
                 'id': "pagination_select",
                 'title': "The number of reduction jobs that should be shown per page",
-                'name': "per_page",
-                'onchange': 'update_page()'
+                'name': "per_page"
             }),
         choices=ITEMS_PER_PAGE,
     )

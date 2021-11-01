@@ -103,6 +103,7 @@ class TestRunsListQueries(BaseTestCase, AccessibilityTestMixin, FooterTestMixin,
         for pagination in (10, 25, 50, 100, 250, 500):
             self.page.launch()
             self.page.update_filter("pagination_select", str(pagination))
+            self.page.click_apply_filters()
             self._test_page_query(f"per_page={pagination}")
 
     def test_run_navigation_btns(self):

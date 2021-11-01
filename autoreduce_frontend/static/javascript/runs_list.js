@@ -33,13 +33,8 @@
     init();
 }())
 
-
-function update_page(item) {
-    let per_page = document.getElementById("pagination_select").value;
-    document.location.href = window.location.origin + window.location.pathname + "?per_page=" + per_page;
-}
-
 function changePage(page) {
     let filterChoice = document.getElementById("filter_select").value;
-    document.location.href = window.location.origin + window.location.pathname + '?page=' + arguments[0] + '&filter=' + filterChoice
+    let per_page = document.getElementById("pagination_select").value;
+    document.location.href = window.location.origin + window.location.pathname + '?page=' + arguments[0] + "?per_page=" + per_page + '&filter=' + filterChoice;
 }

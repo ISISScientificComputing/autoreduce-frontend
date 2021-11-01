@@ -86,18 +86,23 @@
         <!-- Display table for reduction jobs -->
         <div id="filter-options">
             <form action="{{ request.path }}" method="get" id="filter_options">
-                <div class="form-row align-items-center">
-                    <div class="col-auto">
-                        {{ options_form.filter|as_crispy_field }} 
-                    </div>
-                    {% if filtering == 'run' or filtering == 'batch_runs' %}
-                        {{ options_form.per_page|as_crispy_field }} 
-                    {% endif %}
-                <div class="col-md-3">
-                    <input class="btn btn-primary btn-block btn-apply-filters" type="submit" value="Apply filters" id="apply_filters">
+            <div class="form-row align-items-center">
+                <div class="col-auto my-1">
+                    {{ options_form.filter|as_crispy_field }} 
                 </div>
+                <div class="col-auto my-1">
+                    {{ options_form.per_page|as_crispy_field }}
+                </div>
+                <div class="col-auto my-1">
+                <button type="submit" class="btn btn-primary" value="Apply filters" id="apply_filters">Submit</button>
+                </div>
+            </div>
             </form>
         </div>
+
+
+
+
         <br/>
         <!-- Display table for every reduction job -->
         <div class="row" id="runs-table">
