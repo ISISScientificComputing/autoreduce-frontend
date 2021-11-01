@@ -3,9 +3,25 @@ from django_filters.filters import CharFilter, Filter
 from django_filters.widgets import RangeWidget
 from django_filters import FilterSet, DateFromToRangeFilter
 from django.db.models import Q
+import re
+from django.core.exceptions import ValidationError
 
 
 class ReductionRunFilter(FilterSet):
+    def validate_run_number(value):
+        if "," in value and "-" not in value:
+            if not re.match('\d+,\d+', value):
+                raise ValidationError("There must be a run number before and after the comma.")
+        elif "-" in value and "," not in value:
+            if not re.match('\d+-\d+', value):
+                raise ValidationError("There must be a run number before and after the hyphen.")
+        elif "-" and "," in value:
+            if not re.match('\d+-\d+', value):
+                raise ValidationError("There must be a run number before and after the hyphen.")
+        else:
+            if not re.match('\d', value):
+                raise ValidationError("Run number must be numeric.")
+
     created = DateFromToRangeFilter(widget=RangeWidget(attrs={
         'type': 'date',
         'placeholder': 'dd-mm-yyyy',
@@ -13,7 +29,10 @@ class ReductionRunFilter(FilterSet):
     }))
 
     run_description = CharFilter(method='filter_run_description')
-    run_number = CharFilter(field_name="run_number", method="filter_run_number", label='Run Number')
+    run_number = CharFilter(field_name="run_number",
+                            method="filter_run_number",
+                            label='Run Number',
+                            validators=[validate_run_number])
 
     class Meta:
         model = ReductionRun
@@ -21,7 +40,7 @@ class ReductionRunFilter(FilterSet):
 
     def __init__(self, *args, run_description_qualifier=None, **kwargs):
         super(ReductionRunFilter, self).__init__(*args, **kwargs)
-        # doesn't push Submit button, QueryDict (in data) is empty so not all runs displayed at start
+        # Call empty qs here to prevent all runs showing when search page first loaded
         if self.data == {}:
             self.queryset = self.queryset.none()
         self.run_description_qualifier = run_description_qualifier
