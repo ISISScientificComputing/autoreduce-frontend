@@ -12,13 +12,7 @@
             if (tour.ended()) {
                 tour.restart();
             }
-            else {
-                if (confirm("A tour is currently on going\nDo you wish to restart the tour?")) {
-                    tour.restart();
-                    tour.end();
-                }
-            }
-            tour.start(true);
+            tour.start();
         });
     }
 
