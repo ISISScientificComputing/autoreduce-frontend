@@ -17,7 +17,8 @@ class ReductionRunFilter(FilterSet):
                 raise ValidationError("There must be a run number before and after the hyphen.")
         elif "-" and "," in value:
             if not re.match('\d+-\d+', value):
-                raise ValidationError("There must be a run number before and after the hyphen.")
+                raise ValidationError(
+                    "There must be a run number before and after the hyphen, and commas seperating these pairs.")
         else:
             if not re.match('\d', value):
                 raise ValidationError("Run number must be numeric.")
