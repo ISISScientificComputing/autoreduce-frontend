@@ -122,33 +122,16 @@
                         </option>
                     </select>
                 </div>
-                <div class="col-md-3">
-                    <label for="sort_select">Sort by</label>
-                    <select class="form-control" name="sort" form="filter_options" id="sort_select">
-                        <option value="run"
-                            {% if sort == 'run' %}
-                                selected="selected"
-                            {% endif %}
-                            >Number
-                        </option>
-                        <option value="date"
-                            {% if sort == 'date' %}
-                                selected="selected"
-                            {% endif %}
-                            >Date
-                        </option>
-                    </select>
-                </div>
                 {% if filtering == 'run' or filtering == 'batch_runs' %}
                     <div class="col-md-3">
                         <label for="pagination_select">Items per page</label>
                         <select title="The number of reduction jobs that should be shown per page" class="form-control" name="per_page" form="filter_options" id="pagination_select">
-                            <option {% if max_items == '10' %} selected="selected" {% endif %}>10</option>
-                            <option {% if max_items == '25' %} selected="selected" {% endif %}>25</option>
-                            <option {% if max_items == '50' %} selected="selected" {% endif %}>50</option>
-                            <option {% if max_items == '100' %} selected="selected" {% endif %}>100</option>
-                            <option {% if max_items == '250' %} selected="selected" {% endif %}>250</option>
-                            <option {% if max_items == '500' %} selected="selected" {% endif %}>500</option>
+                            <option {% if per_page == '10' %} selected="selected" {% endif %}>10</option>
+                            <option {% if per_page == '25' %} selected="selected" {% endif %}>25</option>
+                            <option {% if per_page == '50' %} selected="selected" {% endif %}>50</option>
+                            <option {% if per_page == '100' %} selected="selected" {% endif %}>100</option>
+                            <option {% if per_page == '250' %} selected="selected" {% endif %}>250</option>
+                            <option {% if per_page == '500' %} selected="selected" {% endif %}>500</option>
                         </select>
                     </div>
                 {% endif %}
@@ -171,45 +154,7 @@
             </div>
         </div>
             <br/>
-            <!-- Paginator -->
-            {% if filtering == 'run' or filtering == 'batch_runs' %}
-                <div class="row">
-                    {% if paginator %}
-                        <div class="col-md-12 text-center">
-                            <div class="btn-group" role="group">
-                                {% if paginator.has_previous %}
-                                    <button title="First Page" class="btn btn-default" onclick="changePage(1)">
-                                        <i class="fa fa-step-backward"></i>
-                                    </button>
-                                    <button title="Previous Page" class="btn btn-default" onclick="changePage({{ paginator.previous_page_index }})">
-                                        <i class="fa fa-chevron-left"></i>
-                                    </button>
-                                {% endif %}
-                                {% for page in paginator.display_list %}
-                                    {% if page.is_visible %}
-                                        {% if page.number == paginator.current_page_index %}
-                                            <button title="Current Page" class="btn btn-primary inline">{{ page.display_name }}</button>
-                                        {% else %}
-                                            <button class="btn btn-default" onclick="changePage({{ page.number }})">{{ page.display_name }}</button>
-                                        {% endif %}
-                                    {% else %}
-                                        <button title="There are additional pages. Please access them using the navigation buttons." class="btn btn-default disabled">...</button>
-                                    {% endif %}
-                                {% endfor %}
-                                {% if paginator.has_next %}
-                                    <button title="Next Page" class="btn btn-default" onclick="changePage({{ paginator.next_page_index }})">
-                                        <i class="fa fa-chevron-right"></i>
-                                    </button>
-                                    <button title="Last page" class="btn btn-default" onclick="changePage({{ last_page_index }})">
-                                        <i class="fa fa-step-forward"></i>
-                                    </button>
-                                {% endif %}
-                            </div>
-                        </div>
-                    {% endif %}
-                </div>
-            {% endif %}
-        </div>
+    </div>
     {% endif %}
 {% endblock %}
 {% block stylesheets %}
