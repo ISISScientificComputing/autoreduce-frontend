@@ -20,11 +20,11 @@
 <div class="tab-content" id="pills-tabContent">
   <div class="tab-pane fade show active" id="pills-runs" role="tabpanel" aria-labelledby="pills-runs-tab">
       <form action="" method="get">
-        {{run_filter.form.run_number|as_crispy_field}}
+        {{ run_filter.form.run_number|as_crispy_field }}
 
-        {{run_filter.form.instrument|as_crispy_field}}
+        {{ run_filter.form.instrument|as_crispy_field }}
 
-        {{run_filter.form.run_description|as_crispy_field}}
+        {{ run_filter.form.run_description|as_crispy_field }}
 
         <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio" name="run_description_qualifier" id="contains" value="contains" {% if run_description_qualifier == 'contains' %} checked {% endif %}>
@@ -35,16 +35,16 @@
             <label class="form-check-label" for="exact">Exact</label>
         </div>
 
-        {{run_filter.form.created|as_crispy_field}}
+        {{ run_filter.form.created|as_crispy_field }}
 
-        {{run_filter.form.status|as_crispy_field}}
+        {{ run_filter.form.status|as_crispy_field }}
 
         <button id="search-button" type="submit" class="btn btn-primary">Search</button>
     </form>
     <hr/>
         <div>
         {% if run_table.rows %}
-            {{options_form.pagination|as_crispy_field}} 
+            {{ options_form.pagination|as_crispy_field }} 
         {% endif %}
     </div>
     
@@ -59,19 +59,19 @@
   <div class="tab-pane fade" id="pills-experiments" role="tabpanel" aria-labelledby="pills-experiments-tab">
       <form action="" method="get">
 
-        {{experiment_filter.form.reference_number|as_crispy_field}}
+        {{ experiment_filter.form.reference_number|as_crispy_field }}
 
         <button id="search-button" type="submit" class="btn btn-primary">Search</button>
     </form>
     <hr/>
         <div>
         {% if experiment_table.rows %}
-            {{options_form.pagination|as_crispy_field}} 
+            {{ options_form.pagination|as_crispy_field }} 
         {% endif %}
     </div>
 
         {% if not experiment_table.rows %}
-            <h4 id="experiment_message">{{experiment_message}}</h4>
+            <h4 id="experiment_message">{{ experiment_message }}</h4>
         {% else %}
             {% render_table experiment_table %}
         {% endif %}

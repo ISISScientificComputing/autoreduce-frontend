@@ -75,7 +75,6 @@
         {% endif %}
 
         <div class="row" id="reduction_job_panel">
-            <div class="col-md-8 col-md-offset-2">
                 <div class="card card-2-column">
                     <div class="card-body">
                         <div class="row">
@@ -163,13 +162,13 @@
                                         {% for location in run.data_location.all %}
                                             {{ data_location }}
                                         {% endfor %}
+                                        <a class="btn btn-primary btn-xs"
+                                        id='datapath_toggle'
+                                        href="{% generate_run_link instrument run=run %}?page={{current_page}}&per_page={{ per_page }}&sort={{ page_type }}&filter={{ filtering }}&path_type={{ new_path_type }}"
+                                        aria-label="Switch to {{ new_path_type|title }}"><i class="fab fa-{{ new_path_type }}" aria-hidden="true"></i></a>
                                     {% else %}
                                         <em>No data found</em>
                                     {% endif %}
-                                        <a class="btn btn-primary btn-xs"
-                                        id='datapath_toggle'
-                                        href="{% generate_run_link instrument run %}?page={{current_page}}&per_page={{ per_page }}&sort={{ page_type }}&filter={{ filtering }}&path_type={{ new_path_type }}"
-                                        aria-label="Switch to {{ new_path_type|title }}"><i class="fab fa-{{ new_path_type }}" aria-hidden="true"></i></a>
                                 </div>
                                 <div id="reduction_host"><strong>Host:</strong> {{ run.reduction_host }}</div>
                             </div>
@@ -198,29 +197,28 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="row col-md-12 my-2">
-            <div class="text-center">
-                <a href="{% generate_run_link instrument newest_run %}?page={{current_page}}&per_page={{ per_page }}&sort={{ page_type }}&filter={{ filtering }}" class="btn btn-primary back {% if newest_run_number == run_unique_id %} disabled {% endif %}" id="newest">&#124;&#60; Newest
-                </a>
-                <a href="{% generate_run_link instrument next_run %}?page={{current_page}}&per_page={{ per_page }}&sort={{ page_type }}&filter={{ filtering }}" class="btn btn-primary back {% if newest_run_number == run_unique_id %} disabled {% endif %}" id="next">&#60;&#60; Next
-                </a>
-                <a href="{% url 'runs:list' run.instrument.name %}?page={{ current_page }}&per_page={{ per_page }}&sort={{ page_type }}&filter={{ filtering }}" class="btn btn-primary back" id="cancel"
-                    >Back to {{ run.instrument.name }} runs
-                </a>
-                <a href="{% generate_run_link instrument previous_run %}?page={{current_page}}&per_page={{ per_page }}&sort={{ page_type }}&filter={{ filtering }}" class="btn btn-primary back {% if oldest_run_number == run_unique_id %} disabled {% endif %}" id="previous">Previous &#62;&#62;
-                </a>
-            </div>
+            
         </div>
 
         <div id="re-run_and_graphs">
             {% autoescape on %}
-                {% include "snippets/run_variables.html" with run_number=run_number run_version=run_version has_reduce_vars=has_reduce_vars batch_run=batch_run standard_variables=standard_variables advanced_variables=advanced_variables variable_help=variable_help instrument=instrument %}
+                {% include "snippets/run_variables.html" with run_number=run_number run_version=run_version has_reduce_vars=has_reduce_vars run=run standard_variables=standard_variables advanced_variables=advanced_variables variable_help=variable_help instrument=instrument %}
             {% endautoescape %}
         </div>
 
+        <div class="d-flex justify-content-center">
+            <div class="text-center">
+                <a href="{% generate_run_link instrument run=newest_run %}?page={{current_page}}&per_page={{ per_page }}&sort={{ page_type }}&filter={{ filtering }}" class="btn btn-primary back {% if newest_run == run %} disabled {% endif %}" id="newest">&#124;&#60; Newest
+                </a>
+                <a href="{% generate_run_link instrument run=next_run %}?page={{current_page}}&per_page={{ per_page }}&sort={{ page_type }}&filter={{ filtering }}" class="btn btn-primary back {% if next_run == run %} disabled {% endif %}" id="next">&#60;&#60; Next
+                </a>
+                <a href="{% url 'runs:list' run.instrument.name %}?page={{ current_page }}&per_page={{ per_page }}&sort={{ page_type }}&filter={{ filtering }}" class="btn btn-primary back" id="cancel"
+                    >Back to {{ run.instrument.name }} runs
+                </a>
+                <a href="{% generate_run_link instrument run=previous_run %}?page={{current_page}}&per_page={{ per_page }}&sort={{ page_type }}&filter={{ filtering }}" class="btn btn-primary back {% if previous_run == run %} disabled {% endif %}" id="previous">Previous &#62;&#62;
+                </a>
+            </div>
+        </div>
 
         {% include 'snippets/run_summary/history.html' with history=history started_by=started_by %}
         {% include 'snippets/run_summary/reduction_log.html' with run=run %}

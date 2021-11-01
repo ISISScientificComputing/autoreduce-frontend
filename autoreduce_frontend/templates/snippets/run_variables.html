@@ -65,11 +65,7 @@
                         </p>
                     </div>
                     {% endif %}
-                    <input type="submit" value="Re-run with new variables" class="btn btn-success" id="variableSubmit"
-                        {% if not has_reduce_vars %}
-                            disabled
-                        {% endif %}
-                    />
+                    <input type="submit" value="Re-run with new variables" class="btn btn-success {% if not has_reduce_vars %} disabled {% endif %}" id="variableSubmit"/>
                 </div>
             </div>
         </form>

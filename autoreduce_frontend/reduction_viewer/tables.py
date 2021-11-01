@@ -5,7 +5,14 @@ from autoreduce_frontend.autoreduce_webapp.templatetags.colour_table_row import 
 
 
 class ReductionRunTable(Table):
+    '''Table model for displaying Reduction Runs (and batch-runs)'''
     def data_status(**kwargs):
+        """Function to add text-(status) class to status column for formatting
+
+        Returns:
+        "text- " concatonated with status fetched from record for formatting with colour_table_row
+
+        """
         status = kwargs.get("value", None)
         if status is None:
             return "header"
@@ -13,7 +20,7 @@ class ReductionRunTable(Table):
             return "text-" + colour_table_row(status.__str__()) + " run-status"
 
     run_number = tables.TemplateColumn(
-        '{% load generate_run_link %} <a href="{% generate_run_link record.instrument record %}?page={{ current_page }}&per_page={{ per_page }}&sort={{ sort }}&filter={{ filtering }}">{{record.run_number}}</a>',
+        '{% load generate_run_link %} <a href="{% generate_run_link record.instrument record %}?page={{ current_page }}&per_page={{ per_page }}&sort={{ sort }}&filter={{ filtering }}">{{ record.title }}</a>',
         attrs={"td": {
             "class": "run-num-links"
         }},
@@ -43,44 +50,8 @@ class ReductionRunTable(Table):
         )
 
 
-class ReductionRunSearchTable(Table):
-    def data_status(**kwargs):
-        status = kwargs.get("value", None)
-        if status is None:
-            return "header"
-        else:
-            return "text-" + colour_table_row(status.__str__()) + " run-status"
-
-    run_number = tables.TemplateColumn(
-        '{% load generate_run_link %} <a href="{% generate_run_link record.instrument record %}?page={{ current_page }}&per_page={{ per_page }}&sort={{ sort }}&filter={{ filtering }}">{{record.run_number}}</a>',
-        attrs={"td": {
-            "class": "run-num-links"
-        }},
-        accessor="run_numbers__run_number")
-
-    status = tables.Column(attrs={"td": {"class": data_status}})
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-    class Meta:
-        model = ReductionRun
-        row_attrs = {"class": "run-row"}
-        fields = (
-            'run_number',
-            'instrument',
-            'status',
-            'created',
-        )
-        sequence = (
-            'run_number',
-            'instrument',
-            'status',
-            'created',
-        )
-
-
 class ExperimentTable(Table):
+    '''Table model for displaying Experiments'''
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

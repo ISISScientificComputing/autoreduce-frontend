@@ -67,12 +67,6 @@ steps = [
         placement: "bottom"
     },
     {
-        element: "#sort_select",
-        title: "Filters",
-        content: "You can filter by number of runs or date here.",
-        placement: "bottom"
-    },
-    {
         element: "#pagination_select",
         title: "Filters",
         content: "If filtering by number, you can select the number of runs to display on each " +

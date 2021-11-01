@@ -44,10 +44,7 @@
             </div>
             <div id="btn-re-run_past_job">
                 <p>
-                    <a href="{% url 'runs:rerun_jobs' instrument=instrument_name %}" class="btn btn-success btn-block"
-                        {% if not has_variables %}
-                            disabled
-                        {% endif %}>
+                    <a href="{% url 'runs:rerun_jobs' instrument=instrument_name %}" class="btn btn-success btn-block {% if not has_variables %} disabled {% endif %}">
                         <i class="fas fa-arrow-left"></i>
                         &nbsp;&nbsp;Re-run past jobs
                     </a>
@@ -55,10 +52,7 @@
             </div>
             <div id="btn-configure_new_runs">
                 <p>
-                    <a href="{% url 'runs:variables' instrument=instrument_name %}"class="btn btn-success btn-block"
-                        {% if not has_variables %}
-                            disabled
-                        {% endif %}>
+                    <a href="{% url 'runs:variables' instrument=instrument_name %}"class="btn btn-success btn-block {% if not has_variables %} disabled {% endif %}">
                         <i class="fas fa-plus"></i>
                         &nbsp;&nbsp;Configure New Runs
                     </a>
@@ -66,20 +60,14 @@
             </div>
             <div id="btn-see_instrument_variables">
                 <p>
-                    <a href="{% url 'runs:variables_summary' instrument=instrument_name %}" class="btn btn-success btn-block"
-                        {% if not has_variables %}
-                            disabled
-                        {% endif %}>
+                    <a href="{% url 'runs:variables_summary' instrument=instrument_name %}" class="btn btn-success btn-block {% if not has_variables %} disabled {% endif %}">
                         <i class="far fa-eye"></i>
                         &nbsp;&nbsp;See Instrument variables
                     </a>
             </div>
             <div id="btn-batch_job">
                 <p>
-                    <a href="{% url 'runs:configure_batch_run' instrument=instrument_name %}" class="btn btn-success btn-block"
-                        {% if not has_variables %}
-                            disabled
-                        {% endif %}>
+                    <a href="{% url 'runs:configure_batch_run' instrument=instrument_name %}" class="btn btn-success btn-block {% if not has_variables %} disabled {% endif %}">
                         <i class="fa fa-cog"></i>
                         &nbsp;&nbsp;Submit batch job
                     </a>
@@ -100,10 +88,10 @@
             <form action="{{ request.path }}" method="get" id="filter_options">
                 <div class="form-row align-items-center">
                     <div class="col-auto">
-                        {{options_form.filter|as_crispy_field}} 
+                        {{ options_form.filter|as_crispy_field }} 
                     </div>
                     {% if filtering == 'run' or filtering == 'batch_runs' %}
-                        {{options_form.per_page|as_crispy_field}} 
+                        {{ options_form.per_page|as_crispy_field }} 
                     {% endif %}
                 <div class="col-md-3">
                     <input class="btn btn-primary btn-block btn-apply-filters" type="submit" value="Apply filters" id="apply_filters">

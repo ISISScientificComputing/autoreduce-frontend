@@ -95,7 +95,6 @@ class SearchPage(Page, NavbarMixin, FooterMixin):
 
     def click_search_button(self) -> None:
         """Click the `Search` button."""
-        #search_btn = self.driver.find_element_by_xpath("/html/body/div[2]/div/form/button")
         search_btn = self.driver.find_element_by_id("search-button")
         search_btn.click()
 

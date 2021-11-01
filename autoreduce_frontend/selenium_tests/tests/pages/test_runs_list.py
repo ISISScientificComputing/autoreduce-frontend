@@ -91,7 +91,7 @@ class TestRunsListQueries(BaseTestCase, AccessibilityTestMixin, FooterTestMixin,
 
     def test_each_query(self):
         """Test that each potential query is maintained."""
-        for query in ("sort=run", "per_page=10", "filter=run", "page="):
+        for query in ("sort=-run_number", "per_page=10", "filter=run", "page="):
             self.page.launch()
             self._test_page_query(query + ("1" if query == "page=" else ""))
 
