@@ -28,6 +28,8 @@ class ReductionRunTable(Table):
 
     status = tables.Column(attrs={"td": {"class": data_status}})
 
+    created = tables.DateTimeColumn(attrs={"td": {"class": "created-dates"}})
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
