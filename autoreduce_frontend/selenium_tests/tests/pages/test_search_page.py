@@ -20,9 +20,7 @@ class TestSearchPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
     fixtures = BaseTestCase.fixtures + ["pr_test"]
 
     def setUp(self) -> None:
-        """
-        Sets up the HelpPage object
-        """
+        """Sets up the SearchPage object."""
         super().setUp()
         self.instrument_name = "TestInstrument"
         self.page = SearchPage(self.driver, self.instrument_name)
@@ -37,6 +35,7 @@ class TestSearchPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
         assert self.page.alert_runs_message_text() == expected
 
     def test_search_by_run_number(self):
+        """Test searching by only run number."""
         self.page.launch()
         self.page.run_number_text_area.send_keys("99999")
         self.page.run_number_text_area.submit()
@@ -46,6 +45,7 @@ class TestSearchPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
         assert run_summary_page.driver.title == "Reduction job #99999 - ISIS Auto-reduction"
 
     def test_search_by_instrument(self):
+        """Test searching by only Instrument."""
         self.page.launch()
         dropdown = self.page.run_instrument_dropdown
         dropdown.select_by_visible_text("TESTINSTRUMENT")
@@ -54,6 +54,7 @@ class TestSearchPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
         assert len(runs) != 0
 
     def test_created_date_selection(self):
+        """Test searching by date range."""
         min_datefield = self.page.created_min_date
         max_datefield = self.page.created_max_date
         min_datefield.send_keys("01012011")
@@ -63,6 +64,10 @@ class TestSearchPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
         assert len(runs) != 0
 
     def test_combining_queries(self):
+        """
+        Test searching with a run number,
+        matching instrument, and date range.
+        """
         self.page.run_number_text_area.send_keys("99999")
         dropdown = self.page.run_instrument_dropdown
         dropdown.select_by_visible_text("TESTINSTRUMENT")
@@ -75,6 +80,7 @@ class TestSearchPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
         assert len(runs) != 0
 
     def test_search_description(self):
+        """Test searching by if run description contains entered text"""
         self.page.launch()
         self.page.run_description_text_area.send_keys("test run_description")
         self.page.run_description_contains.click()
@@ -83,6 +89,7 @@ class TestSearchPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
         assert len(runs) != 0
 
     def test_search_description_exact(self):
+        """Test searching by if run description contains exact entered text"""
         self.page.launch()
         self.page.run_description_text_area.send_keys("test run_description")
         self.page.run_description_exact.click()

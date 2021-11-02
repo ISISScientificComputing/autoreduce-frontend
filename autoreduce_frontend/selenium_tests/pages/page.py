@@ -9,10 +9,9 @@ Module containing the base Page object class
 """
 from abc import ABC, abstractmethod
 from typing import Union
+from selenium import webdriver
 
 from autoreduce_frontend.selenium_tests import configuration
-
-from selenium import webdriver
 
 
 class Page(ABC):

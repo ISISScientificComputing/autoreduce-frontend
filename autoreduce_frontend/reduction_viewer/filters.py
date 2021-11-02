@@ -8,7 +8,7 @@ from django.core.exceptions import ValidationError
 
 
 class ReductionRunFilter(FilterSet):
-    def validate_run_number(value):
+    def validate_run_number(self, value):
         if "," in value and "-" not in value:
             if not re.match(r'\d+,\d+', value):
                 raise ValidationError("There must be a run number before and after the comma.")
@@ -45,6 +45,7 @@ class ReductionRunFilter(FilterSet):
             self.queryset = self.queryset.none()
         self.run_description_qualifier = run_description_qualifier
 
+    # pylint:disable=unused-argument
     def filter_run_number(self, queryset, name, value):
         # If no value is passed, return initial queryset
         if not value:

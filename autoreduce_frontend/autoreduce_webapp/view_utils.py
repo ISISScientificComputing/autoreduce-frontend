@@ -117,8 +117,8 @@ def render_with(template):
             if 'bad_browsers' not in output:
                 # Load in the list of not accepted browsers from the settings
                 bad_browsers = []
-                for browser in OUTDATED_BROWSERS:
-                    bad_browsers.append((browser, OUTDATED_BROWSERS[browser]))
+                for browser, version in OUTDATED_BROWSERS.items():
+                    bad_browsers.append((browser, version))
 
                 # Get the family and version from the user_agent
                 family = request.user_agent.browser.family

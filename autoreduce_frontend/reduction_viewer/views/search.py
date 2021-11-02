@@ -1,17 +1,17 @@
 from autoreduce_db.reduction_viewer.models import Experiment, ReductionRun
-from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions, login_and_uows_valid, render_with)
+from django_tables2 import RequestConfig
 
+from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions, login_and_uows_valid, render_with)
 from autoreduce_frontend.reduction_viewer.filters import ExperimentFilter, ReductionRunFilter
 from autoreduce_frontend.reduction_viewer.tables import ExperimentTable, ReductionRunTable
 from autoreduce_frontend.reduction_viewer.forms import SearchOptionsForm
-
-from django_tables2 import RequestConfig
 
 
 @login_and_uows_valid
 @check_permissions
 @render_with('search.html')
 def search(request):
+    """Render search page."""
     run_list = ReductionRun.objects.none()
     run_description_qualifier = request.GET.get("run_description_qualifier", "contains")
     run_filter = ReductionRunFilter(request.GET, run_description_qualifier=run_description_qualifier, queryset=run_list)

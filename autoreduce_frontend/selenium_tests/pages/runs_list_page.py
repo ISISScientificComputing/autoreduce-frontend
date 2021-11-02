@@ -94,10 +94,16 @@ class RunsListPage(Page, NavbarMixin, FooterMixin, TourMixin):
             raise NoSuchElementException
 
     def click_next_page_button(self) -> None:
+        """
+        Click next page pagination button
+        """
         btn = self.driver.find_element_by_xpath("//li[@class='next page-item']/a")
         btn.click()
 
     def click_prev_page_button(self) -> None:
+        """
+        Click previous page pagination button
+        """
         btn = self.driver.find_element_by_xpath("//li[@class='prev page-item']/a")
         btn.click()
 
