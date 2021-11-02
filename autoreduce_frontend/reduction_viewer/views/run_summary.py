@@ -24,7 +24,8 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
                                           run_numbers__run_number=run_number).order_by('-run_version').select_related(
                                               'status').select_related('experiment').select_related('instrument')
     if len(history) == 0:
-        raise ValueError(f"Could not find any matching runs for instrument {instrument_name} run {run_number}")
+        return redirect("{}?message=Run {}-{} does not exist. Redirected to the instrument page.".format(
+            reverse("runs:list", kwargs={'instrument': instrument_name}), run_number, run_version))
 
     return run_summary_run(request, history, instrument_name, run_version, run_number)
 
