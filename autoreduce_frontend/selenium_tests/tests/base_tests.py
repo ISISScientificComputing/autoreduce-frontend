@@ -11,7 +11,6 @@ Module containing the base test cases for a page and components
 import datetime
 from pathlib import Path
 
-from autoreduce_db.reduction_viewer.models import Instrument
 from autoreduce_utils.settings import AUTOREDUCE_HOME_ROOT
 from axe_selenium_python import Axe
 from django.contrib.auth import get_user_model

@@ -8,18 +8,18 @@ from django.core.exceptions import ValidationError
 
 
 class ReductionRunFilter(FilterSet):
-    def validate_run_number(self, value):
-        if "," in value and "-" not in value:
-            if not re.match(r'\d+,\d+', value):
+    def validate_run_number(self):
+        if "," in self and "-" not in self:
+            if not re.match(r'\d+,\d+', self):
                 raise ValidationError("There must be a run number before and after the comma.")
-        elif "-" in value and "," not in value:
-            if not re.match(r'\d+-\d+', value):
+        elif "-" in self and "," not in self:
+            if not re.match(r'\d+-\d+', self):
                 raise ValidationError("There must be a run number before and after the hyphen.")
-        elif "-" and "," in value:
-            if not re.match(r'\d+-\d+', value):
+        elif "-" and "," in self:
+            if not re.match(r'\d+-\d+', self):
                 raise ValidationError("There must be a run number before and after the hyphen.")
         else:
-            if not re.match(r'^\d+$', value):
+            if not re.match(r'^\d+$', self):
                 raise ValidationError("Run number must be numeric.")
 
     created = DateFromToRangeFilter(widget=RangeWidget(attrs={
