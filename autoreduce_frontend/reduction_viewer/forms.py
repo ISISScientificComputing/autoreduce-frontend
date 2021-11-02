@@ -20,7 +20,7 @@ FILTER_BY = (
 
 class SearchOptionsForm(forms.Form):
     def __init__(self, *args, **kwargs):
-        super(SearchOptionsForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     pagination = forms.ChoiceField(
         widget=forms.Select(
@@ -39,7 +39,7 @@ class SearchOptionsForm(forms.Form):
 
 class RunsListOptionsForm(forms.Form):
     def __init__(self, *args, **kwargs):
-        super(RunsListOptionsForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     per_page = forms.ChoiceField(
         widget=forms.Select(

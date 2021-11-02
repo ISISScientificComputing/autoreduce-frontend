@@ -20,7 +20,9 @@ class ReductionRunTable(Table):
             return "text-" + colour_table_row(status.__str__()) + " run-status"
 
     run_number = tables.TemplateColumn(
-        '{% load generate_run_link %} <a href="{% generate_run_link record.instrument record %}?page={{ current_page }}&per_page={{ per_page }}&sort={{ sort }}&filter={{ filtering }}">{{ record.title }}</a>',
+        """{% load generate_run_link %} <a href="{% generate_run_link record.instrument record %}?
+page={{ current_page }}&per_page={{ per_page }}&sort={{ sort }}&filter={{ filtering }}">{{ record.title }}
+</a>""",
         attrs={"td": {
             "class": "run-num-links"
         }},
@@ -56,7 +58,8 @@ class ExperimentTable(Table):
         super().__init__(*args, **kwargs)
 
     reference_number = tables.TemplateColumn(
-        '<a href="{% url \'experiment_summary\' record.reference_number %}" onClick="event.stopPropagation();">RB{{ record.reference_number }}</a>',
+        """<a href="{% url \'experiment_summary\' record.reference_number %}" onClick="event.stopPropagation();">
+RB{{ record.reference_number }}</a>""",
         attrs={"td": {
             "class": "experiment-num-links"
         }})

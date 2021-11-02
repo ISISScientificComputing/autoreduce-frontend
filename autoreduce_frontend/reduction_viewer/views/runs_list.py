@@ -3,11 +3,11 @@ import logging
 
 from autoreduce_db.reduction_viewer.models import Experiment, Instrument, ReductionRun, Status
 from autoreduce_qp.queue_processor.variable_utils import VariableUtils
+from django_tables2 import RequestConfig
+
 from autoreduce_frontend.autoreduce_webapp.view_utils import check_permissions, login_and_uows_valid, render_with
 from autoreduce_frontend.reduction_viewer.tables import ExperimentTable, ReductionRunTable
 from autoreduce_frontend.reduction_viewer.forms import RunsListOptionsForm
-
-from django_tables2 import RequestConfig
 
 LOGGER = logging.getLogger(__package__)
 

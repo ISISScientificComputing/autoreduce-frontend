@@ -1,25 +1,25 @@
+import re
 from autoreduce_db.reduction_viewer.models import Experiment, ReductionRun
-from django_filters.filters import CharFilter, Filter
+from django_filters.filters import CharFilter
 from django_filters.widgets import RangeWidget
 from django_filters import FilterSet, DateFromToRangeFilter
 from django.db.models import Q
-import re
 from django.core.exceptions import ValidationError
 
 
 class ReductionRunFilter(FilterSet):
     def validate_run_number(value):
         if "," in value and "-" not in value:
-            if not re.match('\d+,\d+', value):
+            if not re.match(r'\d+,\d+', value):
                 raise ValidationError("There must be a run number before and after the comma.")
         elif "-" in value and "," not in value:
-            if not re.match('\d+-\d+', value):
+            if not re.match(r'\d+-\d+', value):
                 raise ValidationError("There must be a run number before and after the hyphen.")
         elif "-" and "," in value:
-            if not re.match('\d+-\d+', value):
+            if not re.match(r'\d+-\d+', value):
                 raise ValidationError("There must be a run number before and after the hyphen.")
         else:
-            if not re.match('\d', value):
+            if not re.match(r'^\d+$', value):
                 raise ValidationError("Run number must be numeric.")
 
     created = DateFromToRangeFilter(widget=RangeWidget(attrs={
@@ -39,7 +39,7 @@ class ReductionRunFilter(FilterSet):
         fields = ['run_number', 'instrument', 'run_description', 'created', 'status']
 
     def __init__(self, *args, run_description_qualifier=None, **kwargs):
-        super(ReductionRunFilter, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         # Call empty qs here to prevent all runs showing when search page first loaded
         if self.data == {}:
             self.queryset = self.queryset.none()
@@ -87,7 +87,7 @@ class ExperimentFilter(FilterSet):
         fields = ['reference_number']
 
     def __init__(self, *args, **kwargs):
-        super(ExperimentFilter, self).__init__(*args, **kwargs)
-        # doesn't push Submit button, QueryDict (in data) is empty so not all runs displayed at start
+        super().__init__(*args, **kwargs)
+        # Call empty qs here to prevent all runs showing when search page first loaded
         if self.data == {}:
             self.queryset = self.queryset.none()

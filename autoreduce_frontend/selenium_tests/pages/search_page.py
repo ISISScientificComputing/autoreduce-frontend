@@ -33,42 +33,55 @@ class SearchPage(Page, NavbarMixin, FooterMixin):
 
     @property
     def run_number_text_area(self) -> WebElement:
+        """Return the run-number text area."""
         return self.driver.find_element_by_id("id_run_number")
 
     @property
     def run_instrument_dropdown(self) -> WebElement:
+        """Return the instrument dropdown selection."""
         dropdown = Select(self.driver.find_element_by_id('id_instrument'))
         return dropdown
 
     @property
     def run_description_text_area(self) -> WebElement:
+        """Return the run-description text area."""
         return self.driver.find_element_by_id("id_run_description")
 
     @property
     def created_min_date(self) -> WebElement:
+        """Return the first (beginning of Date range) date picker."""
         created_min = self.driver.find_element_by_id("id_created_0")
         return created_min
 
     @property
     def created_max_date(self) -> WebElement:
+        """Return the second (end of Date range) date picker."""
         created_max = self.driver.find_element_by_id("id_created_1")
         return created_max
 
     @property
     def run_description_contains(self) -> WebElement:
+        """Return the "contains" radio button for run description."""
         contains_radio_button = self.driver.find_element_by_xpath("//*[@id='contains']")
         return contains_radio_button
 
     @property
     def run_description_exact(self) -> WebElement:
+        """Return the "exact" radio button for run description."""
         exact_radio_button = self.driver.find_element_by_xpath("//*[@id='exact']")
         return exact_radio_button
 
     def click_runs_tab(self) -> None:
+        """
+        Clicks run tab to show Run search form
+        """
         runs_tab = self.driver.find_element_by_class_name("runs-tab")
         runs_tab.click()
 
     def click_experiments_tab(self) -> None:
+        """
+        Clicks experiments tab to show Experiments search form
+        """
         experiments_tab = self.driver.find_element_by_class_name("experiments-tab")
         experiments_tab.click()
 

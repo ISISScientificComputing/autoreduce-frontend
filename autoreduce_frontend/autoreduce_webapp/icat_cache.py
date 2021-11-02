@@ -9,7 +9,6 @@ Chached data from the ICAT service
 """
 import datetime
 import logging
-import os
 
 from django.utils import timezone
 

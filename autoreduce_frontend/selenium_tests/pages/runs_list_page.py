@@ -95,12 +95,10 @@ class RunsListPage(Page, NavbarMixin, FooterMixin, TourMixin):
 
     def click_next_page_button(self) -> None:
         btn = self.driver.find_element_by_xpath("//li[@class='next page-item']/a")
-        #btn = self.driver.find_element_by_class_name("next")
         btn.click()
 
     def click_prev_page_button(self) -> None:
         btn = self.driver.find_element_by_xpath("//li[@class='prev page-item']/a")
-        #btn = self.driver.find_element_by_class_name("prev")
         btn.click()
 
     def update_filter(self, filter_name, value):
