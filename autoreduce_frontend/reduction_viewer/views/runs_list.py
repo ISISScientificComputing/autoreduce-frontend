@@ -72,7 +72,8 @@ def runs_list(request, instrument=None):
             'run_table': run_table,
             'per_page': request.GET.get('per_page', 10),
             'current_page': request.GET.get('page', 1),
-            'options_form': options_form
+            'options_form': options_form,
+            'info_message': request.GET.get('message', ''),
         }
 
         if filter_by == 'experiment':

@@ -1,4 +1,6 @@
 import logging
+from django.shortcuts import redirect
+from django.urls import reverse
 from autoreduce_db.reduction_viewer.models import ReductionRun
 from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions, login_and_uows_valid, render_with)
 
@@ -24,7 +26,7 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
     if len(history) == 0:
         raise ValueError(f"Could not find any matching runs for instrument {instrument_name} run {run_number}")
 
-    return run_summary_run(request, history, instrument_name, run_version)
+    return run_summary_run(request, history, instrument_name, run_version, run_number)
 
 
 @login_and_uows_valid
@@ -38,14 +40,16 @@ def run_summary_batch_run(request, instrument_name=None, pk=None, run_version=0)
     if len(history) == 0:
         raise ValueError(f"Could not find any matching runs for instrument {instrument_name} run {pk}")
 
-    return run_summary_run(request, history, instrument_name, run_version)
+    return run_summary_run(request, history, instrument_name, run_version, pk)
 
 
-# This pylint warning should be fixed, tracked in https://autoreduce.atlassian.net/browse/AR-1581
-# pylint:disable=too-many-locals
-def run_summary_run(request, history, instrument_name=None, run_version=0):
+def run_summary_run(request, history, instrument_name=None, run_version=0, run_number=0):
     """Gathers the context and renders a run's summary"""
-    run = next(run for run in history if run.run_version == int(run_version))
+    try:
+        run = next(run for run in history if run.run_version == int(run_version))
+    except StopIteration:
+        return redirect("{}?message=Run {}-{} does not exist. Redirected to the instrument page.".format(
+            reverse("runs:list", kwargs={'instrument': instrument_name}), run_number, run_version))
     started_by = started_by_id_to_name(run.started_by)
 
     # Run status value of "s" means the run is skipped
