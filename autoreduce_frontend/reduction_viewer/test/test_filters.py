@@ -1,7 +1,6 @@
-from autoreduce_db.reduction_viewer.models import ReductionRun
 import pytest
 from django.core.exceptions import ValidationError
-from autoreduce_frontend.reduction_viewer.filters import validate_run_number, filter_run_number
+from autoreduce_frontend.reduction_viewer.filters import validate_run_number
 
 allowed_queries = ['60200', '60200,60201', '60200-60202', '60190-60200, 60180-60185']
 banned_queries = ['60200$', '60200,', '60200-', 'a']
