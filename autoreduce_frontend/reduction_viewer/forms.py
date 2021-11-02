@@ -14,7 +14,7 @@ ITEMS_PER_PAGE = (
 FILTER_BY = (
     ("run", 'Run Number'),
     ("experiment", 'Experiment Reference (RB)'),
-    ("batch_run", 'Batch Run'),
+    ("batch_runs", 'Batch Run'),
 )
 
 

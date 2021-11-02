@@ -50,13 +50,7 @@ hr {
 /****************
  2. Navbar
 ****************/
-.navbar-collapse.collapse.in .navbar-text,
-.navbar-collapse.collapsing .navbar-text {
-    padding-left: 15px;
-    padding-right: 15px;
-}
-
-.navbar-default .navbar-nav > li > a {
+.navbar-light .navbar-nav .nav-link {
     color: #428bca;
 }
 
@@ -64,7 +58,7 @@ hr {
     padding: 10px;
 }
 
-.navbar-default .navbar-text {
+.navbar-light .navbar-text {
     color: #444444;
 }
 /****************

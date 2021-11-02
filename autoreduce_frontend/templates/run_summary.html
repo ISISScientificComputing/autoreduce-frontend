@@ -206,7 +206,7 @@
             {% endautoescape %}
         </div>
 
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center mt-4">
             <div class="text-center">
                 <a href="{% generate_run_link instrument run=newest_run %}?page={{current_page}}&per_page={{ per_page }}&sort={{ page_type }}&filter={{ filtering }}" class="btn btn-primary back {% if newest_run == run %} disabled {% endif %}" id="newest">&#124;&#60; Newest
                 </a>
