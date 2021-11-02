@@ -1,10 +1,10 @@
-from autoreduce_frontend.autoreduce_webapp.view_utils import get_notifications
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView
 from django.views.generic.edit import DeleteView, FormView
 from rest_framework.authtoken.models import Token
 
+from autoreduce_frontend.autoreduce_webapp.view_utils import get_notifications
 from autoreduce_frontend.generate_token.forms import GenerateTokenForm
 
 

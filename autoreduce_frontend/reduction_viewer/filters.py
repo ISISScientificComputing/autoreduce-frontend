@@ -7,20 +7,46 @@ from django.db.models import Q
 from django.core.exceptions import ValidationError
 
 
+def validate_run_number(self):
+    if "," in self and "-" not in self:
+        if not re.match(r'\d+,\d+', self):
+            raise ValidationError("There must be a run number before and after the comma.")
+    elif "-" in self and "," not in self:
+        if not re.match(r'\d+-\d+', self):
+            raise ValidationError("There must be a run number before and after the hyphen.")
+    elif "-" and "," in self:
+        if not re.match(r'\d+-\d+', self):
+            raise ValidationError("There must be a run number before and after the hyphen.")
+    else:
+        if not re.match(r'^\d+$', self):
+            raise ValidationError("Run number must be numeric.")
+
+
+    # pylint:disable=unused-argument
+def filter_run_number(queryset, name, value):
+    # If no value is passed, return initial queryset
+    if not value:
+        return queryset
+    if "," in value and "-" not in value:
+        list_values = value.split(',')
+        query = Q(run_numbers__run_number__in=list_values)
+        return queryset.filter(query)
+    if "-" in value and "," not in value:
+        list_values = value.split('-')
+        query = Q(run_numbers__run_number__range=(list_values[0], list_values[1]))
+        return queryset.filter(query)
+    if "-" and "," in value:
+        query = Q()
+        list_values = value.split(',')
+        for pair in list_values:
+            seperated_pair = pair.split('-')
+            query.add(Q(run_numbers__run_number__range=(seperated_pair[0], seperated_pair[1])), Q.OR)
+        return queryset.filter(query)
+    query = Q(run_numbers__run_number__exact=value)
+    return queryset.filter(query)
+
+
 class ReductionRunFilter(FilterSet):
-    def validate_run_number(self):
-        if "," in self and "-" not in self:
-            if not re.match(r'\d+,\d+', self):
-                raise ValidationError("There must be a run number before and after the comma.")
-        elif "-" in self and "," not in self:
-            if not re.match(r'\d+-\d+', self):
-                raise ValidationError("There must be a run number before and after the hyphen.")
-        elif "-" and "," in self:
-            if not re.match(r'\d+-\d+', self):
-                raise ValidationError("There must be a run number before and after the hyphen.")
-        else:
-            if not re.match(r'^\d+$', self):
-                raise ValidationError("Run number must be numeric.")
 
     created = DateFromToRangeFilter(widget=RangeWidget(attrs={
         'type': 'date',
@@ -28,9 +54,9 @@ class ReductionRunFilter(FilterSet):
         'label': 'created'
     }))
 
-    run_description = CharFilter(method='filter_run_description')
+    run_description = CharFilter(method="filter_run_description")
     run_number = CharFilter(field_name="run_number",
-                            method="filter_run_number",
+                            method=filter_run_number,
                             label='Run Number',
                             validators=[validate_run_number])
 
@@ -44,29 +70,6 @@ class ReductionRunFilter(FilterSet):
         if self.data == {}:
             self.queryset = self.queryset.none()
         self.run_description_qualifier = run_description_qualifier
-
-    # pylint:disable=unused-argument
-    def filter_run_number(self, queryset, name, value):
-        # If no value is passed, return initial queryset
-        if not value:
-            return queryset
-        if "," in value and "-" not in value:
-            list_values = value.split(',')
-            query = Q(run_numbers__run_number__in=list_values)
-            return queryset.filter(query)
-        if "-" in value and "," not in value:
-            list_values = value.split('-')
-            query = Q(run_numbers__run_number__range=(list_values[0], list_values[1]))
-            return queryset.filter(query)
-        if "-" and "," in value:
-            query = Q()
-            list_values = value.split(',')
-            for pair in list_values:
-                seperated_pair = pair.split('-')
-                query.add(Q(run_numbers__run_number__range=(seperated_pair[0], seperated_pair[1])), Q.OR)
-            return queryset.filter(query)
-        query = Q(run_numbers__run_number__exact=value)
-        return queryset.filter(query)
 
     def filter_run_description(self, queryset, name, value):
         if not value:
