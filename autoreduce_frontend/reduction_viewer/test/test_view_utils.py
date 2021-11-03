@@ -1,9 +1,12 @@
 from django.core.exceptions import ObjectDoesNotExist
+from django.test import TestCase
 from unittest.mock import Mock, mock_open, patch
 from parameterized import parameterized
+from autoreduce_db.reduction_viewer.models import ReductionRun
 from autoreduce_frontend.autoreduce_webapp.settings import DATA_ANALYSIS_BASE_URL
 from autoreduce_frontend.reduction_viewer.view_utils import (get_interactive_plot_data, make_data_analysis_url,
-                                                             started_by_id_to_name)
+                                                             started_by_id_to_name, order_runs)
+from autoreduce_frontend.selenium_tests.tests.base_tests import BaseTestCase
 
 
 def test_make_data_analysis_url_no_instrument_in_string():
@@ -51,3 +54,22 @@ def test_started_by_id_to_name_missing_user(logger: Mock, get_user_model_mock: M
     get_user_model_mock.return_value.objects.get.side_effect = ObjectDoesNotExist
     assert started_by_id_to_name(100) is None
     logger.error.assert_called_once()
+
+
+class ReductionRunTestCase(TestCase):
+    fixtures = BaseTestCase.fixtures + ["autoreduce_frontend/autoreduce_webapp/fixtures/eleven_runs.json"]
+
+    def test_order_runs(self):
+        """
+        Test to ensure ordering of Runs functions as expected
+        """
+        runs = ReductionRun.objects.all()
+        assert runs.count() > 0
+        runs = order_runs("-run_number", runs=runs)
+        assert runs.first().run_number == 100009
+        runs = order_runs("run_number", runs=runs)
+        assert runs.first().run_number == 99999
+        runs = order_runs("-created", runs=runs)
+        assert runs.first().run_number == 99999
+        runs = order_runs("created", runs=runs)
+        assert runs.first().run_number == 100000
