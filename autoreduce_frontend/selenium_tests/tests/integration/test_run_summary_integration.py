@@ -7,7 +7,7 @@
 """Selenium tests for the runs summary page."""
 import datetime
 import re
-import pytz
+from django.utils import timezone
 
 from autoreduce_frontend.selenium_tests.pages.run_summary_page import RunSummaryPage
 from autoreduce_frontend.selenium_tests.pages.runs_list_page import RunsListPage
@@ -113,10 +113,8 @@ class TestRunSummaryPageIntegration(BaseIntegrationTestCase):
         runs_list_page = RunsListPage(self.driver, self.instrument_name)
         runs_list_page.launch()
 
-        gmt = pytz.timezone("Europe/London")
-
         # Get the datetime of now
-        now_datetime = gmt.localize(datetime.datetime.now())
+        now_aware = timezone.now()
 
         # Get the bottom run from the runs list page and cast it to datetime
         bottom_run_element = runs_list_page.get_created_from_table()[-1]
@@ -128,11 +126,11 @@ class TestRunSummaryPageIntegration(BaseIntegrationTestCase):
             replaced = re.sub("p.m.", "PM", bottom_run_element)
 
         run_last_updated = datetime.datetime.strptime(replaced, "%d/%m/%Y %I:%M %p")
-        run_datetime = gmt.localize(run_last_updated)
+        aware_datetime = timezone.make_aware(run_last_updated)
 
         # Calculate the difference in minutes between the current time and the
         # time the run displays on the runs list page
-        minutes_diff = (now_datetime - run_datetime).total_seconds() / 60.0
+        minutes_diff = (now_aware - aware_datetime).total_seconds() / 60.0
 
         # A minute diff more than 30 would indicate a wrong timezone
         assert minutes_diff < 30
