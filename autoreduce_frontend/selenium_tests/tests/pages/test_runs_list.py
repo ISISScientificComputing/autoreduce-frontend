@@ -16,7 +16,7 @@ from autoreduce_frontend.selenium_tests.tests.base_tests import (AccessibilityTe
 class TestRunsList(BaseTestCase, AccessibilityTestMixin, FooterTestMixin, NavbarTestMixin):
     """Test cases for the InstrumentSummary page."""
 
-    fixtures = BaseTestCase.fixtures + ["test_runs_list"]
+    fixtures = BaseTestCase.fixtures + ["eleven_runs"]
 
     def setUp(self) -> None:
         """Sets up the InstrumentSummaryPage object."""
@@ -24,12 +24,17 @@ class TestRunsList(BaseTestCase, AccessibilityTestMixin, FooterTestMixin, Navbar
         self.instrument_name = "TESTINSTRUMENT"
         self.page = RunsListPage(self.driver, self.instrument_name)
 
-    def test_reduction_run_displayed(self):
-        """
-        Test that run '99999' is displayed when the run exists in the database.
-        """
-        runs = self.page.launch().get_run_numbers_from_table()
-        assert "99999" in runs
+    def test_tables_loaded(self):
+        for filter in ("Run Number", "Experiment Reference (RB)", "Batch Run"):
+            self.page.launch()
+            self.page.update_filter("filter_select", filter)
+            self.page.click_apply_filters()
+            if filter == "Run Number":
+                runs = self.page.get_run_numbers_from_table()
+                assert len(runs) > 0
+            elif filter == "Experiment Reference (RB)":
+                experiments = self.page.get_experiments_from_table()
+                assert len(experiments) > 0
 
     def test_alert_message_when_missing_reduce_vars(self):
         """
