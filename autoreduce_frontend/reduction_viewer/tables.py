@@ -1,26 +1,11 @@
 import django_tables2 as tables
 from django_tables2 import Table
 from autoreduce_db.reduction_viewer.models import ReductionRun, Experiment
-from autoreduce_frontend.autoreduce_webapp.templatetags.colour_table_row import colour_table_row
-from autoreduce_frontend.reduction_viewer.view_utils import started_by_id_to_name
+from autoreduce_frontend.reduction_viewer.view_utils import data_status, started_by_id_to_name
 
 
 class ReductionRunTable(Table):
     '''Table model for displaying Reduction Runs (and batch-runs)'''
-
-    # pylint:disable=no-method-argument
-    def data_status(**kwargs):
-        """Function to add text-(status) class to status column for formatting
-
-        Returns:
-        "text- " concatonated with status fetched from record for formatting with colour_table_row
-
-        """
-        status = kwargs.get("value", None)
-        if status is None:
-            return "header"
-        else:
-            return "text-" + colour_table_row(status.__str__()) + " run-status"
 
     run_number = tables.TemplateColumn(
         """{% load generate_run_link %} <a href="{% generate_run_link record.instrument record %}?
@@ -31,7 +16,7 @@ page={{ current_page }}&per_page={{ per_page }}&sort={{ sort }}&filter={{ filter
         }},
         accessor="run_numbers__run_number")
 
-    status = tables.Column(attrs={"td": {"class": data_status}})
+    status = tables.Column(attrs={"td": {"class": lambda record: data_status(record.status.__str__())}})
 
     created = tables.DateTimeColumn(attrs={"td": {"class": "created-dates"}})
 
@@ -76,20 +61,6 @@ RB{{ record.reference_number }}</a>""",
 class ExperimentSummaryTable(Table):
     '''Table model for displaying Reduction Runs (and batch-runs)'''
 
-    # pylint:disable=no-method-argument
-    def data_status(**kwargs):
-        """Function to add text-(status) class to status column for formatting
-
-        Returns:
-        "text- " concatonated with status fetched from record for formatting with colour_table_row
-
-        """
-        status = kwargs.get("value", None)
-        if status is None:
-            return "header"
-        else:
-            return "text-" + colour_table_row(status.__str__()) + " run-status"
-
     run_number = tables.TemplateColumn(
         """{% load generate_run_link %} <a href="{% generate_run_link record.instrument record %}?
 page={{ current_page }}&per_page={{ per_page }}&sort={{ sort }}&filter={{ filtering }}">{{ record.title }}
@@ -99,7 +70,7 @@ page={{ current_page }}&per_page={{ per_page }}&sort={{ sort }}&filter={{ filter
         }},
         accessor="run_numbers__run_number")
 
-    status = tables.Column(attrs={"td": {"class": data_status}})
+    status = tables.Column(attrs={"td": {"class": lambda record: data_status(record.status.__str__())}})
 
     last_updated = tables.DateTimeColumn(attrs={"td": {"class": "last-updated-dates"}})
 
@@ -124,4 +95,8 @@ page={{ current_page }}&per_page={{ per_page }}&sort={{ sort }}&filter={{ filter
         )
 
     def render_started_by(self, value):
+        '''
+        Render method for started_by column to populate with name
+        instead of id.
+        '''
         return started_by_id_to_name(value)

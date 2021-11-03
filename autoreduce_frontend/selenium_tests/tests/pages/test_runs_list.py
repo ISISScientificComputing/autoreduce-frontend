@@ -36,6 +36,11 @@ class TestRunsList(BaseTestCase, AccessibilityTestMixin, FooterTestMixin, Navbar
                 experiments = self.page.get_experiments_from_table()
                 assert len(experiments) > 0
 
+    def test_table_column_attributes(self):
+        self.page.launch()
+        status_list = self.page.get_status_from_table()
+        assert len(status_list) > 0
+
     def test_alert_message_when_missing_reduce_vars(self):
         """
         Test that the correct message is shown when the reduce_vars.py file is

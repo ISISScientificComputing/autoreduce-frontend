@@ -5,7 +5,7 @@ from parameterized import parameterized
 from autoreduce_db.reduction_viewer.models import ReductionRun
 from autoreduce_frontend.autoreduce_webapp.settings import DATA_ANALYSIS_BASE_URL
 from autoreduce_frontend.reduction_viewer.view_utils import (get_interactive_plot_data, make_data_analysis_url,
-                                                             started_by_id_to_name, order_runs)
+                                                             started_by_id_to_name, order_runs, data_status)
 from autoreduce_frontend.selenium_tests.tests.base_tests import BaseTestCase
 
 
@@ -75,3 +75,11 @@ class ReductionRunTestCase(TestCase):
         assert runs.first().run_number == 100000
         runs = order_runs("doesn't_exist", runs=runs)
         assert runs.first().run_number == 100009
+
+
+def test_status_column_colour():
+    assert data_status("Error") == "text-danger run-status"
+    assert data_status("Processing") == "text-warning run-status"
+    assert data_status("Queued") == "text-info run-status"
+    assert data_status("Completed") == "text-success run-status"
+    assert data_status("Skipped") == "text-dark run-status"

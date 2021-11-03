@@ -18,6 +18,7 @@ from autoreduce_db.reduction_viewer.models import Instrument, ReductionRun
 from autoreduce_qp.queue_processor.reduction.service import ReductionScript
 from autoreduce_frontend.autoreduce_webapp.settings import DATA_ANALYSIS_BASE_URL
 from autoreduce_frontend.autoreduce_webapp.settings import (ALLOWED_HOSTS, UOWS_LOGIN_URL)
+from autoreduce_frontend.autoreduce_webapp.templatetags.colour_table_row import colour_table_row
 
 LOGGER = logging.getLogger(__package__)
 
@@ -150,6 +151,17 @@ def order_runs(sort_by: str, runs: ReductionRun.objects):
         runs = runs.order_by('-run_numbers__run_number', 'run_version')
 
     return runs
+
+
+# pylint:disable=no-method-argument
+def data_status(status):
+    """Function to add text-(status) class to status column for formatting
+
+        Returns:
+        "text- " concatonated with status fetched from record for formatting with colour_table_row
+
+        """
+    return "text-" + colour_table_row(status) + " run-status"
 
 
 def get_navigation_runs(instrument_name: str, run: ReductionRun, page_type: str) -> Tuple[ReductionRun]:

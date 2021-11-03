@@ -5,8 +5,8 @@ from autoreduce_db.reduction_viewer.models import ReductionRun
 from autoreduce_frontend.reduction_viewer.filters import validate_run_number, filter_run_number
 from autoreduce_frontend.selenium_tests.tests.base_tests import BaseTestCase
 
-allowed_queries = ['99999', '99999,100000', '100000-100002', '100000-100005, 100007-100009']
-banned_queries = ['60200$', '60200,', '60200-', 'a']
+allowed_queries = ['99999', '99999,100000', '100000-100002', '100000-100005,100007-100009']
+banned_queries = ['60200$', '60200,', '60200-', 'a', '60200£', '60200-23434, 23432-']
 
 
 class FilterRunNumber(TestCase):

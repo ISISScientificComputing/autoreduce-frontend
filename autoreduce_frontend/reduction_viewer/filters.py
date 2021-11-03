@@ -14,16 +14,16 @@ def validate_run_number(self):
     """
     if "," in self and "-" not in self:
         if not re.match(r'\d+,\d+', self):
-            raise ValidationError("There must be a run number before and after the comma.")
+            raise ValidationError("Invalid format. There must be a run number before and after the comma.")
     elif "-" in self and "," not in self:
         if not re.match(r'\d+-\d+', self):
-            raise ValidationError("There must be a run number before and after the hyphen.")
+            raise ValidationError("Invalid format. There must be a run number before and after the hyphen.")
     elif "-" and "," in self:
-        if not re.match(r'\d+-\d+', self):
-            raise ValidationError("There must be a run number before and after the hyphen.")
+        if not re.match(r'[0-9, -]+[0-9,]$', self):
+            raise ValidationError("Invalid format. Accepted format e.g. 60200-60205, 60210-60215")
     else:
         if not re.match(r'^\d+$', self):
-            raise ValidationError("Run number must be numeric.")
+            raise ValidationError("Invalid format. Run number must be numeric.")
 
 
     # pylint:disable=unused-argument
@@ -87,11 +87,9 @@ class ReductionRunFilter(FilterSet):
         if checkbox == "exact":
             query = Q(run_description__exact=value)
             return queryset.filter(query)
-        if checkbox == "contains":
+        elif checkbox == "contains":
             query = Q(run_description__contains=value)
             return queryset.filter(query)
-        query = Q(run_description__exact=value)
-        return queryset.filter(query)
 
 
 class ExperimentFilter(FilterSet):
