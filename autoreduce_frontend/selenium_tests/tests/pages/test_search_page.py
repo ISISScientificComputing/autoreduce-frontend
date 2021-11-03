@@ -22,7 +22,7 @@ class TestSearchPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
     def setUp(self) -> None:
         """Sets up the SearchPage object."""
         super().setUp()
-        self.instrument_name = "TestInstrument"
+        self.instrument_name = "TESTINSTRUMENT"
         self.page = SearchPage(self.driver, self.instrument_name)
         self.page.launch()
 

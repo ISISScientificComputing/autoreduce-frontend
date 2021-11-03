@@ -73,3 +73,5 @@ class ReductionRunTestCase(TestCase):
         assert runs.first().run_number == 99999
         runs = order_runs("created", runs=runs)
         assert runs.first().run_number == 100000
+        runs = order_runs("doesn't_exist", runs=runs)
+        assert runs.first().run_number == 100009

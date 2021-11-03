@@ -34,10 +34,6 @@ def filter_run_number(queryset, name, value):
     ',' for seperate values
     Or a combination of the two
     """
-
-    # If no value is passed, return initial queryset
-    if not value:
-        return queryset
     if "," in value and "-" not in value:
         list_values = value.split(',')
         query = Q(run_numbers__run_number__in=list_values)
@@ -87,8 +83,6 @@ class ReductionRunFilter(FilterSet):
         Returns filtered queryset based on whether user checked the
         'contains' or 'exact' radio button for run description.
         """
-        if not value:
-            return queryset
         checkbox = self.run_description_qualifier
         if checkbox == "exact":
             query = Q(run_description__exact=value)
