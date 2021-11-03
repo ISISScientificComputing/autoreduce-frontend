@@ -28,6 +28,13 @@ def validate_run_number(self):
 
     # pylint:disable=unused-argument
 def filter_run_number(queryset, name, value):
+    """
+    Method to determine regex used by user in run number field to filter runs
+    '-' for a range
+    ',' for seperate values
+    Or a combination of the two
+    """
+
     # If no value is passed, return initial queryset
     if not value:
         return queryset
