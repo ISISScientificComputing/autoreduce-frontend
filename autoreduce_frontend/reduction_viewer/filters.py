@@ -8,6 +8,10 @@ from django.core.exceptions import ValidationError
 
 
 def validate_run_number(self):
+    """
+    Validator method to ensure correct regex in run number field on Search page
+    Raises ValidationError if regex does not match
+    """
     if "," in self and "-" not in self:
         if not re.match(r'\d+,\d+', self):
             raise ValidationError("There must be a run number before and after the comma.")
@@ -47,7 +51,7 @@ def filter_run_number(queryset, name, value):
 
 
 class ReductionRunFilter(FilterSet):
-
+    '''Filter model for filtering and querying ReductionRun models. '''
     created = DateFromToRangeFilter(widget=RangeWidget(attrs={
         'type': 'date',
         'placeholder': 'dd-mm-yyyy',
@@ -72,6 +76,10 @@ class ReductionRunFilter(FilterSet):
         self.run_description_qualifier = run_description_qualifier
 
     def filter_run_description(self, queryset, name, value):
+        """
+        Returns filtered queryset based on whether user checked the
+        'contains' or 'exact' radio button for run description.
+        """
         if not value:
             return queryset
         checkbox = self.run_description_qualifier
@@ -86,6 +94,7 @@ class ReductionRunFilter(FilterSet):
 
 
 class ExperimentFilter(FilterSet):
+    '''Filter model for filtering and querying Experiment models. '''
     class Meta:
         model = Experiment
         fields = ['reference_number']

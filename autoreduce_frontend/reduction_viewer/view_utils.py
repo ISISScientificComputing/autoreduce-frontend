@@ -134,6 +134,24 @@ def make_return_url(request, next_url):
         return UOWS_LOGIN_URL + request.build_absolute_uri()
 
 
+def order_runs(sort_by: str, runs: ReductionRun.objects):
+    """
+    Sort a queryset of runs based on the passed GET sort_by param
+    """
+    if sort_by == "-run_number":
+        runs = runs.order_by('-run_numbers__run_number', '-run_version')
+    elif sort_by == "run_number":
+        runs = runs.order_by('run_numbers__run_number', 'run_version')
+    elif sort_by == "-created":
+        runs = runs.order_by('-created')
+    elif sort_by == "created":
+        runs = runs.order_by('created')
+    else:
+        runs = runs.order_by('-run_numbers__run_number', 'run_version')
+
+    return runs
+
+
 def get_navigation_runs(instrument_name: str, run: ReductionRun, page_type: str) -> Tuple[ReductionRun]:
     """
     Return a tuple of runs that will be used for navigation in the view.
@@ -144,16 +162,8 @@ def get_navigation_runs(instrument_name: str, run: ReductionRun, page_type: str)
         page_type: The type of page that is being viewed.
     """
 
-    if page_type == "-run_number":
-        order = '-pk'
-    elif page_type == "run_number":
-        order = 'pk'
-    elif page_type == "created":
-        order = 'created'
-    elif page_type == "-created":
-        order = '-created'
-
-    runs = ReductionRun.objects.filter(instrument__name=instrument_name, batch_run=run.batch_run).order_by(order)
+    runs = ReductionRun.objects.filter(instrument__name=instrument_name, batch_run=run.batch_run)
+    runs = order_runs(sort_by=page_type, runs=runs)
 
     if not run.batch_run:
         next_run = runs.filter(run_numbers__run_number__gt=run.run_number).last()

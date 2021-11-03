@@ -6,6 +6,7 @@ from autoreduce_qp.queue_processor.variable_utils import VariableUtils
 from django_tables2 import RequestConfig
 
 from autoreduce_frontend.autoreduce_webapp.view_utils import check_permissions, login_and_uows_valid, render_with
+from autoreduce_frontend.reduction_viewer.view_utils import order_runs
 from autoreduce_frontend.reduction_viewer.tables import ExperimentTable, ReductionRunTable
 from autoreduce_frontend.reduction_viewer.forms import RunsListOptionsForm
 
@@ -33,12 +34,7 @@ def runs_list(request, instrument=None):
         last_instrument_run = runs.filter(batch_run=False).last()
         first_instrument_run = runs.filter(batch_run=False).first()
 
-        if sort_by == "-run_number":
-            runs = runs.order_by('-run_numbers__run_number', 'run_version')
-        elif sort_by == "created":
-            runs = runs.order_by('-created')
-        else:
-            runs = runs.order_by('-run_numbers__run_number', 'run_version')
+        runs = order_runs(sort_by=sort_by, runs=runs)
 
         run_table = ReductionRunTable(runs)
         RequestConfig(request, paginate={"per_page": 10}).configure(run_table)
@@ -94,6 +90,7 @@ def runs_list(request, instrument=None):
         elif filter_by == 'batch_runs':
             runs = ReductionRun.objects.only('status', 'last_updated', 'run_version',
                                              'run_description').filter(instrument=instrument_obj, batch_run=True)
+            runs = order_runs(sort_by=sort_by, runs=runs)
             run_table = ReductionRunTable(runs)
             RequestConfig(request, paginate={"per_page": 10}).configure(run_table)
             context_dictionary['run_table'] = run_table

@@ -6,6 +6,8 @@ from autoreduce_frontend.autoreduce_webapp.templatetags.colour_table_row import 
 
 class ReductionRunTable(Table):
     '''Table model for displaying Reduction Runs (and batch-runs)'''
+
+    # pylint:disable=no-method-argument
     def data_status(**kwargs):
         """Function to add text-(status) class to status column for formatting
 
