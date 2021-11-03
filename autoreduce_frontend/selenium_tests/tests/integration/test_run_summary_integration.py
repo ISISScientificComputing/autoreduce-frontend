@@ -117,7 +117,7 @@ class TestRunSummaryPageIntegration(BaseIntegrationTestCase):
         now_aware = timezone.now()
 
         # Get the bottom run from the runs list page and cast it to datetime
-        bottom_run_element = runs_list_page.get_created_from_table()[-1]
+        bottom_run_element = runs_list_page.get_created_from_table()[0]
 
         if "a.m" in bottom_run_element:
             replaced = re.sub("a.m.", "AM", bottom_run_element)
