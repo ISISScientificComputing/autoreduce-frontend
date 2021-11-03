@@ -37,6 +37,7 @@ class TestSearchPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
     def test_search_by_run_number(self):
         """Test searching by only run number."""
         self.page.launch()
+        self.page.click_runs_tab()
         self.page.run_number_text_area.send_keys("99999")
         self.page.run_number_text_area.submit()
         runs = self.page.get_run_numbers_from_table()
@@ -47,6 +48,7 @@ class TestSearchPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
     def test_search_by_instrument(self):
         """Test searching by only Instrument."""
         self.page.launch()
+        self.page.click_runs_tab()
         dropdown = self.page.run_instrument_dropdown
         dropdown.select_by_visible_text("TESTINSTRUMENT")
         self.page.click_search_button()
@@ -55,6 +57,8 @@ class TestSearchPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
 
     def test_created_date_selection(self):
         """Test searching by date range."""
+        self.page.launch()
+        self.page.click_runs_tab()
         min_datefield = self.page.created_min_date
         max_datefield = self.page.created_max_date
         min_datefield.send_keys("01012011")
@@ -68,6 +72,8 @@ class TestSearchPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
         Test searching with a run number,
         matching instrument, and date range.
         """
+        self.page.launch()
+        self.page.click_runs_tab()
         self.page.run_number_text_area.send_keys("99999")
         dropdown = self.page.run_instrument_dropdown
         dropdown.select_by_visible_text("TESTINSTRUMENT")
@@ -82,6 +88,7 @@ class TestSearchPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
     def test_search_description(self):
         """Test searching by if run description contains entered text"""
         self.page.launch()
+        self.page.click_runs_tab()
         self.page.run_description_text_area.send_keys("test run_description")
         self.page.run_description_contains.click()
         self.page.run_description_text_area.submit()
@@ -91,8 +98,18 @@ class TestSearchPage(NavbarTestMixin, BaseTestCase, FooterTestMixin):
     def test_search_description_exact(self):
         """Test searching by if run description contains exact entered text"""
         self.page.launch()
+        self.page.click_runs_tab()
         self.page.run_description_text_area.send_keys("test run_description")
         self.page.run_description_exact.click()
         self.page.run_description_text_area.submit()
         runs = self.page.get_run_numbers_from_table()
         assert len(runs) == 0
+
+    def test_experiment_search(self):
+        """Test searching for an experiment via Reference Number (excluding RB prefix)"""
+        self.page.launch()
+        self.page.click_experiments_tab()
+        self.page.reference_number_text_area.send_keys("2135503")
+        self.page.reference_number_text_area.submit()
+        experiments = self.page.get_experiments_from_table()
+        assert len(experiments) == 0

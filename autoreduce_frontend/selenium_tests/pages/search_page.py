@@ -71,18 +71,23 @@ class SearchPage(Page, NavbarMixin, FooterMixin):
         exact_radio_button = self.driver.find_element_by_xpath("//*[@id='exact']")
         return exact_radio_button
 
+    @property
+    def reference_number_text_area(self) -> WebElement:
+        """Return the reference number text area on Experiments tab."""
+        return self.driver.find_element_by_id("id_reference_number")
+
     def click_runs_tab(self) -> None:
         """
         Clicks run tab to show Run search form
         """
-        runs_tab = self.driver.find_element_by_class_name("runs-tab")
+        runs_tab = self.driver.find_element_by_id("pills-runs-tab")
         runs_tab.click()
 
     def click_experiments_tab(self) -> None:
         """
         Clicks experiments tab to show Experiments search form
         """
-        experiments_tab = self.driver.find_element_by_class_name("experiments-tab")
+        experiments_tab = self.driver.find_element_by_id("pills-experiments-tab")
         experiments_tab.click()
 
     def alert_runs_message_text(self) -> str:
@@ -105,6 +110,13 @@ class SearchPage(Page, NavbarMixin, FooterMixin):
         instrument summary page.
         """
         return [run.text.split(" - ")[0] for run in self.driver.find_elements_by_class_name("run-num-links")]
+
+    def get_experiments_from_table(self) -> List[str]:
+        """
+        Return the list of run numbers visible on the current table of the
+        instrument summary page.
+        """
+        return [run.text.split(" - ")[0] for run in self.driver.find_elements_by_class_name("experiment-num-links")]
 
     def click_search_button(self) -> None:
         """Click the `Search` button."""
