@@ -126,7 +126,7 @@ class TestRunSummaryPageIntegration(BaseIntegrationTestCase):
         for old, new in replacements:
             replaced = re.sub(old, new, bottom_run_element)
 
-        run_last_updated = datetime.datetime.strptime(replaced, "%d/%m/%Y %l:%M%p")
+        run_last_updated = datetime.datetime.strptime(replaced, "%d/%m/%Y %I:%M%p")
         run_datetime = gmt.localize(run_last_updated)
 
         # Calculate the difference in minutes between the current time and the
