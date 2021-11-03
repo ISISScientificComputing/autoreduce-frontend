@@ -109,8 +109,6 @@ class TestRunSummaryPageIntegration(BaseIntegrationTestCase):
         adheres to British Summer Time in the runs list page.
         """
 
-        replacements = [(' a.m.', 'AM'), (' p.m.', 'PM')]
-
         submit_and_wait_for_result(self)
         runs_list_page = RunsListPage(self.driver, self.instrument_name)
         runs_list_page.launch()
@@ -123,10 +121,13 @@ class TestRunSummaryPageIntegration(BaseIntegrationTestCase):
         # Get the bottom run from the runs list page and cast it to datetime
         bottom_run_element = runs_list_page.get_created_from_table()[-1]
 
-        for old, new in replacements:
-            replaced = re.sub(old, new, bottom_run_element)
+        if "a.m" in bottom_run_element:
+            replaced = re.sub("a.m.", "AM", bottom_run_element)
 
-        run_last_updated = datetime.datetime.strptime(replaced, "%d/%m/%Y %I:%M%p")
+        elif "p.m" in bottom_run_element:
+            replaced = re.sub("p.m.", "PM", bottom_run_element)
+
+        run_last_updated = datetime.datetime.strptime(replaced, "%d/%m/%Y %I:%M %p")
         run_datetime = gmt.localize(run_last_updated)
 
         # Calculate the difference in minutes between the current time and the
