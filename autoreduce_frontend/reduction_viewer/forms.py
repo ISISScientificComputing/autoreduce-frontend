@@ -62,3 +62,21 @@ class RunsListOptionsForm(forms.Form):
 
     helper = FormHelper()
     helper.layout = Layout('filter', 'per_page')
+
+
+class FailedQueueOptionsForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_show_labels = False
+
+    per_page = forms.ChoiceField(
+        widget=forms.Select(
+            attrs={
+                'id': "select_per_page",
+                'title': "The number of reduction jobs that should be shown per page",
+                'name': "per_page",
+                'onchange': "this.form.submit()",
+            }),
+        choices=ITEMS_PER_PAGE,
+    )

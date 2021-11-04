@@ -1,10 +1,12 @@
 import json
 import logging
 from django.db.models import Q
+from django_tables2.config import RequestConfig
 
 from autoreduce_db.reduction_viewer.models import ReductionRun, Status
 from autoreduce_frontend.autoreduce_webapp.view_utils import (login_and_uows_valid, render_with, require_admin)
-from autoreduce_frontend.utilities.pagination import CustomPaginator
+from autoreduce_frontend.reduction_viewer.tables import FailQueueTable
+from autoreduce_frontend.reduction_viewer.forms import FailedQueueOptionsForm
 
 LOGGER = logging.getLogger(__package__)
 
@@ -22,20 +24,19 @@ def fail_queue(request):
     if len(failed_jobs) == 0:
         return {'queue': []}
 
-    max_items_per_page = request.GET.get('per_page', 10)
-    custom_paginator = CustomPaginator(page_type='run',
-                                       query_set=failed_jobs,
-                                       items_per_page=max_items_per_page,
-                                       page_tolerance=3,
-                                       current_page=request.GET.get('page', 1))
+    fail_queue_table = FailQueueTable(failed_jobs)
+    RequestConfig(request, paginate={"per_page": 10}).configure(fail_queue_table)
+
+    options_form = FailedQueueOptionsForm(initial={'per_page': request.GET.get('per_page', 10)})
 
     context_dictionary = {
         'queue': failed_jobs,
+        'fail_queue_table': fail_queue_table,
         'status_success': Status.get_completed(),
         'status_failed': Status.get_error(),
-        'paginator': custom_paginator,
-        'last_page_index': len(custom_paginator.page_list),
-        'max_items': max_items_per_page
+        'per_page': request.GET.get('per_page', 10),
+        'current_page': request.GET.get('page', 1),
+        'options_form': options_form
     }
 
     if request.method == 'POST':
@@ -48,7 +49,7 @@ def fail_queue(request):
                 run_number = int(run[0])
                 run_version = int(run[1])
 
-                reduction_run = failed_jobs.get(run_number=run_number, run_version=run_version)
+                reduction_run = failed_jobs.get(pk=run_number, run_version=run_version)
 
                 if action == "hide":
                     reduction_run.hidden_in_failviewer = True
