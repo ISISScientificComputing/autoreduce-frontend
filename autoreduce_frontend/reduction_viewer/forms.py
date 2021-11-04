@@ -17,6 +17,8 @@ FILTER_BY = (
     ("batch_runs", 'Batch Run'),
 )
 
+SHOW_OR_HIDE = (('default', 'Select action to apply to selected runs'), ('hide', 'Hide'))
+
 
 class SearchOptionsForm(forms.Form):
     def __init__(self, *args, **kwargs):
@@ -79,4 +81,15 @@ class FailedQueueOptionsForm(forms.Form):
                 'onchange': "this.form.submit()",
             }),
         choices=ITEMS_PER_PAGE,
+    )
+
+    run_action = forms.ChoiceField(
+        widget=forms.Select(
+            attrs={
+                'id': "runAction",
+                'title': "Select action to apply to selected runs",
+                'name': "runAction",
+                'placeholder': "Placeholder",
+            }),
+        choices=SHOW_OR_HIDE,
     )
