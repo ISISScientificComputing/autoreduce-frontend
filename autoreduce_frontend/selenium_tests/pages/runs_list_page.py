@@ -52,7 +52,7 @@ class RunsListPage(Page, NavbarMixin, FooterMixin, TourMixin):
 
     def get_status_from_table(self) -> List[str]:
         """
-        Return the list of created dates visible on the current table of the
+        Return the list of status' visible on the current table of the
         instrument summary page.
         """
         return [run.text.split(" - ")[0] for run in self.driver.find_elements_by_class_name("run-status")]
