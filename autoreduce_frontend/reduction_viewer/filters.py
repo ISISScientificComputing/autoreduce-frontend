@@ -90,6 +90,8 @@ class ReductionRunFilter(FilterSet):
         elif checkbox == "contains":
             query = Q(run_description__contains=value)
             return queryset.filter(query)
+        else:
+            return queryset.none()
 
 
 class ExperimentFilter(FilterSet):

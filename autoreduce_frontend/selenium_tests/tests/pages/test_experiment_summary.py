@@ -5,9 +5,9 @@
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
 """Selenium tests for the experiment summary page."""
-from autoreduce_db.reduction_viewer.models import Experiment
 from autoreduce_frontend.selenium_tests.pages.experiment_summary_page import ExperimentSummaryPage
-from autoreduce_frontend.selenium_tests.tests.base_tests import AccessibilityTestMixin, BaseTestCase, FooterTestMixin, NavbarTestMixin
+from autoreduce_frontend.selenium_tests.tests.base_tests import (AccessibilityTestMixin, BaseTestCase, FooterTestMixin,
+                                                                 NavbarTestMixin)
 
 
 # pylint:disable=no-member
@@ -26,10 +26,10 @@ class TestExperimentSummaryPage(BaseTestCase, AccessibilityTestMixin, FooterTest
 
     def test_reduction_job_panel_displayed(self):
         """Test that the reduction job panel is showing the right things."""
-        # only one run in the fixture, get it for assertions
         assert self.page.reduction_job_panel.is_displayed()
 
     def test_table_column_attributes(self):
+        """Test that the attributes (class name etc.) to the status column are being added."""
         self.page.launch()
         status_list = self.page.get_status_from_table()
         assert len(status_list) > 0

@@ -16,7 +16,7 @@ from autoreduce_frontend.selenium_tests.tests.base_tests import (BaseTestCase, F
                                                                  AccessibilityTestMixin)
 
 
-class TestSeeInstrumentVariablesPage(BaseTestCase):
+class TestSeeInstrumentVariablesPage(BaseTestCase, AccessibilityTestMixin, FooterTestMixin, NavbarTestMixin):
     fixtures = BaseTestCase.fixtures + ["one_run_mixed_vars"]
 
     @classmethod

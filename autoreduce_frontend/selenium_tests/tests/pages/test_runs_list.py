@@ -25,18 +25,22 @@ class TestRunsList(BaseTestCase, AccessibilityTestMixin, FooterTestMixin, Navbar
         self.page = RunsListPage(self.driver, self.instrument_name)
 
     def test_tables_loaded(self):
-        for filter in ("Run Number", "Experiment Reference (RB)", "Batch Run"):
+        """
+        Test that the Runs Tabel and Experiment Table are loaded correctly.
+        """
+        for filter_selection in ("Run Number", "Experiment Reference (RB)", "Batch Run"):
             self.page.launch()
-            self.page.update_filter("filter_select", filter)
+            self.page.update_filter("filter_select", filter_selection)
             self.page.click_apply_filters()
-            if filter == "Run Number":
+            if filter_selection == "Run Number":
                 runs = self.page.get_run_numbers_from_table()
                 assert len(runs) > 0
-            elif filter == "Experiment Reference (RB)":
+            elif filter_selection == "Experiment Reference (RB)":
                 experiments = self.page.get_experiments_from_table()
                 assert len(experiments) > 0
 
     def test_table_column_attributes(self):
+        """Test that the attributes (class name etc.) to the status column are being added."""
         self.page.launch()
         status_list = self.page.get_status_from_table()
         assert len(status_list) > 0

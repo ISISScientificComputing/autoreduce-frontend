@@ -94,7 +94,8 @@ page={{ current_page }}&per_page={{ per_page }}&sort={{ sort }}&filter={{ filter
             'started_by',
         )
 
-    def render_started_by(self, value):
+    @staticmethod
+    def render_started_by(value):
         '''
         Render method for started_by column to populate with name
         instead of id.

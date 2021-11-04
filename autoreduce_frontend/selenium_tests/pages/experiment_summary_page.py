@@ -5,16 +5,13 @@
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
 """Module for the experiment summary page model."""
-from functools import partial
 from typing import List
 
 from django.urls.base import reverse
 from selenium.webdriver.remote.webelement import WebElement
-from selenium.webdriver.support.wait import WebDriverWait
 
 from autoreduce_frontend.selenium_tests.pages.component_mixins.footer_mixin import FooterMixin
 from autoreduce_frontend.selenium_tests.pages.component_mixins.navbar_mixin import NavbarMixin
-from autoreduce_frontend.selenium_tests.pages.component_mixins.rerun_form_mixin import RerunFormMixin
 from autoreduce_frontend.selenium_tests.pages.page import Page
 
 
