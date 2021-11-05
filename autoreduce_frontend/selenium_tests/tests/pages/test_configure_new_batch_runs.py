@@ -5,8 +5,8 @@
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
 
-import requests
 from unittest.mock import Mock, patch
+import requests
 
 from autoreduce_qp.systemtests.utils.data_archive import DataArchive
 from rest_framework.authtoken.models import Token
@@ -20,6 +20,7 @@ from autoreduce_frontend.selenium_tests.pages.configure_new_batch_run_page impor
 from autoreduce_frontend.selenium_tests.tests.base_tests import BaseTestCase
 
 
+# pylint:disable=duplicate-code
 class TestConfigureNewBatchRunsPage(BaseTestCase):
     fixtures = BaseTestCase.fixtures + ["batch_run"]
 
@@ -47,7 +48,8 @@ class TestConfigureNewBatchRunsPage(BaseTestCase):
         self.page = ConfigureNewBatchRunsPage(self.driver, self.instrument_name)
         self.page.launch()
 
-    def _make_token(self):
+    @staticmethod
+    def _make_token():
         user_model = get_user_model()
         Token.objects.create(user=user_model.objects.get(username="super"))
 

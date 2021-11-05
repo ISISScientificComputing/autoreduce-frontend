@@ -14,6 +14,7 @@ from autoreduce_frontend.selenium_tests.tests.base_tests import (BaseTestCase, F
                                                                  AccessibilityTestMixin)
 
 
+# pylint:disable=duplicate-code
 class TestConfigureNewRunsPage(BaseTestCase, NavbarTestMixin, FooterTestMixin, AccessibilityTestMixin):
     fixtures = BaseTestCase.fixtures + ["two_runs"]
 
