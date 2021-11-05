@@ -40,7 +40,7 @@ DEBUG_TOOLBAR_AVAILABLE = False
 if DEBUG:
     try:
         import debug_toolbar
-        DEBUG_TOOLBAR_AVAILABLE = True
+        DEBUG_TOOLBAR_AVAILABLE = False
     except ImportError:
         pass
 
@@ -53,10 +53,21 @@ INTERNAL_IPS = ['localhost', '127.0.0.1']
 
 # Application definition
 INSTALLED_APPS = [
-    'django.contrib.admin', 'django.contrib.auth', 'django.contrib.contenttypes', 'django.contrib.sessions',
-    'django.contrib.messages', 'django.contrib.staticfiles', 'django.contrib.humanize',
-    'autoreduce_frontend.autoreduce_webapp', 'autoreduce_frontend.generate_token', 'autoreduce_db.reduction_viewer',
-    'autoreduce_db.instrument', 'rest_framework.authtoken'
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'django.contrib.humanize',
+    'autoreduce_frontend.autoreduce_webapp',
+    'autoreduce_frontend.generate_token',
+    'autoreduce_db.reduction_viewer',
+    'autoreduce_db.instrument',
+    'rest_framework.authtoken',
+    'django_filters',
+    'crispy_forms',
+    'django_tables2',
 ]
 
 if DEBUG and DEBUG_TOOLBAR_AVAILABLE:
@@ -71,6 +82,9 @@ MIDDLEWARE = [
     'django_user_agents.middleware.UserAgentMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap4.html"
 
 if DEBUG and DEBUG_TOOLBAR_AVAILABLE:
     MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')

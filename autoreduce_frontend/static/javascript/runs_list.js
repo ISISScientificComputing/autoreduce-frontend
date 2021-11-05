@@ -34,8 +34,7 @@
 }())
 
 function changePage(page) {
-    let paginationChoice = document.getElementById("pagination_select").value;
     let filterChoice = document.getElementById("filter_select").value;
-    let sortChoice = document.getElementById("sort_select").value
-    document.location.href = window.location.origin + window.location.pathname + '?page=' + arguments[0] + '&filter=' + filterChoice + '&pagination=' + paginationChoice + '&sort=' + sortChoice;
+    let per_page = document.getElementById("pagination_select").value;
+    document.location.href = window.location.origin + window.location.pathname + '?page=' + arguments[0] + "?per_page=" + per_page + '&filter=' + filterChoice;
 }

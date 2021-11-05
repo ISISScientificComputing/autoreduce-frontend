@@ -6,9 +6,8 @@
 # ############################################################################### #
 """Selenium tests for the runs summary page."""
 import datetime
-import pytz
-
-from django.urls import reverse
+import re
+from django.utils import timezone
 
 from autoreduce_frontend.selenium_tests.pages.run_summary_page import RunSummaryPage
 from autoreduce_frontend.selenium_tests.pages.runs_list_page import RunsListPage
@@ -109,25 +108,29 @@ class TestRunSummaryPageIntegration(BaseIntegrationTestCase):
         Test that a submitted run's datetime for when it was last updated
         adheres to British Summer Time in the runs list page.
         """
+
         submit_and_wait_for_result(self)
         runs_list_page = RunsListPage(self.driver, self.instrument_name)
         runs_list_page.launch()
 
-        gmt = pytz.timezone("Europe/London")
-
         # Get the datetime of now
-        now_datetime = gmt.localize(datetime.datetime.now())
+        now_aware = timezone.now()
 
         # Get the bottom run from the runs list page and cast it to datetime
-        bottom_run_element = runs_list_page.driver.find_elements_by_class_name("col-md-4")[-1]
-        run_last_updated = datetime.datetime.strptime(
-            bottom_run_element.text.partition(": ")[2].replace(" p.m.", "PM").replace(" a.m.", "AM"),
-            "%d %b %Y, %I:%M%p")
-        run_datetime = gmt.localize(run_last_updated)
+        bottom_run_element = runs_list_page.get_created_from_table()[0]
+
+        if "a.m" in bottom_run_element:
+            replaced = re.sub("a.m.", "AM", bottom_run_element)
+
+        elif "p.m" in bottom_run_element:
+            replaced = re.sub("p.m.", "PM", bottom_run_element)
+
+        run_last_updated = datetime.datetime.strptime(replaced, "%d/%m/%Y %I:%M %p")
+        aware_datetime = timezone.make_aware(run_last_updated)
 
         # Calculate the difference in minutes between the current time and the
         # time the run displays on the runs list page
-        minutes_diff = (now_datetime - run_datetime).total_seconds() / 60.0
+        minutes_diff = (now_aware - aware_datetime).total_seconds() / 60.0
 
         # A minute diff more than 30 would indicate a wrong timezone
         assert minutes_diff < 30

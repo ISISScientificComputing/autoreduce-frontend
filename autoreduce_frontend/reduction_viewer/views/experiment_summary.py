@@ -1,11 +1,11 @@
 import logging
 
 from autoreduce_db.reduction_viewer.models import Experiment, ReductionRun
+from django_tables2.config import RequestConfig
 from autoreduce_frontend.autoreduce_webapp.icat_cache import ICATCache
 from autoreduce_frontend.autoreduce_webapp.settings import DEVELOPMENT_MODE
 from autoreduce_frontend.autoreduce_webapp.view_utils import check_permissions, login_and_uows_valid, render_with
-from autoreduce_frontend.reduction_viewer.view_utils import started_by_id_to_name
-from autoreduce_frontend.utilities.pagination import CustomPaginator
+from autoreduce_frontend.reduction_viewer.tables import ExperimentSummaryTable
 
 LOGGER = logging.getLogger(__package__)
 
@@ -19,18 +19,8 @@ def experiment_summary(request, reference_number=None):
     try:
         experiment = Experiment.objects.get(reference_number=reference_number)
         runs = ReductionRun.objects.filter(experiment=experiment, batch_run=False).order_by('-last_updated')
-        page = request.GET.get('page', 1)
-        if page == '':
-            page = 1
-        max_items_per_page = request.GET.get('pagination', 10)
-        custom_paginator = CustomPaginator(page_type='run',
-                                           query_set=runs,
-                                           items_per_page=max_items_per_page,
-                                           page_tolerance=3,
-                                           current_page=page)
-
-        started_by = [started_by_id_to_name(run.started_by) for run in custom_paginator.current_page.records]
-        runs_with_started_by = zip(custom_paginator.current_page.records, started_by)
+        experiment_summary_table = ExperimentSummaryTable(runs)
+        RequestConfig(request, paginate={"per_page": 10}).configure(experiment_summary_table)
 
         try:
             if DEVELOPMENT_MODE:
@@ -56,12 +46,13 @@ def experiment_summary(request, reference_number=None):
             }
 
         context_dictionary = {
+            'runs': runs,
+            'experiment_summary_table': experiment_summary_table,
             'experiment': experiment,
-            'runs_with_started_by': runs_with_started_by,
             'run_count': len(runs),
             'experiment_details': experiment_details,
-            'paginator': custom_paginator,
-            'last_page_index': len(custom_paginator.page_list),
+            'per_page': request.GET.get('per_page', 10),
+            'current_page': request.GET.get('page', 1),
         }
 
     except Exception as exception:

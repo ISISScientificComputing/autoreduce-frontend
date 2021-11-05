@@ -50,13 +50,7 @@ hr {
 /****************
  2. Navbar
 ****************/
-.navbar-collapse.collapse.in .navbar-text,
-.navbar-collapse.collapsing .navbar-text {
-    padding-left: 15px;
-    padding-right: 15px;
-}
-
-.navbar-default .navbar-nav > li > a {
+.navbar-light .navbar-nav .nav-link {
     color: #428bca;
 }
 
@@ -64,7 +58,7 @@ hr {
     padding: 10px;
 }
 
-.navbar-default .navbar-text {
+.navbar-light .navbar-text {
     color: #444444;
 }
 /****************
@@ -72,6 +66,7 @@ hr {
 ****************/
 header {
     text-align: center;
+    margin-top: 1em;
 }
 
 header .alert {
@@ -108,12 +103,6 @@ search#run_search {
 #by-tabs-mobile {
     width: 100%;
     margin-bottom: 5px;
-}
-
-.tab-content {
-    border-left: 1px solid #ddd;
-    border-right: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
 }
 
 .instrument .instrument-heading {
@@ -196,14 +185,18 @@ search#run_search {
     }
 }
 
+#alert_message {
+    margin-top: 1em;
+}
+
 /****************
  6. Run Summary
 ****************/
 #graphs {
-    column-count: 2;
     -webkit-column-count: 2;
     -moz-column-count: 2;
     -o-column-count: 2;
+    column-count: 2;
 }
 
 #graphs img {
@@ -234,13 +227,17 @@ a.back {
     transform-style: preserve-3d;
 }
 
+.variables-buttons{
+    padding-top: 10px;
+}
+
 @media screen and (min-width: 767px) {
     .run-numbers .middle {
         position: relative;
         top: 50%;
         left: 50%;
-        transform: translateX(-50%) translateY(-50%);
         -ms-transform: translateX(-50%) translateY(-50%);
+        transform: translateX(-50%) translateY(-50%);
     }
 }
 
@@ -267,45 +264,44 @@ a.back {
     max-height: 65vh;
 }
 
-
 /****************
  8. Overrides
 ****************/
-.panel-small .panel-body {
+.card-small .card-body {
     padding: 3px 15px;
 }
 
 @media screen and (min-width: 767px) {
-    .panel.panel-2-column .panel-body .row > div:first-of-type {
+    .card.card-2-column .card-body .row > div:first-of-type {
         border-right: 1px solid #ddd;
     }
 
-    .panel-primary.panel-2-column .panel-body .row > div:first-of-type {
+    .card-primary.card-2-column .card-body .row > div:first-of-type {
         border-right-color: #428bca;
     }
 
-    .panel-default.panel-2-column .panel-body .row > div:first-of-type {
+    .card-default.card-2-column .card-body .row > div:first-of-type {
         border-right-color: #ddd;
     }
 
-    .panel-success.panel-2-column .panel-body .row > div:first-of-type {
+    .card-success.card-2-column .card-body .row > div:first-of-type {
         border-right-color: #d6e9c6;
     }
 
-    .panel-info.panel-2-column .panel-body .row > div:first-of-type {
+    .card-info.card-2-column .card-body .row > div:first-of-type {
         border-right-color: #bce8f1;
     }
 
-    .panel-warning.panel-2-column .panel-body .row > div:first-of-type {
+    .card-warning.card-2-column .card-body .row > div:first-of-type {
         border-right-color: #faebcc;
     }
 
-    .panel-danger.panel-2-column .panel-body .row > div:first-of-type {
+    .card-danger.card-2-column .card-body .row > div:first-of-type {
         border-right-color: #ebccd1;
     }
 }
 
-.panel-title > a:only-child {
+.card-title > a:only-child {
     display: block;
 }
 

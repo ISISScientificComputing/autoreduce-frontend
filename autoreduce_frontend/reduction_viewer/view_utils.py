@@ -5,22 +5,24 @@
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
 """Utility functions for the view of django models."""
+# pylint:disable=no-member
 import functools
 import logging
 import os
+from typing import Tuple
+
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.http import url_has_allowed_host_and_scheme
-from autoreduce_db.reduction_viewer.models import Instrument
+from autoreduce_db.reduction_viewer.models import Instrument, ReductionRun
 from autoreduce_qp.queue_processor.reduction.service import ReductionScript
 from autoreduce_frontend.autoreduce_webapp.settings import DATA_ANALYSIS_BASE_URL
-
 from autoreduce_frontend.autoreduce_webapp.settings import (ALLOWED_HOSTS, UOWS_LOGIN_URL)
+from autoreduce_frontend.autoreduce_webapp.templatetags.colour_table_row import colour_table_row
 
 LOGGER = logging.getLogger(__package__)
 
 
-# pylint:disable=no-member
 def deactivate_invalid_instruments(func):
     """Deactivate instruments if they are invalid."""
     @functools.wraps(func)
@@ -55,7 +57,7 @@ def get_interactive_plot_data(plot_locations):
     return output
 
 
-def make_data_analysis_url(reduction_location: str):
+def make_data_analysis_url(reduction_location: str) -> str:
     """
     Makes a URL for the data.analysis website that will open the location of the
     data.
@@ -65,24 +67,16 @@ def make_data_analysis_url(reduction_location: str):
     return ""
 
 
-def windows_to_linux_path(path):
-    """ Convert windows path to linux path.
-    :param path:
-    :param temp_root_directory:
-    :return: (str) linux formatted file path
-    """
+def windows_to_linux_path(path: str) -> str:
+    """Convert Windows path to Linux path."""
     # '\\isis\inst$\' maps to '/isis/'
     path = path.replace(r'\\isis\inst$' + '\\', '/isis/')
     path = path.replace('\\', '/')
     return path
 
 
-def linux_to_windows_path(path):
-    """ Convert linux path to windows path.
-    :param path:
-    :param temp_root_directory:
-    :return: (str) windows formatted file path
-    """
+def linux_to_windows_path(path: str) -> str:
+    """Convert Linux path to Windows path."""
     # '\\isis\inst$\' maps to '/isis/'
     path = path.replace('/isis/', r'\\isis\inst$' + '\\')
     path = path.replace('/', '\\')
@@ -139,3 +133,64 @@ def make_return_url(request, next_url):
             return UOWS_LOGIN_URL + request.build_absolute_uri(request.path)
     else:
         return UOWS_LOGIN_URL + request.build_absolute_uri()
+
+
+def order_runs(sort_by: str, runs: ReductionRun.objects):
+    """
+    Sort a queryset of runs based on the passed GET sort_by param
+    """
+    if sort_by == "-run_number":
+        runs = runs.order_by('-run_numbers__run_number', '-run_version')
+    elif sort_by == "run_number":
+        runs = runs.order_by('run_numbers__run_number', 'run_version')
+    elif sort_by == "-created":
+        runs = runs.order_by('-created')
+    elif sort_by == "created":
+        runs = runs.order_by('created')
+    else:
+        runs = runs.order_by('-run_numbers__run_number', 'run_version')
+
+    return runs
+
+
+# pylint:disable=no-method-argument
+def data_status(status):
+    """Function to add text-(status) class to status column for formatting
+
+        Returns:
+        "text- " concatonated with status fetched from record for formatting with colour_table_row
+
+        """
+    return "text-" + colour_table_row(status) + " run-status"
+
+
+def get_navigation_runs(instrument_name: str, run: ReductionRun, page_type: str) -> Tuple[ReductionRun]:
+    """
+    Return a tuple of runs that will be used for navigation in the view.
+
+    Args:
+        instrument_name: The name of the instrument.
+        run: The run that is currently being viewed.
+        page_type: The type of page that is being viewed.
+    """
+
+    runs = ReductionRun.objects.filter(instrument__name=instrument_name, batch_run=run.batch_run)
+    runs = order_runs(sort_by=page_type, runs=runs)
+
+    if not run.batch_run:
+        next_run = runs.filter(run_numbers__run_number__gt=run.run_number).last()
+        previous_run = runs.filter(run_numbers__run_number__lt=run.run_number).first()
+    else:
+        next_run = runs.filter(pk__gt=run.pk).last()
+        previous_run = runs.filter(pk__lt=run.pk).first()
+
+    if next_run is None:
+        next_run = run
+
+    if previous_run is None:
+        previous_run = run
+
+    newest_run = runs.first()
+    oldest_run = runs.last()
+
+    return next_run, previous_run, newest_run, oldest_run

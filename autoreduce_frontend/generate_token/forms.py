@@ -12,7 +12,7 @@ class VerboseUserChoiceField(ModelChoiceField):
     visually recognise which user is which.
     """
     def __init__(self, *args, **kwargs):
-        super(VerboseUserChoiceField, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def label_from_instance(self, obj: User) -> str:
         """

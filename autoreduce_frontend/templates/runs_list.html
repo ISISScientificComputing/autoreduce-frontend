@@ -1,22 +1,25 @@
 {% extends "base.html" %}
 {% block title %}{{ instrument_name|default:"Instrument not found" }}{% endblock %}
 {% load static %}
+{% include crispy_tags %}
+{% load crispy_forms_tags %}
 {% load colour_table_row %}
+{% load render_table from django_tables2 %}
 
 {% block body %}
     {% if message %}
-        <div class="text-center col-md-6 col-md-offset-3 well well-small" id="notactive">{{ message }}</div>
+        <div class="text-center card" id="notactive">{{ message }}</div>
     {% else %}
         <!-- Instrument Name -->
         <div class="row">
-            <div class="col-md-12 text-center">
+            <div class="col-lg-12 text-center">
                 <h2>{{ instrument_name }}</h2>
             </div>
         </div>
         <!-- Instrument status and control buttons -->
         <div class="row" id="btn-instrument_active">
             <!-- Status panel -->
-            <div class="col-md-6">
+            <div class="col-6">
                 {% include "snippets/instrument_status.html" with processing=processing queued=queued last_instrument_run=last_instrument_run only %}
             </div>
             <!-- Pause / Resume Reduction button-->
@@ -24,12 +27,12 @@
             <div>
                 {% if instrument.is_paused %}
                     <a class="btn btn-danger btn-block" id="pause">
-                        <i class="fa fa-play"></i>
+                        <i class="fas fa-play"></i>
                         &nbsp;&nbsp;Resume Autoreduction on {{ instrument_name }}
                     </a>
                 {% else %}
                     <a class="btn btn-success btn-block" id="pause">
-                        <i class="fa fa-pause"></i>
+                        <i class="fas fa-pause"></i>
                         &nbsp;&nbsp;Pause Autoreduction on {{ instrument_name }}
                     </a>
                 {% endif %}
@@ -41,43 +44,30 @@
             </div>
             <div id="btn-re-run_past_job">
                 <p>
-                    <a href="{% url 'runs:rerun_jobs' instrument=instrument_name %}" class="btn btn-success btn-block"
-                        {% if not has_variables %}
-                            disabled
-                        {% endif %}>
-                        <i class="fa fa-arrow-left"></i>
+                    <a href="{% url 'runs:rerun_jobs' instrument=instrument_name %}" class="btn btn-success btn-block {% if not has_variables %} disabled {% endif %}">
+                        <i class="fas fa-arrow-left"></i>
                         &nbsp;&nbsp;Re-run past jobs
                     </a>
                 </p>
             </div>
             <div id="btn-configure_new_runs">
                 <p>
-                    <a href="{% url 'runs:variables' instrument=instrument_name %}"class="btn btn-success btn-block"
-                        {% if not has_variables %}
-                            disabled
-                        {% endif %}>
-                        <i class="fa fa-plus"></i>
+                    <a href="{% url 'runs:variables' instrument=instrument_name %}"class="btn btn-success btn-block {% if not has_variables %} disabled {% endif %}">
+                        <i class="fas fa-plus"></i>
                         &nbsp;&nbsp;Configure New Runs
                     </a>
                 </p>
             </div>
             <div id="btn-see_instrument_variables">
                 <p>
-                    <a href="{% url 'runs:variables_summary' instrument=instrument_name %}" class="btn btn-success btn-block"
-                        {% if not has_variables %}
-                            disabled
-                        {% endif %}>
-                        <i class="fa fa-eye"></i>
+                    <a href="{% url 'runs:variables_summary' instrument=instrument_name %}" class="btn btn-success btn-block {% if not has_variables %} disabled {% endif %}">
+                        <i class="far fa-eye"></i>
                         &nbsp;&nbsp;See Instrument variables
                     </a>
-                </p>
             </div>
             <div id="btn-batch_job">
                 <p>
-                    <a href="{% url 'runs:configure_batch_run' instrument=instrument_name %}" class="btn btn-success btn-block"
-                        {% if not has_variables %}
-                            disabled
-                        {% endif %}>
+                    <a href="{% url 'runs:configure_batch_run' instrument=instrument_name %}" class="btn btn-success btn-block {% if not has_variables %} disabled {% endif %}">
                         <i class="fa fa-cog"></i>
                         &nbsp;&nbsp;Submit batch job
                     </a>
@@ -94,123 +84,44 @@
         <br/>
         <hr/>
         <!-- Display table for reduction jobs -->
-        <div class="row" id="filter-options">
-            <!-- Filter, Sort, and Pagination options -->
+        <div id="filter-options">
             <form action="{{ request.path }}" method="get" id="filter_options">
-                <div class="col-md-3">
-                    <label for="filter_select">Filter by</label>
-                    <select class="form-control" name="filter" form="filter_options" id="filter_select">
-                        <option value="run" title="Display run numbers"
-                            {% if filtering == 'run' %}
-                                selected="selected"
-                            {% endif %}
-                            >Run number</option>
-                        <option value="experiment" title="Display run number grouped by RB number"
-                            {% if filtering == 'experiment' %}
-                                selected="selected"
-                            {% endif %}
-                            >Experiment Reference (RB)
-                        </option>
-                        <option value="batch_runs" title="Display batch runs"
-                            {% if filtering == 'batch_runs' %}
-                                selected="selected"
-                            {% endif %}
-                            >Batch runs
-                        </option>
-                    </select>
+            <div class="form-row align-items-center">
+                <div class="col-auto my-1">
+                    {{ options_form.filter|as_crispy_field }} 
                 </div>
-                <div class="col-md-3">
-                    <label for="sort_select">Sort by</label>
-                    <select class="form-control" name="sort" form="filter_options" id="sort_select">
-                        <option value="run"
-                            {% if sort == 'run' %}
-                                selected="selected"
-                            {% endif %}
-                            >Number
-                        </option>
-                        <option value="date"
-                            {% if sort == 'date' %}
-                                selected="selected"
-                            {% endif %}
-                            >Date
-                        </option>
-                    </select>
+                <div class="col-auto my-1">
+                    {{ options_form.per_page|as_crispy_field }}
                 </div>
-                {% if filtering == 'run' or filtering == 'batch_runs' %}
-                    <div class="col-md-3">
-                        <label for="pagination_select">Items per page</label>
-                        <select title="The number of reduction jobs that should be shown per page" class="form-control" name="pagination" form="filter_options" id="pagination_select">
-                            <option {% if max_items == '10' %} selected="selected" {% endif %}>10</option>
-                            <option {% if max_items == '25' %} selected="selected" {% endif %}>25</option>
-                            <option {% if max_items == '50' %} selected="selected" {% endif %}>50</option>
-                            <option {% if max_items == '100' %} selected="selected" {% endif %}>100</option>
-                            <option {% if max_items == '250' %} selected="selected" {% endif %}>250</option>
-                            <option {% if max_items == '500' %} selected="selected" {% endif %}>500</option>
-                        </select>
-                    </div>
-                {% endif %}
-                <div class="col-md-3">
-                    <input class="btn btn-primary btn-block btn-apply-filters" type="submit" value="Apply filters" id="apply_filters">
+                <div class="col-auto my-1">
+                <button type="submit" class="btn btn-primary" value="Apply filters" id="apply_filters">Submit</button>
                 </div>
+            </div>
             </form>
         </div>
+
+
+
+
         <br/>
         <!-- Display table for every reduction job -->
         <div class="row" id="runs-table">
             <div class="tab-content col-md-12">
                 {% if filtering == 'run' or filtering == 'batch_runs' %}
-                    {% include "filtered_by_number.html" %}
+                    {% render_table run_table %}
                 {% elif filtering == 'experiment' %}
-                    {% include "filtered_by_reference.html" %}
+                    {% render_table experiment_table %}
                 {% else %}
                     <div class="row">No runs to show</div>
                 {% endif %}
             </div>
         </div>
             <br/>
-            <!-- Paginator -->
-            {% if filtering == 'run' or filtering == 'batch_runs' %}
-                <div class="row">
-                    {% if paginator %}
-                        <div class="col-md-12 text-center">
-                            <div class="btn-group" role="group">
-                                {% if paginator.has_previous %}
-                                    <button title="First Page" class="btn btn-default" onclick="changePage(1)">
-                                        <i class="fa fa-step-backward"></i>
-                                    </button>
-                                    <button title="Previous Page" class="btn btn-default" onclick="changePage({{ paginator.previous_page_index }})">
-                                        <i class="fa fa-chevron-left"></i>
-                                    </button>
-                                {% endif %}
-                                {% for page in paginator.display_list %}
-                                    {% if page.is_visible %}
-                                        {% if page.number == paginator.current_page_index %}
-                                            <button title="Current Page" class="btn btn-primary inline">{{ page.display_name }}</button>
-                                        {% else %}
-                                            <button class="btn btn-default" onclick="changePage({{ page.number }})">{{ page.display_name }}</button>
-                                        {% endif %}
-                                    {% else %}
-                                        <button title="There are additional pages. Please access them using the navigation buttons." class="btn btn-default disabled">...</button>
-                                    {% endif %}
-                                {% endfor %}
-                                {% if paginator.has_next %}
-                                    <button title="Next Page" class="btn btn-default" onclick="changePage({{ paginator.next_page_index }})">
-                                        <i class="fa fa-chevron-right"></i>
-                                    </button>
-                                    <button title="Last page" class="btn btn-default" onclick="changePage({{ last_page_index }})">
-                                        <i class="fa fa-step-forward"></i>
-                                    </button>
-                                {% endif %}
-                            </div>
-                        </div>
-                    {% endif %}
-                </div>
-            {% endif %}
         </div>
     {% endif %}
 {% endblock %}
 {% block stylesheets %}
-    <link rel="stylesheet" href="{% static "css/vendor/bootstrap-tour.min.css" %}">
+    <link rel="stylesheet" href="{% static "css/vendor/bootstrap-tourist.css" %}">
 {% endblock %}
 {% block scripts %}
     {% if preload_runs %}
@@ -219,7 +130,7 @@
     <script src="{% static "javascript/pause_instrument.js" %}"></script>
     <script src="{% static "javascript/instrument_variables.js" %}"></script>
     <script src="{% static "javascript/runs_list.js" %}"></script>
-    <script src="{% static "javascript/vendor/bootstrap-tour.min.js" %}"></script>
+    <script src="{% static "javascript/vendor/bootstrap-tourist.js" %}"></script>
     <script src="{% static "javascript/tours/instrument_summary_tour.js" %}"></script>
     <script src="{% static "javascript/tours/navbar_tour.js" %}"></script>
     <script src="{% static "javascript/create_tour.js" %}"></script>

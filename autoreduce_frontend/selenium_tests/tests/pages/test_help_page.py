@@ -48,7 +48,7 @@ class TestHelpPage(NavbarTestMixin, BaseTestCase, FooterTestMixin, Accessibility
 
     def test_all_help_topics_have_content(self):
         """
-        Test that all help topic elements have content in .panel-body
+        Test that all help topic elements have content in .card-body
         """
         WebDriverWait(self.driver,
                       10).until(lambda _: "" not in [x.strip() for x in self.page.get_each_help_topic_content()])

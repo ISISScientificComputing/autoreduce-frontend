@@ -27,3 +27,15 @@ class TestFailedJobs(BaseTestCase):
         At the end it turns it back on or following tests will fail
         """
         assert len(self.page.get_failed_runs()) == 2
+
+    def test_hide_run(self):
+        """
+        Test that the option to hide a run works
+        """
+        self.page.update_filter("runAction", "Hide")
+        runs = self.page.get_failed_runs()
+        original_run_count = len(runs)
+        self.page.get_top_checkbox().click()
+        self.page.click_apply_button()
+        new_run_count = len(self.page.get_failed_runs())
+        assert new_run_count == original_run_count - 1

@@ -7,7 +7,6 @@
 from parameterized import parameterized
 
 from autoreduce_db.reduction_viewer.models import ReductionArguments
-from autoreduce_qp.model.database import access as db
 
 from autoreduce_frontend.selenium_tests.pages.configure_new_runs_page import ConfigureNewRunsPage
 from autoreduce_frontend.selenium_tests.pages.variables_summary_page import VariableSummaryPage

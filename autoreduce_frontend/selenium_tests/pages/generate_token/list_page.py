@@ -4,13 +4,12 @@
 # Copyright &copy; 2021 ISIS Rutherford Appleton Laboratory UKRI
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
-from autoreduce_frontend.selenium_tests.pages.generate_token.delete_page import DeleteTokenFormPage
 from typing import List
-
 from django.urls.base import reverse
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.common.keys import Keys
 
+from autoreduce_frontend.selenium_tests.pages.generate_token.delete_page import DeleteTokenFormPage
 from autoreduce_frontend.selenium_tests.pages.component_mixins.footer_mixin import FooterMixin
 from autoreduce_frontend.selenium_tests.pages.component_mixins.navbar_mixin import NavbarMixin
 from autoreduce_frontend.selenium_tests.pages.page import Page

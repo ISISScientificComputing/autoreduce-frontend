@@ -11,7 +11,6 @@ Module containing the base test cases for a page and components
 import datetime
 from pathlib import Path
 
-from autoreduce_db.reduction_viewer.models import Instrument
 from autoreduce_utils.settings import AUTOREDUCE_HOME_ROOT
 from axe_selenium_python import Axe
 from django.contrib.auth import get_user_model
@@ -146,6 +145,14 @@ class NavbarTestMixin:
         """
         self.page.launch().click_navbar_graphs()
         self.assertIn(reverse("graph"), self.driver.current_url)
+
+    def test_search_goes_to_search(self):
+        """
+        Test: driver navigates to search page
+        When: Navbar search link is clicked
+        """
+        self.page.launch().click_navbar_search()
+        self.assertIn(reverse("search"), self.driver.current_url)
 
     def test_help_goes_to_help(self):
         """

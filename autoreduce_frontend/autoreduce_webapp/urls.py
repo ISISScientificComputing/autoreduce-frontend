@@ -11,7 +11,7 @@ from django.contrib import admin
 from django.urls import path, register_converter
 
 from autoreduce_frontend.reduction_viewer.views import (accessibility_statement, experiment_summary, graph, help, index,
-                                                        logout, overview, stats)
+                                                        logout, overview, stats, search)
 
 
 class NegativeIntConverter:
@@ -51,7 +51,8 @@ urlpatterns = [
     path('stats/', stats.stats, name="stats"),
 
     # =======================GENERATE TOKEN========================== #
-    path('tokens/', include('generate_token.urls'))
+    path('tokens/', include('generate_token.urls')),
+    path('search/', search.search, name='search'),
 ]
 
 if settings.DEBUG:
