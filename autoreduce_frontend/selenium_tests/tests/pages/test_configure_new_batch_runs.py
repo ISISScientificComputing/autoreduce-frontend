@@ -5,8 +5,8 @@
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
 
-import requests
 from unittest.mock import Mock, patch
+import requests
 
 from autoreduce_qp.systemtests.utils.data_archive import DataArchive
 from rest_framework.authtoken.models import Token
@@ -41,7 +41,8 @@ class TestConfigureNewBatchRunsPage(BaseIntegrationTestCase):
         self.page = ConfigureNewBatchRunsPage(self.driver, self.instrument_name)
         self.page.launch()
 
-    def _make_token(self):
+    @staticmethod
+    def _make_token():
         user_model = get_user_model()
         Token.objects.create(user=user_model.objects.get(username="super"))
 

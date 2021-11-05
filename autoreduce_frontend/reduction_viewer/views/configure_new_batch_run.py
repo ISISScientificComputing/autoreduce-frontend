@@ -1,7 +1,7 @@
-import requests
-from requests.exceptions import ConnectionError
 import json
 from typing import Any
+import requests
+from requests.exceptions import ConnectionError  # pylint:disable=redefined-builtin
 from autoreduce_db.reduction_viewer.models import Instrument
 from autoreduce_utils.settings import AUTOREDUCE_API_URL
 from django.http.request import HttpRequest

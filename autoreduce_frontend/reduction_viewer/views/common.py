@@ -99,6 +99,7 @@ def decode_b64(value: str):
     return base64.urlsafe_b64decode(value).decode("utf-8")
 
 
+# pylint:disable=too-many-return-statements
 def convert_to_python_type(value: str):
     """
     Converts the string sent by the POST request to a real Python type that can be serialized by JSON

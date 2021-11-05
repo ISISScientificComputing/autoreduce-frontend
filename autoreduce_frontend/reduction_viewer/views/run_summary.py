@@ -30,7 +30,7 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
 @login_and_uows_valid
 @check_permissions
 @render_with('run_summary.html')
-# pylint:disable=no-member,too-many-locals,broad-except
+# pylint:disable=no-member,too-many-locals,broad-except,invalid-name
 def run_summary_batch_run(request, instrument_name=None, pk=None, run_version=0):
     """Gathers the context and renders a run's summary"""
     history = ReductionRun.objects.filter(instrument__name=instrument_name, pk=pk).order_by(
@@ -41,6 +41,8 @@ def run_summary_batch_run(request, instrument_name=None, pk=None, run_version=0)
     return run_summary_run(request, history, instrument_name, run_version)
 
 
+# This pylint warning should be fixed, tracked in https://autoreduce.atlassian.net/browse/AR-1581
+# pylint:disable=too-many-locals
 def run_summary_run(request, history, instrument_name=None, run_version=0):
     """Gathers the context and renders a run's summary"""
     run = next(run for run in history if run.run_version == int(run_version))

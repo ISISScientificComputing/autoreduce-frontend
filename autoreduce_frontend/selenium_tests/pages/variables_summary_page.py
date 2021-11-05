@@ -69,7 +69,7 @@ class VariableSummaryPage(Page, NavbarMixin, FooterMixin, TourMixin):
         button = self.driver.find_element_by_css_selector(f'[href*="{url}"]')
         WebDriverWait(self.driver, 10).until(partial(delete_button_clicked_successfully, button))
 
-    def click_run_edit_button_for(self, start: int, end: int):
+    def click_run_edit_button_for(self, start: int):
         """
         Click the edit button for the given run start and end
         :param start: The start run
