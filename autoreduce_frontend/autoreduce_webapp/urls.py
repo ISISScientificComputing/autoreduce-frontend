@@ -4,7 +4,7 @@
 # Copyright &copy; 2020 ISIS Rutherford Appleton Laboratory UKRI
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
-# pylint: disable=invalid-name
+# pylint: disable=invalid-name,redefined-builtin
 from django.conf import settings
 from django.conf.urls import include
 from django.contrib import admin

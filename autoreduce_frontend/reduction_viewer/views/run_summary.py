@@ -124,7 +124,7 @@ def run_summary_run(request, history, instrument_name=None, run_version=0):
                 ]
 
                 context_dictionary['interactive_plots'] = get_interactive_plot_data(server_plot_locs)
-        except Exception as exception:
+        except Exception as exception:  # pylint: disable=broad-except
             # Lack of plot images is recoverable - we shouldn't stop the whole
             # page rendering if something is wrong with the plot images - but
             # display an error message

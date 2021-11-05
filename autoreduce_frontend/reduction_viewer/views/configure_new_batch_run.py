@@ -59,6 +59,7 @@ class BatchRunSubmit(FormView):
         context["instrument_name"] = instrument
         return render(request, "batch_run_confirmation.html", context)
 
+    # pylint:disable=too-many-return-statements
     def post(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
         instrument_name = kwargs["instrument"]
 
