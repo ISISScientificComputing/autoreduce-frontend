@@ -18,7 +18,7 @@ def validate_run_number(self):
     elif "-" in self and "," not in self:
         if not re.match(r'\d+-\d+', self):
             raise ValidationError("Invalid format. There must be a run number before and after the hyphen.")
-    elif "-" and "," in self:
+    elif "-" in self and "," in self:
         if not re.match(r'[0-9, -]+[0-9,]$', self):
             raise ValidationError("Invalid format. Accepted format e.g. 60200-60205, 60210-60215")
     else:
@@ -42,7 +42,7 @@ def filter_run_number(queryset, name, value):
         list_values = value.split('-')
         query = Q(run_numbers__run_number__range=(list_values[0], list_values[1]))
         return queryset.filter(query)
-    if "-" and "," in value:
+    if "-" in value and "," in value:
         query = Q()
         list_values = value.split(',')
         for pair in list_values:
