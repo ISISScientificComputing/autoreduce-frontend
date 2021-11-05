@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.forms import ModelChoiceField
 
 
@@ -14,7 +14,7 @@ class VerboseUserChoiceField(ModelChoiceField):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def label_from_instance(self, obj: User) -> str:
+    def label_from_instance(self, obj) -> str:
         """
         Returns a custom made label for the given object.
 
@@ -25,4 +25,4 @@ class VerboseUserChoiceField(ModelChoiceField):
 
 
 class GenerateTokenForm(forms.Form):
-    user = VerboseUserChoiceField(queryset=User.objects.filter(auth_token__pk=None).order_by("first_name"))
+    user = VerboseUserChoiceField(queryset=get_user_model().objects.filter(auth_token__pk=None).order_by("first_name"))

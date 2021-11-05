@@ -15,7 +15,7 @@ class GenerateTokenFormView(FormView):
 
     def form_valid(self, form) -> HttpResponse:
         print(form)
-        obj, created = Token.objects.get_or_create(user=form.cleaned_data["user"])
+        _, created = Token.objects.get_or_create(user=form.cleaned_data["user"])
         if not created:
             self.request.session["error_message"] = "User token already exists. You can only have 1 token per user."
         return HttpResponseRedirect(self.get_success_url())
