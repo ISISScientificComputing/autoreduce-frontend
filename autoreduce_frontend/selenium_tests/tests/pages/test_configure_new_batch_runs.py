@@ -5,8 +5,8 @@
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
 
-from unittest.mock import Mock, patch
 import requests
+from unittest.mock import Mock, patch
 
 from autoreduce_qp.systemtests.utils.data_archive import DataArchive
 from rest_framework.authtoken.models import Token
@@ -17,23 +17,29 @@ from autoreduce_frontend.reduction_viewer.views.configure_new_batch_run import (
                                                                                 UNABLE_TO_CONNECT_MESSAGE,
                                                                                 UNAUTHORIZED_MESSAGE)
 from autoreduce_frontend.selenium_tests.pages.configure_new_batch_run_page import ConfigureNewBatchRunsPage
-from autoreduce_frontend.selenium_tests.tests.base_tests import BaseIntegrationTestCase
+from autoreduce_frontend.selenium_tests.tests.base_tests import BaseTestCase
 
 
-class TestConfigureNewBatchRunsPage(BaseIntegrationTestCase):
-    fixtures = BaseIntegrationTestCase.fixtures + ["batch_run"]
+class TestConfigureNewBatchRunsPage(BaseTestCase):
+    fixtures = BaseTestCase.fixtures + ["batch_run"]
 
     @classmethod
     def setUpClass(cls):
         """Sets up the data archive to be shared across test cases"""
         super().setUpClass()
+        cls.instrument_name = "TESTINSTRUMENT"
         cls.data_archive = DataArchive([cls.instrument_name], 21, 21)
         cls.data_archive.create()
         cls.data_archive.add_reduction_script(cls.instrument_name,
                                               """def main(input_file, output_dir): print('some text')""")
         cls.data_archive.add_reduce_vars_script(cls.instrument_name,
                                                 """standard_vars={"variable1":"test_variable_value_123"}""")
-        cls.batch_run_test = True
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        """Destroys the data archive"""
+        cls.data_archive.delete()
+        super().tearDownClass()
 
     def setUp(self) -> None:
         """Sets up the ConfigureNewRunsPage before each test case"""
@@ -41,8 +47,7 @@ class TestConfigureNewBatchRunsPage(BaseIntegrationTestCase):
         self.page = ConfigureNewBatchRunsPage(self.driver, self.instrument_name)
         self.page.launch()
 
-    @staticmethod
-    def _make_token():
+    def _make_token(self):
         user_model = get_user_model()
         Token.objects.create(user=user_model.objects.get(username="super"))
 
