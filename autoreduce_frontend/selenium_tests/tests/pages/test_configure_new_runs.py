@@ -6,7 +6,6 @@
 # ############################################################################### #
 
 from django.urls import reverse
-from autoreduce_qp.systemtests.utils.data_archive import DataArchive
 
 from autoreduce_frontend.selenium_tests.pages.configure_new_runs_page import ConfigureNewRunsPage
 from autoreduce_frontend.selenium_tests.pages.variables_summary_page import VariableSummaryPage

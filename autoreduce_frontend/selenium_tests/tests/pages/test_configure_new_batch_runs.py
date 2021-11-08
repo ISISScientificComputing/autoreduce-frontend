@@ -23,12 +23,6 @@ from autoreduce_frontend.selenium_tests.tests.base_tests import ConfigureNewJobs
 class TestConfigureNewBatchRunsPage(ConfigureNewJobsBaseTestCase):
     fixtures = ConfigureNewJobsBaseTestCase.fixtures + ["batch_run"]
 
-    @classmethod
-    def tearDownClass(cls) -> None:
-        """Destroys the data archive"""
-        cls.data_archive.delete()
-        super().tearDownClass()
-
     def setUp(self) -> None:
         """Sets up the ConfigureNewRunsPage before each test case"""
         super().setUp()
