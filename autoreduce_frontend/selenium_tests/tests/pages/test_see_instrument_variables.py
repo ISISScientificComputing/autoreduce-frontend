@@ -53,7 +53,7 @@ class TestSeeInstrumentVariablesPage(BaseTestCase, AccessibilityTestMixin, Foote
         # makes sure the value we are going to modify is present in the initial values
         assert value_to_modify in upcoming_panel.get_attribute("textContent")
 
-        self.page.click_run_edit_button_for(start, end)
+        self.page.click_run_edit_button_for(start)
 
         new_runs_page = ConfigureNewRunsPage(self.driver, self.instrument_name, start, end)
         assert new_runs_page.run_start_val == str(start)

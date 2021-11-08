@@ -146,6 +146,7 @@ class RunSummaryPage(Page, RerunFormMixin, NavbarMixin, FooterMixin, TourMixin):
 
     def click_cancel_btn(self):
         """Click the cancel button and return a RunsListPage object."""
+        # pylint:disable=cyclic-import,import-outside-toplevel
         from autoreduce_frontend.selenium_tests.pages.runs_list_page import RunsListPage
 
         self._do_cancel_btn(reverse("runs:list", kwargs={"instrument": self.instrument}))

@@ -11,7 +11,7 @@ thus no middleware.
 # pylint:disable=too-many-locals,no-member,unused-argument
 import logging
 
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 
 from autoreduce_db.reduction_viewer.models import Instrument, ReductionArguments
 from autoreduce_frontend.autoreduce_webapp.view_utils import check_permissions, login_and_uows_valid, render_with

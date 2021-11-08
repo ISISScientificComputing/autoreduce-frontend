@@ -181,7 +181,7 @@ class TestConfigureNewRunsPageIntegration(BaseIntegrationTestCase):
 
         summary = VariableSummaryPage(self.driver, self.instrument_name)
 
-        summary.click_run_edit_button_for(self.run_number + 1, self.run_number + 100)
+        summary.click_run_edit_button_for(self.run_number + 1)
 
         self.page.variable1_field = "a new test value 123"
         self.page.submit_button.click()
@@ -206,7 +206,7 @@ class TestConfigureNewRunsPageIntegration(BaseIntegrationTestCase):
         assert "Ongoing" in incoming_run_numbers[2].text
 
         # now for the 2nd variable we made
-        summary.click_run_edit_button_for(self.run_number + 201, self.run_number + 300)
+        summary.click_run_edit_button_for(self.run_number + 201)
         self.page.variable1_field = "another new test value 321"
         self.page.submit_button.click()
 

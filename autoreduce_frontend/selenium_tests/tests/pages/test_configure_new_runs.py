@@ -6,34 +6,16 @@
 # ############################################################################### #
 
 from django.urls import reverse
-from autoreduce_qp.systemtests.utils.data_archive import DataArchive
 
 from autoreduce_frontend.selenium_tests.pages.configure_new_runs_page import ConfigureNewRunsPage
 from autoreduce_frontend.selenium_tests.pages.variables_summary_page import VariableSummaryPage
-from autoreduce_frontend.selenium_tests.tests.base_tests import (BaseTestCase, FooterTestMixin, NavbarTestMixin,
-                                                                 AccessibilityTestMixin)
+from autoreduce_frontend.selenium_tests.tests.base_tests import (ConfigureNewJobsBaseTestCase, FooterTestMixin,
+                                                                 NavbarTestMixin, AccessibilityTestMixin)
 
 
-class TestConfigureNewRunsPage(BaseTestCase, NavbarTestMixin, FooterTestMixin, AccessibilityTestMixin):
-    fixtures = BaseTestCase.fixtures + ["two_runs"]
-
-    @classmethod
-    def setUpClass(cls):
-        """Sets up the data archive to be shared across test cases"""
-        super().setUpClass()
-        cls.instrument_name = "TESTINSTRUMENT"
-        cls.data_archive = DataArchive([cls.instrument_name], 21, 21)
-        cls.data_archive.create()
-        cls.data_archive.add_reduction_script(cls.instrument_name,
-                                              """def main(input_file, output_dir): print('some text')""")
-        cls.data_archive.add_reduce_vars_script(cls.instrument_name,
-                                                """standard_vars={"variable1":"test_variable_value_123"}""")
-
-    @classmethod
-    def tearDownClass(cls) -> None:
-        """Destroys the data archive"""
-        cls.data_archive.delete()
-        super().tearDownClass()
+# pylint:disable=duplicate-code
+class TestConfigureNewRunsPage(ConfigureNewJobsBaseTestCase, NavbarTestMixin, FooterTestMixin, AccessibilityTestMixin):
+    fixtures = ConfigureNewJobsBaseTestCase.fixtures + ["two_runs"]
 
     def setUp(self) -> None:
         """Sets up the ConfigureNewRunsPage before each test case"""
@@ -79,26 +61,8 @@ class TestConfigureNewRunsPage(BaseTestCase, NavbarTestMixin, FooterTestMixin, A
         assert url in self.driver.current_url
 
 
-class TestConfigureNewRunsPageSkippedOnly(BaseTestCase, NavbarTestMixin, FooterTestMixin):
-    fixtures = BaseTestCase.fixtures + ["skipped_run"]
-
-    @classmethod
-    def setUpClass(cls):
-        """Makes test data archive and sets instrument for all test cases"""
-        super().setUpClass()
-        cls.instrument_name = "TESTINSTRUMENT"
-        cls.data_archive = DataArchive([cls.instrument_name], 21, 21)
-        cls.data_archive.create()
-        cls.data_archive.add_reduction_script(cls.instrument_name,
-                                              """def main(input_file, output_dir): print('some text')""")
-        cls.data_archive.add_reduce_vars_script(cls.instrument_name,
-                                                """standard_vars={"variable1":"test_variable_value_123"}""")
-
-    @classmethod
-    def tearDownClass(cls) -> None:
-        """Destroys the data archive"""
-        cls.data_archive.delete()
-        super().tearDownClass()
+class TestConfigureNewRunsPageSkippedOnly(ConfigureNewJobsBaseTestCase, NavbarTestMixin, FooterTestMixin):
+    fixtures = ConfigureNewJobsBaseTestCase.fixtures + ["skipped_run"]
 
     def setUp(self) -> None:
         """Sets up the ConfigureNewRunsPage before each test case"""
