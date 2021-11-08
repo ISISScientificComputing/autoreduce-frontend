@@ -11,6 +11,7 @@ Module containing the base test cases for a page and components
 import datetime
 from pathlib import Path
 
+from autoreduce_qp.systemtests.utils.data_archive import DataArchive
 from autoreduce_utils.settings import AUTOREDUCE_HOME_ROOT
 from axe_selenium_python import Axe
 from django.contrib.auth import get_user_model
@@ -60,6 +61,26 @@ class BaseTestCase(StaticLiveServerTestCase):
             self._feedErrorsToResult(result, self._outcome.errors)
             return len(result.failures) > 0 or len(result.errors) > 0
         return False
+
+
+class ConfigureNewJobsBaseTestCase(BaseTestCase):
+    @classmethod
+    def setUpClass(cls):
+        """Sets up the data archive to be shared across test cases"""
+        super().setUpClass()
+        cls.instrument_name = "TESTINSTRUMENT"
+        cls.data_archive = DataArchive([cls.instrument_name], 21, 21)
+        cls.data_archive.create()
+        cls.data_archive.add_reduction_script(cls.instrument_name,
+                                              """def main(input_file, output_dir): print('some text')""")
+        cls.data_archive.add_reduce_vars_script(cls.instrument_name,
+                                                """standard_vars={"variable1":"test_variable_value_123"}""")
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        """Destroys the data archive"""
+        cls.data_archive.delete()
+        super().tearDownClass()
 
 
 class BaseIntegrationTestCase(BaseTestCase):

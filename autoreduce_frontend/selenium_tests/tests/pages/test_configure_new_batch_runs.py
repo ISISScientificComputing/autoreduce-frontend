@@ -8,7 +8,6 @@
 from unittest.mock import Mock, patch
 import requests
 
-from autoreduce_qp.systemtests.utils.data_archive import DataArchive
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model
 from django.urls import reverse
@@ -17,24 +16,12 @@ from autoreduce_frontend.reduction_viewer.views.configure_new_batch_run import (
                                                                                 UNABLE_TO_CONNECT_MESSAGE,
                                                                                 UNAUTHORIZED_MESSAGE)
 from autoreduce_frontend.selenium_tests.pages.configure_new_batch_run_page import ConfigureNewBatchRunsPage
-from autoreduce_frontend.selenium_tests.tests.base_tests import BaseTestCase
+from autoreduce_frontend.selenium_tests.tests.base_tests import ConfigureNewJobsBaseTestCase
 
 
 # pylint:disable=duplicate-code
-class TestConfigureNewBatchRunsPage(BaseTestCase):
-    fixtures = BaseTestCase.fixtures + ["batch_run"]
-
-    @classmethod
-    def setUpClass(cls):
-        """Sets up the data archive to be shared across test cases"""
-        super().setUpClass()
-        cls.instrument_name = "TESTINSTRUMENT"
-        cls.data_archive = DataArchive([cls.instrument_name], 21, 21)
-        cls.data_archive.create()
-        cls.data_archive.add_reduction_script(cls.instrument_name,
-                                              """def main(input_file, output_dir): print('some text')""")
-        cls.data_archive.add_reduce_vars_script(cls.instrument_name,
-                                                """standard_vars={"variable1":"test_variable_value_123"}""")
+class TestConfigureNewBatchRunsPage(ConfigureNewJobsBaseTestCase):
+    fixtures = ConfigureNewJobsBaseTestCase.fixtures + ["batch_run"]
 
     @classmethod
     def tearDownClass(cls) -> None:
