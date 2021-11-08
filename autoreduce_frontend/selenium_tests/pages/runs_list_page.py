@@ -139,4 +139,5 @@ class RunsListPage(Page, NavbarMixin, FooterMixin, TourMixin):
 
     @property
     def top_alert_message_text(self):
+        """Finds and returns the alert message shown at the top of the runs list page"""
         return self.driver.find_element_by_id("top-alert-message").text

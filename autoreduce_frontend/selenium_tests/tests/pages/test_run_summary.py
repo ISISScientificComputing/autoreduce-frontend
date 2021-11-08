@@ -13,7 +13,8 @@ from autoreduce_db.reduction_viewer.models import ReductionRun
 from autoreduce_frontend.autoreduce_webapp.templatetags.encode_b64 import encode_b64
 from autoreduce_frontend.selenium_tests.pages.run_summary_page import RunSummaryPage
 from autoreduce_frontend.selenium_tests.pages.runs_list_page import RunsListPage
-from autoreduce_frontend.selenium_tests.tests.base_tests import ConfigureNewJobsBaseTestCase, FooterTestMixin, NavbarTestMixin
+from autoreduce_frontend.selenium_tests.tests.base_tests import (ConfigureNewJobsBaseTestCase, FooterTestMixin,
+                                                                 NavbarTestMixin)
 
 
 # pylint:disable=no-member
