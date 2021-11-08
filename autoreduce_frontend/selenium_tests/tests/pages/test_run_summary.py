@@ -10,39 +10,20 @@ from django.urls import reverse
 from selenium.webdriver.support.wait import WebDriverWait
 
 from autoreduce_db.reduction_viewer.models import ReductionRun
-from autoreduce_qp.systemtests.utils.data_archive import DataArchive
 from autoreduce_frontend.autoreduce_webapp.templatetags.encode_b64 import encode_b64
 from autoreduce_frontend.selenium_tests.pages.run_summary_page import RunSummaryPage
-from autoreduce_frontend.selenium_tests.tests.base_tests import BaseTestCase, FooterTestMixin, NavbarTestMixin
+from autoreduce_frontend.selenium_tests.pages.runs_list_page import RunsListPage
+from autoreduce_frontend.selenium_tests.tests.base_tests import ConfigureNewJobsBaseTestCase, FooterTestMixin, NavbarTestMixin
 
 
 # pylint:disable=no-member
-# class TestRunSummaryPage(BaseTestCase, FooterTestMixin, NavbarTestMixin):
-class TestRunSummaryPage(BaseTestCase, FooterTestMixin, NavbarTestMixin):
+class TestRunSummaryPage(ConfigureNewJobsBaseTestCase, FooterTestMixin, NavbarTestMixin):
     """
     Test cases for the InstrumentSummary page when the Rerun form is NOT
     visible.
     """
 
-    fixtures = BaseTestCase.fixtures + ["run_with_one_variable"]
-
-    @classmethod
-    def setUpClass(cls):
-        """
-        Set up a DataArchive with scripts and set instrument for all test cases.
-        """
-        super().setUpClass()
-        cls.instrument_name = "TESTINSTRUMENT"
-        cls.data_archive = DataArchive([cls.instrument_name], 21, 21)
-        cls.data_archive.create()
-        cls.data_archive.add_reduce_vars_script(cls.instrument_name,
-                                                """standard_vars={"variable1":"test_variable_value_123"}""")
-
-    @classmethod
-    def tearDownClass(cls) -> None:
-        """Destroy created DataArchive."""
-        cls.data_archive.delete()
-        super().tearDownClass()
+    fixtures = ConfigureNewJobsBaseTestCase.fixtures + ["run_with_one_variable"]
 
     def setUp(self) -> None:
         """Set up RunSummaryPage before each test case."""
@@ -150,3 +131,15 @@ class TestRunSummaryPage(BaseTestCase, FooterTestMixin, NavbarTestMixin):
         assert self.page.data_path_text() == "Data: \\tmp"
         self.page.toggle_data_path_button.click()
         assert self.page.data_path_text() == "Data: /tmp"
+
+    def test_non_existent_run(self):
+        """
+        Test that going to the run summary for a non-existent run will redirect
+        back to the runs list page and show a warning message to the user.
+        """
+        self.page = RunSummaryPage(self.driver, self.instrument_name, 12345, 0)
+        self.page.launch()
+        self.page = RunsListPage(self.driver, self.instrument_name)
+
+        assert self.page.top_alert_message_text == 'Run 12345-0 does not exist. '\
+                                                   'Redirected to the instrument page.'

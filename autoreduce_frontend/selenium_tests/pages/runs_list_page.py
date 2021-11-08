@@ -78,12 +78,12 @@ class RunsListPage(Page, NavbarMixin, FooterMixin, TourMixin):
 
         raise NoSuchElementException
 
-    def alert_message_text(self) -> str:
+    def variables_alert_message_text(self) -> str:
         """
         Return the text of the alert message element with the id
         'alert_message'.
         """
-        return self.driver.find_element_by_id("alert_message").text.strip()
+        return self.driver.find_element_by_id("variables_alert_message").text.strip()
 
     def get_top_run(self) -> WebElement:
         """Return the element with the id 'top-run-number'."""
@@ -136,3 +136,7 @@ class RunsListPage(Page, NavbarMixin, FooterMixin, TourMixin):
         """Click the `Apply filters` button."""
         btn = self.driver.find_element_by_id("apply_filters")
         btn.click()
+
+    @property
+    def top_alert_message_text(self):
+        return self.driver.find_element_by_id("top-alert-message").text
