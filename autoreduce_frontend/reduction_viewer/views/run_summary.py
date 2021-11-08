@@ -14,14 +14,22 @@ LOGGER = logging.getLogger(__package__)
 
 
 def redirect_run_does_not_exist(instrument_name, run_number, run_version):
+    """
+    Redirects to the runs:list page if the run does not exist, and shows which run was not found.
+
+    Args:
+        instrument_name: The instrument name of the run.
+        run_number: The run number of the run.
+        run_version: The run version of the run.
+    """
     return redirect("{}?message=Run {}-{} does not exist. Redirected to the instrument page.".format(
         reverse("runs:list", kwargs={'instrument': instrument_name}), run_number, run_version))
 
 
+# pylint:disable=no-member,too-many-locals,broad-except
 @login_and_uows_valid
 @check_permissions
 @render_with('run_summary.html')
-# pylint:disable=no-member,too-many-locals,broad-except
 def run_summary(request, instrument_name=None, run_number=None, run_version=0):
     """Render run summary."""
     history = ReductionRun.objects.filter(instrument__name=instrument_name,
