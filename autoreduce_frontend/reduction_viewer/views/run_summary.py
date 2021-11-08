@@ -13,6 +13,11 @@ from autoreduce_frontend.reduction_viewer.view_utils import (get_interactive_plo
 LOGGER = logging.getLogger(__package__)
 
 
+def redirect_run_does_not_exist(instrument_name, run_number, run_version):
+    return redirect("{}?message=Run {}-{} does not exist. Redirected to the instrument page.".format(
+        reverse("runs:list", kwargs={'instrument': instrument_name}), run_number, run_version))
+
+
 @login_and_uows_valid
 @check_permissions
 @render_with('run_summary.html')
@@ -24,8 +29,7 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
                                           run_numbers__run_number=run_number).order_by('-run_version').select_related(
                                               'status').select_related('experiment').select_related('instrument')
     if len(history) == 0:
-        return redirect("{}?message=Run {}-{} does not exist. Redirected to the instrument page.".format(
-            reverse("runs:list", kwargs={'instrument': instrument_name}), run_number, run_version))
+        return redirect_run_does_not_exist(instrument_name, run_number, run_version)
 
     return run_summary_run(request, history, instrument_name, run_version, run_number)
 
@@ -39,7 +43,7 @@ def run_summary_batch_run(request, instrument_name=None, pk=None, run_version=0)
     history = ReductionRun.objects.filter(instrument__name=instrument_name, pk=pk).order_by(
         '-run_version').select_related('status').select_related('experiment').select_related('instrument')
     if len(history) == 0:
-        raise ValueError(f"Could not find any matching runs for instrument {instrument_name} run {pk}")
+        return redirect_run_does_not_exist(instrument_name, pk, run_version)
 
     return run_summary_run(request, history, instrument_name, run_version, pk)
 
@@ -49,8 +53,8 @@ def run_summary_run(request, history, instrument_name=None, run_version=0, run_n
     try:
         run = next(run for run in history if run.run_version == int(run_version))
     except StopIteration:
-        return redirect("{}?message=Run {}-{} does not exist. Redirected to the instrument page.".format(
-            reverse("runs:list", kwargs={'instrument': instrument_name}), run_number, run_version))
+        return redirect_run_does_not_exist(instrument_name, run_number, run_version)
+
     started_by = started_by_id_to_name(run.started_by)
 
     # Run status value of "s" means the run is skipped
