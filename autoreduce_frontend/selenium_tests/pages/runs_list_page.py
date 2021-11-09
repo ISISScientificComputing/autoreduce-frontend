@@ -81,7 +81,7 @@ class RunsListPage(Page, NavbarMixin, FooterMixin, TourMixin):
     def variables_alert_message_text(self) -> str:
         """
         Return the text of the alert message element with the id
-        'alert_message'.
+        'variable_alert_message'.
         """
         return self.driver.find_element_by_id("variables_alert_message").text.strip()
 
