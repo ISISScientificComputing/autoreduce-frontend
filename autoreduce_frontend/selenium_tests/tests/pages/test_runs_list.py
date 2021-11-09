@@ -52,7 +52,7 @@ class TestRunsList(BaseTestCase, AccessibilityTestMixin, FooterTestMixin, Navbar
         """
         self.page.launch()
         expected = "The buttons above have been disabled because reduce_vars.py is missing for this instrument."
-        assert self.page.alert_message_text() == expected
+        assert self.page.variables_alert_message_text() == expected
 
     def test_alert_message_when_reduce_vars_has_error(self):
         """
@@ -67,7 +67,7 @@ class TestRunsList(BaseTestCase, AccessibilityTestMixin, FooterTestMixin, Navbar
 
         self.page.launch()
         expected = "The buttons above have been disabled because reduce_vars.py has an import or syntax error."
-        assert self.page.alert_message_text() == expected
+        assert self.page.variables_alert_message_text() == expected
 
         data_archive.delete()
 
