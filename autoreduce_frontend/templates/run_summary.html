@@ -160,6 +160,10 @@
                                     <strong>Data:</strong>
                                     {% if data_location %}
                                         {{ data_location }}
+                                        <a class="btn btn-primary"
+                                        id='datapath_toggle'
+                                        href="{% generate_run_link instrument run=run %}?page={{current_page}}&per_page={{ per_page }}&sort={{ page_type }}&filter={{ filtering }}&path_type={{ new_path_type }}"
+                                        aria-label="Switch to {{ new_path_type|title }}"><i class="fab fa-{{ new_path_type }}" aria-hidden="true"></i></a>
                                     {% else %}
                                         <em>No data found</em>
                                     {% endif %}
