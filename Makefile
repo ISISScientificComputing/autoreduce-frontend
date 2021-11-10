@@ -3,10 +3,12 @@ all: credentials migrate-with-fixtures
 package-dev:
 	python setup.py sdist bdist_wheel
 	twine upload --repository testpypi dist/*
+	rm -rf build dist
 
 package:
 	python setup.py sdist bdist_wheel
 	twine upload --repository pypi dist/*
+	rm -rf build dist
 
 credentials:
 	autoreduce-creds-migrate
