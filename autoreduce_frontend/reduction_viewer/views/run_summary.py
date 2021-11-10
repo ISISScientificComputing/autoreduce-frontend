@@ -76,16 +76,13 @@ def run_summary_run(request, history, instrument_name=None, run_version=0, run_n
     if reduction_location and '\\' in reduction_location:
         reduction_location = reduction_location.replace('\\', '/')
 
-    data_location_list = run.data_location.all()
-    data_location = ""
-    if data_location_list:
-        data_location = data_location_list[0].file_path
-
     path_type = request.GET.get("path_type", "linux")  # defaults to Linux
     if path_type == "linux":
-        data_location = windows_to_linux_path(data_location)
+        data_location = "\n".join(
+            [windows_to_linux_path(data_location.file_path) for data_location in run.data_location.all()])
     elif path_type == "windows":
-        data_location = linux_to_windows_path(data_location)
+        data_location = "\n".join(
+            [linux_to_windows_path(data_location.file_path) for data_location in run.data_location.all()])
 
     data_analysis_link_url = make_data_analysis_url(reduction_location) if reduction_location else ""
     rb_number = run.experiment.reference_number

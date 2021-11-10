@@ -159,9 +159,7 @@
                                 <div class="file-path">
                                     <strong>Data:</strong>
                                     {% if data_location %}
-                                        {% for location in run.data_location.all %}
-                                            {{ data_location }}
-                                        {% endfor %}
+                                        {{ data_location }}
                                         <a class="btn btn-primary"
                                         id='datapath_toggle'
                                         href="{% generate_run_link instrument run=run %}?page={{current_page}}&per_page={{ per_page }}&sort={{ page_type }}&filter={{ filtering }}&path_type={{ new_path_type }}"
@@ -197,7 +195,7 @@
                         </div>
                     </div>
                 </div>
-            
+
         </div>
 
         <div id="re-run_and_graphs">
