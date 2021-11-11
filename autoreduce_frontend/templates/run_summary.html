@@ -206,14 +206,14 @@
 
         <div class="d-flex justify-content-center mt-4">
             <div class="text-center">
-                <a href="{% generate_run_link instrument run=newest_run %}?page={{current_page}}&per_page={{ per_page }}&sort={{ page_type }}&filter={{ filtering }}" class="btn btn-primary back {% if newest_run == run %} disabled {% endif %}" id="newest">&#124;&#60; Newest
+                <a href="{% generate_run_link instrument run=newest_run %}?page={{current_page}}&per_page={{ per_page }}&sort={{ page_type }}&filter={{ filtering }}" class="btn btn-primary back {% if newest_run == run %} disabled {% endif %}" id="newest"> Newest {{ newest_run }}
                 </a>
-                <a href="{% generate_run_link instrument run=next_run %}?page={{current_page}}&per_page={{ per_page }}&sort={{ page_type }}&filter={{ filtering }}" class="btn btn-primary back {% if next_run == run %} disabled {% endif %}" id="next">&#60;&#60; Next
+                <a href="{% generate_run_link instrument run=next_run %}?page={{current_page}}&per_page={{ per_page }}&sort={{ page_type }}&filter={{ filtering }}" class="btn btn-primary back {% if next_run == run %} disabled {% endif %}" id="next">« Next
                 </a>
                 <a href="{% url 'runs:list' run.instrument.name %}?page={{ current_page }}&per_page={{ per_page }}&sort={{ page_type }}&filter={{ filtering }}" class="btn btn-primary back" id="cancel"
                     >Back to {{ run.instrument.name }} runs
                 </a>
-                <a href="{% generate_run_link instrument run=previous_run %}?page={{current_page}}&per_page={{ per_page }}&sort={{ page_type }}&filter={{ filtering }}" class="btn btn-primary back {% if previous_run == run %} disabled {% endif %}" id="previous">Previous &#62;&#62;
+                <a href="{% generate_run_link instrument run=previous_run %}?page={{current_page}}&per_page={{ per_page }}&sort={{ page_type }}&filter={{ filtering }}" class="btn btn-primary back {% if previous_run == run %} disabled {% endif %}" id="previous">Previous »
                 </a>
             </div>
         </div>
