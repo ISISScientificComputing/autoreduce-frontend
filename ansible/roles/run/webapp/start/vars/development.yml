@@ -1,2 +1,11 @@
 run_command: >
-  singularity instance start webapp.sif webapp autoreduce-webapp-manage runserver 0.0.0.0:8000
+  --volume /home/isisautoreduce/.autoreduce:/home/isisautoreduce/.autoreduce
+  --volume /instrument:/instrument
+  --volume /isis:/isis
+  --volume /isis:/archive
+  --volume /shared-config:/shared-config
+  --volume /staticfiles:/staticfiles
+  --rm
+  --name webapp
+  --publish 8000:8000
+  --detach
