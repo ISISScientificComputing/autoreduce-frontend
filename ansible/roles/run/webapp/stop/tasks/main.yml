@@ -3,5 +3,5 @@
 - name: Stop the Singularity instance
   become: yes
   become_user: "{{ autoreduction_user }}"
-  command: singularity instance stop -t 60 -s SIGTERM webapp
+  command: docker stop --time=60 webapp-instance
   ignore_errors: yes
