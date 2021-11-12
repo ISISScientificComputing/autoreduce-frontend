@@ -1,3 +1,4 @@
+# pylint:disable=no-member,unused-argument,too-many-locals,broad-except
 import traceback
 import logging
 
@@ -16,7 +17,6 @@ LOGGER = logging.getLogger(__package__)
 @login_and_uows_valid
 @check_permissions
 @render_with('runs_list.html')
-# pylint:disable=no-member,unused-argument,too-many-locals,broad-except
 def runs_list(request, instrument=None):
     """Render instrument summary."""
     try:
@@ -78,16 +78,19 @@ def runs_list(request, instrument=None):
 
         if filter_by == 'experiment':
             experiments_and_runs = {}
+
             experiments = Experiment.objects.filter(reduction_runs__instrument=instrument_obj). \
                 order_by('-reference_number').distinct()
             for experiment in experiments:
                 associated_runs = runs.filter(experiment=experiment). \
                     order_by('-created')
                 experiments_and_runs[experiment] = associated_runs
+
             experiment_table = ExperimentTable(experiments)
             RequestConfig(request, paginate={"per_page": 10}).configure(experiment_table)
             context_dictionary['experiments'] = experiments_and_runs
             context_dictionary['experiment_table'] = experiment_table
+
         elif filter_by == 'batch_runs':
             runs = ReductionRun.objects.only('status', 'last_updated', 'run_version',
                                              'run_description').filter(instrument=instrument_obj, batch_run=True)
