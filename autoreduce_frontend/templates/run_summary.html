@@ -206,15 +206,10 @@
 
         <div class="d-flex justify-content-center mt-4">
             <div class="text-center">
-                <a href="{% generate_run_link instrument run=newest_run %}?page={{current_page}}&per_page={{ per_page }}&sort={{ page_type }}&filter={{ filtering }}" class="btn btn-primary back {% if newest_run == run %} disabled {% endif %}" id="newest"> Newest {{ newest_run }}
-                </a>
-                <a href="{% generate_run_link instrument run=next_run %}?page={{current_page}}&per_page={{ per_page }}&sort={{ page_type }}&filter={{ filtering }}" class="btn btn-primary back {% if next_run == run %} disabled {% endif %}" id="next">« Next
-                </a>
-                <a href="{% url 'runs:list' run.instrument.name %}?page={{ current_page }}&per_page={{ per_page }}&sort={{ page_type }}&filter={{ filtering }}" class="btn btn-primary back" id="cancel"
-                    >Back to {{ run.instrument.name }} runs
-                </a>
-                <a href="{% generate_run_link instrument run=previous_run %}?page={{current_page}}&per_page={{ per_page }}&sort={{ page_type }}&filter={{ filtering }}" class="btn btn-primary back {% if previous_run == run %} disabled {% endif %}" id="previous">Previous »
-                </a>
+                <a href="{% generate_run_link instrument run=previous_run %}?page={{current_page}}&per_page={{ per_page }}&sort={{ page_type }}&filter={{ filtering }}" class="btn btn-primary back {% if previous_run == run %} disabled {% endif %}" id="previous"><i class="fas fa-step-backward"></i>Previous</i></a>
+                <a href="{% url 'runs:list' run.instrument.name %}?page={{ current_page }}&per_page={{ per_page }}&sort={{ page_type }}&filter={{ filtering }}" class="btn btn-primary back" id="cancel">Back to {{ run.instrument.name }} runs</a>
+                <a href="{% generate_run_link instrument run=next_run %}?page={{current_page}}&per_page={{ per_page }}&sort={{ page_type }}&filter={{ filtering }}" class="btn btn-primary back {% if next_run == run %} disabled {% endif %}" id="next">Next <i class="fas fa-step-forward"></i></a>
+                <a href="{% generate_run_link instrument run=newest_run %}?page={{current_page}}&per_page={{ per_page }}&sort={{ page_type }}&filter={{ filtering }}" class="btn btn-primary back {% if newest_run == run %} disabled {% endif %}" id="newest"> Newest {{ newest_run }}</a>
             </div>
         </div>
 
