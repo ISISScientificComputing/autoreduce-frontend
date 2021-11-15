@@ -1,31 +1,25 @@
-# ############################################################################### #
+# ############################################################################ #
 # Autoreduction Repository : https://github.com/autoreduction/autoreduce
 #
-# Copyright &copy; 2019 ISIS Rutherford Appleton Laboratory UKRI
+# Copyright &copy; 2021 ISIS Rutherford Appleton Laboratory UKRI
 # SPDX - License - Identifier: GPL-3.0-or-later
-# ############################################################################### #
-"""
-Handles colouring table rows
-"""
+# ############################################################################ #
+# pylint:disable=invalid-name
+"""Handles colouring table rows."""
 from django.template import Library
 
-# pylint:disable=invalid-name
 register = Library()
+
+_STATUSES = {
+    "Error": "danger",
+    "Processing": "warning",
+    "Queued": "info",
+    "Completed": "success",
+    "Skipped": "dark",
+}
 
 
 @register.simple_tag
 def colour_table_row(status):
-    """
-    Switch statement for defining table colouring
-    """
-    if status == 'Error':
-        return 'danger'
-    if status == 'Processing':
-        return 'warning'
-    if status == 'Queued':
-        return 'info'
-    if status == 'Completed':
-        return 'success'
-    if status == 'Skipped':
-        return 'dark'
-    return status
+    """Switch statement for defining table colouring."""
+    return _STATUSES.get(status, status)
