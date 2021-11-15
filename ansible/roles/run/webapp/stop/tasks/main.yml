@@ -1,6 +1,6 @@
 ---
 
-- name: Stop the Singularity instance
+- name: Stop the webapp instance
   become: yes
   become_user: "{{ autoreduction_user }}"
   command: docker stop --time=60 webapp-instance

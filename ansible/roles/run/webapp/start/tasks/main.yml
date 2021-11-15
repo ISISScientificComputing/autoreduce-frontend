@@ -7,7 +7,7 @@
   become: yes
   command: docker pull ghcr.io/isisscientificcomputing/autoreduce-frontend:latest
 
-- name: Start the detached Docker container
+- name: Start the detached container
   become: yes
   command: docker run {{ run_command }} ghcr.io/isisscientificcomputing/autoreduce-frontend:latest
 
