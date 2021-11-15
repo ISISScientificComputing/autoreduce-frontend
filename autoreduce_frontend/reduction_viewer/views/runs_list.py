@@ -1,11 +1,18 @@
+# ############################################################################ #
+# Autoreduction Repository :
+# https://github.com/ISISScientificComputing/autoreduce
+#
+# Copyright &copy; 2021 ISIS Rutherford Appleton Laboratory UKRI
+# SPDX - License - Identifier: GPL-3.0-or-later
+# ############################################################################ #
 # pylint:disable=no-member,unused-argument,too-many-locals,broad-except
 import traceback
 import logging
 
-from autoreduce_db.reduction_viewer.models import Experiment, Instrument, ReductionRun, Status
-from autoreduce_qp.queue_processor.variable_utils import VariableUtils
 from django_tables2 import RequestConfig
 
+from autoreduce_db.reduction_viewer.models import Experiment, Instrument, ReductionRun, Status
+from autoreduce_qp.queue_processor.variable_utils import VariableUtils
 from autoreduce_frontend.autoreduce_webapp.view_utils import check_permissions, login_and_uows_valid, render_with
 from autoreduce_frontend.reduction_viewer.view_utils import order_runs
 from autoreduce_frontend.reduction_viewer.tables import ExperimentTable, ReductionRunTable
@@ -35,7 +42,6 @@ def runs_list(request, instrument=None):
         first_instrument_run = runs.filter(batch_run=False).first()
 
         runs = order_runs(sort_by=sort_by, runs=runs)
-
         run_table = ReductionRunTable(runs)
         RequestConfig(request, paginate={"per_page": 10}).configure(run_table)
 
@@ -48,14 +54,13 @@ def runs_list(request, instrument=None):
             return {'message': "No runs found for instrument."}
 
         current_variables = {}
+        error_reason = ""
         try:
             current_variables.update(VariableUtils.get_default_variables(instrument_obj.name, raise_exc=True))
         except FileNotFoundError:
             error_reason = "reduce_vars.py is missing for this instrument"
         except (ImportError, SyntaxError):
             error_reason = "reduce_vars.py has an import or syntax error"
-        else:
-            error_reason = ""
 
         context_dictionary = {
             'instrument': instrument_obj,
@@ -82,8 +87,7 @@ def runs_list(request, instrument=None):
             experiments = Experiment.objects.filter(reduction_runs__instrument=instrument_obj). \
                 order_by('-reference_number').distinct()
             for experiment in experiments:
-                associated_runs = runs.filter(experiment=experiment). \
-                    order_by('-created')
+                associated_runs = runs.filter(experiment=experiment).order_by('-created')
                 experiments_and_runs[experiment] = associated_runs
 
             experiment_table = ExperimentTable(experiments)

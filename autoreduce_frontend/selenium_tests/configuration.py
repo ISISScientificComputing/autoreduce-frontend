@@ -1,12 +1,12 @@
-# ############################################################################### #
+# ############################################################################ #
 # Autoreduction Repository : https://github.com/autoreduction/autoreduce
 #
 # Copyright &copy; 2020 ISIS Rutherford Appleton Laboratory UKRI
 # SPDX - License - Identifier: GPL-3.0-or-later
-# ############################################################################### #
+# ############################################################################ #
 """
-Module containing configuration functions. Configuration file must be used as a thread safe way to
-share values between xdist workers does not currently exist.
+Module containing configuration functions. Configuration file must be used as a
+thread safe way to share values between xdist workers does not currently exist.
 """
 import json
 import sys
@@ -28,8 +28,8 @@ if not SELENIUM_CONFIG.exists():
 
 def store_original_config():
     """
-    Make a copy of the config file to a temporary file. This prevents arguments given to the test
-     entrypoint being persisted to the config file.
+    Make a copy of the config file to a temporary file. This prevents arguments
+    given to the test entrypoint being persisted to the config file.
     """
     try:
         copyfile(SELENIUM_CONFIG, TEMP_SELENIUM_CONFIG)
@@ -38,36 +38,29 @@ def store_original_config():
 
 
 def get_url():
-    """
-    Returns the url to test against from the config
-    :return: (str) The url to test against from the config
-    """
-
+    """Returns the URL to test against from the config."""
     return load_config_file()["url"]
 
 
 def is_headless():
-    """
-    Returns the headless boolean from the config
-    :return: (bool) The headless boolean from the config
-    """
+    """Returns the headless boolean from the config."""
     return load_config_file()["run_headless"]
 
 
 def set_url(url):
     """
-    Set the url to test against in the config. IPs must be prefixed with http/https still
-    :param url: (str) The url to test against
+    Set the url to test against in the config. IPs must be prefixed with
+    'http'/'https' still.
     """
     config = load_config_file()
     config["url"] = url
     dump_to_config_file(config)
 
 
-def set_headless(headless):
+def set_headless(headless: bool):
     """
-    Set the headless option in the config to decide whether or not to use a headless driver
-    :param headless: (bool) the headless bool option
+    Set the headless option in the config to decide whether or not to use a
+    headless driver.
     """
     config = load_config_file()
     config["run_headless"] = headless
@@ -76,8 +69,8 @@ def set_headless(headless):
 
 def cleanup_config():
     """
-    Copy the original values back to the original config file, so as not to persist arguments given
-    to test runner
+    Copy the original values back to the original config file, so as not to
+    persist arguments given to test runner.
     """
     copyfile(TEMP_SELENIUM_CONFIG, SELENIUM_CONFIG)
     if TEMP_SELENIUM_CONFIG.exists():
@@ -85,10 +78,7 @@ def cleanup_config():
 
 
 def load_config_file():
-    """
-    Load the config file into a python dictionary
-    :return: (dict) The config file as a python dictionary
-    """
+    """Load and return the config file into a python dictionary."""
     try:
         with open(SELENIUM_CONFIG) as fle:
             return json.load(fle)
@@ -97,9 +87,6 @@ def load_config_file():
 
 
 def dump_to_config_file(config_dict):
-    """
-    Dump the given dictionary to the config file
-    :param config_dict: (dict) the dictionary to be dumped.
-    """
+    """Dump the given dictionary to the config file."""
     with open(SELENIUM_CONFIG, "w") as fle:
         json.dump(config_dict, fle, indent=4)

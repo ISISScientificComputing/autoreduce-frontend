@@ -1,3 +1,10 @@
+# ############################################################################ #
+# Autoreduction Repository :
+# https://github.com/ISISScientificComputing/autoreduce
+#
+# Copyright &copy; 2021 ISIS Rutherford Appleton Laboratory UKRI
+# SPDX - License - Identifier: GPL-3.0-or-later
+# ############################################################################ #
 # pylint:disable=no-member,too-many-locals,broad-except
 import logging
 
@@ -5,7 +12,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 
 from autoreduce_db.reduction_viewer.models import ReductionRun
-from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions, login_and_uows_valid, render_with)
+from autoreduce_frontend.autoreduce_webapp.view_utils import check_permissions, login_and_uows_valid, render_with
 from autoreduce_frontend.plotting.plot_handler import PlotHandler
 from autoreduce_frontend.reduction_viewer.views.common import get_arguments_from_file, prepare_arguments_for_render
 from autoreduce_frontend.reduction_viewer.view_utils import (get_interactive_plot_data, get_navigation_runs,
@@ -17,7 +24,7 @@ LOGGER = logging.getLogger(__package__)
 
 def redirect_run_does_not_exist(instrument_name, run_number, run_version):
     """
-    Redirects to the runs:list page if the run does not exist, and shows which
+    Redirect to the runs:list page if the run does not exist, and shows which
     run was not found.
 
     Args:
@@ -48,7 +55,7 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
 @check_permissions
 @render_with('run_summary.html')
 def run_summary_batch_run(request, instrument_name=None, pk=None, run_version=0):
-    """Gathers the context and renders a run's summary"""
+    """Gather the context and renders a run's summary."""
     history = ReductionRun.objects.filter(instrument__name=instrument_name, pk=pk).order_by(
         '-run_version').select_related('status').select_related('experiment').select_related('instrument')
     if len(history) == 0:
@@ -58,7 +65,7 @@ def run_summary_batch_run(request, instrument_name=None, pk=None, run_version=0)
 
 
 def run_summary_run(request, history, instrument_name=None, run_version=0, run_number=0):
-    """Gathers the context and renders a run's summary"""
+    """Gather the context and renders a run's summary."""
     try:
         run = next(run for run in history if run.run_version == int(run_version))
     except StopIteration:
@@ -132,14 +139,13 @@ def run_summary_run(request, history, instrument_name=None, run_version=0, run_n
             plot_handler = PlotHandler(data_filepath=run.data_location.first().file_path,
                                        server_dir=reduction_location,
                                        rb_number=rb_number)
-
             local_plot_locs, server_plot_locs = plot_handler.get_plot_file()
             if local_plot_locs:
                 context_dictionary['static_plots'] = [
                     location for location in local_plot_locs if not location.endswith(".json")
                 ]
-
                 context_dictionary['interactive_plots'] = get_interactive_plot_data(server_plot_locs)
+
         except Exception as exception:
             # Lack of plot images is recoverable - we shouldn't stop the whole
             # page rendering if something is wrong with the plot images - but

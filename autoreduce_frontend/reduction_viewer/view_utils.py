@@ -1,9 +1,9 @@
-# ############################################################################### #
+# ############################################################################ #
 # Autoreduction Repository : https://github.com/autoreduction/autoreduce
 #
 # Copyright &copy; 2021 ISIS Rutherford Appleton Laboratory UKRI
 # SPDX - License - Identifier: GPL-3.0-or-later
-# ############################################################################### #
+# ############################################################################ #
 """Utility functions for the view of django models."""
 # pylint:disable=no-member
 import functools
@@ -14,10 +14,11 @@ from typing import Tuple
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.http import url_has_allowed_host_and_scheme
+
 from autoreduce_db.reduction_viewer.models import Instrument, ReductionRun
 from autoreduce_qp.queue_processor.reduction.service import ReductionScript
 from autoreduce_frontend.autoreduce_webapp.settings import DATA_ANALYSIS_BASE_URL
-from autoreduce_frontend.autoreduce_webapp.settings import (ALLOWED_HOSTS, UOWS_LOGIN_URL)
+from autoreduce_frontend.autoreduce_webapp.settings import ALLOWED_HOSTS, UOWS_LOGIN_URL
 from autoreduce_frontend.autoreduce_webapp.templatetags.colour_table_row import colour_table_row
 
 LOGGER = logging.getLogger(__package__)
@@ -59,25 +60,34 @@ def get_interactive_plot_data(plot_locations):
 
 def make_data_analysis_url(reduction_location: str) -> str:
     """
-    Makes a URL for the data.analysis website that will open the location of the
+    Make a URL for the data.analysis website that will open the location of the
     data.
     """
     if "/instrument/" in reduction_location:
         return DATA_ANALYSIS_BASE_URL + reduction_location.split("/instrument/")[1]
+
     return ""
 
 
 def windows_to_linux_path(path: str) -> str:
-    """Convert Windows path to Linux path."""
-    # '\\isis\inst$\' maps to '/isis/'
+    r"""
+    Convert Windows path to Linux path.
+
+    Note:
+        '\\isis\inst$\' maps to '/isis/'
+    """
     path = path.replace(r'\\isis\inst$' + '\\', '/isis/')
     path = path.replace('\\', '/')
     return path
 
 
 def linux_to_windows_path(path: str) -> str:
-    """Convert Linux path to Windows path."""
-    # '\\isis\inst$\' maps to '/isis/'
+    r"""
+    Convert Linux path to Windows path.
+
+    Note:
+        '\\isis\inst$\' maps to '/isis/'
+    """
     path = path.replace('/isis/', r'\\isis\inst$' + '\\')
     path = path.replace('/', '\\')
     return path
@@ -92,13 +102,8 @@ def started_by_id_to_name(started_by_id=None):
         if not started by a user.
 
     Returns:
-        If started by a valid user, return '[forename] [surname]'.
-
-        If started automatically, return 'Autoreducton service'.
-
-        If started manually, return 'Development team'.
-
-        Otherwise, return None.
+        A string of the name of the user or team that submitted an Autoreduction
+        run.
     """
     if started_by_id is None or started_by_id < -1:
         return None
@@ -136,9 +141,7 @@ def make_return_url(request, next_url):
 
 
 def order_runs(sort_by: str, runs: ReductionRun.objects):
-    """
-    Sort a queryset of runs based on the passed GET sort_by param
-    """
+    """Sort a queryset of runs based on the passed GET sort_by param."""
     if sort_by == "-run_number":
         runs = runs.order_by('-run_numbers__run_number', '-run_version')
     elif sort_by == "run_number":
@@ -153,15 +156,9 @@ def order_runs(sort_by: str, runs: ReductionRun.objects):
     return runs
 
 
-# pylint:disable=no-method-argument
-def data_status(status):
-    """Function to add text-(status) class to status column for formatting
-
-        Returns:
-        "text- " concatonated with status fetched from record for formatting with colour_table_row
-
-        """
-    return "text-" + colour_table_row(status) + " run-status"
+def data_status(status: str) -> str:
+    """Add text-(status) class to status column for formatting."""
+    return f"text-{colour_table_row(status)} run-status"
 
 
 def get_navigation_runs(instrument_name: str, run: ReductionRun, page_type: str) -> Tuple[ReductionRun]:
