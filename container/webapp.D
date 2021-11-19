@@ -1,4 +1,4 @@
-FROM autoreduction/base
+FROM ghcr.io/isisscientificcomputing/base
 
 # add --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple for packages in test.pypi.org
 # also when updating the version here make sure it matches the one in setup.py
