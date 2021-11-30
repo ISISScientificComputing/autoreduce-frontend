@@ -5,6 +5,8 @@ from typing import Tuple
 from autoreduce_db.reduction_viewer.models import ReductionArguments
 from autoreduce_qp.queue_processor.variable_utils import VariableUtils
 
+UNAUTHORIZED_MESSAGE = "User is not authorized to submit batch runs. Please contact the Autoreduce team "\
+                       "at ISISREDUCE@stfc.ac.uk to request the permissions."
 # Holds the default value used when there is no value for the variable
 # in the default variables dictionary. Stored in a parameter for re-use in tests.
 DEFAULT_WHEN_NO_VALUE = ""
