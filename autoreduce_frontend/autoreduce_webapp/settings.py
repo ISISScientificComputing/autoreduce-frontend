@@ -200,3 +200,5 @@ CONN_MAX_AGE = 60
 # Currently this is attached to the request when it goes through the proxy server
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 DATA_ANALYSIS_BASE_URL = "https://data.analysis.stfc.ac.uk/data/browse/#INSTRUMENT/"  # note: the trailing / is important
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

@@ -17,7 +17,7 @@ from django.db.models.query import QuerySet
 from requests.exceptions import ConnectionError  # pylint:disable=redefined-builtin
 
 from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions, login_and_uows_valid, render_with)
-from autoreduce_frontend.reduction_viewer.views.common import make_reduction_arguments
+from autoreduce_frontend.reduction_viewer.views.common import UNAUTHORIZED_MESSAGE, make_reduction_arguments
 from autoreduce_frontend.utilities import input_processing
 
 LOGGER = logging.getLogger(__package__)
@@ -91,7 +91,7 @@ def run_confirmation(request, instrument: str):
     try:
         auth_token = str(request.user.auth_token)
     except AttributeError as err:
-        context_dictionary['error'] = "User is not authorized to submit batch runs."
+        context_dictionary['error'] = UNAUTHORIZED_MESSAGE
         return context_dictionary
     # run_description gets stored in run_description in the ReductionRun object
     max_run_description_length = ReductionRun._meta.get_field('run_description').max_length

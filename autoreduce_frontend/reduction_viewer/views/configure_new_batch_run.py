@@ -10,12 +10,11 @@ from django.views.generic import FormView
 from django.shortcuts import render
 
 from autoreduce_frontend.utilities import input_processing
-from autoreduce_frontend.reduction_viewer.views.common import prepare_arguments_for_render, make_reduction_arguments
+from autoreduce_frontend.reduction_viewer.views.common import (UNAUTHORIZED_MESSAGE, prepare_arguments_for_render,
+                                                               make_reduction_arguments)
 
 UNKNOWN_ERROR_MESSAGE = "Unknown error encountered"
 RUN_EMPTY_MESSAGE = "Run field was invalid or empty"
-UNAUTHORIZED_MESSAGE = "User is not authorized to submit batch runs. Please contact the Autoreduce team "\
-                       "at ISISREDUCE@stfc.ac.uk to request the permissions."
 UNABLE_TO_CONNECT_MESSAGE = "Unable to connect to the Autoreduce job submission service. If the error "\
                             "persists please let the Autoreduce team know at ISISREDUCE@stfc.ac.uk"
 

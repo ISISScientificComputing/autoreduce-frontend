@@ -5,6 +5,8 @@ from typing import Tuple
 from autoreduce_db.reduction_viewer.models import ReductionArguments
 from autoreduce_qp.queue_processor.variable_utils import VariableUtils
 
+UNAUTHORIZED_MESSAGE = "User is not authorized to submit batch runs. Please contact the Autoreduce team "\
+                       "at ISISREDUCE@stfc.ac.uk to request the permissions."
 # Holds the default value used when there is no value for the variable
 # in the default variables dictionary. Stored in a parameter for re-use in tests.
 DEFAULT_WHEN_NO_VALUE = ""
@@ -131,11 +133,17 @@ def convert_to_python_type(value: str):
 def make_reduction_arguments(post_arguments: dict, instrument: str) -> dict:
     """
     Given new variables from the POST request and the default variables from reduce_vars.py
-     create a dictionary of the new variables
-    :param post_arguments: The new variables to be created
-    :param default_variables: The default variables
-    :return: The new variables as a dict
-    :raises ValueError if any variable values exceed the allowed maximum
+    create a dictionary of the new variables
+
+    Args:
+        post_arguments: The new variables to be created
+        default_variables: The default variables
+
+    Returns:
+        The new variables as a dict
+
+    Raises:
+        ValueError if any variable values exceed the allowed maximum
     """
 
     defaults = VariableUtils.get_default_variables(instrument)
