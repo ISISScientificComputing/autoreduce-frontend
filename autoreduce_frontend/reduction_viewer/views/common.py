@@ -133,11 +133,17 @@ def convert_to_python_type(value: str):
 def make_reduction_arguments(post_arguments: dict, instrument: str) -> dict:
     """
     Given new variables from the POST request and the default variables from reduce_vars.py
-     create a dictionary of the new variables
-    :param post_arguments: The new variables to be created
-    :param default_variables: The default variables
-    :return: The new variables as a dict
-    :raises ValueError if any variable values exceed the allowed maximum
+    create a dictionary of the new variables
+
+    Args:
+        post_arguments: The new variables to be created
+        default_variables: The default variables
+
+    Returns:
+        The new variables as a dict
+
+    Raises:
+        ValueError if any variable values exceed the allowed maximum
     """
 
     defaults = VariableUtils.get_default_variables(instrument)
