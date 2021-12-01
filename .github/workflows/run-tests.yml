@@ -16,7 +16,7 @@ jobs:
         with:
           python-version: 3.7
 
-      - uses: ISISScientificComputing/autoreduce-actions/build@master
+      - uses: ISISScientificComputing/autoreduce-actions/build@main
         with:
           package_name: autoreduce_frontend
 
