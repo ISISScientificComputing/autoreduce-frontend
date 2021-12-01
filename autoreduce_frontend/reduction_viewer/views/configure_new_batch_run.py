@@ -10,7 +10,8 @@ from django.views.generic import FormView
 from django.shortcuts import render
 
 from autoreduce_frontend.utilities import input_processing
-from autoreduce_frontend.reduction_viewer.views.common import UNAUTHORIZED_MESSAGE, prepare_arguments_for_render, make_reduction_arguments
+from autoreduce_frontend.reduction_viewer.views.common import (UNAUTHORIZED_MESSAGE, prepare_arguments_for_render,
+                                                               make_reduction_arguments)
 
 UNKNOWN_ERROR_MESSAGE = "Unknown error encountered"
 RUN_EMPTY_MESSAGE = "Run field was invalid or empty"
