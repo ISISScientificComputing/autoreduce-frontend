@@ -24,7 +24,7 @@ setup(
     version="22.0.0.dev7",  # when updating the version here make sure to also update webapp.D
     description="The frontend of the ISIS Autoreduction service",
     author="ISIS Autoreduction Team",
-    url="https://github.com/ISISScientificComputing/autoreduce-frontend/",
+    url="https://github.com/autoreduction/autoreduce-frontend/",
     install_requires=[
         "autoreduce_qp>=22.0.0.dev17",
         "Django==3.2.8",

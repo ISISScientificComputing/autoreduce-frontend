@@ -1,5 +1,5 @@
 # ############################################################################### #
-# Autoreduction Repository : https://github.com/ISISScientificComputing/autoreduce
+# Autoreduction Repository : https://github.com/autoreduction/autoreduce
 #
 # Copyright &copy; 2020 ISIS Rutherford Appleton Laboratory UKRI
 # SPDX - License - Identifier: GPL-3.0-or-later
@@ -212,7 +212,7 @@ class FooterTestMixin:
     """
     Contains test cases for pages with the FooterMixin
     """
-    GITHUB_URL = "https://github.com/ISISScientificComputing/autoreduce"
+    GITHUB_URL = "https://github.com/autoreduction/autoreduce"
 
     def test_footer_visible(self):
         """
@@ -260,7 +260,7 @@ class AccessibilityTestMixin:
     # A shared dict of {rules.id: rules.selector, ...} to also be ignored from the a11y test.
     # Reference: https://www.deque.com/axe/core-documentation/api-documentation/#parameters-1
     _shared_accessibility_test_ignore_rules = {
-        # https://github.com/ISISScientificComputing/autoreduce/issues/790
+        # https://github.com/autoreduction/autoreduce/issues/790
         "color-contrast": "*",
     }
 
