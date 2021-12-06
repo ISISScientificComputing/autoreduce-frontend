@@ -3,5 +3,11 @@
 - name: Stop the webapp instance
   become: yes
   become_user: "{{ autoreduction_user }}"
-  command: docker stop --time=60 webapp-instance
+  command: docker kill webapp-instance
+  ignore_errors: yes
+
+- name: Remove the webapp container
+  become: yes
+  become_user: "{{ autoreduction_user }}"
+  command: docker rm webapp-instance
   ignore_errors: yes
