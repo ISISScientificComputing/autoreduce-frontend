@@ -16,23 +16,21 @@ LOGGER = logging.getLogger(__package__)
 @check_permissions
 @render_with('configure_new_runs.html')
 def configure_new_runs(request, instrument=None, start=0, experiment_reference=0):
-    """
-    Handles request to view instrument variables
-    """
+    """Handle request to view instrument variables."""
     instrument_name = instrument
 
     if request.method == 'POST':
         return configure_new_runs_post(request, instrument_name)
-    else:
-        return configure_new_runs_get(instrument, start, experiment_reference)
+    return configure_new_runs_get(instrument, start, experiment_reference)
 
 
 def configure_new_runs_post(request, instrument_name):
     """
     Submission to modify variables. Acts on POST request.
 
-    Depending on the parameters it either makes them for a run range (when start is given, end is optional)
-    or for experiment reference (when experiment_reference is given).
+    Depending on the parameters it either makes them for a run range (when start
+    is given, end is optional) or for experiment reference (when
+    experiment_reference is given).
     """
     start = int(request.POST.get("run_start")) if request.POST.get("run_start", None) else None
     experiment_reference = int(request.POST.get("experiment_reference_number")) if request.POST.get(
@@ -63,9 +61,7 @@ def configure_new_runs_post(request, instrument_name):
 
 # pylint:disable=too-many-locals
 def configure_new_runs_get(instrument_name, start=0, experiment_reference=0):
-    """
-    GET for the configure new runs page
-    """
+    """GET for the configure new runs page."""
     instrument = Instrument.objects.get(name__iexact=instrument_name)
 
     editing = (start > 0 or experiment_reference > 0)
