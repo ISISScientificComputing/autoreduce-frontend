@@ -27,7 +27,7 @@ setup(
     url="https://github.com/autoreduction/autoreduce-frontend/",
     install_requires=[
         "autoreduce_qp>=22.0.0.dev17",
-        "Django==3.2.8",
+        "Django==4.0",
         "django_extensions==3.1.3",
         "django-user-agents==0.4.0",
         "djangorestframework==3.12.4",
