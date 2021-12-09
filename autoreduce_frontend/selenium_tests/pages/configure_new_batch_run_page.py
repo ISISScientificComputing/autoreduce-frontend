@@ -49,7 +49,7 @@ class ConfigureNewBatchRunsPage(Page, RerunFormMixin, NavbarMixin, FooterMixin, 
     @property
     def runs_val(self) -> WebElement:
         """Return the value of the run start WebElement"""
-        return self.runs.get_attribute("value")
+        return self.runs.get_attribute("value")  # pylint:disable=no-member
 
     @property
     def reset_to_current_values(self) -> WebElement:
