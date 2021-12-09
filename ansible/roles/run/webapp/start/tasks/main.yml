@@ -17,7 +17,6 @@
       - /home/{{ autoreduction_user }}/.autoreduce:/home/{{ autoreduction_user }}/.autoreduce:rw
       - /instrument:/instrument:rw
       - /isis:/isis
-      - /isis:/archive
       - /shared-config:/shared-config
       - /staticfiles:/staticfiles:rw
     detach: yes
