@@ -47,7 +47,7 @@ if DEBUG:
 if DEBUG:
     ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'reducedev2.isis.cclrc.ac.uk']
 else:
-    ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'reduce.isis.cclrc.ac.uk']
+    ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '0.0.0.0', 'reduce.isis.cclrc.ac.uk']
 
 INTERNAL_IPS = ['localhost', '127.0.0.1']
 
