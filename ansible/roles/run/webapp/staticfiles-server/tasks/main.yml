@@ -7,10 +7,18 @@
     name: nginx
     state: latest
 
-- name: Copy over the nginx Kibana reverse proxy configuration
+- name: Copy over the nginx statisfiles configuration
   template:
     src: autoreduce-static.conf
     dest: /etc/nginx/default.d/autoreduce-static.conf
+    owner: 'root'
+    group: 'root'
+    mode: 0644
+
+- name: Copy over the nginx main configuration
+  template:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
     owner: 'root'
     group: 'root'
     mode: 0644
