@@ -97,7 +97,7 @@ def run_summary_run(request, history, instrument_name=None, run_version=0, run_n
     standard_vars, advanced_vars, variable_help = prepare_arguments_for_render(run.arguments, run.instrument.name)
     default_standard_variables, *_ = get_arguments_from_file(run.instrument.name)
 
-    # Picks the unique identifier for a run - for batch runs, it's the pk, and
+    # Picks the unique identifier for a run - for batch runs it's the pk, and
     # for normal runs it's just the run number
     run_unique_id = run.pk if run.batch_run else run.run_number
     runs = ",".join(str(r.run_number) for r in run.run_numbers.all())
