@@ -11,6 +11,8 @@ import itertools
 import json
 import os
 from typing import Tuple
+from logging import getLogger
+import traceback
 
 import requests
 
@@ -23,6 +25,8 @@ UNAUTHORIZED_MESSAGE = "User is not authorized to submit batch runs. Please cont
 # in the default variables dictionary. Stored in a parameter for re-use in
 # tests
 DEFAULT_WHEN_NO_VALUE = ""
+
+logger = getLogger(__package__)
 
 
 def _combine_dicts(current: dict, default: dict):
@@ -100,7 +104,6 @@ def prepare_arguments_for_render(arguments: ReductionArguments, instrument: str)
         values.
     """
     vars_kwargs = arguments.as_dict()
-    fetch_api_urls(vars_kwargs)
 
     standard_vars = vars_kwargs.get("standard_vars", {})
     advanced_vars = vars_kwargs.get("advanced_vars", {})
@@ -110,35 +113,39 @@ def prepare_arguments_for_render(arguments: ReductionArguments, instrument: str)
     final_standard = _combine_dicts(standard_vars, default_standard_variables)
     final_advanced = _combine_dicts(advanced_vars, default_advanced_variables)
 
+    fetch_api_urls(final_standard)
+    fetch_api_urls(final_advanced)
+
     return final_standard, final_advanced, variable_help
 
 
 def fetch_api_urls(vars_kwargs):
     """Convert file URLs in vars_kwargs into API URL strings."""
-    for category, headings in vars_kwargs.items():
-        for heading, heading_value in headings.items():
-            if "file" in heading.lower() and isinstance(heading_value, dict):
-                try:
-                    vars_kwargs[category][heading]["all_files"] = {}
-                    path = heading_value["url"].partition("master")[2]
-                    url = "https://api.github.com/repos/mantidproject/scriptrepository/contents" + path
-                    vars_kwargs[category][heading]["api"] = url
-                    req = requests.get(url)
-                    data = json.loads(req.content)
+    for _, heading_value in vars_kwargs.items():
+        if isinstance(heading_value["current"], dict) and "url" in heading_value["current"]:
+            try:
+                heading_value["all_files"] = {}
+                base_url, _, path = heading_value["current"]["url"].partition("master")
+                # TODO might want to support >1 origin, or allow different syntax
+                repo = base_url.replace("https://raw.githubusercontent.com/", "")[:-1]  # :-1 drops the trailing slash
+                path = path.lstrip("/")
+                url = f"https://api.github.com/repos/{repo}/contents/{path}"
+                auth_token = os.environ.get("AUTOREDUCTION_GITHUB_AUTH_TOKEN", None)
+                headers = {"Authorization": f"Token {auth_token}"} if auth_token else {}
+                req = requests.get(url, headers=headers)
+                data = json.loads(req.content)
 
-                    for link in data:
-                        file_name = link["name"]
+                for link in data:
+                    file_name = link["name"]
+                    # if this download_url is None, then it's a directory
+                    if link["download_url"]:
                         url, _, default = link["download_url"].rpartition("/")
-                        auth_token = os.environ.get("AUTOREDUCTION_GITHUB_AUTH_TOKEN", "")
-                        req = requests.get(f"{url}/{default}", headers={"Authorization": f"Token {auth_token}"})
-                        value = req.text
-                        vars_kwargs[category][heading]["all_files"][file_name] = {
+                        heading_value["all_files"][file_name] = {
                             "url": url,
                             "default": default,
-                            "value": value,
                         }
-                except Exception:
-                    pass
+            except Exception as err:
+                logger.error("Failed to fetch file from GitHub: %s\n%s", str(err), traceback.format_exc())
 
 
 def decode_b64(value: str):

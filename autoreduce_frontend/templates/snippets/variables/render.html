@@ -19,10 +19,10 @@
                     <option value="True" {% if value.lower == 'true' %} selected {% endif %}>True</option>
                     <option value="False" {% if value.lower == 'false' %} selected {% endif %}>False</option>
                 </select>
-            {% elif "file" in name %}
+            {% elif "url" in variable.current %}
                 <select id="var-{{ type }}-{% encode_b64 name %}" data-url="{{ variable.current.url }}" data-initial="{{ variable.current }}" data-default="{{ variable.default }}" name="var-{{ type }}-{% encode_b64 name %}" class="remote-variable">
-                {% if "all_files" in variable.current %}
-                    {% for file in variable.current.all_files %}
+                {% if "all_files" in variable %}
+                    {% for file in variable.all_files %}
                         <option value="file" selected>{{ file }}</option>
                     {% endfor %}
                 {% endif %}
