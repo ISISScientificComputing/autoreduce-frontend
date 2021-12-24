@@ -6,24 +6,32 @@
     <label for="var-{{ type }}-{% encode_b64 name %}" class="col-form-label col-12">
     {{ name }}
     {% if name in variable_help %}
-    <a href="#" data-toggle="popover" data-html="true" data-content="{% dict_get variable_help name %}"
-        data-trigger="hover" data-placement="top" data-container="body">
-        <i class="fa fa-info-circle"></i>
-    </a>
+        <a href="#" data-toggle="popover" data-html="true" data-content="{% dict_get variable_help name %}"
+            data-trigger="hover" data-placement="top" data-container="body">
+            <i class="fa fa-info-circle"></i>
+        </a>
     {% endif %}
     </label>
     <div class="form-row col-sm-12">
         <div class="col-11">
             {% if variable.current|lower == "true" or variable.current|lower == "false" %}
-            <select id="var-{{ type }}-{% encode_b64 name %}" data-initial="{{ variable.current }}" data-default="{{ variable.default }}" name="var-{{ type }}-{% encode_b64 name %}">
-            <option value="True" {% if value.lower == 'true' %} selected {% endif %}>True</option>
-            <option value="False" {% if value.lower == 'false' %} selected {% endif %}>False</option>
-            </select>
+                <select id="var-{{ type }}-{% encode_b64 name %}" data-initial="{{ variable.current }}" data-default="{{ variable.default }}" name="var-{{ type }}-{% encode_b64 name %}">
+                    <option value="True" {% if value.lower == 'true' %} selected {% endif %}>True</option>
+                    <option value="False" {% if value.lower == 'false' %} selected {% endif %}>False</option>
+                </select>
+            {% elif "file" in name %}
+                <select id="var-{{ type }}-{% encode_b64 name %}" data-url="{{ variable.current.url }}" data-initial="{{ variable.current }}" data-default="{{ variable.default }}" name="var-{{ type }}-{% encode_b64 name %}" class="remote-variable">
+                {% if "all_files" in variable.current %}
+                    {% for file in variable.current.all_files %}
+                        <option value="file" selected>{{ file }}</option>
+                    {% endfor %}
+                {% endif %}
+                </select>
             {% else %}
-            <input id="var-{{ type }}-{% encode_b64 name %}" value="{{ variable.current }}" data-initial="{{ variable.current }}" data-default="{{ variable.default }}"
-                class="form-control variable-field"
-                name="var-{{ type }}-{% encode_b64 name %}"
-                />
+                <input id="var-{{ type }}-{% encode_b64 name %}" value="{{ variable.current }}" data-initial="{{ variable.current }}" data-default="{{ variable.default }}"
+                    class="form-control variable-field"
+                    name="var-{{ type }}-{% encode_b64 name %}"
+                    />
             {% endif %}
         </div>
 

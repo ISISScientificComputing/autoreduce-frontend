@@ -125,30 +125,30 @@ class TestRunsListQueries(BaseTestCase, AccessibilityTestMixin, FooterTestMixin,
         Test that the run navigation buttons work. Begin from the fifth run in
         the fixture.
         """
-        for nav in ("newest", "next", "previous"):
-            self.page.launch()
-            runs = self.page.get_run_numbers_from_table()
-            fifth_run = runs[4]
-            run_summary_page = self.page.click_run(fifth_run)
-            assert run_summary_page.title_text() == "Reduction Job #100005"
-            time.sleep(3)
-            run_summary_page.click_btn_by_id(nav)
-            time.sleep(3)
-            if nav == "next":
-                assert run_summary_page.title_text() == "Reduction Job #100006"
-            elif nav == "previous":
-                assert run_summary_page.title_text() == "Reduction Job #100004"
-            elif nav == "newest":
-                assert run_summary_page.title_text() == "Reduction Job #100009"
+        self.page.launch()
+        runs = self.page.get_run_numbers_from_table()
+        fifth_run = runs[4]
+
+        run_summary_page = self.page.click_run(fifth_run)
+        assert run_summary_page.title_text() == "Reduction Job #100005"
+
+        run_summary_page.click_btn_by_id("next")
+        assert run_summary_page.title_text() == "Reduction Job #100006"
+
+        run_summary_page.click_btn_by_id("previous")
+        assert run_summary_page.title_text() == "Reduction Job #100005"
+
+        run_summary_page.click_btn_by_id("newest")
+        assert run_summary_page.title_text() == "Reduction Job #100009"
 
     def test_disabled_btns(self):
         """
         Test that the run summary navigation buttons are disabled depending on a
         runs' recency.
 
-        The latest run should have the `Newest` and `Next` buttons disabled.
+        The latest run should have the 'Newest' and 'Next' buttons disabled.
 
-        The oldest run should have the `Previous` button disabled.
+        The oldest run should have the 'Previous' button disabled.
 
         Note:
             This test assumes that the runs are being sorted by number.

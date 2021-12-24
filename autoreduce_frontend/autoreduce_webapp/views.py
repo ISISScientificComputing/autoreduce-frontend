@@ -1,9 +1,9 @@
 # ############################################################################### #
 # Autoreduction Repository : https://github.com/autoreduction/autoreduce
 #
-# Copyright &copy; 2019 ISIS Rutherford Appleton Laboratory UKRI
+# Copyright &copy; 2021 ISIS Rutherford Appleton Laboratory UKRI
 # SPDX - License - Identifier: GPL-3.0-or-later
-# ############################################################################### #
+# ############################################################################ #
 """Handle page responses for the web app."""
 # pylint: disable=unused-argument,bare-except,no-member
 from django.http import HttpRequest
@@ -18,7 +18,6 @@ def render_error(request: HttpRequest, message: str):
 
     Args:
         request: The original sent request.
-
         message: The message that will be displayed.
 
     Return:

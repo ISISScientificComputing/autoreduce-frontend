@@ -1,14 +1,27 @@
+# ############################################################################ #
+# Autoreduction Repository :
+# https://github.com/ISISScientificComputing/autoreduce
+#
+# Copyright &copy; 2021 ISIS Rutherford Appleton Laboratory UKRI
+# SPDX - License - Identifier: GPL-3.0-or-later
+# ############################################################################ #
+# pylint:disable=too-many-return-statements,broad-except
 import base64
 import itertools
 import json
+import os
 from typing import Tuple
+
+import requests
+
 from autoreduce_db.reduction_viewer.models import ReductionArguments
 from autoreduce_qp.queue_processor.variable_utils import VariableUtils
 
 UNAUTHORIZED_MESSAGE = "User is not authorized to submit batch runs. Please contact the Autoreduce team "\
                        "at ISISREDUCE@stfc.ac.uk to request the permissions."
 # Holds the default value used when there is no value for the variable
-# in the default variables dictionary. Stored in a parameter for re-use in tests.
+# in the default variables dictionary. Stored in a parameter for re-use in
+# tests
 DEFAULT_WHEN_NO_VALUE = ""
 
 
@@ -25,9 +38,10 @@ def _combine_dicts(current: dict, default: dict):
 
     final = {}
     for name in itertools.chain(current.keys(), default.keys()):
-        # the default value for argument, also used when the variable is missing from the current variables
-        # ideally there will always be a default for each variable name, but
-        # if the variable is missing from the default dictionary, then just default to empty string
+        # The default value for argument, also used when the variable is missing
+        # from the current variables ideally there will always be a default for
+        # each variable name, but if the variable is missing from the default
+        # dictionary, then just default to empty string
         default_value = default.get(name, DEFAULT_WHEN_NO_VALUE)
         final[name] = {"current": current.get(name, default_value), "default": default_value}
 
@@ -43,7 +57,8 @@ def unpack_arguments(arguments: dict) -> Tuple[dict, dict, dict]:
         arguments: The arguments dictionary to unpack.
 
     Returns:
-        A tuple containing the standard variables, advanced variables, and variable help.
+        A tuple containing the standard variables, advanced variables, and
+        variable help.
     """
     standard_arguments = arguments.get("standard_vars", {})
     advanced_arguments = arguments.get("advanced_vars", {})
@@ -60,8 +75,8 @@ def get_arguments_from_file(instrument: str) -> Tuple[dict, dict, dict]:
 
     Raises:
         FileNotFoundError: If the instrument's reduce_vars file is not found.
-        ImportError: If the instrument's reduce_vars file contains an import error.
-        SyntaxError: If the instrument's reduce_vars file contains a syntax error.
+        ImportError: If the reduce_vars file contains an import error.
+        SyntaxError: If the reduce_vars file contains a syntax error.
     """
     default_variables = VariableUtils.get_default_variables(instrument)
     default_standard_variables, default_advanced_variables, variable_help = unpack_arguments(default_variables)
@@ -70,7 +85,8 @@ def get_arguments_from_file(instrument: str) -> Tuple[dict, dict, dict]:
 
 def prepare_arguments_for_render(arguments: ReductionArguments, instrument: str) -> Tuple[dict, dict, dict]:
     """
-    Converts the arguments into a dictionary containing their "current" and "default" values.
+    Converts the arguments into a dictionary containing their "current" and
+    "default" values.
 
     Used to render the form in the webapp (with values from "current"), and
     provide the defaults for resetting (with values from "default").
@@ -80,9 +96,12 @@ def prepare_arguments_for_render(arguments: ReductionArguments, instrument: str)
         instrument: The instrument to get the default variables for.
 
     Returns:
-        A dictionary containing the arguments and their current and default values.
+        A dictionary containing the arguments and their current and default
+        values.
     """
     vars_kwargs = arguments.as_dict()
+    fetch_api_urls(vars_kwargs)
+
     standard_vars = vars_kwargs.get("standard_vars", {})
     advanced_vars = vars_kwargs.get("advanced_vars", {})
 
@@ -94,56 +113,83 @@ def prepare_arguments_for_render(arguments: ReductionArguments, instrument: str)
     return final_standard, final_advanced, variable_help
 
 
+def fetch_api_urls(vars_kwargs):
+    """Convert file URLs in vars_kwargs into API URL strings."""
+    for category, headings in vars_kwargs.items():
+        for heading, heading_value in headings.items():
+            if "file" in heading.lower() and isinstance(heading_value, dict):
+                try:
+                    vars_kwargs[category][heading]["all_files"] = {}
+                    path = heading_value["url"].partition("master")[2]
+                    url = "https://api.github.com/repos/mantidproject/scriptrepository/contents" + path
+                    vars_kwargs[category][heading]["api"] = url
+                    req = requests.get(url)
+                    data = json.loads(req.content)
+
+                    for link in data:
+                        file_name = link["name"]
+                        url, _, default = link["download_url"].rpartition("/")
+                        auth_token = os.environ.get("AUTOREDUCTION_GITHUB_AUTH_TOKEN", "")
+                        req = requests.get(f"{url}/{default}", headers={"Authorization": f"Token {auth_token}"})
+                        value = req.text
+                        vars_kwargs[category][heading]["all_files"][file_name] = {
+                            "url": url,
+                            "default": default,
+                            "value": value,
+                        }
+                except Exception:
+                    pass
+
+
 def decode_b64(value: str):
-    """
-    Decodes the base64 representation back to utf-8 string.
-    """
+    """Decodes the base64 representation back to utf-8 string."""
     return base64.urlsafe_b64decode(value).decode("utf-8")
 
 
-# pylint:disable=too-many-return-statements
 def convert_to_python_type(value: str):
     """
-    Converts the string sent by the POST request to a real Python type that can be serialized by JSON
+    Converts the string sent by the POST request to a real Python type that can
+    be serialized by JSON.
 
     Args:
-        value: The string value to convert
+        value: The string value to convert.
 
     Returns:
-        The converted value
+        The converted value.
     """
     try:
-        # json can directly load str/int/floats and lists of them
+        # JSON can directly load str/int/floats and lists of them
         return json.loads(value)
     except json.JSONDecodeError:
-        if value.lower() == "none" or value.lower() == "null":
+        lowered_value = value.lower()
+        if lowered_value in ("none", "null"):
             return None
-        elif value.lower() == "true":
+        if lowered_value == "true":
             return True
-        elif value.lower() == "false":
+        if lowered_value == "false":
             return False
-        elif "," in value and "[" not in value and "]" not in value:
+        if "," in value and "[" not in value and "]" not in value:
             return convert_to_python_type(f"[{value}]")
-        elif "'" in value:
+        if "'" in value:
             return convert_to_python_type(value.replace("'", '"'))
-        else:
-            return value
+
+        return value
 
 
 def make_reduction_arguments(post_arguments: dict, instrument: str) -> dict:
     """
-    Given new variables from the POST request and the default variables from reduce_vars.py
-    create a dictionary of the new variables
+    Given new variables from the POST request and the default variables from
+    reduce_vars.py create a dictionary of the new variables
 
     Args:
-        post_arguments: The new variables to be created
-        default_variables: The default variables
+        post_arguments: The new variables to be created.
+        default_variables: The default variables.
 
     Returns:
-        The new variables as a dict
+        The new variables as a dict.
 
     Raises:
-        ValueError if any variable values exceed the allowed maximum
+        ValueError: If any variable values exceed the allowed maximum.
     """
 
     defaults = VariableUtils.get_default_variables(instrument)
@@ -161,9 +207,10 @@ def make_reduction_arguments(post_arguments: dict, instrument: str) -> dict:
 
             if name is not None:
                 name = decode_b64(name)
-                # skips variables that have been removed from the defaults
+                # Skips variables that have been removed from the defaults
                 if name not in defaults[dict_key]:
                     continue
 
                 defaults[dict_key][name] = convert_to_python_type(value)
+
     return defaults

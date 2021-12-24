@@ -3,7 +3,7 @@
 #
 # Copyright &copy; 2021 ISIS Rutherford Appleton Laboratory UKRI
 # SPDX - License - Identifier: GPL-3.0-or-later
-# ############################################################################### #
+# ############################################################################ #
 """Module for the instrument summary page model."""
 from typing import List
 
@@ -63,7 +63,6 @@ class RunsListPage(Page, NavbarMixin, FooterMixin, TourMixin):
 
         Args:
             run_number: Run number of the link to click.
-
             version: Version of the run to click.
 
         Returns:
@@ -108,26 +107,21 @@ class RunsListPage(Page, NavbarMixin, FooterMixin, TourMixin):
             raise NoSuchElementException
 
     def click_next_page_button(self) -> None:
-        """
-        Click next page pagination button
-        """
+        """Click next page pagination button."""
         btn = self.driver.find_element_by_xpath("//li[@class='next page-item']/a")
         btn.click()
 
     def click_prev_page_button(self) -> None:
-        """
-        Click previous page pagination button
-        """
+        """Click previous page pagination button."""
         btn = self.driver.find_element_by_xpath("//li[@class='prev page-item']/a")
         btn.click()
 
-    def update_filter(self, filter_name, value):
+    def update_filter(self, filter_name: str, value: str) -> None:
         """
         Select a valid filter option.
 
         Args:
             filter_name: The name of the filter type being updated.
-
             value: The new value of the given filter.
         """
         Select(self.driver.find_element_by_id(filter_name)).select_by_visible_text(value)
@@ -138,6 +132,9 @@ class RunsListPage(Page, NavbarMixin, FooterMixin, TourMixin):
         btn.click()
 
     @property
-    def top_alert_message_text(self):
-        """Finds and returns the alert message shown at the top of the runs list page"""
+    def top_alert_message_text(self) -> str:
+        """
+        Find and return the alert message shown at the top of the runs list
+        page.
+        """
         return self.driver.find_element_by_id("top-alert-message").text
