@@ -5,11 +5,15 @@
 # Copyright &copy; 2021 ISIS Rutherford Appleton Laboratory UKRI
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################ #
-# pylint:disable=too-many-return-statements
+# pylint:disable=too-many-return-statements,broad-except
 import base64
 import itertools
 import json
+import os
 from typing import Tuple
+
+import requests
+
 from autoreduce_db.reduction_viewer.models import ReductionArguments
 from autoreduce_qp.queue_processor.variable_utils import VariableUtils
 
@@ -17,7 +21,7 @@ UNAUTHORIZED_MESSAGE = "User is not authorized to submit batch runs. Please cont
                        "at ISISREDUCE@stfc.ac.uk to request the permissions."
 # Holds the default value used when there is no value for the variable
 # in the default variables dictionary. Stored in a parameter for re-use in
-# tests.
+# tests
 DEFAULT_WHEN_NO_VALUE = ""
 
 
@@ -96,6 +100,8 @@ def prepare_arguments_for_render(arguments: ReductionArguments, instrument: str)
         values.
     """
     vars_kwargs = arguments.as_dict()
+    fetch_api_urls(vars_kwargs)
+
     standard_vars = vars_kwargs.get("standard_vars", {})
     advanced_vars = vars_kwargs.get("advanced_vars", {})
 
@@ -105,6 +111,34 @@ def prepare_arguments_for_render(arguments: ReductionArguments, instrument: str)
     final_advanced = _combine_dicts(advanced_vars, default_advanced_variables)
 
     return final_standard, final_advanced, variable_help
+
+
+def fetch_api_urls(vars_kwargs):
+    """Convert file URLs in vars_kwargs into API URL strings."""
+    for category, headings in vars_kwargs.items():
+        for heading, heading_value in headings.items():
+            if "file" in heading.lower() and isinstance(heading_value, dict):
+                try:
+                    vars_kwargs[category][heading]["all_files"] = {}
+                    path = heading_value["url"].partition("master")[2]
+                    url = "https://api.github.com/repos/mantidproject/scriptrepository/contents" + path
+                    vars_kwargs[category][heading]["api"] = url
+                    req = requests.get(url)
+                    data = json.loads(req.content)
+
+                    for link in data:
+                        file_name = link["name"]
+                        url, _, default = link["download_url"].rpartition("/")
+                        auth_token = os.environ.get("AUTOREDUCTION_GITHUB_AUTH_TOKEN", "")
+                        req = requests.get(f"{url}/{default}", headers={"Authorization": f"Token {auth_token}"})
+                        value = req.text
+                        vars_kwargs[category][heading]["all_files"][file_name] = {
+                            "url": url,
+                            "default": default,
+                            "value": value,
+                        }
+                except Exception:
+                    pass
 
 
 def decode_b64(value: str):
