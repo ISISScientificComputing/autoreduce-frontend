@@ -9,6 +9,7 @@ Module for the accessibility statement page model
 """
 from django.urls.base import reverse
 from selenium.webdriver.remote.webelement import WebElement
+from selenium.webdriver.common.by import By
 
 from autoreduce_frontend.selenium_tests.pages.component_mixins.footer_mixin import FooterMixin
 from autoreduce_frontend.selenium_tests.pages.component_mixins.navbar_mixin import NavbarMixin
@@ -32,7 +33,7 @@ class AccessibilityStatementPage(Page, NavbarMixin, FooterMixin):
         Get the <div> #accessibility-statement-contents
         :return: (WebElement) The element #accessibility-statement-contents
         """
-        return self.driver.find_element_by_id("accessibility-statement-contents")
+        return self.driver.find_element(By.ID, "accessibility-statement-contents")
 
     def is_accessibility_statement_visible(self) -> bool:
         """

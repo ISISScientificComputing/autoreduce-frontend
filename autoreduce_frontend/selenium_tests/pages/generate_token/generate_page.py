@@ -11,6 +11,7 @@ Module for the help summary page model
 from django.urls.base import reverse
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.ui import Select
+from selenium.webdriver.common.by import By
 
 from autoreduce_frontend.selenium_tests.pages.component_mixins.footer_mixin import FooterMixin
 from autoreduce_frontend.selenium_tests.pages.component_mixins.navbar_mixin import NavbarMixin
@@ -31,8 +32,8 @@ class GenerateTokenFormPage(Page, NavbarMixin, FooterMixin):
 
     def click_generate_token(self) -> WebElement:
         """Clicks generate in the token generation page"""
-        return self.driver.find_element_by_id("generate-token-submit").click()
+        return self.driver.find_element(By.ID, "generate-token-submit").click()
 
     def generate_form_users(self) -> Select:
         """Grabs the users Select field in the generate new token form"""
-        return Select(self.driver.find_element_by_id("id_user"))
+        return Select(self.driver.find_element(By.ID, "id_user"))

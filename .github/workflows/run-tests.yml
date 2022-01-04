@@ -4,7 +4,7 @@ on: [ push ]
 jobs:
   selenium-pages:
     name: Selenium pages
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
 
@@ -58,7 +58,7 @@ jobs:
 
   selenium-integration:
     name: Selenium integration
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
 
@@ -111,13 +111,17 @@ jobs:
 
   dependency-check:
     name: Dependency-Check
-    runs-on: ubuntu-18.04
-    container: autoreduction/base
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
 
       - uses: actions/cache@v2
         with:
@@ -135,7 +139,7 @@ jobs:
 
   Inspection:
     name: Code Inspection
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
 

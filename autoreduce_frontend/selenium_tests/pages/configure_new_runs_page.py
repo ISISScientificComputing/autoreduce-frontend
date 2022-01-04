@@ -7,6 +7,7 @@
 
 from django.urls import reverse
 from selenium.webdriver.remote.webelement import WebElement
+from selenium.webdriver.common.by import By
 
 from autoreduce_frontend.selenium_tests.pages.component_mixins.footer_mixin import FooterMixin
 from autoreduce_frontend.selenium_tests.pages.component_mixins.navbar_mixin import NavbarMixin
@@ -46,7 +47,7 @@ class ConfigureNewRunsPage(Page, RerunFormMixin, NavbarMixin, FooterMixin, TourM
         """
         Return the run start input WebElement
         """
-        return self.driver.find_element_by_id("run_start")
+        return self.driver.find_element(By.ID, "run_start")
 
     @property
     def run_start_val(self) -> WebElement:
@@ -58,9 +59,9 @@ class ConfigureNewRunsPage(Page, RerunFormMixin, NavbarMixin, FooterMixin, TourM
         """
         Finds and returns the "Reset to values in the current reduce_vars script" button
         """
-        return self.driver.find_element_by_id("currentScript")
+        return self.driver.find_element(By.ID, "currentScript")
 
     @property
     def go_to_other(self) -> WebElement:
         """Return the link to toggle between by run range or by reference"""
-        return self.driver.find_element_by_id("go_to_other")
+        return self.driver.find_element(By.ID, "go_to_other")

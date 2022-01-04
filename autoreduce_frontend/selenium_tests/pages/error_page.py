@@ -9,6 +9,8 @@ Module for the error page model
 """
 from django.urls.base import reverse
 
+from selenium.webdriver.common.by import By
+
 from autoreduce_frontend.selenium_tests.pages.component_mixins.footer_mixin import FooterMixin
 from autoreduce_frontend.selenium_tests.pages.component_mixins.navbar_mixin import NavbarMixin
 from autoreduce_frontend.selenium_tests.pages.page import Page
@@ -38,7 +40,7 @@ class ErrorPage(Page, NavbarMixin, FooterMixin):
         Get the error message from the page
         :return: (str) The text in #error-message
         """
-        return self.driver.find_element_by_id("error-message").text
+        return self.driver.find_element(By.ID, "error-message").text
 
     def launch_with_session(self):
         """

@@ -12,6 +12,7 @@ from typing import List
 from django.urls.base import reverse
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.webelement import WebElement
+from selenium.webdriver.common.by import By
 
 from autoreduce_frontend.selenium_tests.pages.component_mixins.footer_mixin import FooterMixin
 from autoreduce_frontend.selenium_tests.pages.component_mixins.navbar_mixin import NavbarMixin
@@ -35,21 +36,21 @@ class HelpPage(Page, NavbarMixin, FooterMixin):
         Get the contents of the sidenav.
         :return: (List) A list of <li> WebElements in #sidenav-contents
         """
-        return self.driver.find_elements_by_xpath("//ul[@id='sidenav-contents']/li")
+        return self.driver.find_elements(By.XPATH, "//ul[@id='sidenav-contents']/li")
 
     def get_sidenav_contents(self) -> List[str]:
         """
         Get the contents of the sidenav as a list of strings.
         :return: (List) A list of strings inside of each <a> element
         """
-        return [x.find_element_by_tag_name("a").text.strip() for x in self.get_sidenav_contents_elements()]
+        return [x.find_element(By.TAG_NAME, "a").text.strip() for x in self.get_sidenav_contents_elements()]
 
     def get_help_topic_elements(self) -> List[WebElement]:
         """
         Get the help topics
         :return: (List) A list of <section> WebElements of class .help-topic
         """
-        return self.driver.find_elements_by_class_name("help-topic")
+        return self.driver.find_elements(By.CLASS_NAME, "help-topic")
 
     def get_each_help_topic_category(self) -> List[str]:
         """
@@ -63,35 +64,35 @@ class HelpPage(Page, NavbarMixin, FooterMixin):
         Get each content text for each help topic
         :return: (List) A list of topic contents
         """
-        return [x.find_element_by_class_name("card-body").text for x in self.get_help_topic_elements()]
+        return [x.find_element(By.CLASS_NAME, "card-body").text for x in self.get_help_topic_elements()]
 
     def get_help_topic_header_elements(self) -> List[WebElement]:
         """
         Get the help topic headers
         :return: (List) A list of <div> WebElements of class .card-header
         """
-        return [x.find_element_by_xpath("./div[@class='card-header']") for x in self.get_help_topic_elements()]
+        return [x.find_element(By.XPATH, "./div[@class='card-header']") for x in self.get_help_topic_elements()]
 
     def get_help_topic_header_link_elements(self) -> List[WebElement]:
         """
         Get the help topic headers link elements
         :return: (List) A list of WebElement links found in the headers of help topics
         """
-        return [x.find_element_by_xpath("./h3/a") for x in self.get_help_topic_header_elements()]
+        return [x.find_element(By.XPATH, "./h3/a") for x in self.get_help_topic_header_elements()]
 
     def get_each_help_topic_header(self) -> List[str]:
         """
         Get the headers of the help topics.
         :return (List) A list of help topic headers
         """
-        return [x.find_element_by_xpath("./h3/a").text.strip() for x in self.get_help_topic_header_elements()]
+        return [x.find_element(By.XPATH, "./h3/a").text.strip() for x in self.get_help_topic_header_elements()]
 
     def get_category_filter_elements(self) -> List[WebElement]:
         """
         Get the category filter elements in #category-filter
         :return: (List) A list of filter elements
         """
-        return self.driver.find_elements_by_xpath("//div[@id='category-filter']/label")
+        return self.driver.find_elements(By.XPATH, "//div[@id='category-filter']/label")
 
     def get_help_topic_filters(self) -> List[str]:
         """
@@ -127,7 +128,7 @@ class HelpPage(Page, NavbarMixin, FooterMixin):
         Filter help topics by a search term using fuzzy search
         :param text: The search term to enter into #help-search
         """
-        help_search = self.driver.find_element_by_id("help-search")
+        help_search = self.driver.find_element(By.ID, "help-search")
         help_search.clear()
         help_search.send_keys(text)
 
@@ -135,7 +136,7 @@ class HelpPage(Page, NavbarMixin, FooterMixin):
         """
         Clear the text in the search box
         """
-        help_search = self.driver.find_element_by_id("help-search")
+        help_search = self.driver.find_element(By.ID, "help-search")
         help_search.clear()
         help_search.send_keys(Keys.BACKSPACE)  # Send onKeyUp event to #help-search
 

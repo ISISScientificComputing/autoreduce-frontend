@@ -8,6 +8,7 @@
 
 from django.urls import reverse
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.common.by import By
 
 from autoreduce_db.reduction_viewer.models import ReductionRun
 from autoreduce_frontend.autoreduce_webapp.templatetags.encode_b64 import encode_b64
@@ -82,9 +83,9 @@ class TestRunSummaryPage(ConfigureNewJobsBaseTestCase, FooterTestMixin, NavbarTe
         assert not rerun_form.is_displayed()
         self.page.toggle_button.click()
         assert rerun_form.is_displayed()
-        assert rerun_form.find_element_by_id(f"var-standard-{encode_b64('variable1')}").get_attribute(
-            "value") == "value1"
-        labels = rerun_form.find_elements_by_tag_name("label")
+        assert rerun_form.find_element(By.ID,
+                                       f"var-standard-{encode_b64('variable1')}").get_attribute("value") == "value1"
+        labels = rerun_form.find_elements(By.TAG_NAME, "label")
 
         WebDriverWait(self.driver, 10).until(lambda _: labels[0].text == "Re-run description")
         WebDriverWait(self.driver, 10).until(lambda _: labels[1].text == "variable1")

@@ -7,6 +7,7 @@
 """
 Module containing the footer mixin
 """
+from selenium.webdriver.common.by import By
 
 
 class FooterMixin:
@@ -23,13 +24,13 @@ class FooterMixin:
         Checks whether the footer is visible
         :returns: (bool) True if footer is visible, otherwise False
         """
-        return self.driver.find_element_by_id(self.FOOTER_ID).is_displayed()
+        return self.driver.find_element(By.ID, self.FOOTER_ID).is_displayed()
 
     def click_footer_help_link(self):
         """
         Clicks the help link in the footer
         """
-        help_link = self.driver.find_element_by_id(self.HELP_LINK_ID)
+        help_link = self.driver.find_element(By.ID, self.HELP_LINK_ID)
         help_link.click()
         return self
 
@@ -37,7 +38,7 @@ class FooterMixin:
         """
         Clicks the github link in the footer
         """
-        github_link = self.driver.find_element_by_id(self.GITHUB_LINK_ID)
+        github_link = self.driver.find_element(By.ID, self.GITHUB_LINK_ID)
         github_link.click()
         return self
 
@@ -46,4 +47,4 @@ class FooterMixin:
         Check if the support email is visible within the header
         :return: (bool) True if visible, otherwise False
         """
-        return self.driver.find_element_by_id(self.SUPPORT_EMAIL_LINK_ID).is_displayed()
+        return self.driver.find_element(By.ID, self.SUPPORT_EMAIL_LINK_ID).is_displayed()

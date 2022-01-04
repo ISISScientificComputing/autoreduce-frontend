@@ -5,4 +5,5 @@ django-debug-toolbar==3.2.2
 autoreduce-rest-api
 gunicorn
 mysqlclient==2.0.3
-selenium==3.141.0
+selenium==3.141.0 ; python_version <= '3.6'
+selenium==4.1.0 ; python_version >= '3.7'

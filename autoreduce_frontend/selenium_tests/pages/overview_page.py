@@ -49,7 +49,7 @@ class OverviewPage(Page, NavbarMixin, FooterMixin, TourMixin):
         return reverse("overview")
 
     def _get_instrument_buttons(self):
-        return self.driver.find_elements_by_class_name("instrument-btn")
+        return self.driver.find_elements(By.CLASS_NAME, "instrument-btn")
 
     def get_instruments_from_buttons(self):
         """
@@ -64,5 +64,5 @@ class OverviewPage(Page, NavbarMixin, FooterMixin, TourMixin):
         :param instrument: (str) instrument name
         :return: (InstrumentSummaryPage) The overview page object
         """
-        self.driver.find_element_by_id(f"{instrument}-instrument-btn").click()
+        self.driver.find_element(By.ID, f"{instrument}-instrument-btn").click()
         return RunsListPage(self.driver, instrument)

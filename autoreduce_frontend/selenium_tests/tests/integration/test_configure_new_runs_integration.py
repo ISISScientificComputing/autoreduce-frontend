@@ -5,6 +5,7 @@
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
 from parameterized import parameterized
+from selenium.webdriver.common.by import By
 
 from autoreduce_db.reduction_viewer.models import ReductionArguments
 
@@ -196,7 +197,7 @@ class TestConfigureNewRunsPageIntegration(BaseIntegrationTestCase):
         upcoming_panel = summary.panels[1]
         assert "a new test value 123" not in upcoming_panel.get_attribute("textContent")
 
-        incoming_run_numbers = upcoming_panel.find_elements_by_class_name("run-numbers")
+        incoming_run_numbers = upcoming_panel.find_elements(By.CLASS_NAME, "run-numbers")
 
         assert "100100" in incoming_run_numbers[0].text
         assert "100199" in incoming_run_numbers[0].text
@@ -220,7 +221,7 @@ class TestConfigureNewRunsPageIntegration(BaseIntegrationTestCase):
         upcoming_panel = summary.panels[1]
         assert "another new test value 321" not in upcoming_panel.get_attribute("textContent")
 
-        incoming_run_numbers = upcoming_panel.find_elements_by_class_name("run-numbers")
+        incoming_run_numbers = upcoming_panel.find_elements(By.CLASS_NAME, "run-numbers")
 
         # there's a few leftover default variables, but that's OK because the user can remove them
         assert "100100" in incoming_run_numbers[0].text
@@ -246,7 +247,7 @@ class TestConfigureNewRunsPageIntegration(BaseIntegrationTestCase):
         summary.click_experiment_delete_button_for(1234567)
 
         experiment_panel = summary.panels[1]
-        incoming_exp_numbers = experiment_panel.find_elements_by_class_name("run-numbers")
+        incoming_exp_numbers = experiment_panel.find_elements(By.CLASS_NAME, "run-numbers")
 
         assert "2345678" in incoming_exp_numbers[0].text
 

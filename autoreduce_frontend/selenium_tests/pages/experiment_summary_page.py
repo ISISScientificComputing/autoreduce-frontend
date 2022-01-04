@@ -9,6 +9,7 @@ from typing import List
 
 from django.urls.base import reverse
 from selenium.webdriver.remote.webelement import WebElement
+from selenium.webdriver.common.by import By
 
 from autoreduce_frontend.selenium_tests.pages.component_mixins.footer_mixin import FooterMixin
 from autoreduce_frontend.selenium_tests.pages.component_mixins.navbar_mixin import NavbarMixin
@@ -30,25 +31,25 @@ class ExperimentSummaryPage(Page, NavbarMixin, FooterMixin):
     @property
     def reduction_job_panel(self) -> WebElement:
         """Return the experiment summary panel."""
-        return self.driver.find_element_by_class_name("experiment_panel")
+        return self.driver.find_element(By.CLASS_NAME, "experiment_panel")
 
     def get_run_numbers_from_table(self) -> List[str]:
         """
         Return the list of run numbers visible on the current table of the
         experiment summary page.
         """
-        return [run.text.split(" - ")[0] for run in self.driver.find_elements_by_class_name("run-num-links")]
+        return [run.text.split(" - ")[0] for run in self.driver.find_elements(By.CLASS_NAME, "run-num-links")]
 
     def get_created_from_table(self) -> List[str]:
         """
         Return the list of created dates visible on the current table of the
         experiment summary page.
         """
-        return [run.text.split(" - ")[0] for run in self.driver.find_elements_by_class_name("last-updated-dates")]
+        return [run.text.split(" - ")[0] for run in self.driver.find_elements(By.CLASS_NAME, "last-updated-dates")]
 
     def get_status_from_table(self) -> List[str]:
         """
         Return the list of status visible on the current table of the
         experiment summary page.
         """
-        return [run.text.split(" - ")[0] for run in self.driver.find_elements_by_class_name("run-status")]
+        return [run.text.split(" - ")[0] for run in self.driver.find_elements(By.CLASS_NAME, "run-status")]
