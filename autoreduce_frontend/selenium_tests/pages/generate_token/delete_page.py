@@ -10,6 +10,7 @@ Module for the help summary page model
 
 from django.urls.base import reverse
 from selenium.webdriver.remote.webelement import WebElement
+from selenium.webdriver.common.by import By
 
 from autoreduce_frontend.selenium_tests.pages.component_mixins.footer_mixin import FooterMixin
 from autoreduce_frontend.selenium_tests.pages.component_mixins.navbar_mixin import NavbarMixin
@@ -30,4 +31,4 @@ class DeleteTokenFormPage(Page, NavbarMixin, FooterMixin):
 
     def click_delete_token(self) -> WebElement:
         """Clicks the delete token in the delete confirmation page"""
-        return self.driver.find_element_by_id("generate-token-delete").click()
+        return self.driver.find_element(By.ID, "generate-token-delete").click()

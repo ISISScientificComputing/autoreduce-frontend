@@ -29,7 +29,7 @@ class TourMixin:
         """
         Start the tour on the page
         """
-        self.driver.find_element_by_id(self.TOUR_BUTTON_ID).click()
+        self.driver.find_element(By.ID, self.TOUR_BUTTON_ID).click()
 
     def is_tour_visible(self):
         """
@@ -51,32 +51,32 @@ class TourMixin:
         """
         Click the next step of the tour
         """
-        self.driver.find_element_by_xpath(self.NEXT_BUTTON_XPATH).click()
+        self.driver.find_element(By.XPATH, self.NEXT_BUTTON_XPATH).click()
         self.step += 1
 
     def previous_tour_step(self):
         """
         Click the previous step of the tour
         """
-        self.driver.find_element_by_xpath(self.PREV_BUTTON_XPATH).click()
+        self.driver.find_element(By.XPATH, self.PREV_BUTTON_XPATH).click()
         self.step -= 1
 
     def end_tour(self):
         """
         Ends the current tour
         """
-        self.driver.find_element_by_xpath(self.END_BUTTON_XPATH).click()
+        self.driver.find_element(By.XPATH, self.END_BUTTON_XPATH).click()
 
     def is_tour_previous_button_enabled(self):
         """
         Checks if the previous step button is currently enabled
         :return: (bool) True if button is enabled, False otherwise
         """
-        return "disabled" not in self.driver.find_element_by_xpath(self.PREV_BUTTON_XPATH).get_attribute("class")
+        return "disabled" not in self.driver.find_element(By.XPATH, self.PREV_BUTTON_XPATH).get_attribute("class")
 
     def is_tour_next_button_enabled(self):
         """
         Checks if the next step button is currently enabled
         :return: (bool) True if button is enabled, False otherwise
         """
-        return "disabled" not in self.driver.find_element_by_xpath(self.NEXT_BUTTON_XPATH).get_attribute("class")
+        return "disabled" not in self.driver.find_element(By.XPATH, self.NEXT_BUTTON_XPATH).get_attribute("class")

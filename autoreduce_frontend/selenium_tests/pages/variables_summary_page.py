@@ -11,6 +11,7 @@ from functools import partial
 from django.urls import reverse
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.common.by import By
 from selenium.common.exceptions import StaleElementReferenceException
 from autoreduce_frontend.selenium_tests.pages.component_mixins.footer_mixin import FooterMixin
 from autoreduce_frontend.selenium_tests.pages.component_mixins.navbar_mixin import NavbarMixin
@@ -38,24 +39,24 @@ class VariableSummaryPage(Page, NavbarMixin, FooterMixin, TourMixin):
     @property
     def current_arguments_by_run(self) -> WebElement:
         """Return the current_arguments_by_run panel"""
-        return self.driver.find_element_by_id("current_arguments_by_run")
+        return self.driver.find_element(By.ID, "current_arguments_by_run")
 
     @property
     def upcoming_arguments_by_run(self) -> WebElement:
         """Return the upcoming_arguments_by_run panel"""
-        return self.driver.find_element_by_id("upcoming_arguments_by_run")
+        return self.driver.find_element(By.ID, "upcoming_arguments_by_run")
 
     @property
     def upcoming_arguments_by_experiment(self) -> WebElement:
         """Return the upcoming_arguments_by_experiment panel"""
-        return self.driver.find_element_by_id("upcoming_arguments_by_experiment")
+        return self.driver.find_element(By.ID, "upcoming_arguments_by_experiment")
 
     def _do_run_button(self, url):
         def run_button_clicked_successfully(button, url, driver):
             button.click()
             return url in driver.current_url
 
-        button = self.driver.find_element_by_css_selector(f'[href*="{url}"]')
+        button = self.driver.find_element(By.CSS_SELECTOR, f'[href*="{url}"]')
         WebDriverWait(self.driver, 10).until(partial(run_button_clicked_successfully, button, url))
 
     def _do_delete_button(self, url):
@@ -66,7 +67,7 @@ class VariableSummaryPage(Page, NavbarMixin, FooterMixin, TourMixin):
             except StaleElementReferenceException:
                 return True
 
-        button = self.driver.find_element_by_css_selector(f'[href*="{url}"]')
+        button = self.driver.find_element(By.CSS_SELECTOR, f'[href*="{url}"]')
         WebDriverWait(self.driver, 10).until(partial(delete_button_clicked_successfully, button))
 
     def click_run_edit_button_for(self, start: int):
@@ -118,4 +119,4 @@ class VariableSummaryPage(Page, NavbarMixin, FooterMixin, TourMixin):
     @property
     def panels(self) -> List[WebElement]:
         """Return the variable summary panels"""
-        return self.driver.find_elements_by_class_name("card-body")
+        return self.driver.find_elements(By.CLASS_NAME, "card-body")

@@ -10,6 +10,7 @@ Module containing the NavbarMixin
 from typing import List
 
 from selenium.webdriver.remote.webelement import WebElement
+from selenium.webdriver.common.by import By
 
 
 class NavbarMixin:
@@ -30,53 +31,53 @@ class NavbarMixin:
         """
         Click the brand logo in the navbar and return the current page
         """
-        self.driver.find_element_by_class_name(self.LOGO_CLASS).click()
+        self.driver.find_element(By.CLASS_NAME, self.LOGO_CLASS).click()
         return self
 
     def click_navbar_all_instruments(self):
         """
         Click the all instruments link in the navbar
         """
-        self.driver.find_element_by_xpath(self.ALL_INSTRUMENTS_LINK_XPATH).click()
+        self.driver.find_element(By.XPATH, self.ALL_INSTRUMENTS_LINK_XPATH).click()
 
     def click_navbar_job_queue(self):
         """
         Click the job queue link in the navbar
         """
-        self.driver.find_element_by_xpath(self.JOB_QUEUE_XPATH).click()
+        self.driver.find_element(By.XPATH, self.JOB_QUEUE_XPATH).click()
 
     def click_navbar_failed_jobs(self):
         """
         Click the failed jobs link in the navbar
         """
-        self.driver.find_element_by_xpath(self.FAILED_JOBS_XPATH).click()
+        self.driver.find_element(By.XPATH, self.FAILED_JOBS_XPATH).click()
 
     def click_navbar_graphs(self):
         """
         Click the graphs link in the navbar
         """
-        self.driver.find_element_by_xpath(self.GRAPHS_XPATH).click()
+        self.driver.find_element(By.XPATH, self.GRAPHS_XPATH).click()
 
     def click_navbar_help(self):
         """
         Click the help link in the navbar
         """
-        self.driver.find_element_by_xpath(self.HELP_XPATH).click()
+        self.driver.find_element(By.XPATH, self.HELP_XPATH).click()
 
     def click_navbar_search(self):
         """
         Click the search link in the navbar
         """
-        self.driver.find_element_by_xpath(self.SEARCH_XPATH).click()
+        self.driver.find_element(By.XPATH, self.SEARCH_XPATH).click()
 
     def _get_navbar(self) -> WebElement:
-        return self.driver.find_element_by_class_name(self.NAVBAR_CLASS)
+        return self.driver.find_element(By.CLASS_NAME, self.NAVBAR_CLASS)
 
     def _get_logo(self) -> WebElement:
-        return self.driver.find_element_by_class_name(self.LOGO_CLASS)
+        return self.driver.find_element(By.CLASS_NAME, self.LOGO_CLASS)
 
     def _get_navbar_links(self) -> WebElement:
-        return self.driver.find_element_by_id(self.LINKS_ID)
+        return self.driver.find_element(By.ID, self.LINKS_ID)
 
     def is_navbar_logo_visible(self) -> bool:
         """
@@ -104,4 +105,4 @@ class NavbarMixin:
         Get the notification messages on the page.
         :return: (list of str) The text of the notifications messages
         """
-        return [notification.text for notification in self.driver.find_elements_by_class_name("notification-message")]
+        return [notification.text for notification in self.driver.find_elements(By.CLASS_NAME, "notification-message")]

@@ -7,6 +7,7 @@
 
 from django.urls import reverse
 from selenium.webdriver.remote.webelement import WebElement
+from selenium.webdriver.common.by import By
 
 from autoreduce_frontend.selenium_tests.pages.component_mixins.footer_mixin import FooterMixin
 from autoreduce_frontend.selenium_tests.pages.component_mixins.navbar_mixin import NavbarMixin
@@ -37,7 +38,7 @@ class ConfigureNewBatchRunsPage(Page, RerunFormMixin, NavbarMixin, FooterMixin, 
         """
         Return the run start input WebElement
         """
-        return self.driver.find_element_by_id("runs")
+        return self.driver.find_element(By.ID, "runs")
 
     @runs.setter
     def runs(self, value) -> None:
@@ -56,9 +57,9 @@ class ConfigureNewBatchRunsPage(Page, RerunFormMixin, NavbarMixin, FooterMixin, 
         """
         Finds and returns the "Reset to values in the current reduce_vars script" button
         """
-        return self.driver.find_element_by_id("currentScript")
+        return self.driver.find_element(By.ID, "currentScript")
 
     @property
     def error_text(self) -> WebElement:
         """Returns the value of the error field"""
-        return self.driver.find_element_by_id("error").text
+        return self.driver.find_element(By.ID, "error").text

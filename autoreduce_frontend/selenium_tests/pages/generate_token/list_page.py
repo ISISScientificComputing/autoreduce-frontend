@@ -8,6 +8,7 @@ from typing import List
 from django.urls.base import reverse
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
 
 from autoreduce_frontend.selenium_tests.pages.generate_token.delete_page import DeleteTokenFormPage
 from autoreduce_frontend.selenium_tests.pages.component_mixins.footer_mixin import FooterMixin
@@ -33,12 +34,12 @@ class GenerateTokenListPage(Page, NavbarMixin, FooterMixin):
         Get the contents of the sidenav.
         :return: (List) A list of <li> WebElements in #sidenav-contents
         """
-        self.driver.find_element_by_id("generate-token").click()
+        self.driver.find_element(By.ID, "generate-token").click()
         return GenerateTokenFormPage(self.driver)
 
     def token_usernames(self) -> List[WebElement]:
         """Return the usernames for all generated tokens"""
-        return self.driver.find_elements_by_class_name("token-user")
+        return self.driver.find_elements(By.CLASS_NAME, "token-user")
 
     def token_values(self) -> List[WebElement]:
         """
@@ -47,21 +48,21 @@ class GenerateTokenListPage(Page, NavbarMixin, FooterMixin):
         Note: this doesn't return the literal token value, but the field which
         the user can click to reveal/copy the value
         """
-        return self.driver.find_elements_by_class_name("token-value")
+        return self.driver.find_elements(By.CLASS_NAME, "token-value")
 
     def click_delete_first(self) -> DeleteTokenFormPage:
         """Clicks the delete on the first token"""
-        token_deletes = self.driver.find_elements_by_class_name("token-delete")
+        token_deletes = self.driver.find_elements(By.CLASS_NAME, "token-delete")
         token_deletes[0].click()
         return DeleteTokenFormPage(self.driver)
 
     def token_eye_views(self) -> List[WebElement]:
         """Return all "eye" icons, that reveal the value of the token"""
-        return self.driver.find_elements_by_class_name("fa-eye")
+        return self.driver.find_elements(By.CLASS_NAME, "fa-eye")
 
     def token_copy_clipboards(self) -> List[WebElement]:
         """Return all "clipboard" icons, that copy to clipboard"""
-        return self.driver.find_elements_by_class_name("fa-clipboard")
+        return self.driver.find_elements(By.CLASS_NAME, "fa-clipboard")
 
     def paste_and_verify(self, expected: str):
         """
@@ -77,6 +78,6 @@ class GenerateTokenListPage(Page, NavbarMixin, FooterMixin):
         obj.id="selenium-test";
         document.body.appendChild(obj);
         """)
-        obj = self.driver.find_element_by_id("selenium-test")
+        obj = self.driver.find_element(By.ID, "selenium-test")
         obj.send_keys(Keys.CONTROL, "v")
         assert obj.get_attribute("value") == expected

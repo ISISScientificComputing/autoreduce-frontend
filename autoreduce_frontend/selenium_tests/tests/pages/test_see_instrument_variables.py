@@ -8,6 +8,7 @@
 from typing import List
 
 from parameterized import parameterized
+from selenium.webdriver.common.by import By
 from autoreduce_qp.systemtests.utils.data_archive import DataArchive
 
 from autoreduce_frontend.selenium_tests.pages.configure_new_runs_page import ConfigureNewRunsPage
@@ -81,7 +82,7 @@ class TestSeeInstrumentVariablesPage(BaseTestCase, AccessibilityTestMixin, Foote
         # makes sure the value we are going to modify is present in the initial values
         assert value_to_delete in upcoming_panel.get_attribute("textContent")
 
-        incoming_run_numbers = upcoming_panel.find_elements_by_class_name("run-numbers")
+        incoming_run_numbers = upcoming_panel.find_elements(By.CLASS_NAME, "run-numbers")
 
         assert "100100" in incoming_run_numbers[0].text
         assert "100150" in incoming_run_numbers[0].text
@@ -92,7 +93,7 @@ class TestSeeInstrumentVariablesPage(BaseTestCase, AccessibilityTestMixin, Foote
 
         self.page.click_run_delete_button_for(start, end)
 
-        current_panel_runs = self.page.panels[0].find_element_by_class_name("run-numbers")
+        current_panel_runs = self.page.panels[0].find_element(By.CLASS_NAME, "run-numbers")
         # check that the current variables end at the correct run
         assert str(end_run_for_current_vars) in current_panel_runs.text
         upcoming_panel = self.page.panels[1]

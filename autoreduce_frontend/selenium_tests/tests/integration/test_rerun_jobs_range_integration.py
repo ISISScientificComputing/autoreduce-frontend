@@ -6,6 +6,7 @@
 # ############################################################################### #
 
 from django.urls import reverse
+from selenium.webdriver.common.by import By
 from autoreduce_db.reduction_viewer.models import ReductionRun
 from autoreduce_frontend.selenium_tests.pages.rerun_jobs_page import RerunJobsPage
 from autoreduce_frontend.selenium_tests.pages.run_summary_page import RunSummaryPage
@@ -51,7 +52,7 @@ class TestRerunJobsRangePageIntegration(BaseIntegrationTestCase):
         runs_list_page = RunsListPage(self.driver, self.instrument_name)
         for run in self.run_number:
             runs_list_page.launch()
-            run_number_v1 = self.driver.find_element_by_css_selector(f'[href*="{make_run_url(run)}"]')
+            run_number_v1 = self.driver.find_element(By.CSS_SELECTOR, f'[href*="{make_run_url(run)}"]')
             assert run_number_v1.is_displayed()
             assert RunSummaryPage(self.driver, self.instrument_name, run,
                                   1).launch().variable1_field_val == variable_value
