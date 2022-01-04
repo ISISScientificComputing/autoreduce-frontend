@@ -112,7 +112,6 @@ jobs:
   dependency-check:
     name: Dependency-Check
     runs-on: ubuntu-latest
-    container: autoreduction/base
     strategy:
       fail-fast: false
 
