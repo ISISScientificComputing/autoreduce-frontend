@@ -9,6 +9,7 @@ Module containing the footer mixin
 """
 from selenium.webdriver.common.by import By
 
+
 class FooterMixin:
     """
     Footer mixin contains functionality for the page footer when inherited
