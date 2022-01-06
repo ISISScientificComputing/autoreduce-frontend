@@ -21,7 +21,7 @@ print(data_files)
 
 setup(
     name=PACKAGE_NAME,
-    version="22.0.0.dev12",  # when updating the version here make sure to also update webapp.D
+    version="22.0.0.dev11",  # when updating the version here make sure to also update webapp.D
     description="The frontend of the ISIS Autoreduction service",
     author="ISIS Autoreduction Team",
     url="https://github.com/autoreduction/autoreduce-frontend/",
@@ -34,7 +34,7 @@ setup(
         "django-filter==21.1",
         "django-crispy-forms==1.13.0",
         "django-tables2==2.4.1",
-        "requests==2.25.1",
+        "requests==2.27.1",
     ],
     packages=find_packages(),
     package_data={"": data_files},
