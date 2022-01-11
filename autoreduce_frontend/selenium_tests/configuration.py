@@ -23,7 +23,7 @@ if not SELENIUM_CONFIG_DIR.exists():
     SELENIUM_CONFIG_DIR.mkdir(parents=True, exist_ok=True)
 
 if not SELENIUM_CONFIG.exists():
-    SELENIUM_CONFIG.write_text("""{"url": "http://localhost:0000","run_headless": true}""")
+    SELENIUM_CONFIG.write_text("""{"url": "http://localhost:0000","run_headless": true}""", encoding="utf-8")
 
 
 def store_original_config():
@@ -90,7 +90,7 @@ def load_config_file():
     :return: (dict) The config file as a python dictionary
     """
     try:
-        with open(SELENIUM_CONFIG) as fle:
+        with open(SELENIUM_CONFIG, encoding='utf-8') as fle:
             return json.load(fle)
     except FileNotFoundError:
         sys.exit(f"Config file is missing. Please create: {str(SELENIUM_CONFIG)}")
@@ -101,5 +101,5 @@ def dump_to_config_file(config_dict):
     Dump the given dictionary to the config file
     :param config_dict: (dict) the dictionary to be dumped.
     """
-    with open(SELENIUM_CONFIG, "w") as fle:
+    with open(SELENIUM_CONFIG, mode="w", encoding='utf-8') as fle:
         json.dump(config_dict, fle, indent=4)

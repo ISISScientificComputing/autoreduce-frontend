@@ -64,8 +64,8 @@ def run_confirmation(request, instrument: str):
         max_runs = 20
 
     if len(run_numbers) > max_runs:
-        context_dictionary["error"] = "{0} runs were requested, but only {1} runs can be " \
-                                      "queued at a time".format(len(run_numbers), max_runs)
+        context_dictionary["error"] = (f'{len(run_numbers)} runs were requested, '
+                                       f'but only {max_runs} runs can be queued at a time')
         return context_dictionary
 
     related_runs: QuerySet[ReductionRun] = ReductionRun.objects.filter(
@@ -90,15 +90,14 @@ def run_confirmation(request, instrument: str):
 
     try:
         auth_token = str(request.user.auth_token)
-    except AttributeError as err:
+    except AttributeError as err:  # pylint:disable=unused-variable
         context_dictionary['error'] = UNAUTHORIZED_MESSAGE
         return context_dictionary
     # run_description gets stored in run_description in the ReductionRun object
     max_run_description_length = ReductionRun._meta.get_field('run_description').max_length
     if len(run_description) > max_run_description_length:
-        context_dictionary["error"] = "The description contains {0} characters, " \
-                                        "a maximum of {1} are allowed".\
-            format(len(run_description), max_run_description_length)
+        context_dictionary["error"] = (f'The description contains {len(run_description)} characters, '
+                                       f'a maximum of {max_run_description_length} are allowed')
         return context_dictionary
     for run_number in run_numbers:
         matching_previous_runs = related_runs.filter(run_numbers__run_number=run_number).order_by('-run_version')

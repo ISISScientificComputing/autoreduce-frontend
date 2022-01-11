@@ -25,6 +25,7 @@ LOGGER = logging.getLogger(__package__)
 
 def deactivate_invalid_instruments(func):
     """Deactivate instruments if they are invalid."""
+
     @functools.wraps(func)
     def request_processor(request, *args, **kws):
         """
@@ -50,7 +51,7 @@ def get_interactive_plot_data(plot_locations):
     output = {}
     for filepath in json_files:
         name = os.path.basename(filepath)
-        with open(filepath, 'r') as file:
+        with open(filepath, mode='r', encoding='utf-8') as file:
             data = file.read()
         output[name] = data
 

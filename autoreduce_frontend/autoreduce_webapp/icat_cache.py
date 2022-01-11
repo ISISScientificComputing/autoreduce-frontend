@@ -26,6 +26,7 @@ class ICATConnectionException(Exception):
     """
     Used to handle exceptions that we might expect from ICAT
     """
+
     def __init__(self, message=DEFAULT_MESSAGE):  # pylint:disable=useless-super-delegation
         super().__init__(message)
 
@@ -39,6 +40,7 @@ class ICATCache:
     Most of the methods it wraps from ICATCommunication are templated
     rather than declared explicitly; see below.
     """
+
     def __init__(self, **kwargs):
         self.kwargs = kwargs
         self.icat = None
@@ -170,6 +172,7 @@ def make_member_func(obj_type, cache_attr, list_type):
     We create a make_ function to enclose the scope of the member function so that obj_type, etc.,
     are local to the function and not globals; i.e., these are closures.
     """
+
     def isvalid(obj_str):
         """
         Check object string validity

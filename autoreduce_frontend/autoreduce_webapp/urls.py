@@ -25,7 +25,7 @@ class NegativeIntConverter:
     @staticmethod
     def to_url(value):
         """Return the value as a URL string."""
-        return '%d' % value
+        return f'{value}'
 
 
 register_converter(NegativeIntConverter, 'negint')

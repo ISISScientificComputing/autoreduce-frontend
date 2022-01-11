@@ -25,6 +25,7 @@ class TestPlotHandler(unittest.TestCase):
     """
     Test all the functionality of the PlotHandler
     """
+
     def setUp(self):
         """
         Create a few test PlotHandler objects
@@ -110,7 +111,7 @@ class TestPlotHandler(unittest.TestCase):
         """
         mock_os.path.exists.return_value = False
         # check that only the valid matches have been found
-        assert [] == self.test_plot_handler._check_for_plot_files()
+        assert not self.test_plot_handler._check_for_plot_files()
 
     @patch('autoreduce_frontend.plotting.plot_handler.PlotHandler._check_for_plot_files')
     @patch('autoreduce_frontend.plotting.plot_handler.shutil.copy')

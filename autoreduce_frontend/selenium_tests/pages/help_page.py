@@ -23,6 +23,7 @@ class HelpPage(Page, NavbarMixin, FooterMixin):
     """
     Page model class for help page
     """
+
     @staticmethod
     def url_path() -> str:
         """

@@ -40,6 +40,7 @@ class TestRerunJobsRangePageIntegration(BaseIntegrationTestCase):
         """
         Verifies that the run with version 1 exists and has the expected value
         """
+
         def make_run_url(run_number):
             """Constructs the url of the run summary with a django reverse"""
             return reverse("runs:summary",

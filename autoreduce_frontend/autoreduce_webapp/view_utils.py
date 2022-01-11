@@ -52,6 +52,7 @@ def handle_redirect(request):
 
 def login_and_uows_valid(func):
     """Function decorator to check whether the user's session is still valid."""
+
     def request_processor(request, *args, **kws):
         if has_valid_login(request):
             return func(request, *args, **kws)
@@ -63,6 +64,7 @@ def login_and_uows_valid(func):
 
 def require_staff(function_name):
     """Function decorator to check whether the user is a staff memeber."""
+
     def request_processor(request, *args, **kws):
         if has_valid_login(request):
             if request.user.is_staff:
@@ -77,6 +79,7 @@ def require_staff(function_name):
 
 def require_admin(func):
     """Function decorator to check whether the user is a superuser."""
+
     def request_processor(request, *args, **kws):
         if has_valid_login(request):
             if request.user.is_superuser:
@@ -102,7 +105,9 @@ def render_with(template):
     Decorator for Django views that sends returned dict to render function
     with given template and RequestContext as context instance.
     """
+
     def renderer(function_name):
+
         def populate_template_dict(request, output):
             if 'request' not in output:
                 output['request'] = request
@@ -164,6 +169,7 @@ def check_permissions(func):
     Check that the user has permission to access the given experiment and/or
     instrument. Queries ICATCache to check owned instruments and experiments.
     """
+
     def request_processor(request, *args, **kwargs):
         if USER_ACCESS_CHECKS and not request.user.is_superuser:
             # Get the things to check by from the arguments supplied.

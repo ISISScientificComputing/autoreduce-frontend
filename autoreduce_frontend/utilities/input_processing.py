@@ -60,7 +60,7 @@ def _check_input_is_numeric(str_input, extra_whitelisted_char_set=None):
 
     disallowed_char = next((char for char in str_input if char not in allowed_characters), None)
     if disallowed_char:
-        raise SyntaxError("The character '{0}' was entered, " "which is not permitted".format(disallowed_char))
+        raise SyntaxError(f"The character '{disallowed_char}' was entered, which is not permitted")
 
     return True
 
@@ -83,7 +83,7 @@ def _check_ranged_numeric_input(str_input):
 
         if len(returned_ranges) > 2:
             # A range greater than 2 has been added (i.e. 3 - 5 - 7)
-            raise SyntaxError("More than 2 values have been detected in {0}".format(str_input))
+            raise SyntaxError(f'More than 2 values have been detected in {str_input}')
 
         for split_ranges in returned_ranges:
             _check_input_is_numeric(split_ranges)

@@ -21,6 +21,7 @@ class UOWSAuthenticationBackend:
     """
     Custom authentication for use with the User Office Web Service
     """
+
     @staticmethod
     def authenticate(request, token=None):
         """

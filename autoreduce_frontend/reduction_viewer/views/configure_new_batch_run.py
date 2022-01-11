@@ -68,7 +68,7 @@ class BatchRunSubmit(FormView):
 
         try:
             auth_token = str(request.user.auth_token)
-        except AttributeError as err:
+        except AttributeError as err:  # pylint:disable=unused-variable
             return self.render_error(request, UNAUTHORIZED_MESSAGE, input_runs, **kwargs)
         runs = input_processing.parse_user_run_numbers(input_runs)
         args_for_range = make_reduction_arguments(request.POST.items(), instrument_name)

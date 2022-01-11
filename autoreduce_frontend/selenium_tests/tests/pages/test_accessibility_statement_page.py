@@ -7,6 +7,7 @@ class TestAccessibilityStatementPage(NavbarTestMixin, BaseTestCase, FooterTestMi
     """
     Test cases for the accessibility statement page
     """
+
     def setUp(self) -> None:
         """
         Sets up the AccessibilityStatementPage object
