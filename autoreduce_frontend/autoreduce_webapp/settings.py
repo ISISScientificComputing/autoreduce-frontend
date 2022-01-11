@@ -38,11 +38,11 @@ DEBUG = not "AUTOREDUCTION_PRODUCTION" in os.environ
 DEBUG_PROPAGATE_EXCEPTIONS = True
 DEBUG_TOOLBAR_AVAILABLE = False
 if DEBUG:
-    try:
-        import debug_toolbar
+    import importlib
+    debug_toolbar_spec = importlib.util.find_spec("debug_toolbar")
+    found = debug_toolbar_spec is not None
+    if found:
         DEBUG_TOOLBAR_AVAILABLE = True
-    except ImportError:
-        pass
 
 if DEBUG:
     ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'reducedev2.isis.cclrc.ac.uk']
