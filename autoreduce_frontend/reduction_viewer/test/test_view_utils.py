@@ -29,8 +29,8 @@ def test_get_interactive_plot_data():
     mopen: Mock = mock_open()
     with patch("autoreduce_frontend.reduction_viewer.view_utils.open", mopen, create=True):
         get_interactive_plot_data(locations)
-    mopen.assert_any_call(locations[1], 'r')
-    mopen.assert_any_call(locations[3], 'r')
+    mopen.assert_any_call(locations[1], mode='r', encoding='utf-8')
+    mopen.assert_any_call(locations[3], mode='r', encoding='utf-8')
     assert mopen.call_count == 2
 
 
