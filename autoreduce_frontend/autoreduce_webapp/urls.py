@@ -55,11 +55,7 @@ urlpatterns = [
     path('search/', search.search, name='search'),
 ]
 
-if settings.DEBUG:
-    try:
-        urlpatterns = [
-            path('__debug__/', include("debug_toolbar.urls")),
-        ] + urlpatterns
-    except ModuleNotFoundError:
-        # debug_toolbar not installed - just run without it
-        pass
+if settings.DEBUG_TOOLBAR_AVAILABLE:
+    urlpatterns = [
+        path('__debug__/', include("debug_toolbar.urls")),
+    ] + urlpatterns
