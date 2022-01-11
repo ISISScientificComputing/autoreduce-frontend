@@ -24,6 +24,7 @@ class ICATCommunication:
     """
     Handles communication with the ICAT service
     """
+
     def __init__(self, **kwargs):
         if 'URL' not in kwargs:
             kwargs['URL'] = ICAT['URL']
@@ -93,7 +94,7 @@ class ICATCommunication:
             'start_date': 'N/A',
             'end_date': 'N/A',
             'title': 'N/A',
-            'summary': u'N/A',
+            'summary': 'N/A',
             'pi': ''
         }
 

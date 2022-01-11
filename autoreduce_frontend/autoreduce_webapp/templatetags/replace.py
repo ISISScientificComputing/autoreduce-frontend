@@ -18,6 +18,7 @@ class ReplaceNode(Node):
     """
     Node for replacing text
     """
+
     def __init__(self, text, old, new):
         self.text = Variable(text)
         self.old = Variable(old)
@@ -40,6 +41,5 @@ def replace(_, token):
     """
     args = token.split_contents()[1:]
     if len(args) != 3:
-        raise TemplateSyntaxError('%r tag requires a string, an old value, and a new value.' %
-                                  token.contents.split()[0])
+        raise TemplateSyntaxError(f'{token.contents.split()[0]} tag requires a string, an old value, and a new value.')
     return ReplaceNode(*args)

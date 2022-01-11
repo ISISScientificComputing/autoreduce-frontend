@@ -19,7 +19,7 @@ def instrument_pause(request, instrument=None):
     Renders pausing of instrument returning a JSON response
     """
     instrument_obj = Instrument.objects.get(name=instrument)
-    currently_paused = (request.POST.get("currently_paused").lower() == u"false")
+    currently_paused = (request.POST.get("currently_paused").lower() == "false")
     instrument_obj.is_paused = currently_paused
     instrument_obj.save()
     return JsonResponse({'currently_paused': str(currently_paused)})  # Blank response

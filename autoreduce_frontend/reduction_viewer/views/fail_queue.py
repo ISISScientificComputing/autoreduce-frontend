@@ -58,7 +58,7 @@ def fail_queue(request):
                     pass
 
         except Exception as exception:
-            fail_str = "Selected action failed: %s %s" % (type(exception).__name__, exception)
+            fail_str = f'Selected action failed: {type(exception).__name__} {exception}'
             LOGGER.info("Failed to carry out fail_queue action - %s", fail_str)
             context_dictionary["message"] = fail_str
 

@@ -22,8 +22,8 @@ def redirect_run_does_not_exist(instrument_name, run_number, run_version):
         run_number: The run number of the run.
         run_version: The run version of the run.
     """
-    return redirect("{}?message=Run {}-{} does not exist. Redirected to the instrument page.".format(
-        reverse("runs:list", kwargs={'instrument': instrument_name}), run_number, run_version))
+    return redirect(f'{reverse("runs:list", kwargs={"instrument": instrument_name})}'
+                    f'?message=Run {run_number}-{run_version} does not exist. Redirected to the instrument page.')
 
 
 # pylint:disable=no-member,too-many-locals,broad-except

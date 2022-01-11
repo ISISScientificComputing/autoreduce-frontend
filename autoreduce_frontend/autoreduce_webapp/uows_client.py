@@ -18,6 +18,7 @@ LOGGER = logging.getLogger(__package__)
 
 class UOWSClient:
     """A client for interacting with the User Office Web Service."""
+
     def __init__(self, **kwargs):
         url = kwargs.get("URL", UOWS_URL)
         self.client = Client(url)

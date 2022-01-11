@@ -16,6 +16,7 @@ register = Library()
 
 class NaturalTimeDifferenceNode(Node):
     """Class for computing and rendering time differences."""
+
     def __init__(self, start, end):
         self.start = Variable(start)
         self.end = Variable(end)
@@ -52,7 +53,7 @@ def natural_time_difference(_, token):
     """Return NaturalTimeDifference Node."""
     args = token.split_contents()[1:]
     if len(args) != 2:
-        raise TemplateSyntaxError('%r tag requires two datetimes.' % token.contents.split()[0])
+        raise TemplateSyntaxError(f'{token.contents.split()[0]} tag requires two datetimes.')
     return NaturalTimeDifferenceNode(*args)
 
 
