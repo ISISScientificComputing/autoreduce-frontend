@@ -90,7 +90,7 @@ def run_confirmation(request, instrument: str):
 
     try:
         auth_token = str(request.user.auth_token)
-    except AttributeError as err:
+    except AttributeError as err:  # pylint:disable=unused-variable
         context_dictionary['error'] = UNAUTHORIZED_MESSAGE
         return context_dictionary
     # run_description gets stored in run_description in the ReductionRun object
