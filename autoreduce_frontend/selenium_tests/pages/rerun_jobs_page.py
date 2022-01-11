@@ -21,6 +21,7 @@ class RerunJobsPage(Page, RerunFormMixin, NavbarMixin, FooterMixin, TourMixin):
     """
     Page model class for run summary page
     """
+
     def __init__(self, driver, instrument):
         super().__init__(driver)
         self.instrument = instrument

@@ -18,6 +18,7 @@ class Page(ABC):
     """
     Abstract base class for page object model classes
     """
+
     def __init__(self, driver: Union[webdriver.Chrome, webdriver.Remote]):
         self.driver = driver
 

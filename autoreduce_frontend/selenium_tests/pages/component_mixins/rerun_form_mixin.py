@@ -17,6 +17,7 @@ ResetButtons = namedtuple('ResetButtons', ["to_initial", "to_script"])
 
 
 class RerunFormMixin:
+
     @staticmethod
     def _set_field(field, value):
         field.clear()

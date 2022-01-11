@@ -11,6 +11,7 @@ class VerboseUserChoiceField(ModelChoiceField):
     This is because the usernames stored in the database are the user ID's, which makes it hard to
     visually recognise which user is which.
     """
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

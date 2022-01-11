@@ -64,6 +64,7 @@ class BaseTestCase(StaticLiveServerTestCase):
 
 
 class ConfigureNewJobsBaseTestCase(BaseTestCase):
+
     @classmethod
     def setUpClass(cls):
         """Sets up the data archive to be shared across test cases"""
@@ -84,6 +85,7 @@ class ConfigureNewJobsBaseTestCase(BaseTestCase):
 
 
 class BaseIntegrationTestCase(BaseTestCase):
+
     @classmethod
     def setUpClass(cls):
         """
@@ -298,6 +300,7 @@ class AccessibilityTestMixin:
         accessibility_test_tags
         :return: (str) A JSON string which is used for axe options
         """
+
         def build_rules(rules):
             if rules == {}:
                 return ""

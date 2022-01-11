@@ -18,6 +18,7 @@ class TestHelpPage(NavbarTestMixin, BaseTestCase, FooterTestMixin, Accessibility
     """
     Test cases for the help page
     """
+
     def setUp(self) -> None:
         """
         Sets up the HelpPage object
@@ -108,6 +109,7 @@ class TestHelpPage(NavbarTestMixin, BaseTestCase, FooterTestMixin, Accessibility
         """
         Test that help topic header links are correctly constructed
         """
+
         def to_link_text(text):
             return re.sub("[^A-Za-z0-9\\s]+", "", text).replace(" ", "-").lower()
 

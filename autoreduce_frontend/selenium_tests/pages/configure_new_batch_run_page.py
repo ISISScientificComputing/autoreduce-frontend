@@ -20,6 +20,7 @@ class ConfigureNewBatchRunsPage(Page, RerunFormMixin, NavbarMixin, FooterMixin, 
     """
     Page model class for run summary page
     """
+
     def __init__(self, driver, instrument):
         super().__init__(driver)
         self.instrument = instrument

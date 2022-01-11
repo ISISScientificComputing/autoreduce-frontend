@@ -20,6 +20,7 @@ class AccessibilityStatementPage(Page, NavbarMixin, FooterMixin):
     """
     Page model class for accessibility statement page
     """
+
     @staticmethod
     def url_path() -> str:
         """

@@ -42,6 +42,7 @@ page={{ current_page }}&per_page={{ per_page }}&sort={{ sort }}&filter={{ filter
 
 class ExperimentTable(Table):
     '''Table model for displaying Experiments'''
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -105,6 +106,7 @@ page={{ current_page }}&per_page={{ per_page }}&sort={{ sort }}&filter={{ filter
 
 class FailQueueTable(Table):
     '''Table model for displaying Failed Runs (and batch-runs)'''
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
