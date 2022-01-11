@@ -60,7 +60,7 @@ def _check_input_is_numeric(str_input, extra_whitelisted_char_set=None):
 
     disallowed_char = next((char for char in str_input if char not in allowed_characters), None)
     if disallowed_char:
-        raise SyntaxError(f"The character '{disallowed_char}' was entered which is not permitted")
+        raise SyntaxError(f"The character '{disallowed_char}' was entered, which is not permitted")
 
     return True
 
