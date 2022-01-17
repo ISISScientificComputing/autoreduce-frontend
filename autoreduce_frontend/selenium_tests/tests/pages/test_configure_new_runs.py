@@ -73,6 +73,7 @@ class TestConfigureNewRunsPageSkippedOnly(ConfigureNewJobsBaseTestCase, NavbarTe
     def test_configure_skipped_only_run_vars(self):
         """Test that configuring new runs works even with only skipped runs present"""
         self.page.variable1_field = "the new value in the field"
+        self.page.software_select.select_by_visible_text('Mantid-6.2.0')
 
         self.page.submit_button.click()
         summary = VariableSummaryPage(self.driver, self.instrument_name)
@@ -87,6 +88,7 @@ class TestConfigureNewRunsPageSkippedOnly(ConfigureNewJobsBaseTestCase, NavbarTe
         self.page = ConfigureNewRunsPage(self.driver, self.instrument_name, experiment_reference=1234567)
         self.page.launch()
         self.page.variable1_field = "the new value in the field"
+        self.page.software_select.select_by_visible_text('Mantid-6.2.0')
 
         self.page.submit_button.click()
         summary = VariableSummaryPage(self.driver, self.instrument_name)
