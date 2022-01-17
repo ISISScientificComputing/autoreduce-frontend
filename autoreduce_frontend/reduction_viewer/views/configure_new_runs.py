@@ -6,6 +6,7 @@ from django.shortcuts import redirect, get_object_or_404
 
 from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions, login_and_uows_valid, render_with)
 from autoreduce_frontend.reduction_viewer.forms import SelectSoftwareForm
+from autoreduce_frontend.reduction_viewer.view_utils import convert_software_string_to_dict
 from autoreduce_frontend.reduction_viewer.views.common import prepare_arguments_for_render, make_reduction_arguments
 
 LOGGER = logging.getLogger(__package__)
@@ -47,9 +48,7 @@ def configure_new_runs_post(request, instrument_name):
     args_for_range = make_reduction_arguments(request.POST.items(), instrument_name)
     arguments_json = json.dumps(args_for_range, separators=(',', ':'))
 
-    #software_id = Software.objects.get(name=request.POST.get("run_software")).id
-    queryset = Software.objects.filter(name=request.POST.get("run_software"))
-    selected_software = get_object_or_404(Software, pk=request.POST.get("run_software").id)
+    selected_software = get_object_or_404(Software, pk=request.POST.get("software"))
 
     def update_or_create(instrument, selected_software, arguments_json, kwargs):
         try:
