@@ -17,7 +17,7 @@ migrate:
 	autoreduce-webapp-manage migrate
 
 migrate-with-fixtures: migrate
-	autoreduce-webapp-manage loaddata super_user_fixture status_fixture pr_test
+	autoreduce-webapp-manage loaddata super_user_fixture status_fixture software_fixture pr_test
 
 selenium:
 	sudo docker kill selenium && docker rm selenium || echo "Selenium container isn't already running, just starting it."
