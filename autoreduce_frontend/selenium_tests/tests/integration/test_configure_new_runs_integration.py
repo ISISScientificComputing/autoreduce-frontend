@@ -46,6 +46,7 @@ class TestConfigureNewRunsPageIntegration(BaseIntegrationTestCase):
                                          experiment_reference=experiment_number)
         self.page.launch()
         self.page.variable1_field = value
+        self.page.software_select.select_by_visible_text('Mantid-6.2.0')
         self.page.submit_button.click()
 
     @staticmethod
