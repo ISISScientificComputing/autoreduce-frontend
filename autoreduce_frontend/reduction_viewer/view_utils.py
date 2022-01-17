@@ -9,7 +9,7 @@
 import functools
 import logging
 import os
-from typing import Tuple
+from typing import Dict, Tuple
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
@@ -195,3 +195,13 @@ def get_navigation_runs(instrument_name: str, run: ReductionRun, page_type: str)
     oldest_run = runs.last()
 
     return next_run, previous_run, newest_run, oldest_run
+
+
+def convert_software_string_to_dict(software_str: str) -> Dict[str, str]:
+    """
+    Convert the software string to a dictionary.
+    """
+    software_name = software_str.split('-')[1]
+    software_version = software_str.split('-')[2]
+    software_dict = {'name': software_name, 'version': software_version}
+    return software_dict

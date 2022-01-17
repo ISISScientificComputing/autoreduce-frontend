@@ -4,8 +4,9 @@ from unittest.mock import Mock, mock_open, patch
 from parameterized import parameterized
 from autoreduce_db.reduction_viewer.models import ReductionRun
 from autoreduce_frontend.autoreduce_webapp.settings import DATA_ANALYSIS_BASE_URL
-from autoreduce_frontend.reduction_viewer.view_utils import (get_interactive_plot_data, make_data_analysis_url,
-                                                             started_by_id_to_name, order_runs, data_status)
+from autoreduce_frontend.reduction_viewer.view_utils import (convert_software_string_to_dict, get_interactive_plot_data,
+                                                             make_data_analysis_url, started_by_id_to_name, order_runs,
+                                                             data_status)
 from autoreduce_frontend.selenium_tests.tests.base_tests import BaseTestCase
 
 
@@ -54,6 +55,14 @@ def test_started_by_id_to_name_missing_user(logger: Mock, get_user_model_mock: M
     get_user_model_mock.return_value.objects.get.side_effect = ObjectDoesNotExist
     assert started_by_id_to_name(100) is None
     logger.error.assert_called_once()
+
+
+# Test convert_software_string_to_dict in view_utils
+def test_convert_software_string_to_dict():
+    """
+    Test that convert_software_string_to_dict will return the correct dictionary
+    """
+    assert convert_software_string_to_dict("Mantid-6.2.0") == {'name': 'Mantid', 'version': '6.2.0'}
 
 
 class ReductionRunTestCase(TestCase):
