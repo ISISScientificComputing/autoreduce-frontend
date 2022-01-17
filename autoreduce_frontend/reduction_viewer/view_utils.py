@@ -201,7 +201,7 @@ def convert_software_string_to_dict(software_str: str) -> Dict[str, str]:
     """
     Convert the software string to a dictionary.
     """
-    software_name = software_str.split('-')[1]
-    software_version = software_str.split('-')[2]
+    software_name = software_str.split('-')[0]
+    software_version = software_str.split('-')[1]
     software_dict = {'name': software_name, 'version': software_version}
     return software_dict

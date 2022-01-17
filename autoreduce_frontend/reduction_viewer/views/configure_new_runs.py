@@ -6,7 +6,6 @@ from django.shortcuts import redirect, get_object_or_404
 
 from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions, login_and_uows_valid, render_with)
 from autoreduce_frontend.reduction_viewer.forms import SelectSoftwareForm
-from autoreduce_frontend.reduction_viewer.view_utils import convert_software_string_to_dict
 from autoreduce_frontend.reduction_viewer.views.common import prepare_arguments_for_render, make_reduction_arguments
 
 LOGGER = logging.getLogger(__package__)
