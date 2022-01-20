@@ -212,6 +212,7 @@ class TestConfigureNewRunsPageIntegration(BaseIntegrationTestCase):
         # now for the 2nd variable we made
         summary.click_run_edit_button_for(self.run_number + 201)
         self.page.variable1_field = "another new test value 321"
+        self.page.software_select.select_by_visible_text('Mantid-6.2.0')
         self.page.submit_button.click()
 
         upcoming_panel = summary.panels[1]
@@ -258,6 +259,7 @@ class TestConfigureNewRunsPageIntegration(BaseIntegrationTestCase):
         summary.click_experiment_edit_button_for(2345678)
 
         self.page.variable1_field = "a new value for experiment 2345678"
+        self.page.software_select.select_by_visible_text('Mantid-6.2.0')
         self.page.submit_button.click()
 
         experiment_panel = summary.panels[1]
