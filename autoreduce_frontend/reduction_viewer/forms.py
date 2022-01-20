@@ -99,16 +99,5 @@ class FailedQueueOptionsForm(forms.Form):
     )
 
 
-""" class SelectSoftwareForm(forms.ModelForm):
-
-    class Meta:
-        model = Software
-        fields = ['name', 'version']
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['version'].queryset = Software.objects.none() """
-
-
 class SelectSoftwareForm(forms.Form):
     software = forms.ModelChoiceField(queryset=Software.objects.all().order_by('name'))
