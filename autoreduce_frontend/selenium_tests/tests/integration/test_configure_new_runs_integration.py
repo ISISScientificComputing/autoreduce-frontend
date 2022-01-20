@@ -18,7 +18,7 @@ REDUCE_VARS_DEFAULT_VALUE = "default value from reduce_vars"
 
 # pylint:disable=no-member
 class TestConfigureNewRunsPageIntegration(BaseIntegrationTestCase):
-    fixtures = BaseIntegrationTestCase.fixtures + ["run_with_one_variable"]
+    fixtures = BaseIntegrationTestCase.fixtures + ["run_with_one_variable", "software_fixture"]
 
     @classmethod
     def setUpClass(cls):
@@ -75,6 +75,7 @@ class TestConfigureNewRunsPageIntegration(BaseIntegrationTestCase):
         """
         self.page = ConfigureNewRunsPage(self.driver, self.instrument_name, run_start=self.run_number)
         self.page.launch()
+        self.page.software_select.select_by_visible_text('Mantid-6.2.0')
         self.page.submit_button.click()
 
         assert ReductionArguments.objects.count() == 1
@@ -186,6 +187,7 @@ class TestConfigureNewRunsPageIntegration(BaseIntegrationTestCase):
         summary.click_run_edit_button_for(self.run_number + 1)
 
         self.page.variable1_field = "a new test value 123"
+        self.page.software_select.select_by_visible_text('Mantid-6.2.0')
         self.page.submit_button.click()
 
         upcoming_panel = summary.panels[1]
@@ -238,6 +240,7 @@ class TestConfigureNewRunsPageIntegration(BaseIntegrationTestCase):
         summary.click_experiment_edit_button_for(1234567)
 
         self.page.variable1_field = "a new test value 123"
+        self.page.software_select.select_by_visible_text('Mantid-6.2.0')
         self.page.submit_button.click()
 
         experiment_panel = summary.panels[1]
