@@ -30,7 +30,7 @@ jobs:
         run: |
           SELENIUM_REMOTE=1 RUNNING_VIA_PYTEST=true pytest autoreduce_frontend --cov-report=xml --cov=autoreduce_frontend --ignore=autoreduce_frontend/selenium_tests/tests/integration -v
 
-      - uses: codecov/codecov-action@v1
+      - uses: codecov/codecov-action@v2
         with:
           files: ./coverage.xml
           name: codecov-umbrella
