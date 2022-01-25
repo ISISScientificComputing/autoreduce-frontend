@@ -48,7 +48,7 @@
         "pk": 1,
         "model": "reduction_viewer.datalocation",
         "fields": {
-            "file_path": "/isis/NDXTESTINSTRUMENT/Intsrument/data/cycle_21_1/TEST99999.nxs",
+            "file_path": "/isis/NDXTESTINSTRUMENT/Instrument/data/cycle_21_1/TEST99999.nxs",
             "reduction_run_id": 1
         }
     },
