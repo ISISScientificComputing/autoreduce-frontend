@@ -100,4 +100,11 @@ class FailedQueueOptionsForm(forms.Form):
 
 
 class SelectSoftwareForm(forms.Form):
-    software = forms.ModelChoiceField(queryset=Software.objects.all().order_by('name'))
+    qs = Software.objects.all()
+    initial_value = qs.first()
+    software = forms.ModelChoiceField(
+        queryset=qs,
+        empty_label="Select a software",
+        widget=forms.Select(),
+        initial=initial_value,
+    )
