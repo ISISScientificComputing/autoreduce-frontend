@@ -1,3 +1,4 @@
+{% load crispy_forms_tags %}
 <div class="card">
     <div class="card-header">
         <div class="card-title">
@@ -21,6 +22,7 @@
                 <div class="col-md-9">
                     {% include "snippets/variables/form_warnings.html" %}
                     <div class="form-group">
+                        {% crispy software_form %}
                         <label for="run_description" class="col-form-label col-md-6">
                             Re-run description
                             <a href="#" data-toggle="popover"

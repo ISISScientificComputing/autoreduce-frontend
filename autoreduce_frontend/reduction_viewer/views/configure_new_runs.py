@@ -1,11 +1,10 @@
 import json
 import logging
 
-from autoreduce_db.reduction_viewer.models import (Instrument, ReductionArguments, ReductionRun, Status, Software)
-from django.shortcuts import redirect, get_object_or_404
+from autoreduce_db.reduction_viewer.models import (Instrument, ReductionArguments, ReductionRun, Status)
+from django.shortcuts import redirect
 
 from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions, login_and_uows_valid, render_with)
-from autoreduce_frontend.reduction_viewer.forms import SelectSoftwareForm
 from autoreduce_frontend.reduction_viewer.views.common import prepare_arguments_for_render, make_reduction_arguments
 
 LOGGER = logging.getLogger(__package__)
@@ -47,9 +46,7 @@ def configure_new_runs_post(request, instrument_name):
     args_for_range = make_reduction_arguments(request.POST.items(), instrument_name)
     arguments_json = json.dumps(args_for_range, separators=(',', ':'))
 
-    selected_software = get_object_or_404(Software, pk=request.POST.get("software"))
-
-    def update_or_create(instrument, selected_software, arguments_json, kwargs):
+    def update_or_create(instrument, arguments_json, kwargs):
         try:
             args = ReductionArguments.objects.get(instrument=instrument, **kwargs)
             args.raw = arguments_json
@@ -58,9 +55,9 @@ def configure_new_runs_post(request, instrument_name):
             ReductionArguments.objects.create(instrument=instrument, raw=arguments_json, **kwargs)
 
     if start:
-        update_or_create(instrument, selected_software, arguments_json, {'start_run': start})
+        update_or_create(instrument, arguments_json, {'start_run': start})
     else:
-        update_or_create(instrument, selected_software, arguments_json, {'experiment_reference': experiment_reference})
+        update_or_create(instrument, arguments_json, {'experiment_reference': experiment_reference})
     return redirect('runs:variables_summary', instrument=instrument_name)
 
 
@@ -76,8 +73,6 @@ def configure_new_runs_get(instrument_name, start=0, experiment_reference=0):
     existing_arguments = None
     last_run = instrument.get_last_for_rerun(instrument.reduction_runs.filter(batch_run=False))
     run_start = start if start else last_run.run_number + 1
-
-    software_form = SelectSoftwareForm()
 
     if experiment_reference:
         try:
@@ -115,8 +110,7 @@ def configure_new_runs_get(instrument_name, start=0, experiment_reference=0):
         'minimum_run_end': run_start + 1,
         'upcoming_run_variables': "",
         'editing': editing,
-        'tracks_script': '',
-        'software_form': software_form
+        'tracks_script': ''
     }
 
     return context_dictionary

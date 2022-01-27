@@ -8,7 +8,6 @@
 from django.urls import reverse
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import Select
 
 from autoreduce_frontend.selenium_tests.pages.component_mixins.footer_mixin import FooterMixin
 from autoreduce_frontend.selenium_tests.pages.component_mixins.navbar_mixin import NavbarMixin
@@ -67,10 +66,3 @@ class ConfigureNewRunsPage(Page, RerunFormMixin, NavbarMixin, FooterMixin, TourM
     def go_to_other(self) -> WebElement:
         """Return the link to toggle between by run range or by reference"""
         return self.driver.find_element(By.ID, "go_to_other")
-
-    @property
-    def software_select(self) -> Select:
-        """
-        Return the software select WebElement
-        """
-        return Select(self.driver.find_element(By.ID, "id_software"))
