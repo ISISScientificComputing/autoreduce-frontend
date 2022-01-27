@@ -87,8 +87,9 @@ class TestRunSummaryPage(ConfigureNewJobsBaseTestCase, FooterTestMixin, NavbarTe
                                        f"var-standard-{encode_b64('variable1')}").get_attribute("value") == "value1"
         labels = rerun_form.find_elements(By.TAG_NAME, "label")
 
-        WebDriverWait(self.driver, 10).until(lambda _: labels[0].text == "Re-run description")
-        WebDriverWait(self.driver, 10).until(lambda _: labels[1].text == "variable1")
+        WebDriverWait(self.driver, 10).until(lambda _: labels[0].text == "Software")
+        WebDriverWait(self.driver, 10).until(lambda _: labels[1].text == "Re-run description")
+        WebDriverWait(self.driver, 10).until(lambda _: labels[2].text == "variable1")
 
     def test_back_to_instruments_goes_back(self):
         """Test that clicking back goes back to the instrument."""

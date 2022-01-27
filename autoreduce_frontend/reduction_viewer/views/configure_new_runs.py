@@ -110,7 +110,7 @@ def configure_new_runs_get(instrument_name, start=0, experiment_reference=0):
         'minimum_run_end': run_start + 1,
         'upcoming_run_variables': "",
         'editing': editing,
-        'tracks_script': ''
+        'tracks_script': '',
     }
 
     return context_dictionary

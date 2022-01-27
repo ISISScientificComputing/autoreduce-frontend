@@ -61,7 +61,6 @@ class TestSeeInstrumentVariablesPage(BaseTestCase, AccessibilityTestMixin, Foote
 
         assert new_runs_page.variable1_field_val == value_to_modify
         new_runs_page.variable1_field = "some new value"
-        new_runs_page.software_select.select_by_visible_text('Mantid-6.2.0')
         new_runs_page.submit_button.click()
 
         upcoming_panel = self.page.panels[1]
@@ -116,7 +115,6 @@ class TestSeeInstrumentVariablesPage(BaseTestCase, AccessibilityTestMixin, Foote
         assert new_runs_page.variable1_field_val == f"experiment {experiment_reference} var"
 
         new_runs_page.variable1_field = "some new value"
-        new_runs_page.software_select.select_by_visible_text('Mantid-6.2.0')
         new_runs_page.submit_button.click()
 
         experiment_panel = self.page.panels[2]
