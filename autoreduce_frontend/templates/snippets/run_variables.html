@@ -22,7 +22,6 @@
                 <div class="col-md-9">
                     {% include "snippets/variables/form_warnings.html" %}
                     <div class="form-group">
-                        {% crispy software_form %}
                         <label for="run_description" class="col-form-label col-md-6">
                             Re-run description
                             <a href="#" data-toggle="popover"
@@ -57,6 +56,7 @@
                     </div>
                 </div>
             </div>
+            {% crispy software_form %}
             <div class="form-group variables-buttons">
                     {% if not has_reduce_vars %}
                         <div class="alert alert-warning">

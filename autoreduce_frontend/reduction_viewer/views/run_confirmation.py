@@ -9,7 +9,7 @@ import json
 import logging
 
 import requests
-from autoreduce_db.reduction_viewer.models import (ReductionRun, Status)
+from autoreduce_db.reduction_viewer.models import (ReductionRun, Status, Software)
 from autoreduce_utils.settings import AUTOREDUCE_API_URL
 from django.db.models.query import QuerySet
 # without this import the exception does NOT get captured in the except ConnectionError
@@ -33,6 +33,7 @@ def run_confirmation(request, instrument: str):
     """
     range_string = request.POST.get('runs')
     run_description = request.POST.get('run_description')
+    software = Software.objects.get(pk=request.POST.get('software'))
 
     # pylint:disable=no-member
     queue_count = ReductionRun.objects.filter(instrument__name=instrument, status=Status.get_queued()).count()
@@ -116,7 +117,11 @@ def run_confirmation(request, instrument: str):
                                      "runs": run_numbers,
                                      "reduction_arguments": new_script_arguments,
                                      "user_id": request.user.id,
-                                     "description": run_description
+                                     "description": run_description,
+                                     "software": {
+                                         "name": software.name,
+                                         "version": software.version
+                                     }
                                  },
                                  headers={"Authorization": f"Token {auth_token}"})
     except ConnectionError as err:  # pylint:disable=broad-except
