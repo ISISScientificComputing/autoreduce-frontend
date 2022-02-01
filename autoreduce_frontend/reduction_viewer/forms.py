@@ -1,4 +1,5 @@
 from django import forms
+from autoreduce_db.reduction_viewer.models import Software
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout
 
@@ -95,4 +96,15 @@ class FailedQueueOptionsForm(forms.Form):
                 'placeholder': "Placeholder",
             }),
         choices=SHOW_OR_HIDE,
+    )
+
+
+class SelectSoftwareForm(forms.Form):
+    qs = Software.objects.all()
+    initial_value = qs.first()
+    software = forms.ModelChoiceField(
+        queryset=qs,
+        empty_label="Select a software",
+        widget=forms.Select(),
+        initial=initial_value,
     )

@@ -89,6 +89,7 @@ class TestRunSummaryPage(ConfigureNewJobsBaseTestCase, FooterTestMixin, NavbarTe
 
         WebDriverWait(self.driver, 10).until(lambda _: labels[0].text == "Re-run description")
         WebDriverWait(self.driver, 10).until(lambda _: labels[1].text == "variable1")
+        WebDriverWait(self.driver, 10).until(lambda _: labels[2].text == "Software*")
 
     def test_back_to_instruments_goes_back(self):
         """Test that clicking back goes back to the instrument."""

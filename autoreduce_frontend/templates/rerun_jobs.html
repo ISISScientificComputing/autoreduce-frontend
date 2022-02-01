@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block title %}{{ instrument.name|default:"Instrument not found" }} - Re-run past jobs{% endblock %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block body %}
     {% if not instrument %}
@@ -62,6 +63,9 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <div class="col-9">
+                                {% crispy software_form %}
+                            </div>
                             <label for="submit_run_description" class="col-form-label col-md-3">
                                 Re-run description
                                 <a href="#" data-toggle="popover"

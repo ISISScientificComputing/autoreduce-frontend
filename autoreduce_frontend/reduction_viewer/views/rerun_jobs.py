@@ -2,6 +2,7 @@ import logging
 
 from autoreduce_db.reduction_viewer.models import (Instrument, Status)
 from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions, login_and_uows_valid, render_with)
+from autoreduce_frontend.reduction_viewer.forms import SelectSoftwareForm
 from autoreduce_frontend.reduction_viewer.views.common import prepare_arguments_for_render
 
 LOGGER = logging.getLogger(__package__)
@@ -18,6 +19,7 @@ def rerun_jobs(request, instrument=None):
     LOGGER.info('Submitting runs')
     # pylint:disable=no-member
     instrument = Instrument.objects.prefetch_related('reduction_runs').get(name=instrument)
+    software_form = SelectSoftwareForm()
     if request.method == 'GET':
         processing_status = Status.get_processing()
         queued_status = Status.get_queued()
@@ -36,7 +38,8 @@ def rerun_jobs(request, instrument=None):
             'queued': runs_for_instrument.filter(status=queued_status),
             'standard_variables': standard_vars,
             'advanced_variables': advanced_vars,
-            'variable_help': variable_help
+            'variable_help': variable_help,
+            'software_form': software_form
         }
 
         return context_dictionary

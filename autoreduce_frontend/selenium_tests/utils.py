@@ -76,7 +76,7 @@ def submit_and_wait_for_result(test, expected_runs=1, after_submit_url: Optional
             return True
         return False
 
-    WebDriverWait(test.driver, 60).until(runs_completed, "Timed out while waiting for the runs to finish")
+    WebDriverWait(test.driver, 90).until(runs_completed, "Timed out while waiting for the runs to finish")
 
     return find_run_in_database(test)
 

@@ -1,3 +1,4 @@
+{% load crispy_forms_tags %}
 <div class="card">
     <div class="card-header">
         <div class="card-title">
@@ -55,6 +56,7 @@
                     </div>
                 </div>
             </div>
+            {% crispy software_form %}
             <div class="form-group variables-buttons">
                     {% if not has_reduce_vars %}
                         <div class="alert alert-warning">
