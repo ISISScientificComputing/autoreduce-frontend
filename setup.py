@@ -32,7 +32,7 @@ setup(
         "django-user-agents==0.4.0",
         "djangorestframework==3.13.1",
         "django-filter==21.1",
-        "django-crispy-forms==1.13.0",
+        "django-crispy-forms==1.14.0",
         "django-tables2==2.4.1",
         "requests==2.27.1",
     ],
