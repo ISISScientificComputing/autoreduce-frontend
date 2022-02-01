@@ -48,7 +48,7 @@ class TestRerunJobsPageIntegration(BaseIntegrationTestCase):
         """
         Test: Open the submit page, select reuse stored script, and clicking rerun
         """
-        self.page.reuse_stored_script.click()
+        self.page.reuse_script_radio.click()
         result = submit_and_wait_for_result(self)
         assert len(result) == 2
 

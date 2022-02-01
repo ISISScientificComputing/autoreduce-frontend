@@ -46,9 +46,14 @@ class RerunJobsPage(Page, RerunFormMixin, NavbarMixin, FooterMixin, TourMixin):
         return self.driver.find_element(By.ID, "submit_jobs")
 
     @property
-    def reuse_script_checkbox(self) -> WebElement:
+    def reuse_script_radio(self) -> WebElement:
+        """Finds and returns the reuse script radio on the page"""
+        return self.driver.find_element(By.ID, "id_script_choice_0")
+
+    @property
+    def use_reducepy_file_radio(self) -> WebElement:
         """Finds and returns the reuse script checkbox on the page"""
-        return self.driver.find_element(By.ID, "use_stored_reduction_script")
+        return self.driver.find_element(By.ID, "id_script_choice_1")
 
     @property
     def run_range_field(self) -> WebElement:

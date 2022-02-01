@@ -100,6 +100,9 @@ class FailedQueueOptionsForm(forms.Form):
 
 
 class RerunForm(forms.Form):
+    REDUCTION_SCRIPT_CHOICES = [('use_stored_reduction_script', 'Use stored reduction script'),
+                                ('use_reducepy', 'Use reduce.py file')]
+
     qs = Software.objects.all()
     initial_value = qs.first()
     software = forms.ModelChoiceField(
@@ -109,13 +112,6 @@ class RerunForm(forms.Form):
         initial=initial_value,
     )
 
-    use_stored_reduction_script = forms.BooleanField(
-        required=False,
-        label="Use stored reduction script",
-        widget=forms.CheckboxInput(
-            attrs={
-                'id': "use_stored_reduction_script",
-                'title': "Use stored reduction script",
-                'name': "use_stored_reduction_script",
-            }),
-    )
+    script_choice = forms.ChoiceField(choices=REDUCTION_SCRIPT_CHOICES,
+                                      widget=forms.RadioSelect,
+                                      initial='use_stored_reduction_script')

@@ -34,7 +34,7 @@ def run_confirmation(request, instrument: str):
     range_string = request.POST.get('runs')
     run_description = request.POST.get('run_description')
     software = Software.objects.get(pk=request.POST.get('software'))
-    use_stored_reduction_script = request.POST.get('use_stored_reduction_script')
+    script_choice = request.POST.get('script_choice')
 
     # pylint:disable=no-member
     queue_count = ReductionRun.objects.filter(instrument__name=instrument, status=Status.get_queued()).count()
@@ -112,7 +112,7 @@ def run_confirmation(request, instrument: str):
         # list stores (run_number, run_version)
         context_dictionary["runs"].append((run_number, most_recent_run.run_version + 1))
 
-    if use_stored_reduction_script:
+    if script_choice == 'use_stored_reduction_script':
         stored_reduction_script = most_recent_run.script.text
     else:
         stored_reduction_script = None
