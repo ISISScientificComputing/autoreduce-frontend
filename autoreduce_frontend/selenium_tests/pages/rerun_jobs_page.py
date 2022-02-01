@@ -46,6 +46,11 @@ class RerunJobsPage(Page, RerunFormMixin, NavbarMixin, FooterMixin, TourMixin):
         return self.driver.find_element(By.ID, "submit_jobs")
 
     @property
+    def reuse_script_checkbox(self) -> WebElement:
+        """Finds and returns the reuse script checkbox on the page"""
+        return self.driver.find_element(By.ID, "use_stored_reduction_script")
+
+    @property
     def run_range_field(self) -> WebElement:
         """
         Finds and returns the back button for toggling the form on the page.

@@ -44,6 +44,19 @@ class TestRerunJobsPageIntegration(BaseIntegrationTestCase):
 
         assert result[0].arguments == result[1].arguments
 
+    def test_submit_rerun_same_script(self):
+        """
+        Test: Open the submit page, select reuse stored script, and clicking rerun
+        """
+        self.page.reuse_stored_script.click()
+        result = submit_and_wait_for_result(self)
+        assert len(result) == 2
+
+        assert result[0].run_version == 0
+        assert result[1].run_version == 1
+
+        assert result[0].arguments == result[1].arguments
+
     def test_submit_rerun_changed_variable_arbitrary_value(self):
         """
         Test: Open submit page, change a variable, submit the run
