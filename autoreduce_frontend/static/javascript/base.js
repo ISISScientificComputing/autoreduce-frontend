@@ -1,8 +1,8 @@
 (function () {
     var getIgnoredNotification = function getIgnoredNotification() {
         var ignoredNotifications = [];
-        if (docCookies.getItem('ignoredNotifications')) {
-            ignoredNotifications = docCookies.getItem('ignoredNotifications').split(',');
+        if (Cookies.get('ignoredNotifications')) {
+            ignoredNotifications = Cookies.get('ignoredNotifications').split(',');
         }
         return ignoredNotifications;
     };
@@ -10,7 +10,7 @@
     var notificationDismissed = function notificationDismissed() {
         var ignoredNotifications = getIgnoredNotification();
         ignoredNotifications.push($(this).data('notification-id'));
-        docCookies.setItem('ignoredNotifications', ignoredNotifications.join(','), undefined, '/');
+        Cookies.set('ignoredNotifications', ignoredNotifications.join(','), undefined, '/');
     };
 
     var showNotifications = function showNotifications() {
