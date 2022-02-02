@@ -22,7 +22,7 @@
                             <ul>
                                 {% for run in runs %}
                                 <li>
-                                    {{ run.0 }} version {{ run.1 }} <a href="{% url 'runs:summary' instrument_name=instrument_name run_number=run.0 run_version=run.1 %}" target="_blank">View</a>
+                                    {{ run.0 }} version {{ run.1 }} <a href="{% url 'runs:summary' instrument_name=instrument_name run_number=run.0 run_version=run.1 %}" rel="noopener noreferrer" target="_blank">View</a>
                                 </li>
                                 {% endfor %}
                             </ul>
