@@ -174,7 +174,7 @@
                                 <div class="file-path">
                                     <strong>Reduced:</strong>
                                     {% if reduction_location %}
-                                        <a href="{{ data_analysis_link_url }}" target="_blank">{{ reduction_location }}
+                                        <a href="{{ data_analysis_link_url }}" rel="noopener noreferrer" target="_blank">{{ reduction_location }}
                                             <i class="fas fa-external-link-alt" aria-hidden="true"></i>
                                         </a><br/>
                                     {% elif run.reduction_location.all %}
