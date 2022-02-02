@@ -59,6 +59,21 @@ class TestRerunJobsPageIntegration(BaseIntegrationTestCase):
 
         assert result[0].arguments == result[1].arguments
 
+    def test_submit_rerun_use_reducepy(self):
+        """
+        Test: Open the submit page, select use reduce.py, and clicking rerun
+        """
+        # Check if radio button is selected, and if it isn't, click it
+        if not self.page.use_reducepy_file_radio.is_selected():
+            self.page.use_reducepy_file_radio.click()
+        result = submit_and_wait_for_result(self)
+        assert len(result) == 2
+
+        assert result[0].run_version == 0
+        assert result[1].run_version == 1
+
+        assert result[0].arguments == result[1].arguments
+
     def test_submit_rerun_changed_variable_arbitrary_value(self):
         """
         Test: Open submit page, change a variable, submit the run
