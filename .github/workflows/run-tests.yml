@@ -20,6 +20,9 @@ jobs:
         with:
           package_name: autoreduce_frontend
 
+      - name: Simple Dotenv
+        uses: xom9ikk/dotenv@v1.0.2
+
       - name: Start Selenium docker daemon
         run: docker run --name selenium --rm -d --network=host -v /dev/shm:/dev/shm selenium/standalone-chrome:4.0.0-beta-3-prerelease-20210422
 
@@ -73,6 +76,9 @@ jobs:
       - uses: autoreduction/autoreduce-actions/build@main
         with:
           package_name: autoreduce_frontend
+
+      - name: Simple Dotenv
+        uses: xom9ikk/dotenv@v1.0.2
 
       - name: Run MySQL Docker
         run: docker run --rm --name mysql-ar -e MYSQL_ROOT_PASSWORD=password -d --network=host mysql:latest
