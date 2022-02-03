@@ -5,35 +5,29 @@
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
 # pylint: skip-file
-import configparser
 import os
+from dotenv import load_dotenv
 
 from autoreduce_db.autoreduce_django.settings import DATABASES as autoreduce_db_settings
-from autoreduce_utils.settings import CREDENTIALS_INI_FILE
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-
-# Read the utilities .ini file that contains service credentials
-CONFIG = configparser.ConfigParser()
-CONFIG.read(CREDENTIALS_INI_FILE)
-
-
-def get_str(section, key):
-    return str(CONFIG.get(section, key))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/dev/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = get_str("WEBAPP", "secret_key")
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with these turned on in production!
 
 # Enable debug by default, this allows us to serve static content without
 # having to run `manage.py collectstatic` each time. On production
 # we use Apache to serve static content instead.
-DEBUG = not "AUTOREDUCTION_PRODUCTION" in os.environ
+if not "AUTOREDUCTION_PRODUCTION" in os.environ:
+    DEBUG = True
+    load_dotenv()
+else:
+    DEBUG = False
 
 DEBUG_PROPAGATE_EXCEPTIONS = True
 DEBUG_TOOLBAR_AVAILABLE = False
@@ -148,18 +142,18 @@ STATICFILES_DIRS = [
 
 ACTIVEMQ = {
     'topics': ['/queue/DataReady'],
-    'username': get_str('QUEUE', 'user'),
-    'password': get_str('QUEUE', 'password'),
-    'broker': [(get_str('QUEUE', 'host'), get_str('QUEUE', 'port'))],
+    'username': os.getenv('ACTIVEMQ_USERNAME'),
+    'password': os.getenv('ACTIVEMQ_PASSWORD'),
+    'broker': [os.getenv('ACTIVEMQ_HOST'), os.getenv('ACTIVEMQ_PORT')],
     'SSL': False
 }
 
 # ICAT
 ICAT = {
-    'AUTH': get_str('ICAT', 'auth'),
-    'URL': get_str('ICAT', 'host'),
-    'USER': get_str('ICAT', 'user'),
-    'PASSWORD': get_str('ICAT', 'password')
+    'AUTH': os.getenv('ICAT_AUTH'),
+    'URL': os.getenv('ICAT_HOST'),
+    'USER': os.getenv('ICAT_USER'),
+    'PASSWORD': os.getenv('ICAT_PASSWORD')
 }
 
 # Outdated Browsers
