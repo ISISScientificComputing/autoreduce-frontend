@@ -23,11 +23,10 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 # Enable debug by default, this allows us to serve static content without
 # having to run `manage.py collectstatic` each time. On production
 # we use Apache to serve static content instead.
+DEBUG = False
 if not "AUTOREDUCTION_PRODUCTION" in os.environ:
     DEBUG = True
     load_dotenv()
-else:
-    DEBUG = False
 
 DEBUG_PROPAGATE_EXCEPTIONS = True
 DEBUG_TOOLBAR_AVAILABLE = False
