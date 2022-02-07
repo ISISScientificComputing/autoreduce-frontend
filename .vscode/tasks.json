@@ -4,28 +4,6 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Migrate all",
-            "detail": "Migrates credentials and database (with PR fixtures)",
-            "type": "shell",
-            "problemMatcher": [],
-            "dependsOn": [
-                "Migrate credentials",
-                "Migrate database (with PR fixtures)"
-            ],
-            "dependsOrder": "sequence",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
-        },
-        {
-            "label": "Migrate credentials",
-            "type": "shell",
-            "command": "make credentials",
-            "problemMatcher": [],
-            "group": "build"
-        },
-        {
             "label": "Migrate database (with PR fixtures)",
             "type": "shell",
             "command": "make migrate-with-fixtures",
