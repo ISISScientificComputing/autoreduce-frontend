@@ -113,5 +113,5 @@ class RerunForm(forms.Form):
     )
 
     script_choice = forms.ChoiceField(choices=REDUCTION_SCRIPT_CHOICES,
-                                      widget=forms.RadioSelect,
+                                      widget=forms.RadioSelect(),
                                       initial='use_stored_reduction_script')
