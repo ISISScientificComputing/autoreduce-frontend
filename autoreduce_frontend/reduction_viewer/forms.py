@@ -99,7 +99,10 @@ class FailedQueueOptionsForm(forms.Form):
     )
 
 
-class SelectSoftwareForm(forms.Form):
+class RerunForm(forms.Form):
+    REDUCTION_SCRIPT_CHOICES = [('use_stored_reduction_script', 'Use stored reduction script'),
+                                ('use_reducepy', 'Use reduce.py file')]
+
     qs = Software.objects.all()
     initial_value = qs.first()
     software = forms.ModelChoiceField(
@@ -108,3 +111,7 @@ class SelectSoftwareForm(forms.Form):
         widget=forms.Select(),
         initial=initial_value,
     )
+
+    script_choice = forms.ChoiceField(choices=REDUCTION_SCRIPT_CHOICES,
+                                      widget=forms.RadioSelect(),
+                                      initial='use_stored_reduction_script')
