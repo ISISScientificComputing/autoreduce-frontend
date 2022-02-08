@@ -47,12 +47,12 @@ class RerunJobsPage(Page, RerunFormMixin, NavbarMixin, FooterMixin, TourMixin):
 
     @property
     def reuse_script_radio(self) -> WebElement:
-        """Finds and returns the reuse script radio on the page"""
+        """Finds and returns the reuse script radio button on the page"""
         return self.driver.find_element(By.XPATH, "//label[@for='id_script_choice_0']")
 
     @property
     def use_reducepy_file_radio(self) -> WebElement:
-        """Finds and returns the reuse script checkbox on the page"""
+        """Finds and returns the use reduce.py file radio button on the page"""
         return self.driver.find_element(By.XPATH, "//label[@for='id_script_choice_1']")
 
     @property
