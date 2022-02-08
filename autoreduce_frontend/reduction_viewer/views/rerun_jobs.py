@@ -2,7 +2,7 @@ import logging
 
 from autoreduce_db.reduction_viewer.models import (Instrument, Status)
 from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions, login_and_uows_valid, render_with)
-from autoreduce_frontend.reduction_viewer.forms import SelectSoftwareForm
+from autoreduce_frontend.reduction_viewer.forms import RerunForm
 from autoreduce_frontend.reduction_viewer.views.common import prepare_arguments_for_render
 
 LOGGER = logging.getLogger(__package__)
@@ -19,7 +19,7 @@ def rerun_jobs(request, instrument=None):
     LOGGER.info('Submitting runs')
     # pylint:disable=no-member
     instrument = Instrument.objects.prefetch_related('reduction_runs').get(name=instrument)
-    software_form = SelectSoftwareForm()
+    software_form = RerunForm()
     if request.method == 'GET':
         processing_status = Status.get_processing()
         queued_status = Status.get_queued()
