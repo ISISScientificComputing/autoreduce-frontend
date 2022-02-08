@@ -6,7 +6,6 @@
 # ############################################################################### #
 # pylint: skip-file
 import os
-from dotenv import load_dotenv
 
 from autoreduce_db.autoreduce_django.settings import DATABASES as autoreduce_db_settings
 
@@ -26,7 +25,6 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 DEBUG = False
 if not "AUTOREDUCTION_PRODUCTION" in os.environ:
     DEBUG = True
-    load_dotenv()
 
 DEBUG_PROPAGATE_EXCEPTIONS = True
 DEBUG_TOOLBAR_AVAILABLE = False
