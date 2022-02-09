@@ -79,6 +79,11 @@ jobs:
         with:
           package_name: autoreduce_frontend
 
+      - name: Remote dotenv to Environment (configserver alike)
+        uses: Steph0/dotenv-configserver@v1.2.0
+        with:
+          repository: "autoreduction/autoreduce-workspace"
+
       - name: Run MySQL Docker
         run: docker run --rm --name mysql-ar -e MYSQL_ROOT_PASSWORD=password -d --network=host mysql:latest
 
@@ -94,16 +99,10 @@ jobs:
       - name: Wait until the Selenium instance is ready
         run: until nc -w 1 127.0.0.1 4444; do sleep 1; done
 
-      - name: Remote dotenv to Environment (configserver alike)
-        uses: Steph0/dotenv-configserver@v1.2.0
-        with:
-          repository: "autoreduction/autoreduce-workspace"
-          profile: "integration"
-
       - name: Run tests
         run: |
           env
-          pytest autoreduce_frontend/selenium_tests/tests/integration --cov-report=xml --cov=autoreduce_frontend --showlocals -v
+          SELENIUM_REMOTE=1 RUNNING_VIA_PYTEST=true TESTING_MYSQL_DB=true pytest autoreduce_frontend/selenium_tests/tests/integration --cov-report=xml --cov=autoreduce_frontend --showlocals -v
 
       - uses: codecov/codecov-action@v2
         with:
