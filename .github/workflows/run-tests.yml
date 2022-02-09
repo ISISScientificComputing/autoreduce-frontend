@@ -75,14 +75,14 @@ jobs:
         with:
           python-version: 3.8
 
-      - uses: autoreduction/autoreduce-actions/build@main
-        with:
-          package_name: autoreduce_frontend
-
       - name: Remote dotenv to Environment (configserver alike)
         uses: Steph0/dotenv-configserver@v1.2.0
         with:
           repository: "autoreduction/autoreduce-workspace"
+
+      - uses: autoreduction/autoreduce-actions/build@main
+        with:
+          package_name: autoreduce_frontend
 
       - name: Run MySQL Docker
         run: docker run --rm --name mysql-ar -e MYSQL_ROOT_PASSWORD=password -d --network=host mysql:latest
