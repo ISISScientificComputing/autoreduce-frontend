@@ -1,4 +1,4 @@
-all: credentials migrate-with-fixtures
+all: migrate-with-fixtures
 
 package-dev:
 	python setup.py sdist bdist_wheel
@@ -9,9 +9,6 @@ package:
 	python setup.py sdist bdist_wheel
 	twine upload --repository pypi dist/*
 	rm -rf build dist
-
-credentials:
-	autoreduce-creds-migrate
 
 migrate:
 	autoreduce-webapp-manage migrate
