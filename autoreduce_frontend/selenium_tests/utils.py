@@ -18,7 +18,7 @@ from autoreduce_utils.clients.producer import Publisher
 
 from autoreduce_qp.queue_processor.consumer import Consumer
 from autoreduce_qp.model.database import access as db
-from autoreduce_qp.queue_processor.queue_listener import QueueListener, setup_connection
+from autoreduce_qp.queue_processor.consumer import setup_kafka_connections
 
 from autoreduce_qp.systemtests.utils.data_archive import DataArchive
 
@@ -95,7 +95,7 @@ def setup_external_services(instrument_name: str, start_year: int,
     """
     data_archive = setup_archive(instrument_name, start_year, end_year)
     try:
-        publisher, consumer = setup_connection()
+        publisher, consumer = setup_kafka_connections()
     except ConnectionException as err:
         raise RuntimeError("Could not connect to ActiveMQ - check your credentials. If running locally check that "
                            "the ActiveMQ Docker container is running") from err
