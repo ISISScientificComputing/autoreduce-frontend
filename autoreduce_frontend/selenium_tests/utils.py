@@ -14,7 +14,7 @@ from selenium.common.exceptions import ElementClickInterceptedException
 from selenium.webdriver.support.wait import WebDriverWait
 
 from autoreduce_utils.clients.connection_exception import ConnectionException
-from autoreduce_utils.clients.confluent_producer import Publisher
+from autoreduce_utils.clients.producer import Publisher
 
 from autoreduce_qp.queue_processor.confluent_consumer import Consumer
 from autoreduce_qp.model.database import access as db
