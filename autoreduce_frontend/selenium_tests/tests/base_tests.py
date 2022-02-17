@@ -103,7 +103,6 @@ class BaseIntegrationTestCase(BaseTestCase):
         """
         Destroys the created data-archive and disconnects the database and queue clients
         """
-        cls.queue_client.disconnect()
         cls.data_archive.delete()
         super().tearDownClass()
 
