@@ -24,7 +24,7 @@ class TestRunSummaryPageIntegration(BaseIntegrationTestCase):
         super().setUpClass()
         cls.rb_number = 1234567
         cls.run_number = 99999
-        cls.data_archive, cls.queue_client, cls.listener = setup_external_services(cls.instrument_name, 21, 21)
+        cls.data_archive, cls.publisher, cls.consumer = setup_external_services(cls.instrument_name, 21, 21)
         cls.data_archive.add_reduction_script(cls.instrument_name,
                                               """def main(input_file, output_dir): print('some text')""")
         cls.data_archive.add_reduce_vars_script(cls.instrument_name,

@@ -23,7 +23,7 @@ class TestBatchRunSummaryPageIntegration(BaseIntegrationTestCase):
         cls.rb_number = 1234567
         cls.run_number = [123, 124, 125]
         cls.batch_run_test = True
-        cls.data_archive, cls.queue_client, cls.listener = setup_external_services(cls.instrument_name, 21, 21)
+        cls.data_archive, cls.publisher, cls.consumer = setup_external_services(cls.instrument_name, 21, 21)
         cls.data_archive.add_reduction_script(cls.instrument_name,
                                               """def main(input_file, output_dir): print('some text')""")
         cls.data_archive.add_reduce_vars_script(cls.instrument_name,
