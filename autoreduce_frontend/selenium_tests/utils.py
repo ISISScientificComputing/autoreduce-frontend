@@ -5,6 +5,7 @@
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
 from typing import Optional, Tuple
+import time
 from autoreduce_db.reduction_viewer.models import ReductionRun, Status
 
 from django.urls.base import reverse
@@ -52,7 +53,7 @@ def submit_and_wait_for_result(test, expected_runs=1, after_submit_url: Optional
         expected_runs: The number of additional runs that should be in the database after the submission
         after_submit_url: The url to go to after the submission. If None, the default url is used.
     """
-    test.listener._processing = True  # pylint:disable=protected-access
+    test.consumer._processing = True  # pylint:disable=protected-access
     if not after_submit_url:
         expected_url = reverse("runs:run_confirmation", kwargs={"instrument": test.instrument_name})
     else:
@@ -68,6 +69,13 @@ def submit_and_wait_for_result(test, expected_runs=1, after_submit_url: Optional
 
     total_expected = ReductionRun.objects.count() + expected_runs
     WebDriverWait(test.driver, 30).until(submit_successful)
+
+    start_time = time.time()
+    while test.consumer.is_processing_message():
+        time.sleep(5)
+        if time.time() > start_time + 120:  # Prevent waiting indefinitely and break after 2 minutes
+            break
+    time.sleep(10)  # Wait for the message to be processed
 
     def runs_completed(_):
         # If your count is innacurate - check that the status of the runs
