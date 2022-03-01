@@ -26,7 +26,7 @@ jobs:
           repository: "autoreduction/autoreduce-workspace"
 
       - name: Start Selenium docker daemon
-        run: docker run --name selenium --rm -d --network=host -v /dev/shm:/dev/shm selenium/standalone-chrome:4.1.2-20220208
+        run: docker run --name selenium --rm -d --network=host -v /dev/shm:/dev/shm selenium/standalone-chrome:4.1.2-20220217
 
       - name: Wait until the Selenium instance is ready
         run: until nc -w 1 127.0.0.1 4444; do sleep 1; done
@@ -94,7 +94,7 @@ jobs:
         run: gunicorn autoreduce_rest_api.autoreduce_django.wsgi:application -b 127.0.0.1:8001 -e TESTING_MYSQL_DB=true &
 
       - name: Start Selenium docker daemon
-        run: docker run --name selenium --rm -d --network=host -v /dev/shm:/dev/shm selenium/standalone-chrome:4.1.2-20220208
+        run: docker run --name selenium --rm -d --network=host -v /dev/shm:/dev/shm selenium/standalone-chrome:4.1.2-20220217
 
       - name: Wait until the Selenium instance is ready
         run: until nc -w 1 127.0.0.1 4444; do sleep 1; done
