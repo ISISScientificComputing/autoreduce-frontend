@@ -9,7 +9,7 @@ from django.urls import reverse
 
 from autoreduce_frontend.selenium_tests.pages.run_summary_page import RunSummaryPage
 from autoreduce_frontend.selenium_tests.tests.base_tests import BaseIntegrationTestCase
-from autoreduce_frontend.selenium_tests.utils import setup_external_services, submit_and_wait_for_result
+from autoreduce_frontend.selenium_tests.utils import submit_and_wait_for_result
 
 
 class TestBatchRunSummaryPageIntegration(BaseIntegrationTestCase):
@@ -23,7 +23,6 @@ class TestBatchRunSummaryPageIntegration(BaseIntegrationTestCase):
         cls.rb_number = 1234567
         cls.run_number = [123, 124, 125]
         cls.batch_run_test = True
-        cls.data_archive, cls.queue_client, cls.listener = setup_external_services(cls.instrument_name, 21, 21)
         cls.data_archive.add_reduction_script(cls.instrument_name,
                                               """def main(input_file, output_dir): print('some text')""")
         cls.data_archive.add_reduce_vars_script(cls.instrument_name,

@@ -5,6 +5,7 @@
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
 from typing import Optional, Tuple
+import time
 from autoreduce_db.reduction_viewer.models import ReductionRun, Status
 
 from django.urls.base import reverse
@@ -14,10 +15,12 @@ from selenium.common.exceptions import ElementClickInterceptedException
 from selenium.webdriver.support.wait import WebDriverWait
 
 from autoreduce_utils.clients.connection_exception import ConnectionException
-from autoreduce_utils.clients.queue_client import QueueClient
+from autoreduce_utils.clients.producer import Publisher
 
+from autoreduce_qp.queue_processor.confluent_consumer import Consumer
 from autoreduce_qp.model.database import access as db
-from autoreduce_qp.queue_processor.queue_listener import QueueListener, setup_connection
+from autoreduce_qp.queue_processor.confluent_consumer import setup_kafka_connections
+
 from autoreduce_qp.systemtests.utils.data_archive import DataArchive
 
 # pylint:disable=no-member
@@ -50,7 +53,7 @@ def submit_and_wait_for_result(test, expected_runs=1, after_submit_url: Optional
         expected_runs: The number of additional runs that should be in the database after the submission
         after_submit_url: The url to go to after the submission. If None, the default url is used.
     """
-    test.listener._processing = True  # pylint:disable=protected-access
+    test.consumer._processing = True  # pylint:disable=protected-access
     if not after_submit_url:
         expected_url = reverse("runs:run_confirmation", kwargs={"instrument": test.instrument_name})
     else:
@@ -67,6 +70,13 @@ def submit_and_wait_for_result(test, expected_runs=1, after_submit_url: Optional
     total_expected = ReductionRun.objects.count() + expected_runs
     WebDriverWait(test.driver, 30).until(submit_successful)
 
+    start_time = time.time()
+    while test.consumer.is_processing_message():
+        time.sleep(5)
+        if time.time() > start_time + 120:  # Prevent waiting indefinitely and break after 2 minutes
+            break
+    time.sleep(10)  # Wait for the message to be processed
+
     def runs_completed(_):
         # If your count is innacurate - check that the status of the runs
         # in the fixtures is not set to be "queued" by accident. Any other status will work.
@@ -82,7 +92,7 @@ def submit_and_wait_for_result(test, expected_runs=1, after_submit_url: Optional
 
 
 def setup_external_services(instrument_name: str, start_year: int,
-                            end_year: int) -> Tuple[DataArchive, QueueClient, QueueListener]:
+                            end_year: int) -> Tuple[DataArchive, Publisher, Consumer]:
     """
     Sets up a DataArchive complete with scripts, database client and queue client and listeners and returns their
     objects in a tuple
@@ -93,12 +103,12 @@ def setup_external_services(instrument_name: str, start_year: int,
     """
     data_archive = setup_archive(instrument_name, start_year, end_year)
     try:
-        queue_client, listener = setup_connection()
+        publisher, consumer = setup_kafka_connections()
     except ConnectionException as err:
         raise RuntimeError("Could not connect to ActiveMQ - check your credentials. If running locally check that "
                            "the ActiveMQ Docker container is running") from err
 
-    return data_archive, queue_client, listener
+    return data_archive, publisher, consumer
 
 
 def setup_archive(instrument_name: str, start_year: int, end_year: int) -> DataArchive:
