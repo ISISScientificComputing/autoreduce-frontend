@@ -1,5 +1,5 @@
 name: Tests
-on: [ push ]
+on: [push]
 
 jobs:
   selenium-pages:
@@ -26,14 +26,14 @@ jobs:
           repository: "autoreduction/autoreduce-workspace"
 
       - name: Start Selenium docker daemon
-        run: docker run --name selenium --rm -d --network=host -v /dev/shm:/dev/shm selenium/standalone-chrome:4.0.0-beta-3-prerelease-20210422
+        run: docker run --name selenium --rm -d --network=host -v /dev/shm:/dev/shm selenium/standalone-chrome:4.1.2-20220217
 
       - name: Wait until the Selenium instance is ready
         run: until nc -w 1 127.0.0.1 4444; do sleep 1; done
 
       - name: Run tests
         run: |
-          SELENIUM_REMOTE=1 RUNNING_VIA_PYTEST=true pytest autoreduce_frontend --cov-report=xml --cov=autoreduce_frontend --ignore=autoreduce_frontend/selenium_tests/tests/integration --showlocals -v 
+          SELENIUM_REMOTE=1 RUNNING_VIA_PYTEST=true pytest autoreduce_frontend --cov-report=xml --cov=autoreduce_frontend --ignore=autoreduce_frontend/selenium_tests/tests/integration --showlocals -v
 
       - uses: codecov/codecov-action@v2
         with:
@@ -94,7 +94,7 @@ jobs:
         run: gunicorn autoreduce_rest_api.autoreduce_django.wsgi:application -b 127.0.0.1:8001 -e TESTING_MYSQL_DB=true &
 
       - name: Start Selenium docker daemon
-        run: docker run --name selenium --rm -d --network=host -v /dev/shm:/dev/shm selenium/standalone-chrome:4.0.0-beta-3-prerelease-20210422
+        run: docker run --name selenium --rm -d --network=host -v /dev/shm:/dev/shm selenium/standalone-chrome:4.1.2-20220217
 
       - name: Wait until the Selenium instance is ready
         run: until nc -w 1 127.0.0.1 4444; do sleep 1; done
@@ -126,7 +126,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.8']
+        python-version: ["3.8"]
 
     steps:
       - uses: actions/checkout@v2
@@ -149,14 +149,13 @@ jobs:
           pip install -r requirements.txt
           pip install -e .
 
-
   Inspection:
     name: Code Inspection
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.8']
+        python-version: ["3.8"]
 
     steps:
       - uses: actions/checkout@v2
@@ -180,4 +179,3 @@ jobs:
       - uses: autoreduction/autoreduce-actions/code_inspection@main
         with:
           package_name: autoreduce_frontend
-

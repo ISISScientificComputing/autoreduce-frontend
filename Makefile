@@ -18,7 +18,7 @@ migrate-with-fixtures: migrate
 
 selenium:
 	sudo docker kill selenium && docker rm selenium || echo "Selenium container isn't already running, just starting it."
-	sudo docker run --network host --name selenium --rm -d -v /dev/shm:/dev/shm selenium/standalone-chrome:4.0.0-beta-3-prerelease-20210422
+	sudo docker run --network host --name selenium --rm -d -v /dev/shm:/dev/shm selenium/standalone-chrome:4.1.2-20220217
 
 mysql-test:
 	sudo docker kill mysql-ar || echo "Selenium container isn't already running, just starting it."
