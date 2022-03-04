@@ -127,23 +127,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 if not DEBUG:
-    STATIC_ROOT = '/staticfiles'
+    STATIC_ROOT = '/var/www/api'
 else:
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
-
-# ActiveMQ
-
-ACTIVEMQ = {
-    'topics': ['/queue/DataReady'],
-    'username': os.getenv('ACTIVEMQ_USERNAME'),
-    'password': os.getenv('ACTIVEMQ_PASSWORD'),
-    'broker': [os.getenv('ACTIVEMQ_HOST'), os.getenv('ACTIVEMQ_PORT')],
-    'SSL': False
-}
 
 # ICAT
 ICAT = {
