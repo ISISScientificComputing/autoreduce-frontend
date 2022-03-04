@@ -39,9 +39,9 @@ debug_hosts = ['127.0.0.1', 'localhost', 'reducedev2.isis.cclrc.ac.uk']
 prod_hosts = ['127.0.0.1', 'localhost', '0.0.0.0', 'reduce.isis.cclrc.ac.uk']
 
 if DEBUG:
-    ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', debug_hosts)
+    ALLOWED_HOSTS = [os.getenv('DJANGO_ALLOWED_HOSTS', debug_hosts)]
 else:
-    ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', prod_hosts)
+    ALLOWED_HOSTS = [os.getenv('DJANGO_ALLOWED_HOSTS', prod_hosts)]
 
 INTERNAL_IPS = ['localhost', '127.0.0.1']
 
