@@ -135,16 +135,6 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
-# ActiveMQ
-
-ACTIVEMQ = {
-    'topics': ['/queue/DataReady'],
-    'username': os.getenv('ACTIVEMQ_USERNAME'),
-    'password': os.getenv('ACTIVEMQ_PASSWORD'),
-    'broker': [os.getenv('ACTIVEMQ_HOST'), os.getenv('ACTIVEMQ_PORT')],
-    'SSL': False
-}
-
 # ICAT
 ICAT = {
     'AUTH': os.getenv('ICAT_AUTH'),

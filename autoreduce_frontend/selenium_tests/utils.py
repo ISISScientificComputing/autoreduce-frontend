@@ -105,8 +105,8 @@ def setup_external_services(instrument_name: str, start_year: int,
     try:
         publisher, consumer = setup_kafka_connections()
     except ConnectionException as err:
-        raise RuntimeError("Could not connect to ActiveMQ - check your credentials. If running locally check that "
-                           "the ActiveMQ Docker container is running") from err
+        raise RuntimeError("Could not connect to Kafka - check your broker. If running locally check that "
+                           "the Kafka Docker container is running") from err
 
     return data_archive, publisher, consumer
 
