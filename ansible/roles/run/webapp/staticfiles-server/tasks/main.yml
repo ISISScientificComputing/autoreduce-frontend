@@ -1,7 +1,5 @@
 # Installs and configures nginx to serve static files from the webapp host
-
 ---
-
 - name: Install nginx
   yum:
     name: nginx
@@ -34,5 +32,5 @@
 - name: Start service nginx
   ansible.builtin.service:
     name: nginx
+    enabled: true
     state: restarted
-
