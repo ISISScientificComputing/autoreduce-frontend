@@ -12,6 +12,7 @@ from django.core.exceptions import PermissionDenied
 from django.http import HttpRequest
 from django.shortcuts import redirect
 from django.shortcuts import render
+import httpagentparser
 
 from autoreduce_db.reduction_viewer.models import Notification
 from autoreduce_db.reduction_viewer.models import ReductionRun, Experiment
@@ -126,8 +127,9 @@ def render_with(template):
                     bad_browsers.append((browser, version))
 
                 # Get the family and version from the user_agent
-                family = request.user_agent.browser.family
-                version = request.user_agent.browser.version_string
+                data = httpagentparser.detect(request.META.get('HTTP_USER_AGENT', ''))
+                family = data["browser"]["name"]
+                version = data["browser"]["version"]
 
                 # Make sure we are only comparing against a single integer
                 if '.' in version:
