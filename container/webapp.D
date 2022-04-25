@@ -1,8 +1,17 @@
 FROM ghcr.io/autoreduction/base
 
+# Installs frontend from your local repository
+# Set version if you want to install from pypi
 # add --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple for packages in test.pypi.org
-# also when updating the version here make sure it matches the one in setup.py
-RUN python3 -m pip install --user --no-cache-dir gunicorn autoreduce-frontend==22.0.0.dev17
+RUN python3 -m pip install --user --no-cache-dir gunicorn autoreduce-frontend/
 
-CMD autoreduce-webapp-manage collectstatic --no-input &&\
-    gunicorn --workers 4 -b 0.0.0.0:8000 autoreduce_frontend.autoreduce_webapp.wsgi
+# Add fixtures to the project for dev/debugging
+ADD --chown=isisautoreduce:isisautoreduce autoreduce_frontend/autoreduce_webapp/fixtures/ fixtures/ 
+
+USER root
+RUN mkdir -p /var/www/api/
+RUN chown isisautoreduce:isisautoreduce /var/www/api/
+USER isisautoreduce
+
+EXPOSE 8000
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "4", "autoreduce_frontend.autoreduce_webapp.wsgi"]
