@@ -6,10 +6,6 @@ RUN python3 -m pip install --user --no-cache-dir gunicorn
 ADD . .
 RUN python3 -m pip install --user --no-cache-dir .
 
-# Uncomment below if you want to install from pypi
-# add --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple for packages in test.pypi.org
-# RUN python3 -m pip install --user --no-cache-dir autoreduce-frontend==22.0.0.dev21
-
 # Add fixtures to the project for dev/debugging
 ADD --chown=isisautoreduce:isisautoreduce autoreduce_frontend/autoreduce_webapp/fixtures/ fixtures/ 
 
