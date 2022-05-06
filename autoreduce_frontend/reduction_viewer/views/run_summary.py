@@ -2,6 +2,7 @@ import logging
 from django.shortcuts import redirect
 from django.urls import reverse
 from autoreduce_db.reduction_viewer.models import ReductionRun
+from autoreduce_qp.queue_processor.reduction.service import ReductionScript
 from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions, login_and_uows_valid, render_with)
 
 from autoreduce_frontend.plotting.plot_handler import PlotHandler
@@ -10,7 +11,6 @@ from autoreduce_frontend.reduction_viewer.views.common import get_arguments_from
 from autoreduce_frontend.reduction_viewer.view_utils import (get_interactive_plot_data, get_navigation_runs,
                                                              linux_to_windows_path, make_data_analysis_url,
                                                              windows_to_linux_path, started_by_id_to_name)
-from autoreduce_qp.queue_processor.reduction.service import ReductionScript
 
 LOGGER = logging.getLogger(__package__)
 
@@ -101,8 +101,7 @@ def run_summary_run(request, history, instrument_name=None, run_version=0, run_n
     page_type = request.GET.get('sort', '-run_number')
     next_run, previous_run, newest_run, oldest_run = get_navigation_runs(instrument_name, run, page_type)
 
-    script_path = ReductionScript(instrument_name)
-    script_present = script_path.exists()
+    script_present = ReductionScript(instrument_name).exists()
     if not script_present:
         # Disable one of the radio buttons
         software_form.fields['script_choice'].choices = [('use_stored_reduction_script', 'Use stored reduction script')]

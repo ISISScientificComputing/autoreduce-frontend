@@ -6,7 +6,6 @@
 # ############################################################################### #
 """Utility functions for the view of django models."""
 # pylint:disable=no-member
-import functools
 import logging
 import os
 from typing import Dict, Tuple
@@ -14,8 +13,7 @@ from typing import Dict, Tuple
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.http import url_has_allowed_host_and_scheme
-from autoreduce_db.reduction_viewer.models import Instrument, ReductionRun
-from autoreduce_qp.queue_processor.reduction.service import ReductionScript
+from autoreduce_db.reduction_viewer.models import ReductionRun
 from autoreduce_frontend.autoreduce_webapp.settings import DATA_ANALYSIS_BASE_URL
 from autoreduce_frontend.autoreduce_webapp.settings import (ALLOWED_HOSTS, UOWS_LOGIN_URL)
 from autoreduce_frontend.autoreduce_webapp.templatetags.colour_table_row import colour_table_row
