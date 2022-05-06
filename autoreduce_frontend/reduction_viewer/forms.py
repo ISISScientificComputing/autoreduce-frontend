@@ -102,11 +102,18 @@ class FailedQueueOptionsForm(forms.Form):
 class RerunForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
+        self.script_present = kwargs.pop('script_present')
         super().__init__(*args, **kwargs)
         self.fields['software'].initial = Software.objects.all()[0]
-
-    REDUCTION_SCRIPT_CHOICES = [('use_stored_reduction_script', 'Use stored reduction script'),
-                                ('use_reducepy', 'Use reduce.py file')]
+        if self.script_present:
+            # If the script is not present, we don't want to show the option to rerun
+            self.REDUCTION_SCRIPT_CHOICES = [('use_stored_reduction_script', 'Use stored reduction script'),
+                                             ('use_reducepy', 'Use reduce.py file')]
+        else:
+            self.REDUCTION_SCRIPT_CHOICES = [('use_stored_reduction_script', 'Use stored reduction script')]
+        self.fields['script_choice'] = forms.ChoiceField(choices=self.REDUCTION_SCRIPT_CHOICES,
+                                                         widget=forms.RadioSelect,
+                                                         initial='use_stored_reduction_script')
 
     qs = Software.objects.all()
     software = forms.ModelChoiceField(
@@ -114,7 +121,3 @@ class RerunForm(forms.Form):
         empty_label="Select a software",
         widget=forms.Select(),
     )
-
-    script_choice = forms.ChoiceField(choices=REDUCTION_SCRIPT_CHOICES,
-                                      widget=forms.RadioSelect(),
-                                      initial='use_stored_reduction_script')

@@ -86,8 +86,6 @@ def run_summary_run(request, history, instrument_name=None, run_version=0, run_n
         data_location = "\n".join(
             [linux_to_windows_path(data_location.file_path) for data_location in run.data_location.all()])
 
-    software_form = RerunForm()
-
     data_analysis_link_url = make_data_analysis_url(reduction_location) if reduction_location else ""
     rb_number = run.experiment.reference_number
     standard_vars, advanced_vars, variable_help = prepare_arguments_for_render(run.arguments, run.instrument.name)
@@ -102,9 +100,7 @@ def run_summary_run(request, history, instrument_name=None, run_version=0, run_n
     next_run, previous_run, newest_run, oldest_run = get_navigation_runs(instrument_name, run, page_type)
 
     script_present = ReductionScript(instrument_name).exists()
-    if not script_present:
-        # Disable one of the radio buttons
-        software_form.fields['script_choice'].choices = [('use_stored_reduction_script', 'Use stored reduction script')]
+    software_form = RerunForm(script_present=script_present)
 
     context_dictionary = {
         'run': run,
