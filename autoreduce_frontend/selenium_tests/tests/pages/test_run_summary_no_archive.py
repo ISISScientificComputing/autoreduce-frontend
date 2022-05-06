@@ -34,5 +34,5 @@ class TestRunSummaryPageNoArchive(NavbarTestMixin, BaseTestCase, FooterTestMixin
         are no current values.
         """
         self.page.toggle_button.click()
-        assert WebDriverWait(self.driver, 10).until(lambda _: self.page.warning_message.is_displayed())
-        assert "The reduce_vars.py script is missing" in self.page.warning_message.text
+        assert WebDriverWait(self.driver, 10).until(lambda _: self.page.vars_warning_message.is_displayed())
+        assert "The reduce_vars.py script is missing" in self.page.vars_warning_message.text
