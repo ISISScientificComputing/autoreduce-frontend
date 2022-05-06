@@ -107,11 +107,11 @@ class RerunForm(forms.Form):
         self.fields['software'].initial = Software.objects.all()[0]
         if self.script_present:
             # If the script is not present, we don't want to show the option to rerun
-            self.REDUCTION_SCRIPT_CHOICES = [('use_stored_reduction_script', 'Use stored reduction script'),
+            self.reduction_script_choices = [('use_stored_reduction_script', 'Use stored reduction script'),
                                              ('use_reducepy', 'Use reduce.py file')]
         else:
-            self.REDUCTION_SCRIPT_CHOICES = [('use_stored_reduction_script', 'Use stored reduction script')]
-        self.fields['script_choice'] = forms.ChoiceField(choices=self.REDUCTION_SCRIPT_CHOICES,
+            self.reduction_script_choices = [('use_stored_reduction_script', 'Use stored reduction script')]
+        self.fields['script_choice'] = forms.ChoiceField(choices=self.reduction_script_choices,
                                                          widget=forms.RadioSelect,
                                                          initial='use_stored_reduction_script')
 
