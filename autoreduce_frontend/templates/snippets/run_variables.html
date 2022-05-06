@@ -58,6 +58,15 @@
             </div>
             {% crispy software_form %}
             <div class="form-group variables-buttons">
+                    {% if not has_reduce_script %}
+                        <div class="alert alert-warning">
+                            <p class="text-center " id="warning_message">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                    &nbsp;&nbsp;The reduce.py script is missing for this instrument. You may only re-run with the previous script used for this Run.
+                                    Please create it if you wish to re-run with a different script.
+                            </p>
+                        </div>
+                    {% endif %}
                     {% if not has_reduce_vars %}
                         <div class="alert alert-warning">
                             <p class="text-center " id="warning_message">
