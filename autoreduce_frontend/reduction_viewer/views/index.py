@@ -5,10 +5,9 @@ from autoreduce_frontend.autoreduce_webapp.icat_cache import ICATConnectionExcep
 from autoreduce_frontend.autoreduce_webapp.settings import DEVELOPMENT_MODE
 from autoreduce_frontend.autoreduce_webapp.uows_client import UOWSClient
 from autoreduce_frontend.autoreduce_webapp.views import render_error
-from autoreduce_frontend.reduction_viewer.view_utils import deactivate_invalid_instruments, make_return_url
+from autoreduce_frontend.reduction_viewer.view_utils import make_return_url
 
 
-@deactivate_invalid_instruments
 def index(request):
     """Render the index page."""
     return_url = make_return_url(request, request.GET.get('next'))
