@@ -6,6 +6,7 @@
 # ############################################################################### #
 """Utility functions for the view of django models."""
 # pylint:disable=no-member
+import functools
 import logging
 import os
 from typing import Dict, Tuple
@@ -13,12 +14,38 @@ from typing import Dict, Tuple
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.http import url_has_allowed_host_and_scheme
-from autoreduce_db.reduction_viewer.models import ReductionRun
+from autoreduce_db.reduction_viewer.models import Instrument, ReductionRun
+from autoreduce_qp.queue_processor.reduction.service import ReductionScript
 from autoreduce_frontend.autoreduce_webapp.settings import DATA_ANALYSIS_BASE_URL
 from autoreduce_frontend.autoreduce_webapp.settings import (ALLOWED_HOSTS, UOWS_LOGIN_URL)
 from autoreduce_frontend.autoreduce_webapp.templatetags.colour_table_row import colour_table_row
 
 LOGGER = logging.getLogger(__package__)
+
+
+def deactivate_invalid_instruments(func):
+    """Deactivate instruments if they are invalid."""
+
+    @functools.wraps(func)
+    def request_processor(request, *args, **kws):
+        """
+        Function decorator that checks the reduction script for all active
+        instruments and deactivates any that cannot be found.
+
+        Active: instruments that have a script file, or have previous runs
+        with a stored script.
+        """
+        instruments = Instrument.objects.all()
+        for instrument in instruments:
+            script_path = ReductionScript(instrument.name)
+            instrument.is_active = False
+            if script_path.exists() or len(ReductionRun.objects.filter(instrument=instrument)) > 0:
+                instrument.is_active = True
+            instrument.save(update_fields=['is_active'])
+
+        return func(request, *args, **kws)
+
+    return request_processor
 
 
 def get_interactive_plot_data(plot_locations):
