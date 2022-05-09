@@ -120,9 +120,9 @@ variable_help = {
                 </div>
                 <div class="card-body">
 
-                    <h4>reduce.py</h4>
+                    <h4>Reducing new data (reduce.py)</h4>
                     <p>
-                        In order to reduce your data you must have a reduction script written in python.
+                        In order to reduce new data, you must have a reduction script written in python.
                         This script should be called <code>reduce.py</code> and should be placed in the
                         <code>user/scripts/autoreduction/</code>
                         directory in the ISIS data archive.
@@ -160,6 +160,16 @@ def main(input_file, output_dir):
    # use rebin params defined in reduce_vars
    workspace = Rebin(workspace, params['rebin'])
    SaveNexus(workspace, output_dir)</code></pre>
+
+                    <h4>Re-running older reductions (Stored script)</h4>
+                    <p>
+                        If you have a previous run through Autoreduce, you can re-run it using the
+                        same script it was originally run with. This is useful if you have since made changes 
+                        to the reduction script and wish to re-run the same reduction with different variables.
+                        <br>
+                        To do this,	select "Run with stored script" when on the re-run jobs page.
+                        A reduce.py does not need to be present for this (it will simply be ignored if it is)
+                    </p>
 
                     <h4>Imports</h4>
                     <p>
