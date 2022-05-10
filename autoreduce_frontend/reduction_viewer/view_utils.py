@@ -31,13 +31,17 @@ def deactivate_invalid_instruments(func):
         """
         Function decorator that checks the reduction script for all active
         instruments and deactivates any that cannot be found.
+
+        Active: instruments that have a script file, or have previous runs
+        with a stored script.
         """
         instruments = Instrument.objects.all()
         for instrument in instruments:
             script_path = ReductionScript(instrument.name)
-            if instrument.is_active != script_path.exists():
-                instrument.is_active = script_path.exists()
-                instrument.save(update_fields=['is_active'])
+            instrument.is_active = False
+            if script_path.exists() or len(ReductionRun.objects.filter(instrument=instrument)) > 0:
+                instrument.is_active = True
+            instrument.save(update_fields=['is_active'])
 
         return func(request, *args, **kws)
 

@@ -56,11 +56,20 @@
                     </div>
                 </div>
             </div>
-            {% crispy software_form %}
+            {% crispy rerun_form %}
             <div class="form-group variables-buttons">
+                    {% if not has_reduce_script %}
+                        <div class="alert alert-warning">
+                            <p class="text-center " id="script_warning_message">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                    &nbsp;&nbsp;The reduce.py script is missing for this instrument. You may only re-run with the previous script used for this Run.
+                                    Please create it if you wish to re-run with a different script.
+                            </p>
+                        </div>
+                    {% endif %}
                     {% if not has_reduce_vars %}
                         <div class="alert alert-warning">
-                            <p class="text-center " id="warning_message">
+                            <p class="text-center " id="vars_warning_message">
                                 <i class="fas fa-exclamation-triangle"></i>
                                     &nbsp;&nbsp;The reduce_vars.py script is missing for this instrument. Please create it before being able to submit re-runs.
                             </p>

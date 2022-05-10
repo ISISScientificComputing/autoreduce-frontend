@@ -75,9 +75,14 @@ class RunSummaryPage(Page, RerunFormMixin, NavbarMixin, FooterMixin, TourMixin):
         return self.driver.find_element(By.ID, "currentScript")
 
     @property
-    def warning_message(self) -> WebElement:
-        """Return the 'warning_message' box."""
-        return self.driver.find_element(By.ID, "warning_message")
+    def vars_warning_message(self) -> WebElement:
+        """Return the reduce vars 'warning_message' box."""
+        return self.driver.find_element(By.ID, "vars_warning_message")
+
+    @property
+    def script_warning_message(self) -> WebElement:
+        """Return the reduce script 'warning_message' box."""
+        return self.driver.find_element(By.ID, "script_warning_message")
 
     @property
     def next_run_button(self) -> WebElement:

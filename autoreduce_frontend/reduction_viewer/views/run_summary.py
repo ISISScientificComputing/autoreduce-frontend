@@ -2,6 +2,7 @@ import logging
 from django.shortcuts import redirect
 from django.urls import reverse
 from autoreduce_db.reduction_viewer.models import ReductionRun
+from autoreduce_qp.queue_processor.reduction.service import ReductionScript
 from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions, login_and_uows_valid, render_with)
 
 from autoreduce_frontend.plotting.plot_handler import PlotHandler
@@ -85,8 +86,6 @@ def run_summary_run(request, history, instrument_name=None, run_version=0, run_n
         data_location = "\n".join(
             [linux_to_windows_path(data_location.file_path) for data_location in run.data_location.all()])
 
-    software_form = RerunForm()
-
     data_analysis_link_url = make_data_analysis_url(reduction_location) if reduction_location else ""
     rb_number = run.experiment.reference_number
     standard_vars, advanced_vars, variable_help = prepare_arguments_for_render(run.arguments, run.instrument.name)
@@ -100,12 +99,16 @@ def run_summary_run(request, history, instrument_name=None, run_version=0, run_n
     page_type = request.GET.get('sort', '-run_number')
     next_run, previous_run, newest_run, oldest_run = get_navigation_runs(instrument_name, run, page_type)
 
+    script_present = ReductionScript(instrument_name).exists()
+    rerun_form = RerunForm(script_present=script_present)
+
     context_dictionary = {
         'run': run,
         'runs': runs,
         'run_unique_id': run_unique_id,
         'run_version': run_version,
         'has_reduce_vars': bool(default_standard_variables),
+        'has_reduce_script': script_present,
         'batch_run': run.batch_run,
         'standard_variables': standard_vars,
         'advanced_variables': advanced_vars,
@@ -127,7 +130,8 @@ def run_summary_run(request, history, instrument_name=None, run_version=0, run_n
         'oldest_run': oldest_run,
         'next_run': next_run,
         'previous_run': previous_run,
-        'software_form': software_form
+        'rerun_form': rerun_form,
+        'script_present': script_present,
     }
 
     if reduction_location:
