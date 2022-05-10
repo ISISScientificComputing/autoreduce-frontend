@@ -100,7 +100,7 @@ def run_summary_run(request, history, instrument_name=None, run_version=0, run_n
     next_run, previous_run, newest_run, oldest_run = get_navigation_runs(instrument_name, run, page_type)
 
     script_present = ReductionScript(instrument_name).exists()
-    software_form = RerunForm(script_present=script_present)
+    rerun_form = RerunForm(script_present=script_present)
 
     context_dictionary = {
         'run': run,
@@ -130,7 +130,7 @@ def run_summary_run(request, history, instrument_name=None, run_version=0, run_n
         'oldest_run': oldest_run,
         'next_run': next_run,
         'previous_run': previous_run,
-        'software_form': software_form,
+        'rerun_form': rerun_form,
         'script_present': script_present,
     }
 

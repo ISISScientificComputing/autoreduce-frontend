@@ -31,7 +31,7 @@ def rerun_jobs(request, instrument=None):
         standard_vars, advanced_vars, variable_help = prepare_arguments_for_render(last_run.arguments,
                                                                                    last_run.instrument.name)
         script_present = ReductionScript(instrument).exists()
-        software_form = RerunForm(script_present=script_present)
+        rerun_form = RerunForm(script_present=script_present)
         # pylint:disable=no-member
         context_dictionary = {
             'instrument': instrument,
@@ -41,7 +41,7 @@ def rerun_jobs(request, instrument=None):
             'standard_variables': standard_vars,
             'advanced_variables': advanced_vars,
             'variable_help': variable_help,
-            'software_form': software_form
+            'rerun_form': rerun_form
         }
 
         return context_dictionary
