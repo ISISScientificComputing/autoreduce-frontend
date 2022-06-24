@@ -21,7 +21,7 @@ print(data_files)
 
 setup(
     name=PACKAGE_NAME,
-    version="22.0.0.dev21",  # when updating the version here make sure to also update webapp.D
+    version="22.0.0.dev22",  # when updating the version here make sure to also update webapp.D
     description="The frontend of the ISIS Autoreduction service",
     author="ISIS Autoreduction Team",
     url="https://github.com/autoreduction/autoreduce-frontend/",
