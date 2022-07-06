@@ -28,7 +28,7 @@ setup(
     install_requires=[
         "autoreduce_qp==22.0.0.dev37", "Django==4.0.6", "django_extensions==3.1.5", "djangorestframework==3.13.1",
         "django-filter==21.1", "django-crispy-forms==1.14.0", "django-tables2==2.4.1", "requests==2.27.1",
-        "httpagentparser==1.9.2"
+        "httpagentparser==1.9.3"
     ],
     packages=find_packages(),
     package_data={"": data_files},
