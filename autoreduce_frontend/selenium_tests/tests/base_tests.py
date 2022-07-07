@@ -214,7 +214,7 @@ class FooterTestMixin:
     """
     Contains test cases for pages with the FooterMixin
     """
-    GITHUB_URL = "https://github.com/autoreduction/autoreduce"
+    GITHUB_URL = "https://github.com/autoreduction/queue-processor"
 
     def test_footer_visible(self):
         """
