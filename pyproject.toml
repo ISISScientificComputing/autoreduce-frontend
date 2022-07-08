@@ -21,7 +21,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-testing = [
+dev = [
     "axe-selenium-python==2.1.6",
     "django-debug-toolbar==3.4.0",
     "autoreduce-rest-api",

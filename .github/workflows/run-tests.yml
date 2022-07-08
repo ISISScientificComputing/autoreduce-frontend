@@ -7,19 +7,21 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
+      matrix:
+        python-version: ["3.8"]
 
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up Python 3.8
+      - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: ${{ matrix.python-version }}
 
       - name: Pip install
         run: |
           pip install --upgrade pip
-          pip install -e .[testing]
+          pip install -e .[dev]
 
       - uses: autoreduction/autoreduce-actions/build@main
         with:
@@ -71,19 +73,21 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
+      matrix:
+        python-version: ["3.8"]
 
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up Python 3.8
+      - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: ${{ matrix.python-version }}
 
       - name: Pip install
         run: |
           pip install --upgrade pip
-          pip install -e .[testing]
+          pip install -e .[dev]
 
       - uses: autoreduction/autoreduce-actions/build@main
         with:
@@ -156,7 +160,7 @@ jobs:
       - name: Pip install
         run: |
           pip install --upgrade pip
-          pip install -e .[testing]
+          pip install -e .[dev]
 
   Inspection:
     name: Code Inspection
@@ -184,7 +188,7 @@ jobs:
       - name: Pip install
         run: |
           pip install --upgrade pip
-          pip install -e .[testing]
+          pip install -e .[dev]
 
       - uses: autoreduction/autoreduce-actions/build@main
         with:
