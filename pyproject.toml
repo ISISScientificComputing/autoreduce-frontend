@@ -52,13 +52,14 @@ load-plugins = ["pylint_django"]
 django-settings-module = "autoreduce_webapp.settings"
 extension-pkg-whitelist = ["pydantic"]
 disable = [
+    "R0901", # too-many-ancestors
     "R0904", # too-many-public-methods
     "R0902", # too-many-instance-attributes
     "R0903", # too-few-public-methods
     "R1705", # no-else-return
     "C0114", # missing-module-docstring
     "C0115", # missing-class-docstring
-    "R0801", # duplicate-code
+    "W0221", # arguments-differ
 ]
 ignore = [".git", "migrations"]
 [tool.pylint.FORMAT]
