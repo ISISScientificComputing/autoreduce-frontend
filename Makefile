@@ -1,13 +1,13 @@
 all: migrate-with-fixtures
 
 package-dev:
-	python setup.py sdist bdist_wheel
-	twine upload --repository testpypi dist/*
+	python3 -m build
+	python3 -m twine upload --repository testpypi dist/*
 	rm -rf build dist
 
 package:
-	python setup.py sdist bdist_wheel
-	twine upload --repository pypi dist/*
+	python3 -m build
+	python3 -m twine upload --repository pypi dist/*
 	rm -rf build dist
 
 migrate:

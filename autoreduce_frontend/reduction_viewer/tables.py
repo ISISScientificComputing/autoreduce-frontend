@@ -16,7 +16,7 @@ page={{ current_page }}&per_page={{ per_page }}&sort={{ sort }}&filter={{ filter
         }},
         accessor="run_numbers__run_number")
 
-    status = tables.Column(attrs={"td": {"class": lambda record: data_status(record.status.__str__())}})
+    status = tables.Column(attrs={"td": {"class": lambda record: data_status(str(record.status))}})
 
     created = tables.DateTimeColumn(attrs={"td": {"class": "created-dates"}})
 
@@ -71,7 +71,7 @@ page={{ current_page }}&per_page={{ per_page }}&sort={{ sort }}&filter={{ filter
         }},
         accessor="run_numbers__run_number")
 
-    status = tables.Column(attrs={"td": {"class": lambda record: data_status(record.status.__str__())}})
+    status = tables.Column(attrs={"td": {"class": lambda record: data_status(str(record.status))}})
 
     last_updated = tables.DateTimeColumn(attrs={"td": {"class": "last-updated-dates"}})
 
