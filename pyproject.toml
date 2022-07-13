@@ -6,6 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "autoreduce_frontend"
 version = "22.0.0.dev23"
 description = "The frontend of the ISIS Autoreduction service"
+readme = "README.md"
 license = { text = "GNU General Public License" }
 classifiers = ["Framework :: Django", "Programming Language :: Python :: 3"]
 dependencies = [
