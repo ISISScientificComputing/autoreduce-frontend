@@ -104,7 +104,7 @@ class RerunForm(forms.Form):
     def __init__(self, *args, **kwargs):
         self.script_present = kwargs.pop('script_present')
         super().__init__(*args, **kwargs)
-        self.fields['software'].initial = Software.objects.all()[0]
+        self.fields['software'].initial = Software.objects.all().order_by('-version')[0]
         if self.script_present:
             # If the script is not present, we don't want to show the option to rerun
             self.reduction_script_choices = [('use_stored_reduction_script', 'Use stored reduction script'),
@@ -115,7 +115,7 @@ class RerunForm(forms.Form):
                                                          widget=forms.RadioSelect,
                                                          initial='use_stored_reduction_script')
 
-    qs = Software.objects.all()
+    qs = Software.objects.all().order_by('-version')
     software = forms.ModelChoiceField(
         queryset=qs,
         empty_label="Select a software",
