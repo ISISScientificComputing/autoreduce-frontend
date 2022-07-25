@@ -9,7 +9,7 @@
     },
     {
         "model": "reduction_viewer.software",
-        "pk": 1,
+        "pk": 2,
         "fields": {
             "name": "Mantid",
             "version": "nightly"
