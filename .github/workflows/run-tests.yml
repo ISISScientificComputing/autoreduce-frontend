@@ -97,7 +97,7 @@ jobs:
         uses: Steph0/dotenv-configserver@v1.2.0
         with:
           repository: "autoreduction/workspace"
-          profile: "prod"
+          profile: "integration"
 
       - name: Run MySQL Docker
         run: docker run --rm --name mysql-ar -e MYSQL_ROOT_PASSWORD=password -d --network=host mysql:latest
