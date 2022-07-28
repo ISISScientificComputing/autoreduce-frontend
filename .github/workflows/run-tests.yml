@@ -96,7 +96,8 @@ jobs:
       - name: Remote dotenv to Environment (configserver alike)
         uses: Steph0/dotenv-configserver@v1.2.0
         with:
-          repository: "autoreduction/autoreduce-workspace"
+          repository: "autoreduction/workspace"
+          profile: "prod"
 
       - name: Run MySQL Docker
         run: docker run --rm --name mysql-ar -e MYSQL_ROOT_PASSWORD=password -d --network=host mysql:latest
@@ -116,7 +117,7 @@ jobs:
       - name: Run tests
         run: |
           env
-          SELENIUM_REMOTE=1 RUNNING_VIA_PYTEST=true TESTING_MYSQL_DB=true pytest autoreduce_frontend/selenium_tests/tests/integration --cov-report=xml --cov=autoreduce_frontend --showlocals -v
+          pytest autoreduce_frontend/selenium_tests/tests/integration --cov-report=xml --cov=autoreduce_frontend --showlocals -v
 
       - uses: codecov/codecov-action@v2
         with:
