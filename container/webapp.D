@@ -13,4 +13,4 @@ RUN chown isisautoreduce:isisautoreduce /var/www/api/
 USER isisautoreduce
 
 EXPOSE 8000
-CMD ["autoreduce-webapp-manage", "serve", "--port", "8000"]
+CMD ["autoreduce-webapp-manage", "serve", "--port", "8000", "--probe-port", "8004"]
