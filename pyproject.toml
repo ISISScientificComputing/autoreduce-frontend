@@ -19,6 +19,7 @@ dependencies = [
     "django-tables2==2.4.1",
     "requests==2.27.1",
     "httpagentparser==1.9.2",
+    "django-hurricane",
 ]
 
 [project.optional-dependencies]

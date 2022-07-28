@@ -1,7 +1,5 @@
 FROM ghcr.io/autoreduction/base
 
-RUN python3 -m pip install --user --no-cache-dir gunicorn
-
 # Installs frontend from your local repository
 ADD . .
 RUN python3 -m pip install --user --no-cache-dir .
@@ -15,4 +13,4 @@ RUN chown isisautoreduce:isisautoreduce /var/www/api/
 USER isisautoreduce
 
 EXPOSE 8000
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "4", "autoreduce_frontend.autoreduce_webapp.wsgi"]
+CMD ["autoreduce-webapp-manage", "serve", "--port", "8000"]
