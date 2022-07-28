@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'django_filters',
     'crispy_forms',
     'django_tables2',
+    'hurricane',
 ]
 
 if DEBUG and DEBUG_TOOLBAR_AVAILABLE:
