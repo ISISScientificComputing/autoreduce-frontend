@@ -50,7 +50,7 @@ jobs:
           fail_ci_if_error: true
           verbose: true
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         if: failure()
         with:
           name: screenshots_and_reports
@@ -126,7 +126,7 @@ jobs:
           fail_ci_if_error: true
           verbose: true
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         if: failure()
         with:
           name: screenshots_and_reports
