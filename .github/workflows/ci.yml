@@ -6,7 +6,7 @@ on:
     - cron: "0 9 * * 0" # every Sunday at 9:00am
 
 jobs:
-  build-and-push-nightly:
+  build-and-push-frontend:
     runs-on: ubuntu-latest
 
     steps:
