@@ -23,7 +23,7 @@
             {% endif %}
             <div class="row" id="run-action-row">
                 <label for="runAction" hidden>Select action to apply to selected runs</label>
-                {{ options_form.run_action|as_crispy_field }} 
+                {{ options_form.run_action|as_crispy_field }}
                 <form id="actionForm" method="POST" action="{% url 'runs:failed' %}"
                       style="float: left; padding-left: 5px;">
                     <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'/>
@@ -44,7 +44,7 @@
            <div class="col-md-12 text-center">
                 <form action="{{ request.path }}" method="get" id="items-per-page">
                     <label for="items-per-page">Items per page: </label>
-                    {{ options_form.per_page|as_crispy_field }} 
+                    {{ options_form.per_page|as_crispy_field }}
                 </form>
             </div>
         </div>

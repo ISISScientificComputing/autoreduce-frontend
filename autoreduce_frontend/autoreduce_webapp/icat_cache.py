@@ -180,8 +180,9 @@ def make_member_func(obj_type, cache_attr, list_type):
         try:
             obj_type(obj_str)
             return bool(obj_str)
-        # pylint: disable=bare-except
-        except:
+        # pylint: disable=broad-except
+        except Exception as exception:
+            print(str(exception))
             return False
 
     def member_func(self, obj_id):

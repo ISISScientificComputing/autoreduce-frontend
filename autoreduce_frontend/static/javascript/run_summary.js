@@ -2,7 +2,7 @@
     var showHistory = function showHistory(event){
         $('.run-history').modal();
     };
-    
+
     var showLogs = function showHistory(event){
         $('.log-display').modal();
     };

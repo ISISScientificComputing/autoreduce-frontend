@@ -5,7 +5,7 @@ ADD . .
 RUN python3 -m pip install --user --no-cache-dir .
 
 # Add fixtures to the project for dev/debugging
-ADD --chown=isisautoreduce:isisautoreduce autoreduce_frontend/autoreduce_webapp/fixtures/ fixtures/ 
+ADD --chown=isisautoreduce:isisautoreduce autoreduce_frontend/autoreduce_webapp/fixtures/ fixtures/
 
 USER root
 RUN mkdir -p /var/www/api/

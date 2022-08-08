@@ -23,7 +23,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 # having to run `manage.py collectstatic` each time. On production
 # we use Apache to serve static content instead.
 DEBUG = False
-if not "AUTOREDUCTION_PRODUCTION" in os.environ:
+if "AUTOREDUCTION_PRODUCTION" not in os.environ:
     DEBUG = True
 
 DEBUG_PROPAGATE_EXCEPTIONS = True

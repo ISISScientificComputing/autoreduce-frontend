@@ -85,9 +85,9 @@ class ICATCommunication:
                     if investigation_user.role == 'principal_experimenter':
                         trimmed_investigation['pi'] = smart_str(investigation_user.user.fullName)
                 return trimmed_investigation
-            # pylint: disable=bare-except
-            except:
-                pass
+            # pylint: disable=broad-except
+            except Exception as exception:
+                print(str(exception))
 
         trimmed_investigation = {
             'reference_number': str(reference_number),

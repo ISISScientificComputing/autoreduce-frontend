@@ -26,7 +26,7 @@ def validate_run_number(self):
             raise ValidationError("Invalid format. Run number must be numeric.")
 
 
-    # pylint:disable=unused-argument
+# pylint:disable=unused-argument
 def filter_run_number(queryset, name, value):
     """
     Method to determine regex used by user in run number field to filter runs
