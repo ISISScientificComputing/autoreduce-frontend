@@ -96,6 +96,7 @@ class ReductionRunFilter(FilterSet):
 
 class ExperimentFilter(FilterSet):
     '''Filter model for filtering and querying Experiment models. '''
+
     class Meta:
         model = Experiment
         fields = ['reference_number']

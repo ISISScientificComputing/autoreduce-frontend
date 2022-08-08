@@ -21,9 +21,10 @@ repos:
       - id: python-check-mock-methods
 
   - repo: https://github.com/google/yapf
-    rev: main # This should be moved to a tag after the next release post v0.32.0, I am guessing v0.33
+    rev: v0.32.0
     hooks:
       - id: yapf
+        additional_dependencies: [toml]
 
   - repo: https://github.com/PyCQA/flake8
     rev: 5.0.4

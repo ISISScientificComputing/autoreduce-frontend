@@ -29,6 +29,7 @@ class PlotHandler:
     :param server_dir: (str) The path for the directory to search for the data/image files
     :param rb_number: (str)The ISIS RB number.
     """
+
     def __init__(self, data_filepath: str, server_dir: str, rb_number: str = None):
         self.data_filename: str = self._get_only_data_file_name(data_filepath)
         # Used when searching for full Experiment graph. TODO: not actually used right now

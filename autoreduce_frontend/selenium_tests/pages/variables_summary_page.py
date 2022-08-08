@@ -23,6 +23,7 @@ class VariableSummaryPage(Page, NavbarMixin, FooterMixin, TourMixin):
     """
     Page model class for run summary page
     """
+
     def __init__(self, driver, instrument):
         super().__init__(driver)
         self.instrument = instrument
@@ -52,6 +53,7 @@ class VariableSummaryPage(Page, NavbarMixin, FooterMixin, TourMixin):
         return self.driver.find_element(By.ID, "upcoming_arguments_by_experiment")
 
     def _do_run_button(self, url):
+
         def run_button_clicked_successfully(button, url, driver):
             button.click()
             return url in driver.current_url
@@ -60,6 +62,7 @@ class VariableSummaryPage(Page, NavbarMixin, FooterMixin, TourMixin):
         WebDriverWait(self.driver, 10).until(partial(run_button_clicked_successfully, button, url))
 
     def _do_delete_button(self, url):
+
         def delete_button_clicked_successfully(button, _):
             try:
                 button.click()

@@ -24,6 +24,7 @@ class ICATCommunication:
     """
     Handles communication with the ICAT service
     """
+
     def __init__(self, **kwargs):
         if 'URL' not in kwargs:
             kwargs['URL'] = ICAT['URL']

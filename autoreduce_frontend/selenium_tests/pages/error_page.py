@@ -21,6 +21,7 @@ class ErrorPage(Page, NavbarMixin, FooterMixin):
     """
     Page model class for the error view
     """
+
     def __init__(self, driver):
         super().__init__(driver)
         self.fake_token = "r07v2h39q453928"

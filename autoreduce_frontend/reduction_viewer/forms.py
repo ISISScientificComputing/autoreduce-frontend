@@ -22,6 +22,7 @@ SHOW_OR_HIDE = (('default', 'Select action to apply to selected runs'), ('hide',
 
 
 class SearchOptionsForm(forms.Form):
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -41,6 +42,7 @@ class SearchOptionsForm(forms.Form):
 
 
 class RunsListOptionsForm(forms.Form):
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -68,6 +70,7 @@ class RunsListOptionsForm(forms.Form):
 
 
 class FailedQueueOptionsForm(forms.Form):
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -97,6 +100,7 @@ class FailedQueueOptionsForm(forms.Form):
 
 
 class RerunForm(forms.Form):
+
     def __init__(self, *args, **kwargs):
         self.script_present = kwargs.pop('script_present')
         super().__init__(*args, **kwargs)

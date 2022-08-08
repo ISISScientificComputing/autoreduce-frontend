@@ -19,6 +19,7 @@ from autoreduce_frontend.selenium_tests.pages.page import Page
 
 
 class JobQueuePage(Page, NavbarMixin, FooterMixin):
+
     @staticmethod
     def url_path() -> str:
         """
@@ -46,6 +47,7 @@ class JobQueuePage(Page, NavbarMixin, FooterMixin):
             By.ID, f"status-{run_number}-{run_number if not last_run_number else last_run_number}").text
 
     def _do_run_button(self, url):
+
         def run_button_clicked_successfully(button, url, driver):
             button.click()
             return url in driver.current_url

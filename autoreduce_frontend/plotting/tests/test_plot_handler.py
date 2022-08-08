@@ -25,6 +25,7 @@ class TestPlotHandler(unittest.TestCase):
     """
     Test all the functionality of the PlotHandler
     """
+
     def setUp(self):
         """
         Create a few test PlotHandler objects

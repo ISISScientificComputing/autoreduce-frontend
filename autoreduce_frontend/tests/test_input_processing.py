@@ -15,6 +15,7 @@ from autoreduce_frontend.utilities import input_processing
 
 # pylint:disable=missing-docstring
 class RunParsingTestCase(unittest.TestCase):
+
     def test_empty_input(self):
         input_value = ""
         with self.assertRaises(SyntaxError):

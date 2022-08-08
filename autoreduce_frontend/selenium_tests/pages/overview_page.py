@@ -25,6 +25,7 @@ class OverviewPage(Page, NavbarMixin, FooterMixin, TourMixin):
     """
     Overview page model class
     """
+
     def __init__(self, driver):
         super().__init__(driver)
         self.step = 0
