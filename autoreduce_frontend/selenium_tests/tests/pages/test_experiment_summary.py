@@ -6,7 +6,8 @@
 # ############################################################################### #
 """Selenium tests for the experiment summary page."""
 from autoreduce_frontend.selenium_tests.pages.experiment_summary_page import ExperimentSummaryPage
-from autoreduce_frontend.selenium_tests.tests.base_tests import (AccessibilityTestMixin, BaseTestCase, FooterTestMixin, NavbarTestMixin)
+from autoreduce_frontend.selenium_tests.tests.base_tests import (AccessibilityTestMixin, BaseTestCase, FooterTestMixin,
+                                                                 NavbarTestMixin)
 
 
 # pylint:disable=no-member

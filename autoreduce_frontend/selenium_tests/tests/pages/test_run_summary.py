@@ -14,7 +14,8 @@ from autoreduce_db.reduction_viewer.models import ReductionRun
 from autoreduce_frontend.autoreduce_webapp.templatetags.encode_b64 import encode_b64
 from autoreduce_frontend.selenium_tests.pages.run_summary_page import RunSummaryPage
 from autoreduce_frontend.selenium_tests.pages.runs_list_page import RunsListPage
-from autoreduce_frontend.selenium_tests.tests.base_tests import (ConfigureNewJobsBaseTestCase, FooterTestMixin, NavbarTestMixin)
+from autoreduce_frontend.selenium_tests.tests.base_tests import (ConfigureNewJobsBaseTestCase, FooterTestMixin,
+                                                                 NavbarTestMixin)
 
 
 # pylint:disable=no-member
@@ -82,7 +83,8 @@ class TestRunSummaryPage(ConfigureNewJobsBaseTestCase, FooterTestMixin, NavbarTe
         assert not rerun_form.is_displayed()
         self.page.toggle_button.click()
         assert rerun_form.is_displayed()
-        assert rerun_form.find_element(By.ID, f"var-standard-{encode_b64('variable1')}").get_attribute("value") == "value1"
+        assert rerun_form.find_element(By.ID,
+                                       f"var-standard-{encode_b64('variable1')}").get_attribute("value") == "value1"
         labels = rerun_form.find_elements(By.TAG_NAME, "label")
 
         WebDriverWait(self.driver, 10).until(lambda _: labels[0].text == "Re-run description")

@@ -9,7 +9,8 @@ import time
 
 from autoreduce_qp.systemtests.utils.data_archive import DataArchive
 from autoreduce_frontend.selenium_tests.pages.runs_list_page import RunsListPage
-from autoreduce_frontend.selenium_tests.tests.base_tests import (AccessibilityTestMixin, BaseTestCase, FooterTestMixin, NavbarTestMixin)
+from autoreduce_frontend.selenium_tests.tests.base_tests import (AccessibilityTestMixin, BaseTestCase, FooterTestMixin,
+                                                                 NavbarTestMixin)
 
 
 class TestRunsList(BaseTestCase, AccessibilityTestMixin, FooterTestMixin, NavbarTestMixin):

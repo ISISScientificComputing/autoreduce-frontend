@@ -7,13 +7,14 @@ from autoreduce_frontend.reduction_viewer.view_utils import data_status, started
 class ReductionRunTable(Table):
     '''Table model for displaying Reduction Runs (and batch-runs)'''
 
-    run_number = tables.TemplateColumn("""{% load generate_run_link %} <a href="{% generate_run_link record.instrument record %}?
+    run_number = tables.TemplateColumn(
+        """{% load generate_run_link %} <a href="{% generate_run_link record.instrument record %}?
 page={{ current_page }}&per_page={{ per_page }}&sort={{ sort }}&filter={{ filtering }}">{{ record.title }}
 </a>""",
-                                       attrs={"td": {
-                                           "class": "run-num-links"
-                                       }},
-                                       accessor="run_numbers__run_number")
+        attrs={"td": {
+            "class": "run-num-links"
+        }},
+        accessor="run_numbers__run_number")
 
     status = tables.Column(attrs={"td": {"class": lambda record: data_status(str(record.status))}})
 
@@ -60,13 +61,14 @@ RB{{ record.reference_number }}</a>""",
 class ExperimentSummaryTable(Table):
     '''Table model for displaying Reduction Runs (and batch-runs)'''
 
-    run_number = tables.TemplateColumn("""{% load generate_run_link %} <a href="{% generate_run_link record.instrument record %}?
+    run_number = tables.TemplateColumn(
+        """{% load generate_run_link %} <a href="{% generate_run_link record.instrument record %}?
 page={{ current_page }}&per_page={{ per_page }}&sort={{ sort }}&filter={{ filtering }}">{{ record.title }}
 </a>""",
-                                       attrs={"td": {
-                                           "class": "run-num-links"
-                                       }},
-                                       accessor="run_numbers__run_number")
+        attrs={"td": {
+            "class": "run-num-links"
+        }},
+        accessor="run_numbers__run_number")
 
     status = tables.Column(attrs={"td": {"class": lambda record: data_status(str(record.status))}})
 
@@ -106,28 +108,30 @@ class FailQueueTable(Table):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    run_number = tables.TemplateColumn("""{% load generate_run_link %} <a href="{% generate_run_link record.instrument record %}?
+    run_number = tables.TemplateColumn(
+        """{% load generate_run_link %} <a href="{% generate_run_link record.instrument record %}?
 page={{ current_page }}&per_page={{ per_page }}&sort={{ sort }}&filter={{ filtering }}">{{ record.title }}
 </a>""",
-                                       attrs={"td": {
-                                           "class": "failed-run-link"
-                                       }},
-                                       accessor="run_numbers__run_number")
+        attrs={"td": {
+            "class": "failed-run-link"
+        }},
+        accessor="run_numbers__run_number")
 
-    checkbox = tables.CheckBoxColumn(accessor="pk",
-                                     attrs={
-                                         "th__input": {
-                                             "id": "selectAllRuns"
-                                         },
-                                         "td__input": {
-                                             "class": "runCheckbox",
-                                             "id": lambda record: "selectRun" + str(record.pk) + "-" + str(record.run_version),
-                                             "data-run_number": lambda record: record.pk,
-                                             "data-run_version": lambda record: record.run_version,
-                                             "data-rb_number": lambda record: record.experiment.reference_number
-                                         }
-                                     },
-                                     orderable=False)
+    checkbox = tables.CheckBoxColumn(
+        accessor="pk",
+        attrs={
+            "th__input": {
+                "id": "selectAllRuns"
+            },
+            "td__input": {
+                "class": "runCheckbox",
+                "id": lambda record: "selectRun" + str(record.pk) + "-" + str(record.run_version),
+                "data-run_number": lambda record: record.pk,
+                "data-run_version": lambda record: record.run_version,
+                "data-rb_number": lambda record: record.experiment.reference_number
+            }
+        },
+        orderable=False)
 
     message = tables.Column(attrs={"td": {"style": "width:600px; word-break: break-word; font-weight: bold;"}})
 

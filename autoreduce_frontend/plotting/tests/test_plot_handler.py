@@ -60,7 +60,8 @@ class TestPlotHandler(unittest.TestCase):
         When: PlotHandler is initialised
         """
         self.assertEqual("MARI1234", self.test_plot_handler._get_only_data_file_name(self.input_data_filepath))
-        self.assertEqual("MARI1234", self.test_plot_handler._get_only_data_file_name(self.input_data_filepath.replace("\\", "/")))
+        self.assertEqual("MARI1234",
+                         self.test_plot_handler._get_only_data_file_name(self.input_data_filepath.replace("\\", "/")))
 
     def test_generate_file_name_regex(self):
         """
@@ -94,7 +95,8 @@ class TestPlotHandler(unittest.TestCase):
         """
         mock_os.path.exists.return_value = True
         mock_os.listdir.return_value = [
-            "MARI1234_sometext_1.png", "MARI1234_sometext_2.png", "MARI1234_json_file_2.json", "MARI1234.nxs", "MARI1234_sometext.nxs"
+            "MARI1234_sometext_1.png", "MARI1234_sometext_2.png", "MARI1234_json_file_2.json", "MARI1234.nxs",
+            "MARI1234_sometext.nxs"
         ]
 
         # check that only the valid matches have been found

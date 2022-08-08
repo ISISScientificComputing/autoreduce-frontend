@@ -17,17 +17,18 @@ def run_queue(request):
     # Get all runs that should be shown
     queued_status = Status.get_queued()
     processing_status = Status.get_processing()
-    pending_jobs = ReductionRun.objects.filter(Q(status=queued_status) | Q(status=processing_status)).order_by('created')
+    pending_jobs = ReductionRun.objects.filter(Q(status=queued_status)
+                                               | Q(status=processing_status)).order_by('created')
 
     # Filter those which the user shouldn't be able to see
     if USER_ACCESS_CHECKS and not request.user.is_superuser:
         try:
             with ICATCache(AUTH='uows', SESSION={'sessionid': request.session['sessionid']}) as icat:
+                pending_jobs = filter(lambda job: job.experiment.reference_number in icat.get_associated_experiments(
+                    int(request.user.username)), pending_jobs)  # Check RB numbers
                 pending_jobs = filter(
-                    lambda job: job.experiment.reference_number in icat.get_associated_experiments(int(request.user.username)),
-                    pending_jobs)  # Check RB numbers
-                pending_jobs = filter(lambda job: job.instrument.name in icat.get_owned_instruments(int(request.user.username)),
-                                      pending_jobs)  # Check instrument
+                    lambda job: job.instrument.name in icat.get_owned_instruments(int(request.user.username)),
+                    pending_jobs)  # Check instrument
         except ICATConnectionException as excep:
             return render_error(request, str(excep))
     # Initialise list to contain the names of user/team that started runs

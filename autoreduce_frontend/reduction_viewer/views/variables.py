@@ -40,7 +40,8 @@ def delete_instrument_variables(_, instrument=None, start=0, end=0, experiment_r
 
     # We "save" an empty list to delete the previous variables.
     if experiment_reference is not None:
-        ReductionArguments.objects.filter(instrument__name=instrument, experiment_reference=experiment_reference).delete()
+        ReductionArguments.objects.filter(instrument__name=instrument,
+                                          experiment_reference=experiment_reference).delete()
     else:
         start_run_kwargs = {"start_run__gte": start}
         if end > 0:
@@ -60,7 +61,8 @@ def instrument_variables_summary(request, instrument):
 
     current_arguments = last_run_object.arguments
 
-    upcoming_arguments_by_run = ReductionArguments.objects.filter(start_run__gt=last_run_object.run_number, instrument=instrument)
+    upcoming_arguments_by_run = ReductionArguments.objects.filter(start_run__gt=last_run_object.run_number,
+                                                                  instrument=instrument)
     upcoming_arguments_by_experiment = ReductionArguments.objects.filter(
         experiment_reference__gte=last_run_object.experiment.reference_number, instrument=instrument)
 
@@ -84,7 +86,8 @@ def instrument_variables_summary(request, instrument):
         current_start = current_arguments.start_run
         if current_start is None:
             current_start = 0
-        next_run_starts = list(filter(lambda start: start > current_start, sorted(upcoming_arguments_by_run_dict.keys())))
+        next_run_starts = list(
+            filter(lambda start: start > current_start, sorted(upcoming_arguments_by_run_dict.keys())))
         current_end = next_run_starts[0] - 1 if next_run_starts else 0
 
         current_vars = {

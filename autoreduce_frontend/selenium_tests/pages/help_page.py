@@ -115,7 +115,8 @@ class HelpPage(Page, NavbarMixin, FooterMixin):
         Click a category filter button
         :param category: (str) The category name to select
         """
-        filter_button = next((x for x in self.get_category_filter_elements() if x.get_attribute("data-category") == category), None)
+        filter_button = next(
+            (x for x in self.get_category_filter_elements() if x.get_attribute("data-category") == category), None)
 
         if filter_button is None:
             raise Exception(f"Category {category} does not exist.")

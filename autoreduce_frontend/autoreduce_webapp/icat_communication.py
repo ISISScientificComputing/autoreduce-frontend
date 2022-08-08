@@ -66,8 +66,8 @@ class ICATCommunication:
 
         if reference_number > 0:
             try:
-                investigation = self.client.search("SELECT i from Investigation i where i.name = '" + str(reference_number) +
-                                                   "' INCLUDE i.investigationInstruments."
+                investigation = self.client.search("SELECT i from Investigation i where i.name = '" +
+                                                   str(reference_number) + "' INCLUDE i.investigationInstruments."
                                                    "instrument, i.investigationUsers.user")
 
                 trimmed_investigation = {
@@ -158,7 +158,8 @@ class ICATCommunication:
 
         is_on_team = self.client.search("SELECT i.name from Investigation i JOIN"
                                         " i.investigationUsers iu where"
-                                        " iu.user.name = 'uows/" + str(user_number) + "' and i.name = '" + str(reference_number) + "'")
+                                        " iu.user.name = 'uows/" + str(user_number) + "' and i.name = '" +
+                                        str(reference_number) + "'")
         if is_on_team:
             return True
         return False
@@ -222,8 +223,9 @@ class ICATCommunication:
         self._add_list_to_set(
             self.client.search("SELECT i.name FROM Investigation i JOIN"
                                " i.investigationInstruments inst WHERE"
-                               " i.name NOT LIKE 'CAL%' and i.endDate > '" + str(years_back) + "' and (inst.instrument.name = '" +
-                               instrument + "' OR inst.instrument.fullName = '" + instrument + "')"), experiments)
+                               " i.name NOT LIKE 'CAL%' and i.endDate > '" + str(years_back) +
+                               "' and (inst.instrument.name = '" + instrument + "' OR inst.instrument.fullName = '" +
+                               instrument + "')"), experiments)
         return sorted(experiments, reverse=True)
 
     # pylint: disable=invalid-name
@@ -241,8 +243,8 @@ class ICATCommunication:
                                " i.investigationInstruments inst WHERE"
                                " i.name NOT LIKE 'CAL%' and"
                                " i.endDate > CURRENT_TIMESTAMP and"
-                               " (inst.instrument.name = '" + instrument + "' OR inst.instrument.fullName = '" + instrument + "')"),
-            experiments)
+                               " (inst.instrument.name = '" + instrument + "' OR inst.instrument.fullName = '" +
+                               instrument + "')"), experiments)
         return sorted(experiments, reverse=True)
 
     def is_admin(self, user_number):
@@ -270,8 +272,9 @@ class ICATCommunication:
 
         return self.client.search("SELECT dfp FROM DatafileParameter dfp JOIN "
                                   "dfp.datafile.dataset.investigation.investigationInstruments "
-                                  "ii WHERE dfp.type.name='run_number' and dfp.numericValue >= " + str(start_run_number) +
-                                  " and dfp.numericValue <= " + str(end_run_number) + " and ii.instrument.fullName = '" + instrument +
+                                  "ii WHERE dfp.type.name='run_number' and dfp.numericValue >= " +
+                                  str(start_run_number) + " and dfp.numericValue <= " + str(end_run_number) +
+                                  " and ii.instrument.fullName = '" + instrument +
                                   "' and dfp.datafile.dataset.investigation.name "
                                   "not LIKE 'CAL%%' include "
                                   "dfp.datafile.dataset.investigation")

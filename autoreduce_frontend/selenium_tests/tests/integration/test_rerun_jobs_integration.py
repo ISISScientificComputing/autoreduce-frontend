@@ -18,8 +18,10 @@ class TestRerunJobsPageIntegration(BaseIntegrationTestCase):
     def setUpClass(cls):
         """Starts external services and sets instrument for all test cases"""
         super().setUpClass()
-        cls.data_archive.add_reduction_script(cls.instrument_name, """def main(input_file, output_dir): print('some text')""")
-        cls.data_archive.add_reduce_vars_script(cls.instrument_name, """standard_vars={"variable1":"test_variable_value_123"}""")
+        cls.data_archive.add_reduction_script(cls.instrument_name,
+                                              """def main(input_file, output_dir): print('some text')""")
+        cls.data_archive.add_reduce_vars_script(cls.instrument_name,
+                                                """standard_vars={"variable1":"test_variable_value_123"}""")
         # used by find_run_in_database to find the run that we're looking for
         cls.rb_number = 1234567
         cls.run_number = 62000
@@ -151,8 +153,10 @@ class TestRerunJobsPageIntegrationSkippedOnly(BaseIntegrationTestCase):
     def setUpClass(cls):
         """Starts external services and sets instrument for all test cases"""
         super().setUpClass()
-        cls.data_archive.add_reduction_script(cls.instrument_name, """def main(input_file, output_dir): print('some text')""")
-        cls.data_archive.add_reduce_vars_script(cls.instrument_name, """standard_vars={"variable1":"test_variable_value_123"}""")
+        cls.data_archive.add_reduction_script(cls.instrument_name,
+                                              """def main(input_file, output_dir): print('some text')""")
+        cls.data_archive.add_reduce_vars_script(cls.instrument_name,
+                                                """standard_vars={"variable1":"test_variable_value_123"}""")
 
         cls.rb_number = 1234567
         cls.run_number = 99999

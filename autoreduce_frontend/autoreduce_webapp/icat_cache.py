@@ -93,15 +93,19 @@ class ICATCache:
             #  call it for each, building a dict, and then splice it into the constructor kwargs.
             new_obj = obj_type(
                 **{
-                    attr: (getattr(self.icat, func)(obj_id) if typ is None else self.to_list(getattr(self.icat, func)(obj_id)))
+                    attr: (getattr(self.icat, func)
+                           (obj_id) if typ is None else self.to_list(getattr(self.icat, func)(obj_id)))
                     for (func, model, attr, typ) in FUNC_LIST if model == obj_type
                 })
         else:
             # In this case, ICATCommunication returns all the ExperimentCache
             # fields in one query, so we splice that into the constructor.
             new_obj = obj_type(
-                **{attr: str(val)
-                   for attr, val in list(self.icat.get_experiment_details(obj_id).items()) if attr != "reference_number"})
+                **{
+                    attr: str(val)
+                    for attr, val in list(self.icat.get_experiment_details(obj_id).items())
+                    if attr != "reference_number"
+                })
         new_obj.id_name = obj_id
         new_obj.save()
         return new_obj
@@ -152,8 +156,9 @@ class ICATCache:
 
 # Here we define (ICATCommunication function to wrap, Cache object type,
 # field of object to get, type of list element if the field is a list)
-FUNC_LIST = [("get_owned_instruments", UserCache, "owned_instruments", str), ("get_valid_instruments", UserCache, "valid_instruments", str),
-             ("is_admin", UserCache, "is_admin", None), ("is_instrument_scientist", UserCache, "is_instrument_scientist", None),
+FUNC_LIST = [("get_owned_instruments", UserCache, "owned_instruments", str),
+             ("get_valid_instruments", UserCache, "valid_instruments", str), ("is_admin", UserCache, "is_admin", None),
+             ("is_instrument_scientist", UserCache, "is_instrument_scientist", None),
              ("get_associated_experiments", UserCache, "associated_experiments", int),
              ("get_upcoming_experiments_for_instrument", InstrumentCache, "upcoming_experiments", int),
              ("get_valid_experiments_for_instrument", InstrumentCache, "valid_experiments", int)]

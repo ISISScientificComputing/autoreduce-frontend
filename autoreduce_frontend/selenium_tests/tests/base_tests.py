@@ -71,8 +71,10 @@ class ConfigureNewJobsBaseTestCase(BaseTestCase):
         cls.instrument_name = "TESTINSTRUMENT"
         cls.data_archive = DataArchive([cls.instrument_name], 21, 21)
         cls.data_archive.create()
-        cls.data_archive.add_reduction_script(cls.instrument_name, """def main(input_file, output_dir): print('some text')""")
-        cls.data_archive.add_reduce_vars_script(cls.instrument_name, """standard_vars={"variable1":"test_variable_value_123"}""")
+        cls.data_archive.add_reduction_script(cls.instrument_name,
+                                              """def main(input_file, output_dir): print('some text')""")
+        cls.data_archive.add_reduce_vars_script(cls.instrument_name,
+                                                """standard_vars={"variable1":"test_variable_value_123"}""")
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -300,7 +302,8 @@ class AccessibilityTestMixin:
             if rules == {}:
                 return ""
 
-            return ', '.join([f"'{rule}': {{enabled: false, selector: '{selector}'}}" for rule, selector in rules.items()])
+            return ', '.join(
+                [f"'{rule}': {{enabled: false, selector: '{selector}'}}" for rule, selector in rules.items()])
 
         all_rules = {**self._shared_accessibility_test_ignore_rules, **self.accessibility_test_ignore_rules}
 

@@ -7,7 +7,8 @@
 """Selenium tests for the runs summary page."""
 from selenium.webdriver.support.ui import WebDriverWait
 from autoreduce_frontend.selenium_tests.pages.run_summary_page import RunSummaryPage
-from autoreduce_frontend.selenium_tests.tests.base_tests import (AccessibilityTestMixin, BaseTestCase, FooterTestMixin, NavbarTestMixin)
+from autoreduce_frontend.selenium_tests.tests.base_tests import (AccessibilityTestMixin, BaseTestCase, FooterTestMixin,
+                                                                 NavbarTestMixin)
 
 
 # pylint:disable=no-member

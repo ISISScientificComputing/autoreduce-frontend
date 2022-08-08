@@ -8,7 +8,8 @@
 Tests for JobQueuePage
 """
 from autoreduce_frontend.selenium_tests.pages.job_queue_page import JobQueuePage
-from autoreduce_frontend.selenium_tests.tests.base_tests import (FooterTestMixin, BaseTestCase, NavbarTestMixin, AccessibilityTestMixin)
+from autoreduce_frontend.selenium_tests.tests.base_tests import (FooterTestMixin, BaseTestCase, NavbarTestMixin,
+                                                                 AccessibilityTestMixin)
 
 from autoreduce_frontend.selenium_tests.pages.run_summary_page import RunSummaryPage
 

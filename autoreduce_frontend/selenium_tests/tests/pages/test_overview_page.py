@@ -9,7 +9,8 @@ Selenium tests for the overview page
 """
 
 from autoreduce_frontend.selenium_tests.pages.overview_page import OverviewPage
-from autoreduce_frontend.selenium_tests.tests.base_tests import (NavbarTestMixin, BaseTestCase, FooterTestMixin, AccessibilityTestMixin)
+from autoreduce_frontend.selenium_tests.tests.base_tests import (NavbarTestMixin, BaseTestCase, FooterTestMixin,
+                                                                 AccessibilityTestMixin)
 
 
 class TestOverviewPage(NavbarTestMixin, BaseTestCase, FooterTestMixin, AccessibilityTestMixin):

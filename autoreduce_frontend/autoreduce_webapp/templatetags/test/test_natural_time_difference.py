@@ -82,8 +82,14 @@ class TestNaturalTimeDifference(unittest.TestCase):
         [START_DATETIME + datetime.timedelta(days=1, hours=1, minutes=0, seconds=1), "1 day, 1 hour, 1 second"],
         [START_DATETIME + datetime.timedelta(days=1, hours=0, minutes=1, seconds=1), "1 day, 1 minute, 1 second"],
         [START_DATETIME + datetime.timedelta(days=1, hours=1, minutes=1, seconds=0), "1 day, 1 hour, 1 minute"],
-        [START_DATETIME + datetime.timedelta(days=1, hours=1, minutes=1, seconds=1), "1 day, 1 hour, 1 minute, 1 second"],
-        [START_DATETIME + datetime.timedelta(days=200, hours=23, minutes=59, seconds=59), "200 days, 23 hours, 59 minutes, 59 seconds"],
+        [
+            START_DATETIME + datetime.timedelta(days=1, hours=1, minutes=1, seconds=1),
+            "1 day, 1 hour, 1 minute, 1 second"
+        ],
+        [
+            START_DATETIME + datetime.timedelta(days=200, hours=23, minutes=59, seconds=59),
+            "200 days, 23 hours, 59 minutes, 59 seconds"
+        ],
     ])
     def test_difference_days(self, end, expected):
         """

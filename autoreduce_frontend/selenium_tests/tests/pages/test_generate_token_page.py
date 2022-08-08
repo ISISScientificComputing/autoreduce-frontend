@@ -1,6 +1,7 @@
 from rest_framework.authtoken.models import Token
 
-from autoreduce_frontend.selenium_tests.tests.base_tests import (BaseTestCase, FooterTestMixin, NavbarTestMixin, AccessibilityTestMixin)
+from autoreduce_frontend.selenium_tests.tests.base_tests import (BaseTestCase, FooterTestMixin, NavbarTestMixin,
+                                                                 AccessibilityTestMixin)
 from autoreduce_frontend.selenium_tests.pages.generate_token.list_page import GenerateTokenListPage
 
 

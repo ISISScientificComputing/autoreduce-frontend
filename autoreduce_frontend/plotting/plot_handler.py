@@ -120,7 +120,8 @@ class PlotHandler:
                 except FileNotFoundError:
                     LOGGER.error("File \'%s\' does not exist. Error: %s", _server_path, traceback.format_exc())
                 except PermissionError:
-                    LOGGER.error("Insufficient permissions to read \'%s\'. Error: %s", _server_path, traceback.format_exc())
+                    LOGGER.error("Insufficient permissions to read \'%s\'. Error: %s", _server_path,
+                                 traceback.format_exc())
             return local_plot_paths, server_paths
         # No files found
         return (None, None)

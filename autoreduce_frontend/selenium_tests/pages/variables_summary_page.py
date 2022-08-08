@@ -96,7 +96,11 @@ class VariableSummaryPage(Page, NavbarMixin, FooterMixin, TourMixin):
         :param experiment_reference: The experiment reference
         :return: The edit button
         """
-        url = reverse("runs:variables_by_experiment", kwargs={"instrument": self.instrument, "experiment_reference": experiment_reference})
+        url = reverse("runs:variables_by_experiment",
+                      kwargs={
+                          "instrument": self.instrument,
+                          "experiment_reference": experiment_reference
+                      })
         self._do_run_button(url)
 
     def click_experiment_delete_button_for(self, experiment_reference: int):

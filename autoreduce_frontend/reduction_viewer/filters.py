@@ -55,10 +55,17 @@ def filter_run_number(queryset, name, value):
 
 class ReductionRunFilter(FilterSet):
     '''Filter model for filtering and querying ReductionRun models. '''
-    created = DateFromToRangeFilter(widget=RangeWidget(attrs={'type': 'date', 'placeholder': 'dd-mm-yyyy', 'label': 'created'}))
+    created = DateFromToRangeFilter(widget=RangeWidget(attrs={
+        'type': 'date',
+        'placeholder': 'dd-mm-yyyy',
+        'label': 'created'
+    }))
 
     run_description = CharFilter(method="filter_run_description")
-    run_number = CharFilter(field_name="run_number", method=filter_run_number, label='Run Number', validators=[validate_run_number])
+    run_number = CharFilter(field_name="run_number",
+                            method=filter_run_number,
+                            label='Run Number',
+                            validators=[validate_run_number])
 
     class Meta:
         model = ReductionRun

@@ -2,7 +2,8 @@ from django.urls import reverse
 from autoreduce_qp.systemtests.utils.data_archive import DataArchive
 
 from autoreduce_frontend.selenium_tests.pages.rerun_jobs_page import RerunJobsPage
-from autoreduce_frontend.selenium_tests.tests.base_tests import (NavbarTestMixin, BaseTestCase, FooterTestMixin, AccessibilityTestMixin)
+from autoreduce_frontend.selenium_tests.tests.base_tests import (NavbarTestMixin, BaseTestCase, FooterTestMixin,
+                                                                 AccessibilityTestMixin)
 
 
 # pylint:disable=no-member

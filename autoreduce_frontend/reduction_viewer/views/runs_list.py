@@ -29,7 +29,8 @@ def runs_list(request, instrument=None):
 
     try:
         runs = ReductionRun.objects.only('status', 'last_updated', 'run_version',
-                                         'run_description').select_related('status').filter(instrument=instrument_obj, batch_run=False)
+                                         'run_description').select_related('status').filter(instrument=instrument_obj,
+                                                                                            batch_run=False)
         last_instrument_run = runs.filter(batch_run=False).last()
         first_instrument_run = runs.filter(batch_run=False).first()
 
@@ -88,8 +89,8 @@ def runs_list(request, instrument=None):
             context_dictionary['experiments'] = experiments_and_runs
             context_dictionary['experiment_table'] = experiment_table
         elif filter_by == 'batch_runs':
-            runs = ReductionRun.objects.only('status', 'last_updated', 'run_version', 'run_description').filter(instrument=instrument_obj,
-                                                                                                                batch_run=True)
+            runs = ReductionRun.objects.only('status', 'last_updated', 'run_version',
+                                             'run_description').filter(instrument=instrument_obj, batch_run=True)
             runs = order_runs(sort_by=sort_by, runs=runs)
             run_table = ReductionRunTable(runs)
             RequestConfig(request, paginate={"per_page": 10}).configure(run_table)

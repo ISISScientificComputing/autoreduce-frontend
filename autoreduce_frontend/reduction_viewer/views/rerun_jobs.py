@@ -28,7 +28,8 @@ def rerun_jobs(request, instrument=None):
         runs_for_instrument = instrument.reduction_runs.filter(batch_run=False)
         last_run = instrument.get_last_for_rerun(runs_for_instrument)
 
-        standard_vars, advanced_vars, variable_help = prepare_arguments_for_render(last_run.arguments, last_run.instrument.name)
+        standard_vars, advanced_vars, variable_help = prepare_arguments_for_render(last_run.arguments,
+                                                                                   last_run.instrument.name)
         script_present = ReductionScript(instrument).exists()
         rerun_form = RerunForm(script_present=script_present)
         # pylint:disable=no-member

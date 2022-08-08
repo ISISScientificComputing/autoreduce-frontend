@@ -10,7 +10,8 @@ import re
 from selenium.webdriver.support.wait import WebDriverWait
 
 from autoreduce_frontend.selenium_tests.pages.help_page import HelpPage
-from autoreduce_frontend.selenium_tests.tests.base_tests import (NavbarTestMixin, BaseTestCase, FooterTestMixin, AccessibilityTestMixin)
+from autoreduce_frontend.selenium_tests.tests.base_tests import (NavbarTestMixin, BaseTestCase, FooterTestMixin,
+                                                                 AccessibilityTestMixin)
 
 
 class TestHelpPage(NavbarTestMixin, BaseTestCase, FooterTestMixin, AccessibilityTestMixin):
@@ -35,21 +36,22 @@ class TestHelpPage(NavbarTestMixin, BaseTestCase, FooterTestMixin, Accessibility
         """
         Test that the sidebar lists all the help topic headers
         """
-        WebDriverWait(self.driver, 10).until(lambda _: self.page.get_sidenav_contents() == self.page.get_each_help_topic_header())
+        WebDriverWait(self.driver,
+                      10).until(lambda _: self.page.get_sidenav_contents() == self.page.get_each_help_topic_header())
 
     def test_all_help_topics_have_a_valid_category(self):
         """
         Test that all topics have a valid data-category="..."
         """
-        WebDriverWait(
-            self.driver,
-            10).until(lambda _: set(self.page.get_each_help_topic_category()) == set(self.page.get_available_help_topic_categories()))
+        WebDriverWait(self.driver, 10).until(lambda _: set(self.page.get_each_help_topic_category()) == set(
+            self.page.get_available_help_topic_categories()))
 
     def test_all_help_topics_have_content(self):
         """
         Test that all help topic elements have content in .card-body
         """
-        WebDriverWait(self.driver, 10).until(lambda _: "" not in [x.strip() for x in self.page.get_each_help_topic_content()])
+        WebDriverWait(self.driver,
+                      10).until(lambda _: "" not in [x.strip() for x in self.page.get_each_help_topic_content()])
 
     def test_filter_help_topics_by_category(self):
         """

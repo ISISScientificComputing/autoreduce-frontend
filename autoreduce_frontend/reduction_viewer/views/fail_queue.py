@@ -19,7 +19,8 @@ def fail_queue(request):
     """Render status of failed queue."""
     # Render the page
     error_status = Status.get_error()
-    failed_jobs = ReductionRun.objects.filter(Q(status=error_status) & Q(hidden_in_failviewer=False)).order_by('-created')
+    failed_jobs = ReductionRun.objects.filter(Q(status=error_status)
+                                              & Q(hidden_in_failviewer=False)).order_by('-created')
     if len(failed_jobs) == 0:
         return {'queue': []}
 
