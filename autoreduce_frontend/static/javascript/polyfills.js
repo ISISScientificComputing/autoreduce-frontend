@@ -33,8 +33,8 @@ if(typeof String.prototype.toTitleCase != 'function'){
             }
             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
         });
-     
-        // Certain minor words should be left lowercase unless 
+
+        // Certain minor words should be left lowercase unless
         // they are the first or last words in the string
         lowers = ['A', 'An', 'The', 'And', 'But', 'Or', 'For', 'Nor', 'As', 'At',
         'By', 'For', 'From', 'In', 'Into', 'Near', 'Of', 'On', 'Onto', 'To', 'With'];
