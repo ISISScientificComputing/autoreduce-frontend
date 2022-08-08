@@ -1,10 +1,11 @@
+#!/usr/bin/env python
+
 # ############################################################################### #
 # Autoreduction Repository : https://github.com/autoreduction/autoreduce
 #
 # Copyright &copy; 2020 ISIS Rutherford Appleton Laboratory UKRI
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
-#!/usr/bin/env python
 """Django's command-line utility for administrative tasks."""
 import os
 import sys

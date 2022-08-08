@@ -41,5 +41,5 @@ def test_banned_queries():
     Assert ValidationError exception is raised
     """
     for query in banned_queries:
-        with pytest.raises(ValidationError) as exc:
+        with pytest.raises(ValidationError):
             validate_run_number(query)

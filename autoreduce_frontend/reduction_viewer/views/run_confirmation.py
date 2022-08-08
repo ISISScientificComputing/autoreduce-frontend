@@ -91,7 +91,7 @@ def run_confirmation(request, instrument: str):
 
     try:
         auth_token = str(request.user.auth_token)
-    except AttributeError as err:  # pylint:disable=unused-variable
+    except AttributeError:  # pylint:disable=unused-variable
         context_dictionary['error'] = UNAUTHORIZED_MESSAGE
         return context_dictionary
     # run_description gets stored in run_description in the ReductionRun object
@@ -130,7 +130,7 @@ def run_confirmation(request, instrument: str):
                                      "reduction_script": stored_reduction_script,
                                  },
                                  headers={"Authorization": f"Token {auth_token}"})
-    except ConnectionError as err:  # pylint:disable=broad-except
+    except ConnectionError:  # pylint:disable=broad-except
         context_dictionary['error'] = "Unable to connect to the Autoreduce job submission service. If the error "\
                     "persists please let the Autoreduce team know at ISISREDUCE@stfc.ac.uk"
         return context_dictionary

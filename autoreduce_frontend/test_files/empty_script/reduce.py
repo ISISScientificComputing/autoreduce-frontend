@@ -5,7 +5,6 @@
 # SPDX - License - Identifier: GPL-3.0-or-later
 # ############################################################################### #
 # pylint:skip-file
-import sys
 
 
 def main():
