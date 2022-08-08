@@ -16,7 +16,6 @@ register = Library()
 
 class NaturalTimeDifferenceNode(Node):
     """Class for computing and rendering time differences."""
-
     def __init__(self, start, end):
         self.start = Variable(start)
         self.end = Variable(end)

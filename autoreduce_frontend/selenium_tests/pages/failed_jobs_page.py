@@ -18,7 +18,6 @@ from autoreduce_frontend.selenium_tests.pages.page import Page
 
 
 class FailedJobsPage(Page, NavbarMixin, FooterMixin):
-
     @staticmethod
     def url_path() -> str:
         """

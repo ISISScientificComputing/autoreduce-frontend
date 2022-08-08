@@ -22,7 +22,6 @@ SHOW_OR_HIDE = (('default', 'Select action to apply to selected runs'), ('hide',
 
 
 class SearchOptionsForm(forms.Form):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -42,17 +41,15 @@ class SearchOptionsForm(forms.Form):
 
 
 class RunsListOptionsForm(forms.Form):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
     per_page = forms.ChoiceField(
-        widget=forms.Select(
-            attrs={
-                'id': "pagination_select",
-                'title': "The number of reduction jobs that should be shown per page",
-                'name': "per_page"
-            }),
+        widget=forms.Select(attrs={
+            'id': "pagination_select",
+            'title': "The number of reduction jobs that should be shown per page",
+            'name': "per_page"
+        }),
         choices=ITEMS_PER_PAGE,
     )
 
@@ -70,7 +67,6 @@ class RunsListOptionsForm(forms.Form):
 
 
 class FailedQueueOptionsForm(forms.Form):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -88,19 +84,17 @@ class FailedQueueOptionsForm(forms.Form):
     )
 
     run_action = forms.ChoiceField(
-        widget=forms.Select(
-            attrs={
-                'id': "runAction",
-                'title': "Select action to apply to selected runs",
-                'name': "runAction",
-                'placeholder': "Placeholder",
-            }),
+        widget=forms.Select(attrs={
+            'id': "runAction",
+            'title': "Select action to apply to selected runs",
+            'name': "runAction",
+            'placeholder': "Placeholder",
+        }),
         choices=SHOW_OR_HIDE,
     )
 
 
 class RerunForm(forms.Form):
-
     def __init__(self, *args, **kwargs):
         self.script_present = kwargs.pop('script_present')
         super().__init__(*args, **kwargs)

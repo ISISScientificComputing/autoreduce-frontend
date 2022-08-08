@@ -5,8 +5,7 @@ from parameterized import parameterized
 from autoreduce_db.reduction_viewer.models import ReductionRun
 from autoreduce_frontend.autoreduce_webapp.settings import DATA_ANALYSIS_BASE_URL
 from autoreduce_frontend.reduction_viewer.view_utils import (convert_software_string_to_dict, get_interactive_plot_data,
-                                                             make_data_analysis_url, started_by_id_to_name, order_runs,
-                                                             data_status)
+                                                             make_data_analysis_url, started_by_id_to_name, order_runs, data_status)
 from autoreduce_frontend.selenium_tests.tests.base_tests import BaseTestCase
 
 

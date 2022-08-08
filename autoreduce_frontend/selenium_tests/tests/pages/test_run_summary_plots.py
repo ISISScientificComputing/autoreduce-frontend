@@ -41,12 +41,8 @@ class TestRunSummaryPagePlots(BaseTestCase):
         """
         # the plot files are expected to be in the reduction location, so we write them there for the test to work
         plot_files = [
-            tempfile.NamedTemporaryFile(prefix="data_",
-                                        suffix=".png",
-                                        dir=self.run.reduction_location.first().file_path),
-            tempfile.NamedTemporaryFile(prefix="data_",
-                                        suffix=".png",
-                                        dir=self.run.reduction_location.first().file_path)
+            tempfile.NamedTemporaryFile(prefix="data_", suffix=".png", dir=self.run.reduction_location.first().file_path),
+            tempfile.NamedTemporaryFile(prefix="data_", suffix=".png", dir=self.run.reduction_location.first().file_path)
         ]
         self.page.launch()
 
@@ -67,10 +63,7 @@ class TestRunSummaryPagePlots(BaseTestCase):
 
         for _ in range(2):
             # pylint:disable=consider-using-with
-            tfile = tempfile.NamedTemporaryFile('w',
-                                                prefix="data_",
-                                                suffix=".json",
-                                                dir=self.run.reduction_location.first().file_path)
+            tfile = tempfile.NamedTemporaryFile('w', prefix="data_", suffix=".json", dir=self.run.reduction_location.first().file_path)
             tfile.write("""{"data": [{"type": "bar","x": [1,2,3],"y": [1,3,2]}]}""")
             tfile.flush()
             plot_files.append(tfile)
@@ -85,13 +78,8 @@ class TestRunSummaryPagePlots(BaseTestCase):
     def test_plot_files_mix(self):
         """Test that both static and interactive plots are rendered"""
         plot_files = [
-            tempfile.NamedTemporaryFile(prefix="data_",
-                                        suffix=".png",
-                                        dir=self.run.reduction_location.first().file_path),
-            tempfile.NamedTemporaryFile('w',
-                                        prefix="data_",
-                                        suffix=".json",
-                                        dir=self.run.reduction_location.first().file_path)
+            tempfile.NamedTemporaryFile(prefix="data_", suffix=".png", dir=self.run.reduction_location.first().file_path),
+            tempfile.NamedTemporaryFile('w', prefix="data_", suffix=".json", dir=self.run.reduction_location.first().file_path)
         ]
         # write the interactive plot data
         plot_files[1].write("""{"data": [{"type": "bar","x": [1,2,3],"y": [1,3,2]}]}""")

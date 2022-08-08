@@ -10,8 +10,8 @@ from django.conf.urls import include
 from django.contrib import admin
 from django.urls import path, register_converter
 
-from autoreduce_frontend.reduction_viewer.views import (accessibility_statement, experiment_summary, graph, help, index,
-                                                        logout, overview, stats, search)
+from autoreduce_frontend.reduction_viewer.views import (accessibility_statement, experiment_summary, graph, help, index, logout, overview,
+                                                        stats, search)
 
 
 class NegativeIntConverter:

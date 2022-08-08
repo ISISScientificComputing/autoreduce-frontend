@@ -17,7 +17,6 @@ ResetButtons = namedtuple('ResetButtons', ["to_initial", "to_script"])
 
 
 class RerunFormMixin:
-
     @staticmethod
     def _set_field(field, value):
         field.clear()
@@ -58,9 +57,7 @@ class RerunFormMixin:
         Finds and returns the inline reset buttons for the variable1 field
         """
         buttons = self.driver.find_elements(By.CSS_SELECTOR, f"[data-for=var-standard-{encode_b64('variable1')}]")
-        assert len(
-            buttons
-        ) == 2, "Found more elements with that selector that expected, further test assertions will not work properly"
+        assert len(buttons) == 2, "Found more elements with that selector that expected, further test assertions will not work properly"
         return ResetButtons(*buttons)
 
     @variable1_field.setter

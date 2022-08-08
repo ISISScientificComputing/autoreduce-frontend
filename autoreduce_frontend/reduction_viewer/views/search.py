@@ -27,9 +27,7 @@ def search(request):
     if 'run_number' in request.GET:
         run_list = ReductionRun.objects.all()
         run_description_qualifier = request.GET.get("run_description_qualifier", "contains")
-        run_filter = ReductionRunFilter(request.GET,
-                                        run_description_qualifier=run_description_qualifier,
-                                        queryset=run_list)
+        run_filter = ReductionRunFilter(request.GET, run_description_qualifier=run_description_qualifier, queryset=run_list)
         run_table = ReductionRunTable(run_filter.qs, order_by="-run_number")
         RequestConfig(request, paginate={"per_page": 10}).configure(run_table)
     if "reference_number" in request.GET:

@@ -29,7 +29,6 @@ class PlotHandler:
     :param server_dir: (str) The path for the directory to search for the data/image files
     :param rb_number: (str)The ISIS RB number.
     """
-
     def __init__(self, data_filepath: str, server_dir: str, rb_number: str = None):
         self.data_filename: str = self._get_only_data_file_name(data_filepath)
         # Used when searching for full Experiment graph. TODO: not actually used right now
@@ -121,8 +120,7 @@ class PlotHandler:
                 except FileNotFoundError:
                     LOGGER.error("File \'%s\' does not exist. Error: %s", _server_path, traceback.format_exc())
                 except PermissionError:
-                    LOGGER.error("Insufficient permissions to read \'%s\'. Error: %s", _server_path,
-                                 traceback.format_exc())
+                    LOGGER.error("Insufficient permissions to read \'%s\'. Error: %s", _server_path, traceback.format_exc())
             return local_plot_paths, server_paths
         # No files found
         return (None, None)

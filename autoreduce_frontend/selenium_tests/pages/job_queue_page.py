@@ -19,7 +19,6 @@ from autoreduce_frontend.selenium_tests.pages.page import Page
 
 
 class JobQueuePage(Page, NavbarMixin, FooterMixin):
-
     @staticmethod
     def url_path() -> str:
         """
@@ -35,19 +34,15 @@ class JobQueuePage(Page, NavbarMixin, FooterMixin):
         """
         return [run.text for run in self.driver.find_elements(By.CLASS_NAME, "run-link")]
 
-    def get_status_from_run(self,
-                            run_number: Union[str, int],
-                            last_run_number: Optional[Union[str, int]] = None) -> str:
+    def get_status_from_run(self, run_number: Union[str, int], last_run_number: Optional[Union[str, int]] = None) -> str:
         """
         Given a run number return the status of the run as shown in the table
         :param run_number: (str/int) The run number
         :return: (status) The status as a string
         """
-        return self.driver.find_element(
-            By.ID, f"status-{run_number}-{run_number if not last_run_number else last_run_number}").text
+        return self.driver.find_element(By.ID, f"status-{run_number}-{run_number if not last_run_number else last_run_number}").text
 
     def _do_run_button(self, url):
-
         def run_button_clicked_successfully(button, url, driver):
             button.click()
             return url in driver.current_url

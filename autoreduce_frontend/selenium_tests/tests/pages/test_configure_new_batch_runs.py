@@ -12,8 +12,7 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 
-from autoreduce_frontend.reduction_viewer.views.configure_new_batch_run import (PARSING_ERROR_MESSAGE,
-                                                                                UNABLE_TO_CONNECT_MESSAGE,
+from autoreduce_frontend.reduction_viewer.views.configure_new_batch_run import (PARSING_ERROR_MESSAGE, UNABLE_TO_CONNECT_MESSAGE,
                                                                                 UNAUTHORIZED_MESSAGE)
 from autoreduce_frontend.selenium_tests.pages.configure_new_batch_run_page import ConfigureNewBatchRunsPage
 from autoreduce_frontend.selenium_tests.tests.base_tests import ConfigureNewJobsBaseTestCase
@@ -85,8 +84,7 @@ class TestConfigureNewBatchRunsPage(ConfigureNewJobsBaseTestCase):
         response.content = "bad json"
         self.page.runs = "99999-100000"
         self.page.submit_button.click()
-        assert self.page.error_text == PARSING_ERROR_MESSAGE.format("Expecting value: line 1 column 1 (char 0)",
-                                                                    response.content)
+        assert self.page.error_text == PARSING_ERROR_MESSAGE.format("Expecting value: line 1 column 1 (char 0)", response.content)
 
     @patch("autoreduce_frontend.reduction_viewer.views.configure_new_batch_run.requests.post")
     def test_submit_run_post_raises_connection_error(self, requests_post: Mock):

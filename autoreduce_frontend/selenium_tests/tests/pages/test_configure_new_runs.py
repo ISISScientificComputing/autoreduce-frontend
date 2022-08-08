@@ -9,8 +9,8 @@ from django.urls import reverse
 
 from autoreduce_frontend.selenium_tests.pages.configure_new_runs_page import ConfigureNewRunsPage
 from autoreduce_frontend.selenium_tests.pages.variables_summary_page import VariableSummaryPage
-from autoreduce_frontend.selenium_tests.tests.base_tests import (ConfigureNewJobsBaseTestCase, FooterTestMixin,
-                                                                 NavbarTestMixin, AccessibilityTestMixin)
+from autoreduce_frontend.selenium_tests.tests.base_tests import (ConfigureNewJobsBaseTestCase, FooterTestMixin, NavbarTestMixin,
+                                                                 AccessibilityTestMixin)
 
 
 # pylint:disable=duplicate-code
@@ -44,11 +44,7 @@ class TestConfigureNewRunsPage(ConfigureNewJobsBaseTestCase, NavbarTestMixin, Fo
     def test_go_to_other_goes_to_experiment(self):
         """Test: clicking the link to configure by experiment goes to configure by experiment"""
         self.page.go_to_other.click()
-        url = reverse("runs:variables_by_experiment",
-                      kwargs={
-                          "instrument": self.instrument_name,
-                          "experiment_reference": 1234567
-                      })
+        url = reverse("runs:variables_by_experiment", kwargs={"instrument": self.instrument_name, "experiment_reference": 1234567})
         assert url in self.driver.current_url
 
     def test_go_to_other_goes_to_run_range(self):

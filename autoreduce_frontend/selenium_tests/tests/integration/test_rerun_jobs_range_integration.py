@@ -23,10 +23,8 @@ class TestRerunJobsRangePageIntegration(BaseIntegrationTestCase):
     def setUpClass(cls):
         """Starts all external services"""
         super().setUpClass()
-        cls.data_archive.add_reduction_script(cls.instrument_name,
-                                              """def main(input_file, output_dir): print('some text')""")
-        cls.data_archive.add_reduce_vars_script(cls.instrument_name,
-                                                """standard_vars={"variable1":"test_variable_value_123"}""")
+        cls.data_archive.add_reduction_script(cls.instrument_name, """def main(input_file, output_dir): print('some text')""")
+        cls.data_archive.add_reduce_vars_script(cls.instrument_name, """standard_vars={"variable1":"test_variable_value_123"}""")
         cls.rb_number = 1234567
         cls.run_number = [99999, 100000]
 
@@ -40,23 +38,16 @@ class TestRerunJobsRangePageIntegration(BaseIntegrationTestCase):
         """
         Verifies that the run with version 1 exists and has the expected value
         """
-
         def make_run_url(run_number):
             """Constructs the url of the run summary with a django reverse"""
-            return reverse("runs:summary",
-                           kwargs={
-                               "instrument_name": self.instrument_name,
-                               "run_number": run_number,
-                               "run_version": 1
-                           })
+            return reverse("runs:summary", kwargs={"instrument_name": self.instrument_name, "run_number": run_number, "run_version": 1})
 
         runs_list_page = RunsListPage(self.driver, self.instrument_name)
         for run in self.run_number:
             runs_list_page.launch()
             run_number_v1 = self.driver.find_element(By.CSS_SELECTOR, f'[href*="{make_run_url(run)}"]')
             assert run_number_v1.is_displayed()
-            assert RunSummaryPage(self.driver, self.instrument_name, run,
-                                  1).launch().variable1_field_val == variable_value
+            assert RunSummaryPage(self.driver, self.instrument_name, run, 1).launch().variable1_field_val == variable_value
             vars_for_run_v1 = ReductionRun.objects.filter(run_numbers__run_number=run).last().arguments.as_dict()
             for _, value in vars_for_run_v1["standard_vars"].items():
                 assert value == variable_value

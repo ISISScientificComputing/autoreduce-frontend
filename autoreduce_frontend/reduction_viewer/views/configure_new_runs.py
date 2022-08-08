@@ -35,8 +35,8 @@ def configure_new_runs_post(request, instrument_name):
     or for experiment reference (when experiment_reference is given).
     """
     start = int(request.POST.get("run_start")) if request.POST.get("run_start", None) else None
-    experiment_reference = int(request.POST.get("experiment_reference_number")) if request.POST.get(
-        "experiment_reference_number", None) else None
+    experiment_reference = int(request.POST.get("experiment_reference_number")) if request.POST.get("experiment_reference_number",
+                                                                                                    None) else None
 
     if not start and not experiment_reference:
         return {"message": "Invalid run range or experiment reference submitted."}
@@ -86,12 +86,10 @@ def configure_new_runs_get(instrument_name, start=0, experiment_reference=0):
             pass
 
     if existing_arguments:
-        standard_vars, advanced_vars, variable_help = prepare_arguments_for_render(existing_arguments,
-                                                                                   last_run.instrument.name)
+        standard_vars, advanced_vars, variable_help = prepare_arguments_for_render(existing_arguments, last_run.instrument.name)
     else:
         # load the arguments from the latest rerun
-        standard_vars, advanced_vars, variable_help = prepare_arguments_for_render(last_run.arguments,
-                                                                                   last_run.instrument.name)
+        standard_vars, advanced_vars, variable_help = prepare_arguments_for_render(last_run.arguments, last_run.instrument.name)
 
     context_dictionary = {
         'instrument': instrument,

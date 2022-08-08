@@ -18,7 +18,6 @@ class ReplaceNode(Node):
     """
     Node for replacing text
     """
-
     def __init__(self, text, old, new):
         self.text = Variable(text)
         self.old = Variable(old)

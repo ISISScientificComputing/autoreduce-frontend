@@ -18,7 +18,6 @@ from autoreduce_frontend.selenium_tests.pages.page import Page
 
 class ExperimentSummaryPage(Page, NavbarMixin, FooterMixin):
     """Page model class for experiment summary page."""
-
     def __init__(self, driver, reference_number):
         super().__init__(driver)
         self.reference_number = reference_number

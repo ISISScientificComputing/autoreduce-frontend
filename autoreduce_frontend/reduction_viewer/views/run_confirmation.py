@@ -66,8 +66,7 @@ def run_confirmation(request, instrument: str):
         max_runs = 20
 
     if len(run_numbers) > max_runs:
-        context_dictionary["error"] = (f'{len(run_numbers)} runs were requested, '
-                                       f'but only {max_runs} runs can be queued at a time')
+        context_dictionary["error"] = (f'{len(run_numbers)} runs were requested, ' f'but only {max_runs} runs can be queued at a time')
         return context_dictionary
 
     related_runs: QuerySet[ReductionRun] = ReductionRun.objects.filter(

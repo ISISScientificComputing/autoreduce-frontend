@@ -22,7 +22,6 @@ from autoreduce_frontend.selenium_tests.pages.page import Page
 
 class RunSummaryPage(Page, RerunFormMixin, NavbarMixin, FooterMixin, TourMixin):
     """Page model class for run summary page."""
-
     def __init__(self, driver, instrument, run_number, version, batch_run=False):
         super().__init__(driver)
         self.instrument = instrument
@@ -144,7 +143,6 @@ class RunSummaryPage(Page, RerunFormMixin, NavbarMixin, FooterMixin, TourMixin):
         return self.driver.find_elements(By.CLASS_NAME, "js-plotly-plot")
 
     def _do_cancel_btn(self, url):
-
         def run_button_clicked_successfully(button, url, driver):
             button.click()
             return driver.current_url.split("?")[0].endswith(url)

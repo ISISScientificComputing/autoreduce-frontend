@@ -20,7 +20,6 @@ class ConfigureNewRunsPage(Page, RerunFormMixin, NavbarMixin, FooterMixin, TourM
     """
     Page model class for run summary page
     """
-
     def __init__(self, driver, instrument, run_start=None, experiment_reference=None):
         super().__init__(driver)
         self.instrument = instrument

@@ -22,7 +22,6 @@ from autoreduce_frontend.selenium_tests.pages.run_summary_page import RunSummary
 
 class RunsListPage(Page, NavbarMixin, FooterMixin, TourMixin):
     """Page model class for instrument summary page."""
-
     def __init__(self, driver, instrument):
         super().__init__(driver)
         self.instrument = instrument

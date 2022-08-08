@@ -29,3 +29,8 @@ repos:
     rev: main # This should be moved to a tag after the next release post v0.32.0, I am guessing v0.33
     hooks:
       - id: yapf
+
+  # - repo: https://github.com/PyCQA/flake8
+  #   rev: 5.0.4
+  #   hooks:
+  #     - id: flake8

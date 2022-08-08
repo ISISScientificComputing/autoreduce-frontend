@@ -20,7 +20,6 @@ from autoreduce_frontend.selenium_tests.pages.run_summary_page import RunSummary
 
 
 class SearchPage(Page, NavbarMixin, FooterMixin):
-
     def __init__(self, driver, instrument):
         super().__init__(driver)
         self.instrument = instrument

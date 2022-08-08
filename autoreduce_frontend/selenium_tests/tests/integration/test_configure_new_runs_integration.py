@@ -27,10 +27,8 @@ class TestConfigureNewRunsPageIntegration(BaseIntegrationTestCase):
         are running for all testcases
         """
         super().setUpClass()
-        cls.data_archive.add_reduction_script(cls.instrument_name,
-                                              """def main(input_file, output_dir): print('some text')""")
-        cls.data_archive.add_reduce_vars_script(cls.instrument_name,
-                                                f"""standard_vars={{"variable1":"{REDUCE_VARS_DEFAULT_VALUE}"}}""")
+        cls.data_archive.add_reduction_script(cls.instrument_name, """def main(input_file, output_dir): print('some text')""")
+        cls.data_archive.add_reduce_vars_script(cls.instrument_name, f"""standard_vars={{"variable1":"{REDUCE_VARS_DEFAULT_VALUE}"}}""")
         cls.rb_number = 1234567
         cls.run_number = 99999
 
@@ -40,10 +38,7 @@ class TestConfigureNewRunsPageIntegration(BaseIntegrationTestCase):
         self.page = ConfigureNewRunsPage(self.driver, self.instrument_name, run_start=self.run_number + 1)
 
     def _submit_args_value(self, value, start=None, experiment_number=None):
-        self.page = ConfigureNewRunsPage(self.driver,
-                                         self.instrument_name,
-                                         run_start=start,
-                                         experiment_reference=experiment_number)
+        self.page = ConfigureNewRunsPage(self.driver, self.instrument_name, run_start=start, experiment_reference=experiment_number)
         self.page.launch()
         self.page.variable1_field = value
         self.page.submit_button.click()

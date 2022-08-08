@@ -8,9 +8,8 @@ from autoreduce_frontend.autoreduce_webapp.view_utils import (check_permissions,
 from autoreduce_frontend.plotting.plot_handler import PlotHandler
 from autoreduce_frontend.reduction_viewer.forms import RerunForm
 from autoreduce_frontend.reduction_viewer.views.common import get_arguments_from_file, prepare_arguments_for_render
-from autoreduce_frontend.reduction_viewer.view_utils import (get_interactive_plot_data, get_navigation_runs,
-                                                             linux_to_windows_path, make_data_analysis_url,
-                                                             windows_to_linux_path, started_by_id_to_name)
+from autoreduce_frontend.reduction_viewer.view_utils import (get_interactive_plot_data, get_navigation_runs, linux_to_windows_path,
+                                                             make_data_analysis_url, windows_to_linux_path, started_by_id_to_name)
 
 LOGGER = logging.getLogger(__package__)
 
@@ -34,10 +33,8 @@ def redirect_run_does_not_exist(instrument_name, run_number, run_version):
 @render_with('run_summary.html')
 def run_summary(request, instrument_name=None, run_number=None, run_version=0):
     """Render run summary."""
-    history = ReductionRun.objects.filter(instrument__name=instrument_name,
-                                          batch_run=False,
-                                          run_numbers__run_number=run_number).order_by('-run_version').select_related(
-                                              'status').select_related('experiment').select_related('instrument')
+    history = ReductionRun.objects.filter(instrument__name=instrument_name, batch_run=False, run_numbers__run_number=run_number).order_by(
+        '-run_version').select_related('status').select_related('experiment').select_related('instrument')
     if len(history) == 0:
         return redirect_run_does_not_exist(instrument_name, run_number, run_version)
 
@@ -50,8 +47,9 @@ def run_summary(request, instrument_name=None, run_number=None, run_version=0):
 # pylint:disable=no-member,too-many-locals,broad-except,invalid-name
 def run_summary_batch_run(request, instrument_name=None, pk=None, run_version=0):
     """Gathers the context and renders a run's summary"""
-    history = ReductionRun.objects.filter(instrument__name=instrument_name, pk=pk).order_by(
-        '-run_version').select_related('status').select_related('experiment').select_related('instrument')
+    history = ReductionRun.objects.filter(
+        instrument__name=instrument_name,
+        pk=pk).order_by('-run_version').select_related('status').select_related('experiment').select_related('instrument')
     if len(history) == 0:
         return redirect_run_does_not_exist(instrument_name, pk, run_version)
 
@@ -80,11 +78,9 @@ def run_summary_run(request, history, instrument_name=None, run_version=0, run_n
 
     path_type = request.GET.get("path_type", "linux")  # defaults to Linux
     if path_type == "linux":
-        data_location = "\n".join(
-            [windows_to_linux_path(data_location.file_path) for data_location in run.data_location.all()])
+        data_location = "\n".join([windows_to_linux_path(data_location.file_path) for data_location in run.data_location.all()])
     elif path_type == "windows":
-        data_location = "\n".join(
-            [linux_to_windows_path(data_location.file_path) for data_location in run.data_location.all()])
+        data_location = "\n".join([linux_to_windows_path(data_location.file_path) for data_location in run.data_location.all()])
 
     data_analysis_link_url = make_data_analysis_url(reduction_location) if reduction_location else ""
     rb_number = run.experiment.reference_number
@@ -141,9 +137,7 @@ def run_summary_run(request, history, instrument_name=None, run_version=0, run_n
                                        rb_number=rb_number)
             local_plot_locs, server_plot_locs = plot_handler.get_plot_file()
             if local_plot_locs:
-                context_dictionary['static_plots'] = [
-                    location for location in local_plot_locs if not location.endswith(".json")
-                ]
+                context_dictionary['static_plots'] = [location for location in local_plot_locs if not location.endswith(".json")]
 
                 context_dictionary['interactive_plots'] = get_interactive_plot_data(server_plot_locs)
         except Exception as exception:  # pylint: disable=broad-except
@@ -151,8 +145,7 @@ def run_summary_run(request, history, instrument_name=None, run_version=0, run_n
             # page rendering if something is wrong with the plot images - but
             # display an error message
             err_msg = "Encountered error while retrieving plots for this run"
-            LOGGER.error("%s. Instrument: %s, run %s. RB Number %s Error: %s", err_msg, run.instrument.name, run,
-                         rb_number, exception)
+            LOGGER.error("%s. Instrument: %s, run %s. RB Number %s Error: %s", err_msg, run.instrument.name, run, rb_number, exception)
             context_dictionary["plot_error_message"] = f"{err_msg}."
 
     return context_dictionary

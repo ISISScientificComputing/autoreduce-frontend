@@ -13,8 +13,7 @@ from autoreduce_qp.systemtests.utils.data_archive import DataArchive
 
 from autoreduce_frontend.selenium_tests.pages.configure_new_runs_page import ConfigureNewRunsPage
 from autoreduce_frontend.selenium_tests.pages.variables_summary_page import VariableSummaryPage
-from autoreduce_frontend.selenium_tests.tests.base_tests import (BaseTestCase, FooterTestMixin, NavbarTestMixin,
-                                                                 AccessibilityTestMixin)
+from autoreduce_frontend.selenium_tests.tests.base_tests import (BaseTestCase, FooterTestMixin, NavbarTestMixin, AccessibilityTestMixin)
 
 
 class TestSeeInstrumentVariablesPage(BaseTestCase, AccessibilityTestMixin, FooterTestMixin, NavbarTestMixin):
@@ -108,9 +107,7 @@ class TestSeeInstrumentVariablesPage(BaseTestCase, AccessibilityTestMixin, Foote
         assert f"experiment {experiment_reference} var" in experiment_panel.get_attribute("textContent")
 
         self.page.click_experiment_edit_button_for(experiment_reference)
-        new_runs_page = ConfigureNewRunsPage(self.driver,
-                                             self.instrument_name,
-                                             experiment_reference=experiment_reference)
+        new_runs_page = ConfigureNewRunsPage(self.driver, self.instrument_name, experiment_reference=experiment_reference)
 
         assert new_runs_page.variable1_field_val == f"experiment {experiment_reference} var"
 

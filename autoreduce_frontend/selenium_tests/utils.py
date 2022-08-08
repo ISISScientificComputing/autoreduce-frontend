@@ -35,8 +35,7 @@ def find_run_in_database(test):
     """
     instrument = db.get_instrument(test.instrument_name)
     if isinstance(test.run_number, list):
-        return instrument.reduction_runs.filter(run_numbers__run_number__in=test.run_number,
-                                                batch_run=test.batch_run_test).distinct()
+        return instrument.reduction_runs.filter(run_numbers__run_number__in=test.run_number, batch_run=test.batch_run_test).distinct()
     else:
         return instrument.reduction_runs.filter(run_numbers__run_number=test.run_number)
 
@@ -80,8 +79,7 @@ def submit_and_wait_for_result(test, expected_runs=1, after_submit_url: Optional
     def runs_completed(_):
         # If your count is innacurate - check that the status of the runs
         # in the fixtures is not set to be "queued" by accident. Any other status will work.
-        current = ReductionRun.objects.filter(~Q(status=Status.get_queued())
-                                              & ~Q(status=Status.get_processing())).count()
+        current = ReductionRun.objects.filter(~Q(status=Status.get_queued()) & ~Q(status=Status.get_processing())).count()
         if current == total_expected:
             return True
         return False
@@ -91,8 +89,7 @@ def submit_and_wait_for_result(test, expected_runs=1, after_submit_url: Optional
     return find_run_in_database(test)
 
 
-def setup_external_services(instrument_name: str, start_year: int,
-                            end_year: int) -> Tuple[DataArchive, Publisher, Consumer]:
+def setup_external_services(instrument_name: str, start_year: int, end_year: int) -> Tuple[DataArchive, Publisher, Consumer]:
     """
     Sets up a DataArchive complete with scripts, database client and queue client and listeners and returns their
     objects in a tuple

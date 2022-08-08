@@ -19,8 +19,8 @@ from autoreduce_db.reduction_viewer.models import ReductionRun, Experiment
 from autoreduce_frontend.autoreduce_webapp.views import render_error
 from autoreduce_frontend.autoreduce_webapp.icat_cache import ICATCache, ICATConnectionException
 # Below import is a template on the repository
-from autoreduce_frontend.autoreduce_webapp.settings import (DEVELOPMENT_MODE, LOGIN_URL, OUTDATED_BROWSERS,
-                                                            UOWS_LOGIN_URL, USER_ACCESS_CHECKS)
+from autoreduce_frontend.autoreduce_webapp.settings import (DEVELOPMENT_MODE, LOGIN_URL, OUTDATED_BROWSERS, UOWS_LOGIN_URL,
+                                                            USER_ACCESS_CHECKS)
 
 LOGGER = logging.getLogger(__package__)
 
@@ -45,15 +45,13 @@ def handle_redirect(request):
     """Redirect the user to either capture the session id or to go and log in."""
     if request.GET.get('sessionid'):
         return redirect(
-            request.build_absolute_uri(LOGIN_URL) + "?next=" +
-            request.build_absolute_uri().replace('?sessionid=', '&sessionid='))
+            request.build_absolute_uri(LOGIN_URL) + "?next=" + request.build_absolute_uri().replace('?sessionid=', '&sessionid='))
 
     return redirect(UOWS_LOGIN_URL + request.build_absolute_uri())
 
 
 def login_and_uows_valid(func):
     """Function decorator to check whether the user's session is still valid."""
-
     def request_processor(request, *args, **kws):
         if has_valid_login(request):
             return func(request, *args, **kws)
@@ -65,7 +63,6 @@ def login_and_uows_valid(func):
 
 def require_staff(function_name):
     """Function decorator to check whether the user is a staff memeber."""
-
     def request_processor(request, *args, **kws):
         if has_valid_login(request):
             if request.user.is_staff:
@@ -80,7 +77,6 @@ def require_staff(function_name):
 
 def require_admin(func):
     """Function decorator to check whether the user is a superuser."""
-
     def request_processor(request, *args, **kws):
         if has_valid_login(request):
             if request.user.is_superuser:
@@ -106,9 +102,7 @@ def render_with(template):
     Decorator for Django views that sends returned dict to render function
     with given template and RequestContext as context instance.
     """
-
     def renderer(function_name):
-
         def populate_template_dict(request, output):
             if 'request' not in output:
                 output['request'] = request
@@ -171,7 +165,6 @@ def check_permissions(func):
     Check that the user has permission to access the given experiment and/or
     instrument. Queries ICATCache to check owned instruments and experiments.
     """
-
     def request_processor(request, *args, **kwargs):
         if USER_ACCESS_CHECKS and not request.user.is_superuser:
             # Get the things to check by from the arguments supplied.
@@ -237,8 +230,7 @@ def check_icat_permissions(request: HttpRequest,
 
         # Check for access to the instrument
         if owned_instrument_name or viewed_instrument_name:
-            optional_instrument_names.add(
-                owned_instrument_name if owned_instrument_name is not None else viewed_instrument_name)
+            optional_instrument_names.add(owned_instrument_name if owned_instrument_name is not None else viewed_instrument_name)
 
             # Check access to an owned instrument
             if owned_instrument_name is not None \
