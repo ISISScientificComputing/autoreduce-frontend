@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'django_tables2',
     'hurricane',
+    'django_dbconn_retry',
 ]
 
 if DEBUG and DEBUG_TOOLBAR_AVAILABLE:
