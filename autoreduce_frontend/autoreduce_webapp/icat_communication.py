@@ -25,6 +25,8 @@ class ICATCommunication:
     Handles communication with the ICAT service
     """
 
+    # pylint: disable=unsubscriptable-object
+
     def __init__(self, **kwargs):
         if 'URL' not in kwargs:
             kwargs['URL'] = ICAT['URL']
