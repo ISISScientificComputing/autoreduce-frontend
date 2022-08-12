@@ -30,6 +30,7 @@ dev = [
     "gunicorn",
     "mysqlclient==2.1.0",
     "selenium",
+    "parameterized==0.8.1",
 ]
 
 [project.urls]
