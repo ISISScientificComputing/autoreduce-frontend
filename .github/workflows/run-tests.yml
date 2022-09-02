@@ -60,16 +60,6 @@ jobs:
             ~/.autoreduce/selenium_tests/screenshots
             ~/.autoreduce/selenium_tests/a11y_reports
 
-      - name: Build package for publishing
-        if: ${{ github.ref == 'refs/heads/main' }}
-        run: python3 -m pip install --upgrade build wheel && python -m build
-
-      - name: Publish distribution 📦 to PyPI
-        if: ${{ github.ref == 'refs/heads/main' }}
-        uses: pypa/gh-action-pypi-publish@master
-        with:
-          password: ${{ secrets.PYPI_API_TOKEN }}
-
   selenium-integration:
     name: Selenium integration
     runs-on: ubuntu-latest
