@@ -20,7 +20,7 @@ def index(request):
 
     if DEVELOPMENT_MODE:
         user = authenticate(username="super", password="super", backend="django.contrib.auth.backends.ModelBackend")
-        login(request, user)
+        login(request, user, backend="django.contrib.auth.backends.ModelBackend")
         authenticated = True
     else:
         if 'sessionid' in request.session.keys():
