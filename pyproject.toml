@@ -25,7 +25,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "axe-selenium-python==2.1.6",
-    "django-debug-toolbar==3.4.0",
+    "django-debug-toolbar==3.7.0",
     "autoreduce-rest-api",
     "gunicorn",
     "mysqlclient==2.1.0",
