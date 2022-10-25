@@ -18,7 +18,7 @@ dependencies = [
     "django-crispy-forms==1.14.0",
     "django-tables2==2.4.1",
     "requests==2.27.1",
-    "httpagentparser==1.9.2",
+    "httpagentparser==1.9.5",
     "django-hurricane",
 ]
 
